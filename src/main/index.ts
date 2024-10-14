@@ -29,10 +29,9 @@ function createWindow(): void {
   app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
     // On certificate error we disable default behaviour (stop loading the page)
     // and we then say "it is all fine - true" to the callback
-    event.preventDefault();
-    callback(true);
-});
-
+    event.preventDefault()
+    callback(true)
+  })
 
   // HMR for renderer base on electron-vite cli.
 
@@ -69,7 +68,6 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
