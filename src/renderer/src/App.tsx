@@ -25,7 +25,7 @@ function App(): JSX.Element {
       <HashRouter>
         <Routes>
           <Route path="/" element={<LogIn />}></Route>
-          <Route path="/test" element={<Main />}></Route>
+          <Route path="/dashboard" element={<Main />}></Route>
         </Routes>
       </HashRouter>
     </QueryClientProvider>

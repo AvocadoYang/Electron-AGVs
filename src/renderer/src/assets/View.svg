@@ -1,46 +1,50 @@
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g clip-path="url(#clip0_1001_4)">
 <rect width="1920" height="1080" fill="#F7F4F4"/>
-<ellipse cx="98" cy="254" rx="141" ry="130" fill="url(#pattern0_1001_4)" fill-opacity="0.6"/>
+<ellipse cx="98" cy="254" rx="141" ry="130" fill="url(#pattern0_1001_4)" fill-opacity="0.3"/>
+<ellipse cx="1461" cy="538" rx="141" ry="130" fill="url(#pattern1_1001_4)" fill-opacity="0.3"/>
 <g filter="url(#filter0_d_1001_4)">
-<ellipse cx="508.5" cy="489" rx="120.5" ry="105" fill="url(#pattern1_1001_4)" fill-opacity="0.6" shape-rendering="crispEdges"/>
+<ellipse cx="839.5" cy="639" rx="120.5" ry="105" fill="url(#pattern2_1001_4)" shape-rendering="crispEdges"/>
 </g>
 <g filter="url(#filter1_d_1001_4)">
-<ellipse cx="709" cy="266.5" rx="173" ry="139.5" fill="url(#pattern2_1001_4)" fill-opacity="0.6" shape-rendering="crispEdges"/>
+<ellipse cx="1705.5" cy="127" rx="120.5" ry="105" fill="url(#pattern3_1001_4)" shape-rendering="crispEdges"/>
 </g>
 <g filter="url(#filter2_d_1001_4)">
-<path d="M847 993C847 1041.05 795.737 1080 732.5 1080C669.263 1080 618 1041.05 618 993C618 944.951 669.263 906 732.5 906C795.737 906 847 944.951 847 993Z" fill="url(#pattern3_1001_4)" fill-opacity="0.6" shape-rendering="crispEdges"/>
+<ellipse cx="787" cy="232.5" rx="173" ry="139.5" fill="url(#pattern4_1001_4)" fill-opacity="0.3" shape-rendering="crispEdges"/>
 </g>
 <g filter="url(#filter3_d_1001_4)">
-<ellipse cx="813" cy="623" rx="145" ry="116" fill="url(#pattern4_1001_4)" fill-opacity="0.6" shape-rendering="crispEdges"/>
+<ellipse cx="1786" cy="905.5" rx="173" ry="139.5" fill="url(#pattern5_1001_4)" shape-rendering="crispEdges"/>
 </g>
 <g filter="url(#filter4_d_1001_4)">
-<path d="M357.5 542.5C357.5 599.109 302.879 645 235.5 645C168.121 645 113.5 599.109 113.5 542.5C113.5 485.891 168.121 440 235.5 440C302.879 440 357.5 485.891 357.5 542.5Z" fill="url(#pattern5_1001_4)" fill-opacity="0.6" shape-rendering="crispEdges"/>
+<path d="M847 993C847 1041.05 795.737 1080 732.5 1080C669.263 1080 618 1041.05 618 993C618 944.951 669.263 906 732.5 906C795.737 906 847 944.951 847 993Z" fill="url(#pattern6_1001_4)" fill-opacity="0.3" shape-rendering="crispEdges"/>
 </g>
-<path d="M669 809C669 874.722 609.23 928 535.5 928C461.77 928 402 874.722 402 809C402 743.278 461.77 690 535.5 690C609.23 690 669 743.278 669 809Z" fill="url(#pattern6_1001_4)" fill-opacity="0.6"/>
-<path d="M367 958C367 1036.42 321.781 1100 266 1100C210.219 1100 165 1036.42 165 958C165 879.576 210.219 816 266 816C321.781 816 367 879.576 367 958Z" fill="url(#pattern7_1001_4)" fill-opacity="0.6"/>
-<ellipse cx="417" cy="146.5" rx="151" ry="141.5" fill="url(#pattern8_1001_4)" fill-opacity="0.6"/>
-<path d="M217 786.5C217 853.05 163.722 907 98 907C32.2781 907 -21 853.05 -21 786.5C-21 719.95 32.2781 666 98 666C163.722 666 217 719.95 217 786.5Z" fill="url(#pattern9_1001_4)" fill-opacity="0.6"/>
+<g filter="url(#filter5_d_1001_4)">
+<path d="M1523 985C1523 1033.05 1471.74 1072 1408.5 1072C1345.26 1072 1294 1033.05 1294 985C1294 936.951 1345.26 898 1408.5 898C1471.74 898 1523 936.951 1523 985Z" fill="url(#pattern7_1001_4)" fill-opacity="0.3" shape-rendering="crispEdges"/>
+</g>
+<g filter="url(#filter6_d_1001_4)">
+<ellipse cx="547" cy="500" rx="145" ry="116" fill="url(#pattern8_1001_4)" fill-opacity="0.3" shape-rendering="crispEdges"/>
+</g>
+<g filter="url(#filter7_d_1001_4)">
+<path d="M357.5 542.5C357.5 599.109 302.879 645 235.5 645C168.121 645 113.5 599.109 113.5 542.5C113.5 485.891 168.121 440 235.5 440C302.879 440 357.5 485.891 357.5 542.5Z" fill="url(#pattern9_1001_4)" fill-opacity="0.6" shape-rendering="crispEdges"/>
+</g>
+<path d="M533 141C533 206.722 473.23 260 399.5 260C325.77 260 266 206.722 266 141C266 75.2781 325.77 22 399.5 22C473.23 22 533 75.2781 533 141Z" fill="url(#pattern10_1001_4)"/>
+<path d="M1282 816C1282 881.722 1222.23 935 1148.5 935C1074.77 935 1015 881.722 1015 816C1015 750.278 1074.77 697 1148.5 697C1222.23 697 1282 750.278 1282 816Z" fill="url(#pattern11_1001_4)" fill-opacity="0.3"/>
+<path d="M367 958C367 1036.42 321.781 1100 266 1100C210.219 1100 165 1036.42 165 958C165 879.576 210.219 816 266 816C321.781 816 367 879.576 367 958Z" fill="url(#pattern12_1001_4)" fill-opacity="0.3"/>
+<path d="M1192 425C1192 503.424 1146.78 567 1091 567C1035.22 567 990 503.424 990 425C990 346.576 1035.22 283 1091 283C1146.78 283 1192 346.576 1192 425Z" fill="url(#pattern13_1001_4)" fill-opacity="0.3"/>
+<ellipse cx="517" cy="787.5" rx="151" ry="141.5" fill="url(#pattern14_1001_4)"/>
+<ellipse cx="1351" cy="156.5" rx="151" ry="141.5" fill="url(#pattern15_1001_4)" fill-opacity="0.3"/>
+<path d="M217 786.5C217 853.05 163.722 907 98 907C32.2781 907 -21 853.05 -21 786.5C-21 719.95 32.2781 666 98 666C163.722 666 217 719.95 217 786.5Z" fill="url(#pattern16_1001_4)" fill-opacity="0.3"/>
+<path d="M1974 518.5C1974 585.05 1920.72 639 1855 639C1789.28 639 1736 585.05 1736 518.5C1736 451.95 1789.28 398 1855 398C1920.72 398 1974 451.95 1974 518.5Z" fill="url(#pattern17_1001_4)" fill-opacity="0.3"/>
 </g>
 <rect x="0.5" y="0.5" width="1919" height="1079" stroke="white"/>
 <defs>
 <pattern id="pattern0_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image0_1001_4" transform="matrix(0.00218341 0 0 0.00236816 0 -0.0458599)"/>
 </pattern>
-<filter id="filter0_d_1001_4" x="384" y="384" width="249" height="218" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dy="4"/>
-<feGaussianBlur stdDeviation="2"/>
-<feComposite in2="hardAlpha" operator="out"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1001_4"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
-</filter>
 <pattern id="pattern1_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image1_1001_4" transform="matrix(0.00670284 0 0 0.00769231 0.191669 0)"/>
+<use xlink:href="#image0_1001_4" transform="matrix(0.00218341 0 0 0.00236816 0 -0.0458599)"/>
 </pattern>
-<filter id="filter1_d_1001_4" x="532" y="127" width="354" height="287" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter0_d_1001_4" x="715" y="534" width="249" height="218" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
@@ -51,9 +55,9 @@
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
 </filter>
 <pattern id="pattern2_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image2_1001_4" transform="matrix(0.00279986 0 0 0.00347222 0.231214 0)"/>
+<use xlink:href="#image1_1001_4" transform="matrix(0.00670284 0 0 0.00769231 0.191669 0)"/>
 </pattern>
-<filter id="filter2_d_1001_4" x="614" y="906" width="237" height="182" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter1_d_1001_4" x="1581" y="22" width="249" height="218" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
@@ -64,9 +68,9 @@
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
 </filter>
 <pattern id="pattern3_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image3_1001_4" transform="matrix(0.00471941 0 0 0.00621118 0.108289 0)"/>
+<use xlink:href="#image1_1001_4" transform="matrix(0.00670284 0 0 0.00769231 0.191669 0)"/>
 </pattern>
-<filter id="filter3_d_1001_4" x="664" y="507" width="298" height="240" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter2_d_1001_4" x="610" y="93" width="354" height="287" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
@@ -77,9 +81,9 @@
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
 </filter>
 <pattern id="pattern4_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
-<use xlink:href="#image4_1001_4" transform="matrix(0.00195599 0 0 0.00244499 0.214425 0)"/>
+<use xlink:href="#image2_1001_4" transform="matrix(0.00279986 0 0 0.00347222 0.231214 0)"/>
 </pattern>
-<filter id="filter4_d_1001_4" x="109.5" y="440" width="252" height="213" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<filter id="filter3_d_1001_4" x="1609" y="766" width="354" height="287" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>
 <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
 <feOffset dy="4"/>
@@ -90,18 +94,82 @@
 <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
 </filter>
 <pattern id="pattern5_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image2_1001_4" transform="matrix(0.00279986 0 0 0.00347222 0.231214 0)"/>
+</pattern>
+<filter id="filter4_d_1001_4" x="614" y="906" width="237" height="182" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1001_4"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
+</filter>
+<pattern id="pattern6_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image3_1001_4" transform="matrix(0.00471941 0 0 0.00621118 0.108289 0)"/>
+</pattern>
+<filter id="filter5_d_1001_4" x="1290" y="898" width="237" height="182" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1001_4"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
+</filter>
+<pattern id="pattern7_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image3_1001_4" transform="matrix(0.00471941 0 0 0.00621118 0.108289 0)"/>
+</pattern>
+<filter id="filter6_d_1001_4" x="398" y="384" width="298" height="240" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1001_4"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
+</filter>
+<pattern id="pattern8_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image4_1001_4" transform="matrix(0.00195599 0 0 0.00244499 0.214425 0)"/>
+</pattern>
+<filter id="filter7_d_1001_4" x="109.5" y="440" width="252" height="213" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1001_4"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1001_4" result="shape"/>
+</filter>
+<pattern id="pattern9_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image5_1001_4" transform="matrix(0.00454143 0 0 0.00540541 0.227514 0)"/>
 </pattern>
-<pattern id="pattern6_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<pattern id="pattern10_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image6_1001_4" transform="matrix(0.00416535 0 0 0.0046729 -0.0602401 0)"/>
 </pattern>
-<pattern id="pattern7_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<pattern id="pattern11_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image6_1001_4" transform="matrix(0.00416535 0 0 0.0046729 -0.0602401 0)"/>
+</pattern>
+<pattern id="pattern12_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image7_1001_4" transform="matrix(0.00237892 0 0 0.00169205 -0.00195172 0)"/>
 </pattern>
-<pattern id="pattern8_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<pattern id="pattern13_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image7_1001_4" transform="matrix(0.00237892 0 0 0.00169205 -0.00195172 0)"/>
+</pattern>
+<pattern id="pattern14_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image8_1001_4" transform="matrix(0.00242718 0 0 0.00259014 0 -0.0581752)"/>
 </pattern>
-<pattern id="pattern9_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<pattern id="pattern15_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image8_1001_4" transform="matrix(0.00242718 0 0 0.00259014 0 -0.0581752)"/>
+</pattern>
+<pattern id="pattern16_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
+<use xlink:href="#image9_1001_4" transform="matrix(0.00373134 0 0 0.0036849 0 -0.00298817)"/>
+</pattern>
+<pattern id="pattern17_1001_4" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image9_1001_4" transform="matrix(0.00373134 0 0 0.0036849 0 -0.00298817)"/>
 </pattern>
 <clipPath id="clip0_1001_4">

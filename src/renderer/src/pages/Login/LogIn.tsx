@@ -31,7 +31,7 @@ const Login: React.FC = () => {
                 <a href="#">Forgot password ?</a>
               </div>
 
-              <Button size='large' onClick={()=>{navigate("/test")}}>LogIn</Button>
+              <Button size='large' onClick={()=>{navigate("/dashboard")}}>LogIn</Button>
             </div>
           </div>
         </Col>
