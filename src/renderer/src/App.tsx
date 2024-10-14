@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import axios from 'axios'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Routes, Route, HashRouter } from 'react-router-dom'
 import { Main, LogIn } from './pages'
 
 const client = new QueryClient({
@@ -22,12 +22,12 @@ function App(): JSX.Element {
 
   return (
     <QueryClientProvider client={client}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<LogIn />}></Route>
           <Route path="/test" element={<Main />}></Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </QueryClientProvider>
   )
 }
