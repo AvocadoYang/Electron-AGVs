@@ -3,7 +3,7 @@ import { Layout } from 'antd'
 import Header from '../../components/Header'
 import '../../sockets/test'
 import { Scene } from './3D'
-import CarCardWrap from './3D/car_info/CardWrap'
+import CarCardWrap from './Car_Card/CardWrap'
 const { Content } = Layout
 
 const Main: React.FC = () => {

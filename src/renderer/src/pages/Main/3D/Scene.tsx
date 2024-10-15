@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import React, { useRef, useState, FC, useEffect, Suspense } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import CardWrap from './car_info/CardWrap'
+import CardWrap from '../Car_Card/CardWrap'
 
 const Scene: React.FC = () => {
   const sceneDOM = useRef<HTMLDivElement>(null)
