@@ -13,10 +13,10 @@ const Login: React.FC = () => {
         <Col span={12}></Col>
         <Col span={12}>
           <div className="From-Wrap">
-          <div className='Tittle'></div>
+            <div className="Tittle"></div>
             <div className="wrapper">
               <h1>LogIn</h1>
-              <Space direction="vertical" style={{ width: "80%"}}>
+              <Space direction="vertical" style={{ width: '80%' }}>
                 <Input
                   placeholder="User ID"
                   prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -31,7 +31,14 @@ const Login: React.FC = () => {
                 <a href="#">Forgot password ?</a>
               </div>
 
-              <Button size='large' onClick={()=>{navigate("/dashboard")}}>LogIn</Button>
+              <Button
+                size="large"
+                onClick={() => {
+                  navigate('/dashboard')
+                }}
+              >
+                LogIn
+              </Button>
             </div>
           </div>
         </Col>

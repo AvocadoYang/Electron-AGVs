@@ -1,4 +1,5 @@
 import { Layout, Menu } from 'antd'
+import '../components/component.css'
 const { Header: AntdHeader } = Layout
 
 const items = new Array(3).fill(null).map((_, index) => ({
@@ -8,8 +9,7 @@ const items = new Array(3).fill(null).map((_, index) => ({
 
 const Header: React.FC = () => {
   return (
-    <AntdHeader style={{ display: 'flex', alignItems: 'center'
-     }}>
+    <AntdHeader style={{ display: 'flex', alignItems: 'center', padding: '0 1px 0 1px' }}>
       <div className="demo-logo" />
       <Menu
         theme="dark"

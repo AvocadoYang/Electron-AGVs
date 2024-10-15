@@ -1,0 +1,7 @@
+.demo-logo {
+  background-image: url('../assets/kenmec_without_background.png');
+  background-size: cover;
+  height: 50%;
+  width: 8%;
+  background-position: center;
+}

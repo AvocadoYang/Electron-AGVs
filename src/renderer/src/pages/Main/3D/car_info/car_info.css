@@ -1,0 +1,11 @@
+.card-wrap {
+  height: 99%;
+  width: 10%;
+  position: absolute;
+  left: 10px;
+  top: 3px;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3);
+  background-color: rgba(255, 255, 255, 0.50);
+  border-radius: 8px;
+  z-index: 999;
+}

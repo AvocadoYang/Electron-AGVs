@@ -33,7 +33,7 @@
 .Tittle {
   background-image: url("../../assets/kenmec_without_background.png");
   background-size: cover;
-  background-position: 8px;
+  background-position: center;
   width: 50%;
   height: 10%;
   margin-bottom: 20px;

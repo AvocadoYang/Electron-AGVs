@@ -9,6 +9,12 @@ const api = {}
 // just add to the DOM global.
 if (process.contextIsolated) {
   try {
+    contextBridge.exposeInMainWorld('env', {
+      ELECTRON_RENDERER_URL: process.env.ELECTRON_RENDERER_URL,
+      NODE_ENV: process.env.NODE_ENV,
+      VITE_REACT_APP_MISSION_CONTROL_URL: process.env.VITE_REACT_APP_MISSION_CONTROL_URL
+    })
+
     contextBridge.exposeInMainWorld('versions', {
       node: () => process.versions.node,
       chrome: () => process.versions.chrome,
