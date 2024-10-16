@@ -8,8 +8,8 @@ dotenv.config()
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 720,
+    width: 1300,
+    height: 760,
     show: false,
     // autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),

@@ -13,7 +13,7 @@ import './car_info.css'
 
 const Card: React.FC = () => {
   return (
-    <InfoWrap randomColor={'red'} isstop={false}>
+    <InfoWrap randomcolor={'red'} isstop={false}>
       <CarRow1>
         <LogInStatus login={true}></LogInStatus>
         <div className="car-name">

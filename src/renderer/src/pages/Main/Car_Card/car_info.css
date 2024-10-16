@@ -38,3 +38,9 @@
     font-size: 7px;
   }
 }
+
+@media screen and (max-width: 500px) {
+  .card-wrap {
+    width: 15%;
+  }
+}
