@@ -1,0 +1,20 @@
+.mission-wrap {
+  height: 99%;
+  width: 13%;
+  position: absolute;
+  right: 10px;
+  top: 3px;
+  box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3);
+  background-color: #ffffff00;
+  border-radius: 8px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-around; */
+  align-items: center;
+  overflow-y: scroll;
+}
+
+.mission-wrap::-webkit-scrollbar{
+  display: none;
+}

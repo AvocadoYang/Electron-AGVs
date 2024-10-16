@@ -5,10 +5,10 @@ import styled from 'styled-components'
 export const LogInStatus = styled.p.attrs<{ login: 'boolean' }>((props) => {
   return { login: props.login }
 })<{ login: boolean }>`
-  background-color: ${(props) => (props.login ? '	#00A600' : 'red')};
+  background-color: ${(props) => (props.login ? '	#92e247' : 'red')};
   color: ${(props) => (props.login ? 'black' : 'white')};
-  width: 0.25em;
-  height: 0.25em;
+  width: 0.4em;
+  height: 0.4em;
   border-radius: 50%;
   position: absolute;
   left: 0;
@@ -65,7 +65,7 @@ export const CarStatus = styled.span`
 export const CarRow3 = styled.div`
   width: 100%;
   display: flex;
-  margin-top: 2px;
+  margin-top: 5px;
   justify-content: space-around;
   align-items: center;
   overflow: hidden;
