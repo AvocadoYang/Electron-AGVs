@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import axios from 'axios'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Routes, Route, HashRouter } from 'react-router-dom'
-import { Main, LogIn } from './pages'
+import { Main, LogIn, Setting } from './pages'
 
 const client = new QueryClient({
   defaultOptions: {
@@ -25,6 +25,7 @@ function App(): JSX.Element {
       <HashRouter>
         <Routes>
           <Route path="/" element={<LogIn />}></Route>
+          <Route path="/setting" element={<Setting></Setting>}></Route>
           <Route path="/dashboard" element={<Main />}></Route>
         </Routes>
       </HashRouter>

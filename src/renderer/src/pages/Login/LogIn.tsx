@@ -34,7 +34,7 @@ const Login: React.FC = () => {
               <Button
                 size="large"
                 onClick={() => {
-                  navigate('/dashboard')
+                  navigate('/Setting')
                 }}
               >
                 LogIn
