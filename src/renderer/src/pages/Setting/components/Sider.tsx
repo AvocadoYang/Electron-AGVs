@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Layout, Menu, theme } from 'antd'
+import { Layout, Menu } from 'antd'
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import '../setting.css'
@@ -27,25 +27,15 @@ const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOu
 const { Sider: AntdSider } = Layout
 
 const Sider: React.FC = () => {
-  const [collapsed, setCollapsed] = useState(false)
-  const {
-    token: { colorBgContainer }
-  } = theme.useToken()
+  const [collapsed, setCollapsed] = useState(true)
   return (
     <AntdSider
       collapsible
       width={200}
-      style={{ background: colorBgContainer }}
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
     >
-      <Menu
-        mode="inline"
-        defaultSelectedKeys={['1']}
-        defaultOpenKeys={['sub1']}
-        style={{ height: '100%', borderRight: 0 }}
-        items={items2}
-      />
+      <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} items={items2} />
     </AntdSider>
   )
 }

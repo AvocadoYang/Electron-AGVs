@@ -2,6 +2,7 @@
   "test_translation": "test translation",
   "zoom_out": "Zoom Out",
   "zoom_in": "Zoom In",
-  "page_map": "Map",
-  "page_setting": "Setting"
+  "page_view": "View",
+  "page_setting": "Setting",
+  "page_dashboard": "Dashboard"
 }

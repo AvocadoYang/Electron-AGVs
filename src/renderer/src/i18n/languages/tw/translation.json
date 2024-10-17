@@ -2,6 +2,7 @@
   "test_translation": "測試翻譯",
    "zoom_out": "縮小",
   "zoom_in": "放大",
-  "page_map": "地圖",
-  "page_setting": "點位設定"
+  "page_view": "地圖",
+  "page_setting": "點位設定",
+  "page_dashboard": "控制中心"
 }

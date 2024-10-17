@@ -31,7 +31,6 @@ const MapView: React.FC<{ scale: number }> = ({ scale }) => {
     >
       <img
         src="https://localhost:4000/static/images/rf_map_1.png"
-        alt=""
         draggable={false}
         style={{ userSelect: 'none' }}
       />
