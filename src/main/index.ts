@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -7,6 +7,7 @@ dotenv.config()
 
 function createWindow(): void {
   // Create the browser window.
+  let zoomFactor = 1
   const mainWindow = new BrowserWindow({
     width: 1300,
     height: 760,
@@ -44,6 +45,21 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  globalShortcut.register('CommandOrControl+=', () => {
+    zoomFactor += 0.1
+    mainWindow.webContents.setZoomFactor(zoomFactor)
+  })
+
+  globalShortcut.register('CommandOrControl+-', () => {
+    zoomFactor = Math.max(0.1, zoomFactor - 0.1)
+    mainWindow.webContents.setZoomFactor(zoomFactor)
+  })
+
+  globalShortcut.register('CommandOrControl+0', () => {
+    zoomFactor = 1
+    mainWindow.webContents.setZoomFactor(zoomFactor)
+  })
 }
 
 // This method will be called when Electron has finished
