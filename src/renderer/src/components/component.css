@@ -8,13 +8,13 @@
 }
 
 .custom-header {
-    background-color: rgba(240, 202, 167, 0.925);
-    /* background-color: rgba(248, 181, 118, 0.925); */
+    /* background-color: rgba(240, 202, 167, 0.925); */
+    background-color: white
 }
 
 .custom-header > ul {
-  background-color: rgba(241, 204, 170, 0.925);
-  /* background-color: rgba(252, 186, 125, 0.925); */
+  /* background-color: rgba(241, 204, 170, 0.925); */
+  background-color: white;
 }
 
 
