@@ -13,7 +13,7 @@ const Main: React.FC = () => {
     <Layout style={{ height: '100vh' }}>
       <Header></Header>
       <Content>
-        <div style={{ width: '100%', height: '100%', position: 'relative'}}>
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
           <CarCardWrap></CarCardWrap>
           <Scene></Scene>
           <MissionWrap></MissionWrap>
