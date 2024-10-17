@@ -6,6 +6,10 @@
   background-position: center; */
 }
 
+.setting-sider svg{
+  fill: rgb(255, 128, 0);
+}
+
 .ant-layout-sider-trigger {
   background: white !important;
 }

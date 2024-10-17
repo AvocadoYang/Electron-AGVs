@@ -34,6 +34,7 @@ const Sider: React.FC = () => {
       width={200}
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
+      className="setting-sider"
     >
       <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} items={items2} />
     </AntdSider>

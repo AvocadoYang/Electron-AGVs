@@ -18,3 +18,20 @@
 .mission-wrap::-webkit-scrollbar{
   display: none;
 }
+
+.row1-file, .row1-status, .row1-cancel {
+  text-align: center;
+  font-size: 80%;
+  padding: 3.5px
+}
+
+.row1-file {
+  background-color: rgb(165, 176, 193);
+}
+
+.row1-status {
+  background-color: rgb(96, 124, 166);
+  color: white;
+  text-align:left
+}
+

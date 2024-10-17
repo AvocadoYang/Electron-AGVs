@@ -23,6 +23,6 @@
   font-weight: bold;
 }
 
-svg {
-  fill: rgb(255, 137, 2);
+.custom-header svg {
+  fill: rgb(29, 83, 246);
 }

@@ -36,7 +36,7 @@ const Header: React.FC = () => {
 
   return (
     <AntdHeader
-      style={{ display: 'flex', alignItems: 'center', padding: '0 1px 0 1px', height: '6%' }}
+      style={{ display: 'flex', alignItems: 'center', padding: '0 1px 0 1px', height: '5vh' }}
       className="custom-header"
     >
       <div className="demo-logo" />
