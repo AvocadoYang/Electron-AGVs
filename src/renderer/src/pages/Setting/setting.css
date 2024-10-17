@@ -1,8 +1,16 @@
 .map-view {
-  background-image: url("../../assets/rf_map_1.png");
+  /* background-image: url("../../assets/ruifang-f2.png");
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center;
+
+  background-position: center; */
+}
+
+.ant-layout-sider-trigger {
+  background: white !important;
+}
+.ant-layout-sider-trigger > span {
+  color: black;
 }
 
 ::-webkit-scrollbar-track {

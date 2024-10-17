@@ -18,13 +18,13 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
   return (
     <ZoomPadWrap>
       <Button.Group>
-        <Button onClick={() => setScale((pre) => pre + 0.1)} icon={<PlusOutlined />}>
+        <Button onClick={() => setScale((pre) => pre + 0.05)} icon={<PlusOutlined />}>
           {t('zoom_in')}
         </Button>
         <Button
           onClick={() =>
             setScale((pre) => {
-              return pre - 0.1
+              return pre - 0.05
             })
           }
           icon={<MinusOutlined />}

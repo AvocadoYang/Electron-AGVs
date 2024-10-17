@@ -17,9 +17,6 @@ const Setting: React.FC = () => {
           <Sider></Sider>
           <Content
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               overflow: 'scroll'
             }}
           >

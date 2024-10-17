@@ -45,7 +45,6 @@ const Sider: React.FC = () => {
         defaultOpenKeys={['sub1']}
         style={{ height: '100%', borderRight: 0 }}
         items={items2}
-        theme="dark"
       />
     </AntdSider>
   )
