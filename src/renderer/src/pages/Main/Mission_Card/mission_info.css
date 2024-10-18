@@ -19,19 +19,160 @@
   display: none;
 }
 
+
+/* ===== row1 start  =====*/
 .row1-file, .row1-status, .row1-cancel {
   text-align: center;
   font-size: 80%;
-  padding: 3.5px
+  padding: 3.5px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
 }
 
 .row1-file {
   background-color: rgb(165, 176, 193);
+
 }
 
 .row1-status {
   background-color: rgb(96, 124, 166);
   color: white;
-  text-align:left
+  font-weight: bold;
+  text-align:left;
+  font-size: 10px;
+  white-space:nowrap;
+  justify-content: left;
 }
 
+@media screen and (max-width:1200px) {
+  .row1-status {
+    font-size: 7px;
+  }
+}
+
+/* ===== row1 end =====*/
+
+
+/* ===== row2 start  =====*/
+.row2-src, .row2-dis, .row2-icon{
+  width: 32.33%;
+  font-size: 13.5px;
+  margin: 8px;
+}
+
+.row2-src, .row2-dis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.row2-icon {
+  text-align: center;
+}
+
+.row2-describe {
+  font-size: 8.5px;
+  color: rgb(102, 99, 99);
+  margin-top: 1px;
+}
+
+@media screen and (max-width:1200px) {
+  .row2-id {
+    font-size: 9px;
+  }
+  .row2-describe {
+    font-size: 7px;
+  }
+}
+
+
+/* ===== row2 end =====*/
+
+
+
+
+/* ===== row3 start  =====*/
+.row3-tittle {
+  font-size: 11.5px;
+  width: 100%;
+  background-color: rgb(197, 212, 236);
+  display: flex;
+  align-items: center;
+  padding: 2px 0 0 4px;
+  font-weight:300;
+}
+
+.row3-content{
+  padding: 3px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.row3-content-color {
+  width: 7px;
+  height: 7px;
+  background-color: var(--clr);
+  align-self: center;
+  margin: 0 2px 0 2px;
+}
+
+.row3-content-num {
+  font-size: 70%;
+  height: 100%;
+  white-space:nowrap;
+  padding: 1px;
+  margin: 0 2px 0 2px;
+}
+
+.row3-content-id {
+  font-size: 60%;
+  height: 100%;
+  color: rgb(102, 99, 99);
+  align-self:flex-end;
+  margin: 0 2px 0 2px;
+  white-space:nowrap;
+}
+
+@media screen and (max-width:1360px) {
+  .row3-content-id {
+    display: none;
+  }
+
+  .row3-tittle {
+    font-size: 9px;
+  }
+}
+
+/* ===== row3 end =====*/
+
+
+/* ===== row4 start  =====*/
+.row4-tittle {
+  font-size: 11px;
+  width: 100%;
+  background-color: rgb(197, 212, 236);
+  display: flex;
+  align-items: center;
+  padding: 2px 0 0 4px;
+  font-weight:550;
+}
+
+.row4-content {
+  font-size: 70%;
+  text-align: center;
+  margin: 2px 0 2px 0;
+}
+
+
+@media screen and (max-width:1360px) {
+
+  .row4-tittle {
+    font-size: 9px;
+  }
+}
+/* ===== row4 end =====*/

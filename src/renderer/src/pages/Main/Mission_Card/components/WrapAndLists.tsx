@@ -17,10 +17,30 @@ export const InfoWrap = styled.div`
 export const CardRow1 = styled.div`
   width: 100%;
   display: flex;
+  height: 25px;
   position: relative;
   justify-content: space-around;
   align-items: center;
   overflow: hidden;
 `
 
+// ==============================
+
+// ======= Second row in info card =======
+export const CardRow2 = styled.div`
+  width: 100%;
+  display: flex;
+  /* height: 40px; */
+  overflow: hidden;
+  align-items: center;
+  justify-content: space-around;
+`
+// ==============================
+
+// ======= Third row in info card =======
+export const CardRow3 = styled.div``
+// ==============================
+
+// ======= 4sd row in info card =======
+export const CardRow4 = styled.div``
 // ==============================
