@@ -7,7 +7,7 @@ export const InfoWrap = styled.div.attrs<{
 }>((props) => {
   return { randomcolor: props.randomcolor, isstop: props.isstop }
 })<{ randomcolor: string; isstop: boolean }>`
-  margin-bottom: 3%;
+  /* margin-bottom: 3%; */
   margin-top: 6%;
   z-index: 2;
   /* overflow: hidden; */

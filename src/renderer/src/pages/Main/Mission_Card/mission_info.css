@@ -59,8 +59,8 @@
 /* ===== row2 start  =====*/
 .row2-src, .row2-dis, .row2-icon{
   width: 32.33%;
-  font-size: 13.5px;
-  margin: 8px;
+  font-size: 11px;
+  margin: 5px;
 }
 
 .row2-src, .row2-dis {
@@ -75,8 +75,9 @@
 }
 
 .row2-describe {
-  font-size: 8.5px;
+  font-size: 7.5px;
   color: rgb(102, 99, 99);
+  white-space:nowrap;
   margin-top: 1px;
 }
 

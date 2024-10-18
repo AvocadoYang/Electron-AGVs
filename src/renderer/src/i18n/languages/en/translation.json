@@ -4,5 +4,15 @@
   "zoom_in": "Zoom In",
   "page_view": "View",
   "page_setting": "Setting",
-  "page_dashboard": "Dashboard"
+  "page_dashboard": "Dashboard",
+  "toolbar": {
+    "location" : {
+     "locations": "Locations",
+      "edit_locations": "Edit Locations",
+      "show_in_use_locations": "Show stored Locations",
+      "show_edit_locations": "Show Edit Locations",
+      "show_locations_table": "Show Locations Table",
+      "show_tooltip": "Show Tooltip"
+    }
+  }
 }

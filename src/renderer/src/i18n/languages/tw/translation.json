@@ -4,5 +4,15 @@
   "zoom_in": "放大",
   "page_view": "地圖",
   "page_setting": "點位設定",
-  "page_dashboard": "控制中心"
+  "page_dashboard": "控制中心",
+  "toolbar": {
+    "location" : {
+      "locations": "點位",
+      "edit_locations": "編輯點位",
+      "show_in_use_locations": "顯示現有地點",
+      "show_edit_locations": "顯示編輯地點",
+      "show_locations_table": "顯示地點表",
+      "show_tooltip": "顯示點位提示框"
+    }
+  }
 }
