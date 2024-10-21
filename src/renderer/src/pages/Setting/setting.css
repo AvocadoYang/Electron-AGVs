@@ -10,6 +10,10 @@
   fill: rgb(10, 9, 9);
 }
 
+.setting-sider-menu svg:hover {
+  font-size: 25px;
+}
+
 .location_icon svg {
   fill: rgb(56, 142, 240);
 }
@@ -20,6 +24,10 @@
 
 .zone_icon svg {
   fill: rgb(236, 38, 38);
+}
+
+.shelve_icon svg {
+  fill: rgb(247, 108, 10);
 }
 
 .ant-layout-sider-trigger {

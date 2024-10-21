@@ -29,6 +29,21 @@
         "edit_zone": "Edit Zones",
         "show_zone_list": "Show Zone List"
       }
+    },
+    "shelve": {
+      "shelves": {
+        "shelves&pallet": "Shelves & Pallet",
+        "edit_shelve": "Edit shelves",
+        "edit_shelve_type": "Edit shelves type",
+        "edit_yaw": "Shelves Yaw",
+        "edit_pallet": "Edit Pallet"
+      }
+    },
+    "others": {
+      "others": "Others",
+      "edit_gauge": "Edit Gauge",
+      "edit_tag": "Edit Tag",
+      "edit_charge_station_icon_style": "Edit charge station icon style"
     }
   }
 }

@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useEffect, useState } from 'react'
 import { Layout, Menu, Switch } from 'antd'
-import { AimOutlined, NodeIndexOutlined, BorderOuterOutlined } from '@ant-design/icons'
+import {
+  AimOutlined,
+  NodeIndexOutlined,
+  BorderOuterOutlined,
+  GoldOutlined,
+  DeploymentUnitOutlined
+} from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { ToolBarItemType } from './antd'
 import { EditLocation } from './forms'
@@ -37,7 +43,6 @@ const Sider: React.FC = () => {
   const { t } = useTranslation()
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
-
     useEffect(() => {
       setStartMousePoint(false)
     }, [])
@@ -78,6 +83,31 @@ const Sider: React.FC = () => {
         break
       case 'show_zone_list':
         console.log('show_zone_list')
+        break
+      // ===================
+      // === shelves ===
+      case 'edit_shelve':
+        console.log('edit_shelve')
+        break
+      case 'edit_shelve_type':
+        console.log('edit_shelve_type')
+        break
+      case 'edit_yaw':
+        console.log('edit_yaw')
+        break
+      case 'edit_pallet':
+        console.log('edit_pallet')
+        break
+      // ===================
+      // === others ===
+      case 'edit_gauge':
+        console.log('edit_gauge')
+        break
+      case 'edit_tag':
+        console.log('edit_tag')
+        break
+      case 'edit_charge_station_icon_style':
+        console.log('edit_charge_station_icon_style')
         break
       // ===================
     }
@@ -162,6 +192,53 @@ const Sider: React.FC = () => {
           onChange={(checked) => handleShowPanel(checked, 'show_zone_list')}
         />
       )
+    ]),
+    getItem(
+      t('toolbar.shelve.shelves.shelves&pallet'),
+      '4',
+      <GoldOutlined className="shelve_icon" />,
+      [
+        getItem(
+          t('toolbar.shelve.shelves.edit_shelve'),
+          '4-1',
+          <Switch onChange={(checked) => handleShowPanel(checked, 'edit_shelve')} />
+        ),
+        getItem(
+          t('toolbar.shelve.shelves.edit_shelve_type'),
+          '4-2',
+          <Switch onChange={(checked) => handleShowPanel(checked, 'edit_shelve_type')} />
+        ),
+        getItem(
+          t('toolbar.shelve.shelves.edit_yaw'),
+          '4-3',
+          <Switch onChange={(checked) => handleShowPanel(checked, 'edit_yaw')} />
+        ),
+        getItem(
+          t('toolbar.shelve.shelves.edit_pallet'),
+          '4-4',
+          <Switch checked={false} onChange={(checked) => handleShowPanel(checked, 'edit_pallet')} />
+        )
+      ]
+    ),
+    getItem(t('toolbar.others.others'), '7', <DeploymentUnitOutlined />, [
+      getItem(
+        t('toolbar.others.edit_gauge'),
+        '7-1',
+        <Switch checked={false} onChange={(checked) => handleShowPanel(checked, 'edit_gauge')} />
+      ),
+      getItem(
+        t('toolbar.others.edit_tag'),
+        '7-2',
+        <Switch checked={false} onChange={(checked) => handleShowPanel(checked, 'edit_tag')} />
+      ),
+      getItem(
+        t('toolbar.others.edit_charge_station_icon_style'),
+        '7-3',
+        <Switch
+          checked={false}
+          onChange={(checked) => handleShowPanel(checked, 'edit_charge_station_icon_style')}
+        />
+      )
     ])
   ]
 
@@ -175,7 +252,7 @@ const Sider: React.FC = () => {
         onCollapse={(value) => setCollapsed(value)}
         className="setting-sider"
       >
-        <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} items={toolItem} />
+        <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} items={toolItem} className='setting-sider-menu'/>
       </AntdSider>
       <EditLocation
         openEditLocationPanel={openEditLocationPanel}

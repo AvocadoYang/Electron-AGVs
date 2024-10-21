@@ -29,6 +29,21 @@
         "edit_zone": "編輯區域",
         "show_zone_list": "顯示區域"
       }
+    },
+    "shelve": {
+      "shelves": {
+        "shelves&pallet": "貨架&棧板",
+        "edit_shelve": "編輯貨架",
+        "edit_shelve_type": "貨架種類",
+        "edit_yaw": "貨架角度",
+        "edit_pallet": "編輯棧板"
+      }
+    },
+    "others": {
+      "others": "其它",
+      "edit_gauge": "編輯錶頭",
+      "edit_tag": "標籤設定",
+      "edit_charge_station_icon_style": "充電站 Icon"
     }
   }
 }
