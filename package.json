@@ -30,6 +30,7 @@
     "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "i18next": "^23.16.0",
+    "jotai": "^2.10.1",
     "react-draggable": "^4.4.6",
     "react-i18next": "^15.0.3",
     "react-router-dom": "^6.26.2",

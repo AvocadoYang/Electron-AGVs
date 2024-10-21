@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { FC, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { FC } from 'react'
 import styled from 'styled-components'
+import { useAtom } from 'jotai';
+import { startMousePoint } from '@renderer/utils/gloable'
 
 const Container = styled.div.attrs<{ left: number; top: number }>(({ left, top }) => ({
   style: { left, top }
@@ -30,16 +31,12 @@ const Point: FC<{
   x: number
   y: number
 }> = ({ x, y }) => {
-  const pageLink = useLocation()
-  const [isDisplay, setIsDisplay] = useState(true)
-  useEffect(() => {
-    if (pageLink.pathname.includes('setting')) return
-    setIsDisplay(false)
-  }, [pageLink.pathname])
+  const [isMousePointStart] = useAtom(startMousePoint);
 
+  console.log(isMousePointStart, '@@@@')
   return (
     <Container left={x} top={y}>
-      <Circle show={isDisplay} />
+      <Circle show={isMousePointStart} />
     </Container>
   )
 }

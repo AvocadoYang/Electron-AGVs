@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Layout, Menu, Switch } from 'antd'
 import { AimOutlined, NodeIndexOutlined, BorderOuterOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { ToolBarItemType } from './antd'
 import { EditLocation } from './forms'
 import type { MenuProps } from 'antd'
+import { useAtom } from 'jotai'
+import { startMousePoint } from '@renderer/utils/gloable'
 import '../setting.css'
 
 export type MenuItem = Required<MenuProps>['items'][number]
@@ -30,14 +32,21 @@ const { Sider: AntdSider } = Layout
 
 const Sider: React.FC = () => {
   const [openEditLocationPanel, setOpenEditLocationPanel] = useState(false)
+  const [isMousePointStart, setStartMousePoint] = useAtom(startMousePoint)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
+
+    useEffect(() => {
+      setStartMousePoint(false)
+    }, [])
+
     switch (itemType) {
       // === location ===
       case 'locationPanel':
         setOpenEditLocationPanel(!openEditLocationPanel)
+        setStartMousePoint(!isMousePointStart)
         break
       case 'stored_location':
         console.log('stored_location')
@@ -168,10 +177,6 @@ const Sider: React.FC = () => {
       >
         <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} items={toolItem} />
       </AntdSider>
-      <EditLocation
-        openEditLocationPanel={openEditLocationPanel}
-        setOpenEditLocationPanel={setOpenEditLocationPanel}
-      ></EditLocation>
       <EditLocation
         openEditLocationPanel={openEditLocationPanel}
         setOpenEditLocationPanel={setOpenEditLocationPanel}
