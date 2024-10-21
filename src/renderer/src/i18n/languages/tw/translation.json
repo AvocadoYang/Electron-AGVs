@@ -10,9 +10,25 @@
       "locations": "點位",
       "edit_locations": "編輯點位",
       "show_in_use_locations": "顯示現有地點",
-      "show_edit_locations": "顯示編輯地點",
+      "show_edit_locations": "顯示編輯中地點",
       "show_locations_table": "顯示地點表",
       "show_tooltip": "顯示點位提示框"
+    },
+    "road": {
+      "roads": {
+        "roads": "路徑",
+        "edit_roads": "編輯路徑",
+        "show_in_use_roads": "顯示現有路徑",
+        "show_edit_roads": "顯示編輯中路徑",
+        "show_roads_table": "顯示路徑表"
+      }
+    },
+    "zone": {
+      "zones": {
+        "zones": "區域",
+        "edit_zone": "編輯區域",
+        "show_zone_list": "顯示區域"
+      }
     }
   }
 }

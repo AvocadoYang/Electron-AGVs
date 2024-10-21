@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Flex } from 'antd'
 import '../components/component.css'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'antd'
@@ -36,7 +36,7 @@ const Header: React.FC = () => {
 
   return (
     <AntdHeader
-      style={{ display: 'flex', alignItems: 'center', padding: '0 1px 0 1px', height: '5vh' }}
+      style={{ display: 'flex', alignItems: 'center', padding: '0 1px 0 1px' }}
       className="custom-header"
     >
       <div className="demo-logo" />
@@ -48,16 +48,8 @@ const Header: React.FC = () => {
         onClick={handleMenuClick}
         className="custom-menu"
       />
-      <div
-        style={{
-          display: 'flex',
-          padding: '1px',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-          marginRight: '8px',
-          width: '13%'
-        }}
-      >
+
+      <Flex gap="middle" align="start" style={{ marginRight: '10px' }}>
         <Select
           defaultValue="ch.tw"
           style={{ width: 120 }}
@@ -67,8 +59,10 @@ const Header: React.FC = () => {
             { value: 'ch.tw', label: 'Chinese' }
           ]}
         />
-        <UserOutlined style={{ color: 'blue' }} />
-      </div>
+        <UserOutlined
+          style={{ color: 'blue', textAlign: 'center', fontSize: '150%', marginTop: '5px' }}
+        />
+      </Flex>
     </AntdHeader>
   )
 }

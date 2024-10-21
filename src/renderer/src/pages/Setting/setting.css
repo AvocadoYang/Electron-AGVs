@@ -7,7 +7,19 @@
 }
 
 .setting-sider svg{
-  fill: rgb(255, 128, 0);
+  fill: rgb(10, 9, 9);
+}
+
+.location_icon svg {
+  fill: rgb(56, 142, 240);
+}
+
+.road_icon svg{
+  fill: rgb(71, 138, 129);
+}
+
+.zone_icon svg {
+  fill: rgb(236, 38, 38);
 }
 
 .ant-layout-sider-trigger {

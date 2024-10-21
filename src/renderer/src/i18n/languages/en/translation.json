@@ -13,6 +13,22 @@
       "show_edit_locations": "Show Edit Locations",
       "show_locations_table": "Show Locations Table",
       "show_tooltip": "Show Tooltip"
+    },
+    "road": {
+      "roads": {
+        "roads": "Roads",
+        "edit_roads": "Edit Roads",
+        "show_in_use_roads": "Show stored Roads",
+        "show_edit_roads": "Show Edit Locations",
+        "show_roads_table": "Show Roads Table"
+      }
+    },
+    "zone": {
+      "zones": {
+        "zones": "Zones",
+        "edit_zone": "Edit Zones",
+        "show_zone_list": "Show Zone List"
+      }
     }
   }
 }
