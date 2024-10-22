@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useEffect, useState } from 'react'
-import { Layout, Menu, Switch } from 'antd'
+import React, { useState } from 'react'
+import { Layout, Menu, Switch, FormInstance } from 'antd'
 import {
   AimOutlined,
   NodeIndexOutlined,
@@ -12,8 +12,6 @@ import { useTranslation } from 'react-i18next'
 import { ToolBarItemType } from './antd'
 import { EditLocation } from './forms'
 import type { MenuProps } from 'antd'
-import { useAtom } from 'jotai'
-import { startMousePoint } from '@renderer/utils/gloable'
 import '../setting.css'
 
 export type MenuItem = Required<MenuProps>['items'][number]
@@ -36,22 +34,21 @@ export function getItem(
 
 const { Sider: AntdSider } = Layout
 
-const Sider: React.FC = () => {
+const Sider: React.FC<{
+  setIsMousePointStart: React.Dispatch<boolean>
+  isMousePointStart: boolean,
+  forms: { locationPanelForm: FormInstance<unknown> }
+}> = ({ setIsMousePointStart, isMousePointStart, forms }) => {
   const [openEditLocationPanel, setOpenEditLocationPanel] = useState(false)
-  const [isMousePointStart, setStartMousePoint] = useAtom(startMousePoint)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
-    useEffect(() => {
-      setStartMousePoint(false)
-    }, [])
-
     switch (itemType) {
       // === location ===
       case 'locationPanel':
         setOpenEditLocationPanel(!openEditLocationPanel)
-        setStartMousePoint(!isMousePointStart)
+        setIsMousePointStart(!isMousePointStart)
         break
       case 'stored_location':
         console.log('stored_location')
@@ -252,11 +249,20 @@ const Sider: React.FC = () => {
         onCollapse={(value) => setCollapsed(value)}
         className="setting-sider"
       >
-        <Menu mode="inline" style={{ height: '100%', borderRight: 0 }} items={toolItem} className='setting-sider-menu'/>
+        <Menu
+          mode="inline"
+          style={{ height: '100%', borderRight: 0 }}
+          items={toolItem}
+          className="setting-sider-menu"
+        />
       </AntdSider>
+
       <EditLocation
         openEditLocationPanel={openEditLocationPanel}
         setOpenEditLocationPanel={setOpenEditLocationPanel}
+        setIsMousePointStart={setIsMousePointStart}
+        isMousePointStart={isMousePointStart}
+        locationPanelForm={forms.locationPanelForm}
       ></EditLocation>
     </>
   )

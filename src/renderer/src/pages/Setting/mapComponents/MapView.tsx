@@ -19,7 +19,8 @@ const MapView: React.FC<{
   scale: number
   mapRef: RefObject<HTMLDivElement>
   mousePointXY: { x: number; y: number }
-}> = ({ scale, mapRef, mousePointXY }) => {
+  isMousePointStart: boolean
+}> = ({ scale, mapRef, mousePointXY, isMousePointStart }) => {
   const [x1, y1] = rosCoord2DisplayCoord({
     x: -63.2114,
     y: -4.52656,
@@ -55,7 +56,11 @@ const MapView: React.FC<{
       />
       <Container left={x1} top={y1} key={3} />
       <Container left={x2} top={y2} key={4} />
-      <MousePoint x={Number(mousePointXY.x)} y={Number(mousePointXY.y)}></MousePoint>
+      {isMousePointStart ? (
+        <MousePoint x={Number(mousePointXY.x)} y={Number(mousePointXY.y)}></MousePoint>
+      ) : (
+        <></>
+      )}
     </div>
   )
 }

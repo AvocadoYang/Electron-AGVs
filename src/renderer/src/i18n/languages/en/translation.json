@@ -45,5 +45,22 @@
       "edit_tag": "Edit Tag",
       "edit_charge_station_icon_style": "Edit charge station icon style"
     }
+  },
+
+  "edit_location_panel": {
+    "none": "normal",
+    "charge_station": "charge station",
+    "prepare_spot": "prepare location",
+    "shelve": "shelve",
+    "save": "save",
+
+    "save_pose_notify": {
+    "empty_value": "X/Y is required",
+    "fill_in_value": "Please fill in the X/Y value",
+    "format_warn": "formate error",
+    "is_a_navigate": "Location ID can't be a negative number",
+    "duplicate_id": "duplicate ID",
+    "change_duplicate_id": "please change ID, can not be same"
+  }
   }
 }

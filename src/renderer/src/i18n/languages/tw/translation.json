@@ -45,5 +45,22 @@
       "edit_tag": "標籤設定",
       "edit_charge_station_icon_style": "充電站 Icon"
     }
+  },
+
+  "edit_location_panel": {
+    "none": "路徑點",
+    "charge_station": "充電站",
+    "prepare_spot": "預備點",
+    "shelve": "貨區",
+    "save": "儲存",
+
+    "save_pose_notify": {
+      "empty_value": "X/Y 為必填值",
+      "fill_in_value": "請填入 X/Y 值",
+      "format_warn": "格式錯誤 (點位不可為負值)",
+      "is_a_navigate": "點位 ID 不可為負值",
+      "duplicate_id": "ID 重複",
+      "change_duplicate_id": "請檢查輸入 ID,不可重複！"
+    }
   }
 }

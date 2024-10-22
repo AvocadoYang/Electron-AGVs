@@ -2,13 +2,15 @@
 import { useEffect, RefObject, useState } from 'react'
 import { fromEvent, throttleTime, debounceTime, map, tap, merge } from 'rxjs'
 import { rvizCoord } from '@renderer/utils/utils'
+import { FormInstance } from 'antd'
 
 const useMousePoint = (
   mapWrapRef: RefObject<HTMLDivElement>,
   mapRef: RefObject<HTMLDivElement>,
   scale: number,
   setMousePointX: React.Dispatch<number>,
-  setMousePointY: React.Dispatch<number>
+  setMousePointY: React.Dispatch<number>,
+  locationPanelForm: FormInstance<unknown>
 ) => {
   const [scrollTop, setScrollTop] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
@@ -34,6 +36,8 @@ const useMousePoint = (
     const combinedEvent$ = merge(
       scrollEvent$.pipe(
         tap(() => initScrollEvent.unsubscribe()),
+        throttleTime(300),
+        debounceTime(300),
         map((e) => ({
           scrollEvent: e
         })),
@@ -81,8 +85,8 @@ const useMousePoint = (
 
           setMousePointX(adjustX / scale)
           setMousePointY(adjustY / scale)
-          // formLocation.setFieldValue('x', Number(rx.toFixed(5)))
-          // formLocation.setFieldValue('y', Number(ry.toFixed(5)))
+          locationPanelForm.setFieldValue('x', Number(rx.toFixed(5)))
+          locationPanelForm.setFieldValue('y', Number(ry.toFixed(5)))
         })
       )
     )

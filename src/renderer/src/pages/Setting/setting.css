@@ -10,8 +10,16 @@
   fill: rgb(10, 9, 9);
 }
 
-.setting-sider-menu svg:hover {
-  font-size: 25px;
+.setting-sider-menu li:hover {
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.1s;
+}
+
+.setting-sider-menu li:hover svg {
+  font-size: 15px;
+  transform: scale(1.2);
+  transition: 0.1s;
 }
 
 .location_icon svg {
