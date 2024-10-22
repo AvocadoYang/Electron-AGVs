@@ -26,8 +26,3 @@ export type LocationType = {
   canRotate: boolean
 }
 
-export type Modify = {
-  delete: string[]
-  edit: string[]
-  add: string[]
-}
