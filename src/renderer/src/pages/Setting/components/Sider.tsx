@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { Layout, Menu, Switch, FormInstance } from 'antd'
 import {
   AimOutlined,
@@ -36,9 +36,13 @@ const { Sider: AntdSider } = Layout
 
 const Sider: React.FC<{
   setIsMousePointStart: React.Dispatch<boolean>
-  isMousePointStart: boolean,
+  isMousePointStart: boolean
   forms: { locationPanelForm: FormInstance<unknown> }
-}> = ({ setIsMousePointStart, isMousePointStart, forms }) => {
+  showStoredLocationControl: {
+    setShowStoredLocation: React.Dispatch<boolean>
+    showStoredLocation: boolean
+  }
+}> = ({ setIsMousePointStart, isMousePointStart, forms, showStoredLocationControl }) => {
   const [openEditLocationPanel, setOpenEditLocationPanel] = useState(false)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
@@ -51,7 +55,9 @@ const Sider: React.FC<{
         setIsMousePointStart(!isMousePointStart)
         break
       case 'stored_location':
-        console.log('stored_location')
+        showStoredLocationControl.setShowStoredLocation(
+          !showStoredLocationControl.showStoredLocation
+        )
         break
       case 'show_editLocation':
         console.log('show_editLocation')
@@ -126,7 +132,7 @@ const Sider: React.FC<{
         <Switch
           defaultChecked
           onChange={(checked) => handleShowPanel(checked, 'stored_location')}
-          checked={false}
+          checked={showStoredLocationControl.showStoredLocation}
         />
       ),
       getItem(
@@ -268,4 +274,4 @@ const Sider: React.FC<{
   )
 }
 
-export default Sider
+export default memo(Sider)

@@ -56,20 +56,6 @@ const useMousePoint = (
         })),
         tap(({ clientX, clientY }) => {
           if (!mapRef.current) return
-          // console.log(
-          //   'clientX: ',
-          //   clientX,
-          //   'clientY: ',
-          //   clientY,
-          //   'offsetLeft: ',
-          //   mapRef.current.offsetLeft,
-          //   'offsetTop:',
-          //   mapRef.current.offsetTop,
-          //   'scrollLeft:',
-          //   scrollLeft,
-          //   'scrollTop:',
-          //   scrollTop
-          // )
 
           const adjustX = clientX - mapRef.current.offsetLeft + scrollLeft
           const adjustY = clientY - mapRef.current.offsetTop + scrollTop

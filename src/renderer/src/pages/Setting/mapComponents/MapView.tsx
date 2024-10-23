@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { RefObject } from 'react'
+import { RefObject, memo } from 'react'
 import '../setting.css'
 import { MousePoint } from './components'
 import styled from 'styled-components'
@@ -19,8 +19,10 @@ const MapView: React.FC<{
   scale: number
   mapRef: RefObject<HTMLDivElement>
   mousePointXY: { x: number; y: number }
-  isMousePointStart: boolean
-}> = ({ scale, mapRef, mousePointXY, isMousePointStart }) => {
+  isMousePointStart: boolean,
+  showStoredLocation: boolean
+}> = ({ scale, mapRef, mousePointXY, isMousePointStart, showStoredLocation }) => {
+  console.log(showStoredLocation)
   const [x1, y1] = rosCoord2DisplayCoord({
     x: -63.2114,
     y: -4.52656,
@@ -65,4 +67,4 @@ const MapView: React.FC<{
   )
 }
 
-export default MapView
+export default memo(MapView)

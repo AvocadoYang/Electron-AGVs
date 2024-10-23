@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, memo } from 'react'
 import { LocationType } from '../antd'
+import { modifyLoc as Loc, modifyRoad as Road, modifyZone as Zone } from '@renderer/utils/gloable'
 import { useAtom } from 'jotai'
+import { Modify } from '@renderer/utils/jotai'
 import { tempEditLocationList } from '@renderer/utils/gloable'
 import type { DraggableData, DraggableEvent } from 'react-draggable'
 import Draggable from 'react-draggable'
@@ -23,6 +25,7 @@ const EditLocation: React.FC<{
   isMousePointStart: boolean
   setIsMousePointStart: React.Dispatch<boolean>
   locationPanelForm: FormInstance<unknown>
+  // addModifyHandler: (id: string, genre: 'loc' | 'road' | 'zone') => void
 }> = ({
   openEditLocationPanel,
   setOpenEditLocationPanel,
@@ -31,9 +34,46 @@ const EditLocation: React.FC<{
   locationPanelForm
 }) => {
   const [editingList, setEditingList] = useAtom(tempEditLocationList)
+  const [modifyLoc, setModifyLoc] = useAtom(Loc)
+  const [modifyRoad, setModifyRoad] = useAtom(Road)
+  const [modifyZone, setModifyZone] = useAtom(Zone)
   const { t } = useTranslation()
   const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 })
   const draggleRef = useRef<HTMLDivElement>(null)
+
+  const addModifyHandler = useCallback(
+    (id: string, genre: 'loc' | 'road' | 'zone') => {
+      let staleModify = { ...modifyLoc }
+
+      if (genre === 'road') staleModify = { ...modifyRoad }
+      if (genre === 'zone') staleModify = { ...modifyZone }
+
+      const addList = [...staleModify.add, id]
+
+      const editList = [...staleModify.edit].filter((d) => d !== id)
+
+      const deleteList = [...staleModify.delete]
+
+      const newModify: Modify = {
+        add: [...new Set(addList)] as string[],
+        edit: editList,
+        delete: deleteList
+      }
+
+      if (genre === 'loc') {
+        setModifyLoc(newModify)
+      }
+
+      if (genre === 'road') {
+        setModifyRoad(newModify)
+      }
+
+      if (genre === 'zone') {
+        setModifyZone(newModify)
+      }
+    },
+    [modifyLoc, modifyRoad, modifyZone]
+  )
 
   const savePose = () => {
     const payload = locationPanelForm.getFieldsValue() as LocationType
@@ -77,6 +117,7 @@ const EditLocation: React.FC<{
       locationId: Number(payload.locationId),
       rotation: Number(payload.rotation)
     }
+    addModifyHandler(sanitizedPayload.locationId.toString(), 'loc')
     setEditingList([...editingList, sanitizedPayload])
   }
 
@@ -194,4 +235,4 @@ const EditLocation: React.FC<{
   )
 }
 
-export default EditLocation
+export default memo(EditLocation)
