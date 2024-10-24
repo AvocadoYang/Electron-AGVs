@@ -4,7 +4,6 @@ import { Layout, Form } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider } from './components'
 
-
 import MapView from './mapComponents/MapView'
 import { useMousePoint } from './hooks'
 import './setting.css'
@@ -39,7 +38,8 @@ const Setting: React.FC = () => {
             ></Sider>
             <Content
               style={{
-                overflow: 'scroll'
+                overflow: 'scroll',
+                // backgroundColor: 'white'
               }}
               ref={mapWrapRef}
             >

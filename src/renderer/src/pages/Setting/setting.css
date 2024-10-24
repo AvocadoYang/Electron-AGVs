@@ -2,8 +2,8 @@
   /* background-image: url("../../assets/ruifang-f2.png");
   background-size: contain;
   background-repeat: no-repeat;
-
   background-position: center; */
+  height: 100%;
 }
 
 .setting-sider svg{
@@ -37,12 +37,14 @@
 .shelve_icon svg {
   fill: rgb(247, 108, 10);
 }
+.error-text {
+  margin-bottom: 10px;
+  text-align: center;
 
-.error-image {
-  height: 100%;
-  background-image: url('../../assets/errorImage.png');
-  background-size: contain;
+}
 
+.robot-icon svg {
+  font-size: 90px;
 }
 
 .ant-layout-sider-trigger {

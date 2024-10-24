@@ -1,11 +1,7 @@
 /* eslint-disable react/prop-types */
 import { RefObject, memo } from 'react'
 import '../setting.css'
-import { MousePoint, AllLocations } from './components'
-import { LoadingOutlined } from '@ant-design/icons'
-import { Spin } from 'antd'
-import useMap from '@renderer/api/useMap'
-
+import { MousePoint, AllLocations, MapImage } from './components'
 
 const MapView: React.FC<{
   scale: number
@@ -14,18 +10,7 @@ const MapView: React.FC<{
   isMousePointStart: boolean
   showStoredLocation: boolean
 }> = ({ scale, mapRef, mousePointXY, isMousePointStart, showStoredLocation }) => {
-  const { data, isLoading, isError } = useMap()
 
-  if (isLoading)
-    return (
-      <div
-        style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-      >
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 55 }} spin />} />
-      </div>
-    )
-  if (isError) return <div className="error-image"></div>
-  if (!data) return <div className="error-image"></div>
   return (
     <div
       style={{
@@ -36,7 +21,7 @@ const MapView: React.FC<{
       className="map-view"
       ref={mapRef}
     >
-      <img src={`${data.imageUrl}`} draggable={false} style={{ userSelect: 'none' }} />
+      <MapImage></MapImage>
 
       {showStoredLocation ? <AllLocations></AllLocations> : <></>}
 
