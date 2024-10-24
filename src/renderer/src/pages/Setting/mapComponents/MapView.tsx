@@ -1,45 +1,31 @@
 /* eslint-disable react/prop-types */
 import { RefObject, memo } from 'react'
 import '../setting.css'
-import { MousePoint } from './components'
-import styled from 'styled-components'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
+import { MousePoint, AllLocations } from './components'
+import { LoadingOutlined } from '@ant-design/icons'
+import { Spin } from 'antd'
+import useMap from '@renderer/api/useMap'
 
-const Container = styled.div.attrs<{ left: number; top: number }>(({ left, top }) => ({
-  style: { left, top }
-}))<{ left: number; top: number }>`
-  position: absolute;
-  width: 5px;
-  background: #0e1bd3;
-  height: 5px;
-  border-radius: 50%;
-`
 
 const MapView: React.FC<{
   scale: number
   mapRef: RefObject<HTMLDivElement>
   mousePointXY: { x: number; y: number }
-  isMousePointStart: boolean,
+  isMousePointStart: boolean
   showStoredLocation: boolean
 }> = ({ scale, mapRef, mousePointXY, isMousePointStart, showStoredLocation }) => {
-  const [x1, y1] = rosCoord2DisplayCoord({
-    x: -63.2114,
-    y: -4.52656,
-    mapResolution: 0.05,
-    mapOriginX: -70.711403,
-    mapOriginY: -8.826561,
-    mapHeight: 608
-  })
+  const { data, isLoading, isError } = useMap()
 
-  const [x2, y2] = rosCoord2DisplayCoord({
-    x: -40.6614,
-    y: 9.3734,
-    mapResolution: 0.05,
-    mapOriginX: -70.711403,
-    mapOriginY: -8.826561,
-    mapHeight: 608
-  })
-
+  if (isLoading)
+    return (
+      <div
+        style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 55 }} spin />} />
+      </div>
+    )
+  if (isError) return <div className="error-image"></div>
+  if (!data) return <div className="error-image"></div>
   return (
     <div
       style={{
@@ -50,13 +36,10 @@ const MapView: React.FC<{
       className="map-view"
       ref={mapRef}
     >
-      <img
-        src="https://localhost:4000/static/images/ruifang-f2.png"
-        draggable={false}
-        style={{ userSelect: 'none' }}
-      />
-      <Container left={x1} top={y1} key={3} />
-      <Container left={x2} top={y2} key={4} />
+      <img src={`${data.imageUrl}`} draggable={false} style={{ userSelect: 'none' }} />
+
+      {showStoredLocation ? <AllLocations></AllLocations> : <></>}
+
       {isMousePointStart ? (
         <MousePoint x={Number(mousePointXY.x)} y={Number(mousePointXY.y)}></MousePoint>
       ) : (

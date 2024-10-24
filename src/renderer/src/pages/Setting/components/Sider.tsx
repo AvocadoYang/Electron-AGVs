@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { ToolBarItemType } from './antd'
-import { EditLocation } from './forms'
+import { EditLocation } from '../forms'
 import type { MenuProps } from 'antd'
 import '../setting.css'
 

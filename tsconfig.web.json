@@ -4,10 +4,10 @@
     "env.d.ts",
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
-    "src/configs/config.ts",
+    "src/renderer/src/configs/config.ts",
     "src/preload/*.d.ts",
     "src/@type/*"
-  ],
+, "src/configs"  ],
   "compilerOptions": {
     "composite": true,
     "jsx": "react-jsx",

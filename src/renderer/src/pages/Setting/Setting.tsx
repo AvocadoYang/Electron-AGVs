@@ -3,13 +3,14 @@ import React, { useState, useRef } from 'react'
 import { Layout, Form } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider } from './components'
+
+
 import MapView from './mapComponents/MapView'
 import { useMousePoint } from './hooks'
 import './setting.css'
-
 const { Content } = Layout
-
 const Setting: React.FC = () => {
+
   const mapRef = useRef(null)
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
