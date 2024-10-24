@@ -5,6 +5,5 @@ declare global {
     electron: ElectronAPI
     api: { net: Electron.Net }
     versions: unknown
-    env: { VITE_REACT_APP_MISSION_CONTROL_URL: string }
   }
 }

@@ -22,7 +22,6 @@ const MapView: React.FC<{
   isMousePointStart: boolean,
   showStoredLocation: boolean
 }> = ({ scale, mapRef, mousePointXY, isMousePointStart, showStoredLocation }) => {
-  console.log(showStoredLocation)
   const [x1, y1] = rosCoord2DisplayCoord({
     x: -63.2114,
     y: -4.52656,

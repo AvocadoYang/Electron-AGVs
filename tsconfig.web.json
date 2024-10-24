@@ -1,10 +1,10 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
   "include": [
-    "src/renderer/src/env.d.ts",
+    "env.d.ts",
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
-    "src/renderer/configs/config.ts",
+    "src/configs/config.ts",
     "src/preload/*.d.ts",
     "src/@type/*"
   ],

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Layout } from 'antd'
 import Header from '../../components/Header'
-import '../../sockets/test'
 import { Scene } from './3D'
 import CarCardWrap from './Car_Card/CardWrap'
 import MissionWrap from './Mission_Card/MissionWrap'
