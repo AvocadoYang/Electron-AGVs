@@ -22,3 +22,6 @@ export const modifyZone = atom<Modify>({
   edit: [],
   add: []
 })
+
+// record the version of map's points
+export const sameVersion = atom(true)

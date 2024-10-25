@@ -47,6 +47,12 @@
   font-size: 90px;
 }
 
+.location-wrap:hover {
+    width: 8px;
+    height: 8px;
+    background: green;
+}
+
 .ant-layout-sider-trigger {
   background: white !important;
 }

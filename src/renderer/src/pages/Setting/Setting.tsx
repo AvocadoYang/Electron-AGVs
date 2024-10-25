@@ -9,7 +9,6 @@ import { useMousePoint } from './hooks'
 import './setting.css'
 const { Content } = Layout
 const Setting: React.FC = () => {
-
   const mapRef = useRef(null)
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
@@ -38,7 +37,7 @@ const Setting: React.FC = () => {
             ></Sider>
             <Content
               style={{
-                overflow: 'scroll',
+                overflow: 'scroll'
                 // backgroundColor: 'white'
               }}
               ref={mapWrapRef}
