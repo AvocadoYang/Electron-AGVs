@@ -17,9 +17,21 @@ const Setting: React.FC = () => {
   const [mousePointY, setMousePointY] = useState(-3)
 
   const [showStoredLocation, setShowStoredLocation] = useState(false)
+  const [showEditingLocation, setShowEditingLocation] = useState(false)
   const [scale, setScale] = useState(1)
 
-  useMousePoint(mapWrapRef, mapRef, scale, setMousePointX, setMousePointY, locationPanelForm)
+  console.log(showEditingLocation)
+
+  useMousePoint(
+    mapWrapRef,
+    mapRef,
+    scale,
+    setMousePointX,
+    setMousePointY,
+    locationPanelForm,
+    isMousePointStart
+  )
+
   return (
     <>
       <Layout style={{ height: '100vh' }}>
@@ -33,6 +45,10 @@ const Setting: React.FC = () => {
               showStoredLocationControl={{
                 setShowStoredLocation,
                 showStoredLocation
+              }}
+              showEditingLocationControl={{
+                setShowEditingLocation,
+                showEditingLocation
               }}
             ></Sider>
             <Content

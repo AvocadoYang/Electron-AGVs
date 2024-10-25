@@ -6,15 +6,15 @@ import styled from 'styled-components'
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
 import { PointInfo, MapInfo } from '../locationInfo'
 
-const Container = styled.div.attrs<{ left: number; top: number; canRotate: boolean }>(
+const Container = styled.div.attrs<{ left: number; top: number; canrotate: string }>(
   ({ left, top }) => ({
     style: { left, top }
   })
-)<{ left: number; top: number; canRotate: boolean }>`
+)<{ left: number; top: number; canrotate: string }>`
   position: absolute;
   width: 4.5px;
   background: #1225ce;
-  background: ${(prop) => (!prop.canRotate ? '#1225ce' : '#f88f05')};
+  background: ${(prop) => (prop.canrotate === 'false' ? '#1225ce' : '#f88f05')};
   height: 4.5px;
   z-index: 20px;
   border-radius: 50%;
@@ -34,7 +34,7 @@ const Location: React.FC<{ pointInfo: PointInfo; mapInfo: MapInfo }> = ({ pointI
       <Container
         left={left}
         top={top}
-        canRotate={pointInfo.canRotate}
+        canrotate={pointInfo.canRotate.toString()}
         key={pointInfo.locationId}
         className="location-wrap"
       />

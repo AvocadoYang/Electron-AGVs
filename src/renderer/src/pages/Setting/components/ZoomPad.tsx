@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
+import { memo } from 'react'
 
 const ZoomPadWrap = styled.div`
   position: absolute;
@@ -36,4 +37,4 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
   )
 }
 
-export default ZoomPad
+export default memo(ZoomPad)

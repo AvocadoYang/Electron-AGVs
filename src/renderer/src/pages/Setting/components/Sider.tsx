@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { ToolBarItemType } from './antd'
 import { EditLocation } from '../forms'
 import type { MenuProps } from 'antd'
+import { ShowStoredLocationControl, ShowEditingLocationControl } from './sider'
 import '../setting.css'
 
 export type MenuItem = Required<MenuProps>['items'][number]
@@ -38,11 +39,15 @@ const Sider: React.FC<{
   setIsMousePointStart: React.Dispatch<boolean>
   isMousePointStart: boolean
   forms: { locationPanelForm: FormInstance<unknown> }
-  showStoredLocationControl: {
-    setShowStoredLocation: React.Dispatch<boolean>
-    showStoredLocation: boolean
-  }
-}> = ({ setIsMousePointStart, isMousePointStart, forms, showStoredLocationControl }) => {
+  showStoredLocationControl: ShowStoredLocationControl
+  showEditingLocationControl: ShowEditingLocationControl
+}> = ({
+  setIsMousePointStart,
+  isMousePointStart,
+  forms,
+  showStoredLocationControl,
+  showEditingLocationControl
+}) => {
   const [openEditLocationPanel, setOpenEditLocationPanel] = useState(false)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
@@ -60,7 +65,9 @@ const Sider: React.FC<{
         )
         break
       case 'show_editLocation':
-        console.log('show_editLocation')
+        showEditingLocationControl.setShowEditingLocation(
+          !showEditingLocationControl.showEditingLocation
+        )
         break
       case 'locationList':
         console.log('locationList')
@@ -140,7 +147,7 @@ const Sider: React.FC<{
         '1-3',
         <Switch
           onClick={(checked) => handleShowPanel(checked, 'show_editLocation')}
-          checked={false}
+          checked={showEditingLocationControl.showEditingLocation}
         />
       ),
       getItem(

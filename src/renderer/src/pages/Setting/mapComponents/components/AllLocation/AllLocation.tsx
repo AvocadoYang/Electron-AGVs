@@ -4,7 +4,6 @@ import { memo } from 'react'
 
 const AllLocation: React.FC = () => {
   const { data } = useMap()
-
   if (!data) return
   const { mapHeight, mapOriginX, mapOriginY, mapResolution } = data
   return (
