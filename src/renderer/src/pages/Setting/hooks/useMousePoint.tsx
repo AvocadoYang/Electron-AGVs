@@ -2,6 +2,7 @@
 import { useEffect, RefObject } from 'react'
 import { fromEvent, throttleTime, debounceTime, map, tap } from 'rxjs'
 import { rvizCoord } from '@renderer/utils/utils'
+import useMap from '@renderer/api/useMap'
 import { FormInstance } from 'antd'
 
 const useMousePoint = (
@@ -13,8 +14,9 @@ const useMousePoint = (
   locationPanelForm: FormInstance<unknown>,
   isMousePointStart: boolean
 ) => {
+  const { data } = useMap()
   useEffect(() => {
-    if (!mapWrapRef.current || !mapRef.current || !isMousePointStart) return
+    if (!mapWrapRef.current || !mapRef.current || !isMousePointStart || !data) return
 
     const clickEvent$ = fromEvent<MouseEvent>(mapRef.current, 'click').pipe(
       throttleTime(300),
@@ -33,10 +35,10 @@ const useMousePoint = (
         const [rx, ry] = rvizCoord({
           displayX: adjustX,
           displayY: adjustY,
-          mapResolution: 0.05,
-          mapOriginX: -70.711403,
-          mapOriginY: -8.826561,
-          mapHeight: 608,
+          mapResolution: data?.mapResolution,
+          mapOriginX: data?.mapOriginX,
+          mapOriginY: data?.mapOriginY,
+          mapHeight: data?.mapHeight,
           scaleSize: scale
         })
 

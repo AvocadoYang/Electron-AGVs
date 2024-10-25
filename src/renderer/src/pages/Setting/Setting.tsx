@@ -16,11 +16,9 @@ const Setting: React.FC = () => {
   const [mousePointX, setMousePointX] = useState(-3)
   const [mousePointY, setMousePointY] = useState(-3)
 
-  const [showStoredLocation, setShowStoredLocation] = useState(false)
+  const [showStoredLocation, setShowStoredLocation] = useState(true)
   const [showEditingLocation, setShowEditingLocation] = useState(false)
   const [scale, setScale] = useState(1)
-
-  console.log(showEditingLocation)
 
   useMousePoint(
     mapWrapRef,
@@ -53,8 +51,8 @@ const Setting: React.FC = () => {
             ></Sider>
             <Content
               style={{
-                overflow: 'scroll'
-                // backgroundColor: 'white'
+                overflow: 'scroll',
+                backgroundColor: 'white'
               }}
               ref={mapWrapRef}
             >
@@ -65,6 +63,7 @@ const Setting: React.FC = () => {
                 mousePointXY={{ x: mousePointX, y: mousePointY }}
                 isMousePointStart={isMousePointStart}
                 showStoredLocation={showStoredLocation}
+                showEditingLocation={showEditingLocation}
               ></MapView>
             </Content>
           </Layout>

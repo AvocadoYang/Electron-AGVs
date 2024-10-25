@@ -5,7 +5,7 @@ import { useAtom } from 'jotai'
 import { sameVersion } from '@renderer/utils/gloable'
 import Cookies from 'js-cookie'
 import useVerityVersion from '@renderer/api/useVerityVersion'
-import { MousePoint, AllLocations, MapImage } from './components'
+import { MousePoint, AllLocations, MapImage, AllEditingLocation } from './components'
 
 const MapView: React.FC<{
   scale: number
@@ -13,7 +13,15 @@ const MapView: React.FC<{
   mousePointXY: { x: number; y: number }
   isMousePointStart: boolean
   showStoredLocation: boolean
-}> = ({ scale, mapRef, mousePointXY, isMousePointStart, showStoredLocation }) => {
+  showEditingLocation: boolean
+}> = ({
+  scale,
+  mapRef,
+  mousePointXY,
+  isMousePointStart,
+  showStoredLocation,
+  showEditingLocation
+}) => {
   const { data: currentVersion } = useVerityVersion()
   const [, setSameVersion] = useAtom(sameVersion)
 
@@ -47,7 +55,9 @@ const MapView: React.FC<{
     >
       <MapImage></MapImage>
 
-      {showStoredLocation ? <AllLocations></AllLocations> : []}
+      {showStoredLocation ? <AllLocations /> : []}
+
+      {showEditingLocation ? <AllEditingLocation /> : []}
 
       {isMousePointStart ? (
         <MousePoint x={Number(mousePointXY.x)} y={Number(mousePointXY.y)}></MousePoint>

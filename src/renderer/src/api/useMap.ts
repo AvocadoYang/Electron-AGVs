@@ -71,7 +71,7 @@ const getMap = async () => {
 }
 
 const useMap = () => {
-  return useQuery(['map'], getMap, { retry: 10 })
+  return useQuery(['map'], getMap)
 }
 
 export default useMap

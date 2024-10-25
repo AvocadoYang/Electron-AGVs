@@ -6,6 +6,7 @@ import { LoadingOutlined, RobotOutlined } from '@ant-design/icons'
 
 const MapImage = () => {
   const { data, isLoading, isError } = useMap()
+  console.log(isError, isLoading)
   if (isLoading)
     return (
       <div
