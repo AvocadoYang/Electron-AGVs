@@ -17,7 +17,6 @@ const Circle = styled.div`
   border-color: red;
   background-color: red;
   transform: translate(-50%, -50%);
-  cursor: crosshair;
 `
 
 const Point: FC<{

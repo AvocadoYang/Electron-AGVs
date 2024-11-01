@@ -12,6 +12,8 @@ const Setting: React.FC = () => {
   const mapRef = useRef(null)
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
+  const [roadPanelForm] = Form.useForm()
+  console.log(roadPanelForm.getFieldsValue())
   const [isMousePointStart, setIsMousePointStart] = useState(false)
   const [mousePointX, setMousePointX] = useState(-3)
   const [mousePointY, setMousePointY] = useState(-3)
@@ -19,7 +21,6 @@ const Setting: React.FC = () => {
   const [showStoredLocation, setShowStoredLocation] = useState(true)
   const [showEditingLocation, setShowEditingLocation] = useState(false)
   const [scale, setScale] = useState(1)
-
   useMousePoint(
     mapWrapRef,
     mapRef,
@@ -60,6 +61,7 @@ const Setting: React.FC = () => {
               <MapView
                 scale={scale}
                 mapRef={mapRef}
+                forms={{ roadPanelForm }}
                 mousePointXY={{ x: mousePointX, y: mousePointY }}
                 isMousePointStart={isMousePointStart}
                 showStoredLocation={showStoredLocation}

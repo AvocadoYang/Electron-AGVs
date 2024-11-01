@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
 import { RefObject, memo } from 'react'
 import '../setting.css'
+import { FormInstance } from 'antd'
 import { useAtom } from 'jotai'
 import { sameVersion } from '@renderer/utils/gloable'
 import Cookies from 'js-cookie'
 import useVerityVersion from '@renderer/api/useVerityVersion'
 import { MousePoint, AllLocations, MapImage, AllEditingLocation } from './components'
+import { AllCargo } from './components/AllCargo.tsx'
 
 const MapView: React.FC<{
   scale: number
+  forms: { roadPanelForm: FormInstance<unknown> }
   mapRef: RefObject<HTMLDivElement>
   mousePointXY: { x: number; y: number }
   isMousePointStart: boolean
@@ -20,7 +23,8 @@ const MapView: React.FC<{
   mousePointXY,
   isMousePointStart,
   showStoredLocation,
-  showEditingLocation
+  showEditingLocation,
+  forms
 }) => {
   const { data: currentVersion } = useVerityVersion()
   const [, setSameVersion] = useAtom(sameVersion)
@@ -57,7 +61,13 @@ const MapView: React.FC<{
 
       {showStoredLocation ? <AllLocations /> : []}
 
-      {showEditingLocation ? <AllEditingLocation /> : []}
+      {showStoredLocation ? <AllCargo /> : []}
+
+      {showEditingLocation ? (
+        <AllEditingLocation roadPanelForm={forms.roadPanelForm} mapRef={mapRef} scale={scale} />
+      ) : (
+        []
+      )}
 
       {isMousePointStart ? (
         <MousePoint x={Number(mousePointXY.x)} y={Number(mousePointXY.y)}></MousePoint>
