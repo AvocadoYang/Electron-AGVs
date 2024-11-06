@@ -16,13 +16,3 @@ export type ToolBarItemType =
   | 'edit_gauge'
   | 'edit_tag'
   | 'edit_charge_station_icon_style'
-
-export type LocationType = {
-  locationId: number
-  x: number
-  y: number
-  areaType: string
-  rotation: number
-  canRotate: boolean
-}
-

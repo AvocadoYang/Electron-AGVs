@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { FC } from 'react'
 import styled from 'styled-components'
+import useMap from '@renderer/api/useMap'
 
 const Container = styled.div.attrs<{ left: number; top: number }>(({ left, top }) => ({
   style: { left, top }
@@ -23,6 +24,8 @@ const Point: FC<{
   x: number
   y: number
 }> = ({ x, y }) => {
+  const { data } = useMap()
+  if (!data) return null
   return (
     <Container left={x} top={y}>
       <Circle />

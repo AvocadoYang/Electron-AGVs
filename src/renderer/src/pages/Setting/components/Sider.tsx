@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, memo } from 'react'
-import { Layout, Menu, Switch, FormInstance } from 'antd'
+import { Layout, Menu, Switch } from 'antd'
+import { useAtom } from 'jotai'
+import {
+  EditLocationPanelSwitch,
+  StoredLocationSwitch,
+  EditingLocationSwitch
+} from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
   NodeIndexOutlined,
@@ -10,9 +16,7 @@ import {
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { ToolBarItemType } from './antd'
-import { EditLocation } from '../forms'
 import type { MenuProps } from 'antd'
-import { ShowStoredLocationControl, ShowEditingLocationControl } from './sider'
 import '../setting.css'
 
 export type MenuItem = Required<MenuProps>['items'][number]
@@ -38,17 +42,10 @@ const { Sider: AntdSider } = Layout
 const Sider: React.FC<{
   setIsMousePointStart: React.Dispatch<boolean>
   isMousePointStart: boolean
-  forms: { locationPanelForm: FormInstance<unknown> }
-  showStoredLocationControl: ShowStoredLocationControl
-  showEditingLocationControl: ShowEditingLocationControl
-}> = ({
-  setIsMousePointStart,
-  isMousePointStart,
-  forms,
-  showStoredLocationControl,
-  showEditingLocationControl
-}) => {
-  const [openEditLocationPanel, setOpenEditLocationPanel] = useState(false)
+}> = ({ setIsMousePointStart, isMousePointStart }) => {
+  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
+  const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch)
+  const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
@@ -60,14 +57,10 @@ const Sider: React.FC<{
         setIsMousePointStart(!isMousePointStart)
         break
       case 'stored_location':
-        showStoredLocationControl.setShowStoredLocation(
-          !showStoredLocationControl.showStoredLocation
-        )
+        setShowStoredLocation(!showStoredLocation)
         break
       case 'show_editLocation':
-        showEditingLocationControl.setShowEditingLocation(
-          !showEditingLocationControl.showEditingLocation
-        )
+        setShowEditingLocation(!showEditingLocation)
         break
       case 'locationList':
         console.log('locationList')
@@ -139,7 +132,7 @@ const Sider: React.FC<{
         <Switch
           defaultChecked
           onChange={(checked) => handleShowPanel(checked, 'stored_location')}
-          checked={showStoredLocationControl.showStoredLocation}
+          checked={showStoredLocation}
         />
       ),
       getItem(
@@ -147,7 +140,7 @@ const Sider: React.FC<{
         '1-3',
         <Switch
           onClick={(checked) => handleShowPanel(checked, 'show_editLocation')}
-          checked={showEditingLocationControl.showEditingLocation}
+          checked={showEditingLocation}
         />
       ),
       getItem(
@@ -269,14 +262,6 @@ const Sider: React.FC<{
           className="setting-sider-menu"
         />
       </AntdSider>
-
-      <EditLocation
-        openEditLocationPanel={openEditLocationPanel}
-        setOpenEditLocationPanel={setOpenEditLocationPanel}
-        setIsMousePointStart={setIsMousePointStart}
-        isMousePointStart={isMousePointStart}
-        locationPanelForm={forms.locationPanelForm}
-      ></EditLocation>
     </>
   )
 }

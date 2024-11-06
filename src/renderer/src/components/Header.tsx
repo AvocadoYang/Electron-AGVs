@@ -3,6 +3,7 @@ import { Layout, Menu, Flex } from 'antd'
 import '../components/component.css'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'antd'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserOutlined } from '@ant-design/icons'
 const { Header: AntdHeader } = Layout
@@ -67,4 +68,4 @@ const Header: React.FC = () => {
   )
 }
 
-export default Header
+export default memo(Header)

@@ -2,7 +2,7 @@ import useMap from '@renderer/api/useMap'
 import { memo } from 'react'
 import AllCargoFix from './components/AllCargoFix'
 
-const AllLocation: React.FC = () => {
+const AllCargos: React.FC = () => {
   const { data } = useMap()
   if (!data) return
 
@@ -17,4 +17,4 @@ const AllLocation: React.FC = () => {
   )
 }
 
-export default memo(AllLocation)
+export default memo(AllCargos)

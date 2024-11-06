@@ -1,35 +1,47 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Form } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider } from './components'
+import { useAtom } from 'jotai'
+import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
+import useMap from '@renderer/api/useMap'
+import { EditLocation, EditRoad } from './forms'
 
 import MapView from './mapComponents/MapView'
-import { useMousePoint } from './hooks'
+import { useResetSiderSwitch } from './hooks'
 import './setting.css'
 const { Content } = Layout
 const Setting: React.FC = () => {
+  const { data } = useMap()
   const mapRef = useRef(null)
+  const [, setTempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
+  const [TempEditLocationList] = useAtom(tempEditLocationList)
+
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
-  console.log(roadPanelForm.getFieldsValue())
-  const [isMousePointStart, setIsMousePointStart] = useState(false)
-  const [mousePointX, setMousePointX] = useState(-3)
-  const [mousePointY, setMousePointY] = useState(-3)
 
-  const [showStoredLocation, setShowStoredLocation] = useState(true)
-  const [showEditingLocation, setShowEditingLocation] = useState(false)
+  console.log(roadPanelForm.getFieldsValue())
+
+  const [isMousePointStart, setIsMousePointStart] = useState(false)
+
   const [scale, setScale] = useState(1)
-  useMousePoint(
-    mapWrapRef,
-    mapRef,
-    scale,
-    setMousePointX,
-    setMousePointY,
-    locationPanelForm,
-    isMousePointStart
-  )
+
+  useEffect(() => {
+    if (!data) return
+    const storedData = data.locations.map((v) => ({
+      locationId: Number(v.locationId),
+      x: v.x,
+      y: v.y,
+      rotation: v.rotation === undefined ? 0 : v.rotation,
+      areaType: v.areaType,
+      canRotate: v.canRotate
+    }))
+    setTempEditAndStoredLocation([...storedData, ...TempEditLocationList])
+  }, [data])
+
+  useResetSiderSwitch()
 
   return (
     <>
@@ -40,15 +52,6 @@ const Setting: React.FC = () => {
             <Sider
               setIsMousePointStart={setIsMousePointStart}
               isMousePointStart={isMousePointStart}
-              forms={{ locationPanelForm }}
-              showStoredLocationControl={{
-                setShowStoredLocation,
-                showStoredLocation
-              }}
-              showEditingLocationControl={{
-                setShowEditingLocation,
-                showEditingLocation
-              }}
             ></Sider>
             <Content
               style={{
@@ -61,15 +64,24 @@ const Setting: React.FC = () => {
               <MapView
                 scale={scale}
                 mapRef={mapRef}
-                forms={{ roadPanelForm }}
-                mousePointXY={{ x: mousePointX, y: mousePointY }}
+                mapWrapRef={mapWrapRef}
+                roadPanelForm={roadPanelForm}
+                locationPanelForm={locationPanelForm}
                 isMousePointStart={isMousePointStart}
-                showStoredLocation={showStoredLocation}
-                showEditingLocation={showEditingLocation}
               ></MapView>
             </Content>
           </Layout>
         </Content>
+
+        {
+          /** 1-1 編輯點位的彈跳視窗 */
+          <EditLocation
+            setIsMousePointStart={setIsMousePointStart}
+            isMousePointStart={isMousePointStart}
+            locationPanelForm={locationPanelForm}
+          ></EditLocation>
+        }
+        {<EditRoad roadPanelForm={roadPanelForm}></EditRoad>}
       </Layout>
     </>
   )

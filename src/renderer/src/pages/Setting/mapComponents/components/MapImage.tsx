@@ -3,7 +3,7 @@ import useMap from '@renderer/api/useMap'
 import { Spin } from 'antd'
 import '../../setting.css'
 import { LoadingOutlined, RobotOutlined } from '@ant-design/icons'
-
+import { memo } from 'react'
 const MapImage = () => {
   const { data, isLoading, isError } = useMap()
 
@@ -53,4 +53,4 @@ const MapImage = () => {
   )
 }
 
-export default MapImage
+export default memo(MapImage)

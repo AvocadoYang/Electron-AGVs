@@ -1,66 +1,66 @@
-import { Form, FormInstance, Input, Select, Switch } from 'antd';
-import { Dispatch, FC, SetStateAction, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-import { nanoid } from 'nanoid';
-import { LayerType } from '~/api/useLocation';
-import usePallet from '~/api/usePallet';
+import { Form, FormInstance, Input, Select, Switch } from 'antd'
+import { Dispatch, FC, SetStateAction, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+import { nanoid } from 'nanoid'
+import { LayerType } from '~/api/useLocation'
+import usePallet from '~/api/usePallet'
 
 const Wrapper = styled.div`
   border: 1px solid #8b8b8b;
   width: 100%;
   max-height: 70vh;
   overflow-y: scroll;
-`;
+`
 
 const Box = styled.div`
   padding: 1em;
-`;
+`
 
 const defaultValue = {
-  isEdit: false,
-};
+  isEdit: false
+}
 
 const LayerForm: FC<{
-  locId: string;
-  form: FormInstance<unknown>;
-  layer: LayerType[];
-  setIsEditLayer: Dispatch<SetStateAction<boolean>>;
+  locId: string
+  form: FormInstance<unknown>
+  layer: LayerType[]
+  setIsEditLayer: Dispatch<SetStateAction<boolean>>
 }> = ({ form, locId, layer, setIsEditLayer }) => {
-  const { t } = useTranslation();
-  const { data: pallet } = usePallet();
+  const { t } = useTranslation()
+  const { data: pallet } = usePallet()
 
   // 如果以後要限制有貨時有沒有棧版之類的就需要它 之後有需求在設定
   // const [fState, setFState] = useState<{ [key: string]: unknown }>({});
 
   const palletOption = pallet?.map((v) => ({
     value: v.id,
-    label: v.name,
-  }));
+    label: v.name
+  }))
 
   const clearCargoField = (index: number) => {
-    const level = index;
-    form.setFieldValue(`cargoName${level}`, null);
+    const level = index
+    form.setFieldValue(`cargoName${level}`, null)
     // form.setFieldValue(`pallet${level}`, null);
-  };
+  }
 
   const userHasChangeData = () => {
-    setIsEditLayer(true);
-  };
+    setIsEditLayer(true)
+  }
 
   useEffect(() => {
-    if (!layer) return;
+    if (!layer) return
     layer.forEach((L, i) => {
-      const level = i;
-      form.setFieldValue(`hasCargo${level}`, L[level].cargo?.hasCargo);
-      form.setFieldValue(`levelName${level}`, L[level]?.levelName || null);
-      form.setFieldValue(`pallet${level}`, L[level]?.pallet.id || null);
-      form.setFieldValue(`cargoName${level}`, L[level]?.cargo?.name || null);
+      const level = i
+      form.setFieldValue(`hasCargo${level}`, L[level].cargo?.hasCargo)
+      form.setFieldValue(`levelName${level}`, L[level]?.levelName || null)
+      form.setFieldValue(`pallet${level}`, L[level]?.pallet.id || null)
+      form.setFieldValue(`cargoName${level}`, L[level]?.cargo?.name || null)
 
-      form.setFieldValue(`disable${level}`, L[level]?.disable || false);
-      form.setFieldValue(`cargo_limit${level}`, L[level]?.cargo_limit || 0);
-    });
-  }, [form, layer]);
+      form.setFieldValue(`disable${level}`, L[level]?.disable || false)
+      form.setFieldValue(`cargo_limit${level}`, L[level]?.cargo_limit || 0)
+    })
+  }, [form, layer])
 
   return (
     <Wrapper>
@@ -75,14 +75,11 @@ const LayerForm: FC<{
         initialValues={defaultValue}
       >
         {layer.map((_L, i) => {
-          const level = i;
+          const level = i
           return (
             <Box key={nanoid()}>
               <h2>{`第${level}格`}</h2>
-              <Form.Item
-                label={`${t('shelf_column_name')}`}
-                name={`levelName${level}`}
-              >
+              <Form.Item label={`${t('shelf_column_name')}`} name={`levelName${level}`}>
                 <Input />
               </Form.Item>
 
@@ -115,11 +112,11 @@ const LayerForm: FC<{
                 />
               </Form.Item>
             </Box>
-          );
+          )
         })}
       </Form>
     </Wrapper>
-  );
-};
+  )
+}
 
-export default LayerForm;
+export default LayerForm

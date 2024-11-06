@@ -2,6 +2,7 @@
 import styled from 'styled-components'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
+import useMap from '@renderer/api/useMap'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
 import { memo } from 'react'
 
@@ -15,7 +16,9 @@ const ZoomPadWrap = styled.div`
 const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>> }> = ({
   setScale
 }) => {
+  const { data, isError } = useMap()
   const { t } = useTranslation()
+  if (isError || !data) return
   return (
     <ZoomPadWrap>
       <Button.Group>

@@ -5,14 +5,14 @@ import { memo } from 'react'
 const PointDiv = styled.div.attrs<{
   left: number
   top: number
-  canRotate: boolean
+  canrotate: boolean
   hoverLoc?: boolean
-}>(({ left, top, canRotate, hoverLoc }) => ({
-  style: { left, top, canRotate, hoverLoc }
+}>(({ left, top, canrotate, hoverLoc }) => ({
+  style: { left, top, canrotate, hoverLoc }
 }))<{
   left: number
   top: number
-  canRotate: boolean
+  canrotate: boolean
   hoverLoc?: boolean
 }>`
   position: absolute;
@@ -22,7 +22,7 @@ const PointDiv = styled.div.attrs<{
   z-index: 10;
   transition-duration: 200ms;
 
-  background: ${(props) => (props.canRotate ? '#f27ef4' : '#1b00ce')};
+  background: ${(props) => (props.canrotate ? '#f27ef4' : '#1b00ce')};
   border: ${(props) => (props.hoverLoc ? '5px solid #ff0000' : 'none')};
   &:hover {
     background: red;
@@ -38,23 +38,20 @@ const DraggableLineDiv = styled.div.attrs<{
   deg: number
   width: number
   scale?: number
-  showblockId?: string
-}>(({ left, top }) => ({ style: { left, top } }))<{
-  left: number
-  top: number
-  deg: number | undefined
-  width: number | undefined
-  scale?: number
   showblockid?: string
-}>`
+}>(({ left, top, deg, width, scale }) => ({
+  style: {
+    left,
+    top,
+    transform: `rotate(${deg || 0}deg)`,
+    width: width ? width / (scale || 1) : 5
+  }
+}))`
   display: ${(props) => (props.showblockid === props.id ? 'block' : 'none')};
   position: absolute;
   background-color: black;
-  width: ${(props) => (props.width ? props.width / (props.scale as number) : 5)}px;
-  // width: 15px;
-  height: 3px; /* 初始高度 */
+  height: 3px;
   transform-origin: 0 50%;
-  transform: rotate(${(props) => (props.deg ? props.deg : 0)}deg);
   pointer-events: none;
 
   &::after {
@@ -70,6 +67,5 @@ const DraggableLineDiv = styled.div.attrs<{
     pointer-events: none;
   }
 `
-
 
 export const DraggableLine = memo(DraggableLineDiv)

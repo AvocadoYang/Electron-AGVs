@@ -62,5 +62,26 @@
       "duplicate_id": "ID 重複",
       "change_duplicate_id": "請檢查輸入 ID,不可重複！"
     }
+  },
+
+  "edit_road_panel": {
+    "road": "路徑",
+    "single_road": "單向道",
+    "two_way_road": "雙向道",
+    "yaw": "轉角",
+    "disabled": "禁用路線",
+    "limit": "限制路段",
+    "start_point": "起點",
+    "end_point": "終點",
+    "add": "新增路線",
+    "save_road_notify" : {
+      "warn": "路徑端點設定錯誤",
+      "warn_number_only": "只能輸入數字",
+      "warn_msg": "起始位置跟結束位置不可相同！",
+      "warn_road_yaw": "路徑角度為必選 !",
+      "illegal_road_yaw": "不合法的角度設定 !",
+      "duplicate_id": "ID 重複",
+      "road_exists": "此路線已存在"
+    }
   }
 }

@@ -62,5 +62,27 @@
     "duplicate_id": "duplicate ID",
     "change_duplicate_id": "please change ID, can not be same"
   }
+  },
+
+  "edit_road_panel": {
+   "road": "Road",
+   "single_road": "Single Road",
+    "two_way_road": "Two Way Road",
+    "yaw": "Yaw",
+   "disabled": "Disable Line",
+    "limit": "limit tunnel",
+    "start_point": "Start Point",
+    "end_point": "End Point",
+    "add": "Add New Road",
+
+    "save_road_notify" : {
+      "warn": "road setting error",
+      "warn_number_only": "Only Number",
+      "warn_msg": "Start point and End point can not be same !",
+      "warn_road_yaw": "Yaw list is necessary !",
+      "illegal_road_yaw": "Vertical and Horizontal yaws can't be set at the same time !",
+      "duplicate_id": "duplicate ID",
+      "road_exists": "This road already exists"
+    }
   }
 }
