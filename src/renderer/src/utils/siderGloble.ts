@@ -8,3 +8,6 @@ export const StoredLocationSwitch = atom<boolean>(false)
 
 /** 1-3  顯示編輯終點位開關 */
 export const EditingLocationSwitch = atom<boolean>(false)
+
+/** 2-1 編輯路徑開關 */
+export const EditRoadSwitch = atom<boolean>(false)

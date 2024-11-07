@@ -5,7 +5,8 @@ import { useAtom } from 'jotai'
 import {
   EditLocationPanelSwitch,
   StoredLocationSwitch,
-  EditingLocationSwitch
+  EditingLocationSwitch,
+  EditRoadSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -43,9 +44,10 @@ const Sider: React.FC<{
   setIsMousePointStart: React.Dispatch<boolean>
   isMousePointStart: boolean
 }> = ({ setIsMousePointStart, isMousePointStart }) => {
-  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
+  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
   const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch)
   const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch)
+  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadSwitch) // 2-1
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
@@ -68,7 +70,7 @@ const Sider: React.FC<{
       // ===================
       // === road ===
       case 'roadPanel':
-        console.log('roadPanel')
+        setOpenEditRoadPanel(!openEditRoadPanel)
         break
       case 'stored_roads':
         console.log('stored_roads')

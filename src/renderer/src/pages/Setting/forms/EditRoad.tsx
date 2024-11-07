@@ -8,6 +8,7 @@ import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { modifyLoc as Loc, modifyRoad as Road, modifyZone as Zone } from '@renderer/utils/gloable'
 import { tempEditAndStoredLocation, tempEditAndStoredRoads } from '@renderer/utils/gloable'
 import { useTranslation } from 'react-i18next'
+import { EditRoadSwitch } from '@renderer/utils/siderGloble'
 import { getLocationInfoById } from '../utils/utils'
 import { useCallback, useState } from 'react'
 import { openNotificationWithIcon } from '../utils/notification'
@@ -47,8 +48,8 @@ function validateArray(arr: string[]) {
 const EditRoad: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPanelForm }) => {
   const [chooseAngle, setChooseAngle] = useState<string>('')
   const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
+  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadSwitch) // 2-1
   const [TempEditAndStoredRoads, setEditingRoadsList] = useAtom(tempEditAndStoredRoads)
-
 
   const [modifyLoc, setModifyLoc] = useAtom(Loc)
   const [modifyRoad, setModifyRoad] = useAtom(Road)
@@ -195,20 +196,6 @@ const EditRoad: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPane
         )
         return
       }
-
-      newPayload = {
-        ...payload,
-        roadId: erId,
-        validYawList: targetYawList,
-        to: payload.to.toString(),
-        x: payload.x.toString(),
-        disabled: !!payload.disabled,
-        limit: !!payload.limit,
-        x1: result1.x,
-        y1: result1.y,
-        x2: result2.x,
-        y2: result2.y
-      } as RoadListType
     }
 
     const result1 = getLocationInfoById(payload.to.toString(), TempEditAndStoredLocation)
@@ -235,7 +222,7 @@ const EditRoad: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPane
 
   return (
     <>
-      {1 && (
+      {openEditRoadPanel && (
         <DraggableWindow>
           {
             <>
@@ -247,7 +234,11 @@ const EditRoad: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPane
                   width: '100%'
                 }}
               >
-                <CloseOutlined />
+                <CloseOutlined
+                  onClick={() => {
+                    setOpenEditRoadPanel(false)
+                  }}
+                />
               </div>
               <Form
                 initialValues={{ ...initialRoadValue }}
