@@ -6,12 +6,13 @@ import { ZoomPad, Sider } from './components'
 import { useAtom } from 'jotai'
 import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
 import useMap from '@renderer/api/useMap'
-import { EditLocation, EditRoad } from './forms'
+import { EditLocationPanel, EditRoadPanel } from './forms'
 
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
 const { Content } = Layout
+
 const Setting: React.FC = () => {
   const { data } = useMap()
   const mapRef = useRef(null)
@@ -21,10 +22,6 @@ const Setting: React.FC = () => {
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
-
-  console.log(roadPanelForm.getFieldsValue())
-
-  const [isMousePointStart, setIsMousePointStart] = useState(false)
 
   const [scale, setScale] = useState(1)
 
@@ -39,7 +36,7 @@ const Setting: React.FC = () => {
       canRotate: v.canRotate
     }))
     setTempEditAndStoredLocation([...storedData, ...TempEditLocationList])
-  }, [data])
+  }, [data, TempEditLocationList])
 
   useResetSiderSwitch()
 
@@ -49,10 +46,7 @@ const Setting: React.FC = () => {
         <Header></Header>
         <Content>
           <Layout style={{ height: '100%', width: '100%' }}>
-            <Sider
-              setIsMousePointStart={setIsMousePointStart}
-              isMousePointStart={isMousePointStart}
-            ></Sider>
+            <Sider></Sider>
             <Content
               style={{
                 overflow: 'scroll',
@@ -67,7 +61,6 @@ const Setting: React.FC = () => {
                 mapWrapRef={mapWrapRef}
                 roadPanelForm={roadPanelForm}
                 locationPanelForm={locationPanelForm}
-                isMousePointStart={isMousePointStart}
               ></MapView>
             </Content>
           </Layout>
@@ -75,13 +68,12 @@ const Setting: React.FC = () => {
 
         {
           /** 1-1 編輯點位的彈跳視窗 */
-          <EditLocation
-            setIsMousePointStart={setIsMousePointStart}
-            isMousePointStart={isMousePointStart}
-            locationPanelForm={locationPanelForm}
-          ></EditLocation>
+          <EditLocationPanel locationPanelForm={locationPanelForm}></EditLocationPanel>
         }
-        {<EditRoad roadPanelForm={roadPanelForm}></EditRoad>}
+        {
+          /** 2-1 編輯路線的彈跳視窗 */
+          <EditRoadPanel roadPanelForm={roadPanelForm}></EditRoadPanel>
+        }
       </Layout>
     </>
   )

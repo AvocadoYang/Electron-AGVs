@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useCallback, memo } from 'react'
+import React, { memo } from 'react'
 import { LocationType } from '@renderer/utils/jotai'
-import { modifyLoc as Loc, modifyRoad as Road, modifyZone as Zone } from '@renderer/utils/gloable'
+import { modifyLoc as Loc } from '@renderer/utils/gloable'
 import { useAtom } from 'jotai'
 import { Modify } from '@renderer/utils/jotai'
 import { EditLocationPanelSwitch } from '@renderer/utils/siderGloble'
@@ -11,60 +11,33 @@ import { openNotificationWithIcon } from '../utils/notification'
 import { useTranslation } from 'react-i18next'
 import { CloseOutlined } from '@ant-design/icons'
 import { Form, Input, Radio, Button, FormInstance, Checkbox } from 'antd'
+import { initialLocationFormValue } from './formInitValue'
 
-const initialValue = {
-  locationId: 0,
-  areaType: 'Extra',
-  rotation: 0,
-  canRotate: false
-}
-
-const EditLocation: React.FC<{
-  isMousePointStart: boolean
-  setIsMousePointStart: React.Dispatch<boolean>
+const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
-  // addModifyHandler: (id: string, genre: 'loc' | 'road' | 'zone') => void
-}> = ({ setIsMousePointStart, isMousePointStart, locationPanelForm }) => {
+}> = ({ locationPanelForm }) => {
   const [editingList, setEditingList] = useAtom(tempEditLocationList)
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [modifyLoc, setModifyLoc] = useAtom(Loc)
-  const [modifyRoad, setModifyRoad] = useAtom(Road)
-  const [modifyZone, setModifyZone] = useAtom(Zone)
   const { t } = useTranslation()
 
-  const addModifyHandler = useCallback(
-    (id: string, genre: 'loc' | 'road' | 'zone') => {
-      let staleModify = { ...modifyLoc }
+  const addModifyHandler = (id: string) => {
+    const staleModify = { ...modifyLoc }
 
-      if (genre === 'road') staleModify = { ...modifyRoad }
-      if (genre === 'zone') staleModify = { ...modifyZone }
+    const addList = [...staleModify.add, id]
 
-      const addList = [...staleModify.add, id]
+    const editList = [...staleModify.edit].filter((d) => d !== id)
 
-      const editList = [...staleModify.edit].filter((d) => d !== id)
+    const deleteList = [...staleModify.delete]
 
-      const deleteList = [...staleModify.delete]
+    const newModify: Modify = {
+      add: [...new Set(addList)] as string[],
+      edit: editList,
+      delete: deleteList
+    }
 
-      const newModify: Modify = {
-        add: [...new Set(addList)] as string[],
-        edit: editList,
-        delete: deleteList
-      }
-
-      if (genre === 'loc') {
-        setModifyLoc(newModify)
-      }
-
-      if (genre === 'road') {
-        setModifyRoad(newModify)
-      }
-
-      if (genre === 'zone') {
-        setModifyZone(newModify)
-      }
-    },
-    [modifyLoc, modifyRoad, modifyZone]
-  )
+    setModifyLoc(newModify)
+  }
 
   const savePose = () => {
     const payload = locationPanelForm.getFieldsValue() as LocationType
@@ -108,7 +81,7 @@ const EditLocation: React.FC<{
       locationId: Number(payload.locationId),
       rotation: Number(payload.rotation)
     }
-    addModifyHandler(sanitizedPayload.locationId.toString(), 'loc')
+    addModifyHandler(sanitizedPayload.locationId.toString())
     setEditingList([...editingList, sanitizedPayload])
   }
 
@@ -126,13 +99,12 @@ const EditLocation: React.FC<{
           >
             <CloseOutlined
               onClick={() => {
-                setIsMousePointStart(!isMousePointStart)
                 setOpenEditLocationPanel(false)
               }}
             />
           </div>
           <Form
-            initialValues={initialValue}
+            initialValues={initialLocationFormValue}
             form={locationPanelForm as FormInstance<unknown>}
             style={{ paddingTop: '15px' }}
           >
@@ -192,4 +164,4 @@ const EditLocation: React.FC<{
   )
 }
 
-export default memo(EditLocation)
+export default memo(EditLocationPanel)

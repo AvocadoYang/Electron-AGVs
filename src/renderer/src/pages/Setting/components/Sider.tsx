@@ -6,7 +6,7 @@ import {
   EditLocationPanelSwitch,
   StoredLocationSwitch,
   EditingLocationSwitch,
-  EditRoadSwitch
+  EditRoadPanelSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -40,14 +40,12 @@ export function getItem(
 
 const { Sider: AntdSider } = Layout
 
-const Sider: React.FC<{
-  setIsMousePointStart: React.Dispatch<boolean>
-  isMousePointStart: boolean
-}> = ({ setIsMousePointStart, isMousePointStart }) => {
+const Sider: React.FC
+= () => {
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
   const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch)
   const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch)
-  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadSwitch) // 2-1
+  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
@@ -56,7 +54,6 @@ const Sider: React.FC<{
       // === location ===
       case 'locationPanel':
         setOpenEditLocationPanel(!openEditLocationPanel)
-        setIsMousePointStart(!isMousePointStart)
         break
       case 'stored_location':
         setShowStoredLocation(!showStoredLocation)
@@ -155,7 +152,10 @@ const Sider: React.FC<{
       getItem(
         t('toolbar.road.roads.edit_roads'),
         '2-1',
-        <Switch onChange={(checked) => handleShowPanel(checked, 'roadPanel')} checked={false} />
+        <Switch
+          onChange={(checked) => handleShowPanel(checked, 'roadPanel')}
+          checked={openEditRoadPanel}
+        />
       ),
       getItem(
         t('toolbar.road.roads.show_in_use_roads'),

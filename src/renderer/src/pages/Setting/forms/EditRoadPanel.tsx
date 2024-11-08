@@ -8,26 +8,13 @@ import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { modifyLoc as Loc, modifyRoad as Road, modifyZone as Zone } from '@renderer/utils/gloable'
 import { tempEditAndStoredLocation, tempEditAndStoredRoads } from '@renderer/utils/gloable'
 import { useTranslation } from 'react-i18next'
-import { EditRoadSwitch } from '@renderer/utils/siderGloble'
+import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 import { getLocationInfoById } from '../utils/utils'
 import { useCallback, useState } from 'react'
 import { openNotificationWithIcon } from '../utils/notification'
 import { Modify, RoadListType } from '@renderer/utils/jotai'
 import { CloseOutlined } from '@ant-design/icons'
-
-const initialRoadValue = {
-  roadId: '',
-  validYawList: [] as unknown as number[],
-  x: '',
-  to: '',
-  x1: 0,
-  y1: 0,
-  x2: 0,
-  y2: 0,
-  disabled: false,
-  limit: false,
-  roadType: 'twoWayRoad'
-}
+import { initialRoadValue } from './formInitValue'
 
 function validateArray(arr: string[]) {
   if (arr.includes('*')) {
@@ -45,10 +32,10 @@ function validateArray(arr: string[]) {
   return true
 }
 
-const EditRoad: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPanelForm }) => {
+const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPanelForm }) => {
   const [chooseAngle, setChooseAngle] = useState<string>('')
   const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
-  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadSwitch) // 2-1
+  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [TempEditAndStoredRoads, setEditingRoadsList] = useAtom(tempEditAndStoredRoads)
 
   const [modifyLoc, setModifyLoc] = useAtom(Loc)
@@ -384,4 +371,4 @@ const EditRoad: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPane
   )
 }
 
-export default EditRoad
+export default EditRoadPanel

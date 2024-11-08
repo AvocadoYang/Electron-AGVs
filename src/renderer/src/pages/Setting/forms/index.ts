@@ -1,2 +1,2 @@
-export { default as EditLocation } from './EditLocation'
-export { default as EditRoad } from './EditRoad'
+export { default as EditLocationPanel } from './EditLocationPanel'
+export { default as EditRoadPanel } from './EditRoadPanel'

@@ -10,4 +10,4 @@ export const StoredLocationSwitch = atom<boolean>(false)
 export const EditingLocationSwitch = atom<boolean>(false)
 
 /** 2-1 編輯路徑開關 */
-export const EditRoadSwitch = atom<boolean>(false)
+export const EditRoadPanelSwitch = atom<boolean>(false)
