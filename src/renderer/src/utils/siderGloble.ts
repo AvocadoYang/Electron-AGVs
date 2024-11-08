@@ -11,3 +11,5 @@ export const EditingLocationSwitch = atom<boolean>(false)
 
 /** 2-1 編輯路徑開關 */
 export const EditRoadPanelSwitch = atom<boolean>(false)
+
+export const SideSwitchToShowForm = atom<boolean>(false)

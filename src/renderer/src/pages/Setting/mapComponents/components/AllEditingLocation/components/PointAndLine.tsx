@@ -16,9 +16,9 @@ const PointDiv = styled.div.attrs<{
   hoverLoc?: boolean
 }>`
   position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 20px;
+  width: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
+  height: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
+  border-radius: ${(props) => (props.canrotate === 'true' ? 0 : '50%')};
   z-index: 10;
   transition-duration: 200ms;
 

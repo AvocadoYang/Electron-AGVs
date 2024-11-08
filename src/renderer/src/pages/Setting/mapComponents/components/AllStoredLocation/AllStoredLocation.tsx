@@ -38,10 +38,11 @@ const AllStoredLocation: React.FC<{
               onDragStart={(event) => {
                 event.preventDefault()
               }}
+              style={{ borderRadius: '50%' }}
             >
               <Point
                 id={loc.locationId.toString()}
-                canrotate={loc.canRotate}
+                canrotate={`${loc.canRotate}`}
                 left={displayX}
                 top={displayY}
                 key={nanoid()}

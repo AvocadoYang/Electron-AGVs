@@ -5,6 +5,7 @@ import Header from '../../components/Header'
 import { ZoomPad, Sider } from './components'
 import { useAtom } from 'jotai'
 import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
+import { SideSwitchToShowForm } from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
 import { EditLocationPanel, EditRoadPanel } from './forms'
 
@@ -18,6 +19,7 @@ const Setting: React.FC = () => {
   const mapRef = useRef(null)
   const [, setTempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
   const [TempEditLocationList] = useAtom(tempEditLocationList)
+  const [sideSwitchToShowForm, test] = useAtom(SideSwitchToShowForm)
 
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
@@ -45,25 +47,37 @@ const Setting: React.FC = () => {
       <Layout style={{ height: '100vh' }}>
         <Header></Header>
         <Content>
-          <Layout style={{ height: '100%', width: '100%' }}>
-            <Sider></Sider>
-            <Content
-              style={{
-                overflow: 'scroll',
-                backgroundColor: 'white'
-              }}
-              ref={mapWrapRef}
-            >
-              <ZoomPad setScale={setScale}></ZoomPad>
-              <MapView
-                scale={scale}
-                mapRef={mapRef}
-                mapWrapRef={mapWrapRef}
-                roadPanelForm={roadPanelForm}
-                locationPanelForm={locationPanelForm}
-              ></MapView>
-            </Content>
-          </Layout>
+          <Row style={{ height: '100%' }}>
+            <Col span={sideSwitchToShowForm ? 19 : 24} style={{ height: '100%' }}>
+              <Layout style={{ height: '100%', width: '100%' }}>
+                <Sider></Sider>
+                <Content
+                  style={{
+                    overflow: 'scroll',
+                    backgroundColor: 'white'
+                  }}
+                  ref={mapWrapRef}
+                >
+                  <ZoomPad setScale={setScale}></ZoomPad>
+                  <MapView
+                    scale={scale}
+                    mapRef={mapRef}
+                    mapWrapRef={mapWrapRef}
+                    roadPanelForm={roadPanelForm}
+                    locationPanelForm={locationPanelForm}
+                  ></MapView>
+                </Content>
+              </Layout>
+            </Col>
+            <Col span={sideSwitchToShowForm ? 5 : 0} style={{ height: '100%' }}>
+              <div
+                style={{ height: '100%', backgroundColor: 'white', overflowY: 'scroll'}}
+                onClick={() => {
+                  test(false)
+                }}
+              ></div>
+            </Col>
+          </Row>
         </Content>
 
         {

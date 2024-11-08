@@ -5,24 +5,24 @@ import { memo } from 'react'
 const PointDiv = styled.div.attrs<{
   left: number
   top: number
-  canrotate: boolean
+  canrotate: string
   hoverLoc?: boolean
 }>(({ left, top, canrotate, hoverLoc }) => ({
   style: { left, top, canrotate, hoverLoc }
 }))<{
   left: number
   top: number
-  canrotate: boolean
+  canrotate: string
   hoverLoc?: boolean
 }>`
   position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: ${(props) => (props.canrotate ? 0 : '50%')};
+  width: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
+  height: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
+  background: ${(props) => (props.canrotate === 'true' ? '#f27ef4' : '#1b00ce')};
+  border-radius: ${(props) => (props.canrotate === 'true' ? 0 : '50%')};
   z-index: 10;
   transition-duration: 200ms;
 
-  background: ${(props) => (props.canrotate ? '#f27ef4' : '#1b00ce')};
   border: ${(props) => (props.hoverLoc ? '5px solid #ff0000' : 'none')};
   &:hover {
     background: red;

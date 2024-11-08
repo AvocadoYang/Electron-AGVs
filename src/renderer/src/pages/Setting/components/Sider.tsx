@@ -7,7 +7,8 @@ import {
   EditLocationPanelSwitch,
   StoredLocationSwitch,
   EditingLocationSwitch,
-  EditRoadPanelSwitch
+  EditRoadPanelSwitch,
+  SideSwitchToShowForm
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -48,6 +49,7 @@ const Sider: React.FC = () => {
   const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch)
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [collapsed, setCollapsed] = useState(true)
+  const [sideSwitchToShowForm, setSideSwitchToShowForm] = useAtom(SideSwitchToShowForm)
   const { t } = useTranslation()
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
@@ -65,7 +67,9 @@ const Sider: React.FC = () => {
         setShowEditingLocation(!showEditingLocation)
         break
       case 'locationList':
-        console.log('locationList')
+        if (!sideSwitchToShowForm) {
+          setSideSwitchToShowForm(true)
+        }
         break
       // ===================
       // === road ===
