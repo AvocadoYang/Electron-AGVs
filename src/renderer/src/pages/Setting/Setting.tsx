@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Form, Col, Row } from 'antd'
+import { Layout, Form, Col, Row, Button } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider } from './components'
 import { useAtom } from 'jotai'
 import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
 import { SideSwitchToShowForm } from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
-import { EditLocationPanel, EditRoadPanel } from './forms'
+import { EditLocationPanel, EditRoadPanel, AllLocationListForm } from './forms'
 
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
@@ -70,12 +70,22 @@ const Setting: React.FC = () => {
               </Layout>
             </Col>
             <Col span={sideSwitchToShowForm ? 5 : 0} style={{ height: '100%' }}>
-              <div
-                style={{ height: '100%', backgroundColor: 'white', overflowY: 'scroll'}}
-                onClick={() => {
-                  test(false)
-                }}
-              ></div>
+              <div className="form-wrap-side">
+                <div className="close-side-button">
+                  <Button
+                    color="primary"
+                    variant="solid"
+                    onClick={() => {
+                      test(false)
+                    }}
+                  >
+                    123
+                  </Button>
+                </div>
+                {<AllLocationListForm></AllLocationListForm>}
+                {<AllLocationListForm></AllLocationListForm>}
+                {<AllLocationListForm></AllLocationListForm>}
+              </div>
             </Col>
           </Row>
         </Content>

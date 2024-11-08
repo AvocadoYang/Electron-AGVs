@@ -9,6 +9,9 @@ export const StoredLocationSwitch = atom<boolean>(false)
 /** 1-3  顯示編輯終點位開關 */
 export const EditingLocationSwitch = atom<boolean>(false)
 
+/** 1-4 顯示所有點位表單 */
+export const EditLocationListFormSwitch = atom<boolean>(false)
+
 /** 2-1 編輯路徑開關 */
 export const EditRoadPanelSwitch = atom<boolean>(false)
 

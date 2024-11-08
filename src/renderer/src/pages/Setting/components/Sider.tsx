@@ -8,7 +8,8 @@ import {
   StoredLocationSwitch,
   EditingLocationSwitch,
   EditRoadPanelSwitch,
-  SideSwitchToShowForm
+  SideSwitchToShowForm,
+  EditLocationListFormSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -45,8 +46,9 @@ const { Sider: AntdSider } = Layout
 const Sider: React.FC = () => {
   const { data } = useMap()
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
-  const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch)
-  const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch)
+  const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch) // 1-2
+  const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch) // 1-3
+  const [showAllLocationListForm, setShowAllLocationListForm] = useAtom(EditLocationListFormSwitch) // 1-4
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [collapsed, setCollapsed] = useState(true)
   const [sideSwitchToShowForm, setSideSwitchToShowForm] = useAtom(SideSwitchToShowForm)
@@ -70,6 +72,7 @@ const Sider: React.FC = () => {
         if (!sideSwitchToShowForm) {
           setSideSwitchToShowForm(true)
         }
+        setShowAllLocationListForm(!showAllLocationListForm)
         break
       // ===================
       // === road ===
@@ -152,7 +155,10 @@ const Sider: React.FC = () => {
       getItem(
         t('toolbar.location.show_locations_table'),
         '1-4',
-        <Switch checked={false} onChange={(checked) => handleShowPanel(checked, 'locationList')} />
+        <Switch
+          checked={showAllLocationListForm}
+          onChange={(checked) => handleShowPanel(checked, 'locationList')}
+        />
       )
     ]),
     getItem(t('toolbar.road.roads.roads'), '2', <NodeIndexOutlined className="road_icon" />, [
