@@ -230,10 +230,7 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
               <Form
                 initialValues={{ ...initialRoadValue }}
                 form={roadPanelForm}
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                style={{ maxWidth: 600 }}
-                autoComplete="off"
+                style={{ paddingTop: '10px' }}
               >
                 <Form.Item label={t('edit_road_panel.road')} name="roadType" shouldUpdate>
                   <Radio.Group buttonStyle="solid">
@@ -246,7 +243,7 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
                   </Radio.Group>
                 </Form.Item>
 
-                <Form.Item name="checkboxGroup" label={t('edit_road_panel.yaw')}>
+                <Form.Item name="checkboxGroup" label={t('edit_road_panel.yaw')} required>
                   <Checkbox.Group>
                     <Row>
                       <Col span={8}>
@@ -349,15 +346,15 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
                   <Switch />
                 </Form.Item>
 
-                <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate>
+                <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
                   <InputNumber />
                 </Form.Item>
 
-                <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate>
+                <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
                   <InputNumber />
                 </Form.Item>
 
-                <Form.Item>
+                <Form.Item style={{ textAlign: 'center'}}>
                   <Button onClick={() => saveRoad()} type="primary">
                     {t('edit_road_panel.add')}
                   </Button>

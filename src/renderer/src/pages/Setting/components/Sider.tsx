@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, memo } from 'react'
 import { Layout, Menu, Switch } from 'antd'
+import useMap from '@renderer/api/useMap'
 import { useAtom } from 'jotai'
 import {
   EditLocationPanelSwitch,
@@ -40,8 +41,8 @@ export function getItem(
 
 const { Sider: AntdSider } = Layout
 
-const Sider: React.FC
-= () => {
+const Sider: React.FC = () => {
+  const { data } = useMap()
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
   const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch)
   const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch)
@@ -50,10 +51,12 @@ const Sider: React.FC
   const { t } = useTranslation()
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
+    if (!data) return
     switch (itemType) {
       // === location ===
       case 'locationPanel':
         setOpenEditLocationPanel(!openEditLocationPanel)
+        setShowEditingLocation(true)
         break
       case 'stored_location':
         setShowStoredLocation(!showStoredLocation)

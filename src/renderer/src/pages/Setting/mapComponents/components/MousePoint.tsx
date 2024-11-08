@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import styled from 'styled-components'
 import useMap from '@renderer/api/useMap'
 
@@ -33,4 +33,4 @@ const Point: FC<{
   )
 }
 
-export default Point
+export default memo(Point)

@@ -1,18 +1,25 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/prop-types */
 import { RefObject, memo, useState } from 'react'
 import '../setting.css'
 import { FormInstance } from 'antd'
 import { useAtom } from 'jotai'
-import { sameVersion } from '@renderer/utils/gloable'
+import {
+  sameVersion,
+  showBlockId as ShowBlockId,
+  tempEditAndStoredLocation
+} from '@renderer/utils/gloable'
 import {
   StoredLocationSwitch,
   EditingLocationSwitch,
   EditLocationPanelSwitch
 } from '@renderer/utils/siderGloble'
+import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
 import { draggableLineInitialPoint, mouseLocation } from '../hooks/hook'
 import { useMousePoint, useDraggableLine } from '../hooks'
+import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
 import { MousePoint, AllStoredLocation, MapImage, AllEditingLocation } from './components'
 
@@ -23,11 +30,18 @@ const MapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>
   mapWrapRef: RefObject<HTMLDivElement>
 }> = ({ scale, mapRef, locationPanelForm, roadPanelForm, mapWrapRef }) => {
-  const [mousePointX, setMousePointX] = useState(-3)
-  const [mousePointY, setMousePointY] = useState(-3)
+  const { data } = useMap()
+  const [mousePointX, setMousePointX] = useState(-3) // MousePoint 編輯點位小紅點
+  const [mousePointY, setMousePointY] = useState(-3) // MousePoint 編輯點位小紅點
   const { data: currentVersion } = useVerityVersion()
+
+  /** 路線拖曳相關參數 */
+  const [, setShowBlockId] = useAtom(ShowBlockId)
+  const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
   const [initPoint, setInitPoint] = useState({} as draggableLineInitialPoint)
   const [mouseLocation, setMouseLocation] = useState({} as mouseLocation)
+  const [isResizing, setIsResizing] = useState(false)
+
   const [, setSameVersion] = useAtom(sameVersion)
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [showStoredLocation] = useAtom(StoredLocationSwitch)
@@ -57,7 +71,15 @@ const MapView: React.FC<{
     openEditLocationPanel
   )
 
-  useDraggableLine(mapRef, roadPanelForm, initPoint, setMouseLocation)
+  const handleMouseDown = (startId: string) => {
+    if (!data) return
+    setIsResizing(true)
+    setShowBlockId(startId)
+    const result = getLocationInfoById(startId, TempEditAndStoredLocation)
+    roadPanelForm.setFieldValue('x', result.locationId)
+  }
+
+  useDraggableLine(mapRef, roadPanelForm, initPoint, setMouseLocation, isResizing, setIsResizing)
 
   window.addEventListener('beforeunload', () => {
     if (!currentVersion) return
@@ -75,12 +97,26 @@ const MapView: React.FC<{
     >
       <MapImage></MapImage>
 
-      {showStoredLocation ? <AllStoredLocation /> : []}
+      {showStoredLocation ? (
+        <AllStoredLocation
+          scale={scale}
+          setInitPoint={setInitPoint}
+          handleMouseDown={handleMouseDown}
+          mouseLocation={mouseLocation}
+        />
+      ) : (
+        []
+      )}
 
       {/* {showStoredLocation ? <AllCargo /> : []} */}
 
       {showEditingLocation ? (
-        <AllEditingLocation mapRef={mapRef} scale={scale} roadPanelForm={roadPanelForm} />
+        <AllEditingLocation
+          scale={scale}
+          setInitPoint={setInitPoint}
+          handleMouseDown={handleMouseDown}
+          mouseLocation={mouseLocation}
+        />
       ) : (
         []
       )}

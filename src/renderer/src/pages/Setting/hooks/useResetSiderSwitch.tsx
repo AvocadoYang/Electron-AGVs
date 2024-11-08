@@ -15,7 +15,7 @@ const useResetSiderSwitch = () => {
   const [, setShowBlockId] = useAtom(showBlockId)
   useEffect(() => {
     setOpenEditLocationPanel(false)
-    setShowStoredLocation(false)
+    setShowStoredLocation(true)
     setShowEditingLocation(false)
     setShowBlockId('')
   }, [])

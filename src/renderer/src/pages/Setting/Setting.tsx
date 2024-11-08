@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Form } from 'antd'
+import { Layout, Form, Col, Row } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider } from './components'
 import { useAtom } from 'jotai'

@@ -5,7 +5,7 @@ import { modifyLoc as Loc } from '@renderer/utils/gloable'
 import { useAtom } from 'jotai'
 import { Modify } from '@renderer/utils/jotai'
 import { EditLocationPanelSwitch } from '@renderer/utils/siderGloble'
-import { tempEditLocationList } from '@renderer/utils/gloable'
+import { tempEditLocationList, tempEditAndStoredLocation } from '@renderer/utils/gloable'
 import DraggableWindow from './DraggableWindow'
 import { openNotificationWithIcon } from '../utils/notification'
 import { useTranslation } from 'react-i18next'
@@ -16,8 +16,9 @@ import { initialLocationFormValue } from './formInitValue'
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
 }> = ({ locationPanelForm }) => {
-  const [editingList, setEditingList] = useAtom(tempEditLocationList)
+  const [TempEditLocationList, setTempEditLocationList] = useAtom(tempEditLocationList)
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
+  const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
   const [modifyLoc, setModifyLoc] = useAtom(Loc)
   const { t } = useTranslation()
 
@@ -43,7 +44,7 @@ const EditLocationPanel: React.FC<{
     const payload = locationPanelForm.getFieldsValue() as LocationType
     const isNegative = payload.locationId <= 0
 
-    const isDuplicateId = editingList.some((v) => {
+    const isDuplicateId = TempEditAndStoredLocation.some((v) => {
       return v.locationId === Number(payload.locationId)
     })
 
@@ -82,7 +83,7 @@ const EditLocationPanel: React.FC<{
       rotation: Number(payload.rotation)
     }
     addModifyHandler(sanitizedPayload.locationId.toString())
-    setEditingList([...editingList, sanitizedPayload])
+    setTempEditLocationList([...TempEditLocationList, sanitizedPayload])
   }
 
   return (
@@ -105,7 +106,7 @@ const EditLocationPanel: React.FC<{
           </div>
           <Form
             initialValues={initialLocationFormValue}
-            form={locationPanelForm as FormInstance<unknown>}
+            form={locationPanelForm}
             style={{ paddingTop: '15px' }}
           >
             <Form.Item label="X" name="x" shouldUpdate required>
@@ -131,7 +132,7 @@ const EditLocationPanel: React.FC<{
               <Input type="number" />
             </Form.Item>
 
-            <Form.Item label="是否可旋轉" name="canRotate" valuePropName="checked" shouldUpdate>
+            <Form.Item label="是否可旋轉" name="canRotate" valuePropName="checked" shouldUpdate >
               <Checkbox />
             </Form.Item>
 
@@ -152,7 +153,7 @@ const EditLocationPanel: React.FC<{
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item>
+            <Form.Item style={{ textAlign: 'center'}}>
               <Button onClick={savePose} type="primary">
                 {t('edit_location_panel.save')}
               </Button>
