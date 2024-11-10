@@ -1,5 +1,7 @@
 {
   "test_translation": "test translation",
+  "open": "Open Drawer",
+  "close": "Close Drawer",
   "zoom_out": "Zoom Out",
   "zoom_in": "Zoom In",
   "page_view": "View",

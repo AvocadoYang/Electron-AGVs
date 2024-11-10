@@ -2,8 +2,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Form, Col, Row, Button } from 'antd'
 import Header from '../../components/Header'
-import { ZoomPad, Sider } from './components'
+import { ZoomPad, Sider, FormDrawerBtn } from './components'
 import { useAtom } from 'jotai'
+import { useTranslation } from 'react-i18next'
 import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
 import { SideSwitchToShowForm } from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
@@ -17,6 +18,7 @@ const { Content } = Layout
 const Setting: React.FC = () => {
   const { data } = useMap()
   const mapRef = useRef(null)
+  const { t } = useTranslation()
   const [, setTempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
   const [TempEditLocationList] = useAtom(tempEditLocationList)
   const [sideSwitchToShowForm, test] = useAtom(SideSwitchToShowForm)
@@ -48,7 +50,7 @@ const Setting: React.FC = () => {
         <Header></Header>
         <Content>
           <Row style={{ height: '100%' }}>
-            <Col span={sideSwitchToShowForm ? 19 : 24} style={{ height: '100%' }}>
+            <Col span={sideSwitchToShowForm ? 17 : 24} style={{ height: '100%' }}>
               <Layout style={{ height: '100%', width: '100%' }}>
                 <Sider></Sider>
                 <Content
@@ -59,6 +61,7 @@ const Setting: React.FC = () => {
                   ref={mapWrapRef}
                 >
                   <ZoomPad setScale={setScale}></ZoomPad>
+                  <FormDrawerBtn></FormDrawerBtn>
                   <MapView
                     scale={scale}
                     mapRef={mapRef}
@@ -69,23 +72,19 @@ const Setting: React.FC = () => {
                 </Content>
               </Layout>
             </Col>
-            <Col span={sideSwitchToShowForm ? 5 : 0} style={{ height: '100%' }}>
-              <div className="form-wrap-side">
-                <div className="close-side-button">
-                  <Button
-                    color="primary"
-                    variant="solid"
-                    onClick={() => {
-                      test(false)
-                    }}
-                  >
-                    123
-                  </Button>
-                </div>
-                {<AllLocationListForm></AllLocationListForm>}
-                {<AllLocationListForm></AllLocationListForm>}
-                {<AllLocationListForm></AllLocationListForm>}
+            <Col span={sideSwitchToShowForm ? 7 : 0} className="form-wrap-side">
+              <div className="close-side-button">
+                <Button
+                  color="danger"
+                  variant="solid"
+                  onClick={() => {
+                    test(false)
+                  }}
+                >
+                  {t('close')}
+                </Button>
               </div>
+              {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
             </Col>
           </Row>
         </Content>

@@ -5,12 +5,12 @@ import { Button, Checkbox, Col, Form, FormInstance, InputNumber, Radio, Row, Swi
 import DraggableWindow from './DraggableWindow'
 import { useAtom } from 'jotai'
 import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
-import { modifyLoc as Loc, modifyRoad as Road, modifyZone as Zone } from '@renderer/utils/gloable'
+import { modifyRoad as Road } from '@renderer/utils/gloable'
 import { tempEditAndStoredLocation, tempEditAndStoredRoads } from '@renderer/utils/gloable'
 import { useTranslation } from 'react-i18next'
 import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 import { getLocationInfoById } from '../utils/utils'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { openNotificationWithIcon } from '../utils/notification'
 import { Modify, RoadListType } from '@renderer/utils/jotai'
 import { CloseOutlined } from '@ant-design/icons'
@@ -38,46 +38,28 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [TempEditAndStoredRoads, setEditingRoadsList] = useAtom(tempEditAndStoredRoads)
 
-  const [modifyLoc, setModifyLoc] = useAtom(Loc)
   const [modifyRoad, setModifyRoad] = useAtom(Road)
-  const [modifyZone, setModifyZone] = useAtom(Zone)
 
   const [, setShowBlockId] = useAtom(ShowBlockId)
   const { t } = useTranslation()
 
-  const addModifyHandler = useCallback(
-    (id: string, genre: 'loc' | 'road' | 'zone') => {
-      let staleModify = { ...modifyLoc }
+  const addModifyHandler = (id: string) => {
+    const staleModify = { ...modifyRoad }
 
-      if (genre === 'road') staleModify = { ...modifyRoad }
-      if (genre === 'zone') staleModify = { ...modifyZone }
+    const addList = [...staleModify.add, id]
 
-      const addList = [...staleModify.add, id]
+    const editList = [...staleModify.edit].filter((d) => d !== id)
 
-      const editList = [...staleModify.edit].filter((d) => d !== id)
+    const deleteList = [...staleModify.delete]
 
-      const deleteList = [...staleModify.delete]
+    const newModify: Modify = {
+      add: [...new Set(addList)] as string[],
+      edit: editList,
+      delete: deleteList
+    }
 
-      const newModify: Modify = {
-        add: [...new Set(addList)] as string[],
-        edit: editList,
-        delete: deleteList
-      }
-
-      if (genre === 'loc') {
-        setModifyLoc(newModify)
-      }
-
-      if (genre === 'road') {
-        setModifyRoad(newModify)
-      }
-
-      if (genre === 'zone') {
-        setModifyZone(newModify)
-      }
-    },
-    [modifyLoc, modifyRoad, modifyZone]
-  )
+    setModifyRoad(newModify)
+  }
 
   const saveRoad = () => {
     const payload = roadPanelForm.getFieldsValue() as RoadListType
@@ -202,7 +184,7 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
       y2: result2.y
     } as RoadListType
 
-    addModifyHandler(newPayload.roadId, 'road')
+    addModifyHandler(newPayload.roadId)
     setEditingRoadsList([...TempEditAndStoredRoads, newPayload])
     setShowBlockId('')
   }
@@ -354,7 +336,7 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
                   <InputNumber />
                 </Form.Item>
 
-                <Form.Item style={{ textAlign: 'center'}}>
+                <Form.Item style={{ textAlign: 'center' }}>
                   <Button onClick={() => saveRoad()} type="primary">
                     {t('edit_road_panel.add')}
                   </Button>

@@ -1,6 +1,8 @@
 {
   "test_translation": "測試翻譯",
-   "zoom_out": "縮小",
+  "open": "開啟表單列",
+  "close": "關閉表單列",
+  "zoom_out": "縮小",
   "zoom_in": "放大",
   "page_view": "地圖",
   "page_setting": "點位設定",

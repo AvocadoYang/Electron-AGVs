@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { app, shell, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
+import icon from '../../resources/logo_64x64.png?asset'
 
 function createWindow(): void {
   // Create the browser window.
@@ -11,13 +12,37 @@ function createWindow(): void {
     height: 760,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    // ...(process.platform === 'linux' ? { icon } : {}),
+    ...{ icon },
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       nodeIntegration: true,
       sandbox: false
     }
   })
+
+  function registerShortcuts() {
+    globalShortcut.register('CommandOrControl+=', () => {
+      zoomFactor += 0.1
+      mainWindow.webContents.setZoomFactor(zoomFactor)
+    })
+
+    globalShortcut.register('CommandOrControl+-', () => {
+      zoomFactor = Math.max(0.1, zoomFactor - 0.1)
+      mainWindow.webContents.setZoomFactor(zoomFactor)
+    })
+
+    globalShortcut.register('CommandOrControl+0', () => {
+      zoomFactor = 1
+      mainWindow.webContents.setZoomFactor(zoomFactor)
+    })
+  }
+
+  function unregisterShortcuts() {
+    globalShortcut.unregister('CommandOrControl+=')
+    globalShortcut.unregister('CommandOrControl+-')
+    globalShortcut.unregister('CommandOrControl+0')
+  }
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -44,19 +69,16 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  globalShortcut.register('CommandOrControl+=', () => {
-    zoomFactor += 0.1
-    mainWindow.webContents.setZoomFactor(zoomFactor)
+  app.on('browser-window-focus', () => {
+    registerShortcuts()
   })
 
-  globalShortcut.register('CommandOrControl+-', () => {
-    zoomFactor = Math.max(0.1, zoomFactor - 0.1)
-    mainWindow.webContents.setZoomFactor(zoomFactor)
+  app.on('browser-window-blur', () => {
+    unregisterShortcuts()
   })
 
-  globalShortcut.register('CommandOrControl+0', () => {
-    zoomFactor = 1
-    mainWindow.webContents.setZoomFactor(zoomFactor)
+  mainWindow.on('close', () => {
+    unregisterShortcuts()
   })
 }
 
