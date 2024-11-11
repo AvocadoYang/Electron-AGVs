@@ -11,6 +11,7 @@ const BtnWrap = styled.div`
   width: 35px;
   height: 35px;
   border-radius: 50%;
+  cursor: pointer;
   background-color: #2d7df6;
   display: flex;
   align-items: center;
@@ -18,7 +19,7 @@ const BtnWrap = styled.div`
   opacity: 0.9;
   box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
   z-index: 4;
-  top: 0px;
+  top: 70px;
   right: 30px;
   transition: 0.2s;
 
@@ -33,13 +34,12 @@ const FormDrawerBtn = () => {
   return (
     <>
       {!sideSwitchToShowForm ? (
-        <BtnWrap>
-          <LeftOutlined
-            className="open-form-drawer-btn"
-            onClick={() => {
-              setSideSwitchToShowForm(true)
-            }}
-          />
+        <BtnWrap
+          onClick={() => {
+            setSideSwitchToShowForm(true)
+          }}
+        >
+          <LeftOutlined className="open-form-drawer-btn" />
         </BtnWrap>
       ) : null}
     </>

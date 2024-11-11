@@ -4,18 +4,19 @@ import { FormInstance } from 'antd'
 import { useAtom } from 'jotai'
 import { hoverLocation } from '@renderer/utils/gloable'
 import { EditLocationListFormSwitch } from '@renderer/utils/siderGloble'
+import { CloseSquareOutlined } from '@ant-design/icons'
 
-import React from 'react';
-import { Space, Table, Tag } from 'antd';
-import type { TableProps } from 'antd';
+import React, { memo } from 'react'
+import { Space, Table, Tag } from 'antd'
+import type { TableProps } from 'antd'
 
 interface DataType {
-  key: string;
-  test: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
+  key: string
+  test: string
+  name: string
+  age: number
+  address: string
+  tags: string[]
 }
 
 const columns: TableProps<DataType>['columns'] = [
@@ -23,7 +24,7 @@ const columns: TableProps<DataType>['columns'] = [
     title: 'Name',
     dataIndex: 'name',
     key: 'name',
-    render: (text) => <a>{text}</a>,
+    render: (text) => <a>{text}</a>
   },
   {
     title: 'Test',
@@ -33,12 +34,12 @@ const columns: TableProps<DataType>['columns'] = [
   {
     title: 'Age',
     dataIndex: 'age',
-    key: 'age',
+    key: 'age'
   },
   {
     title: 'Address',
     dataIndex: 'address',
-    key: 'address',
+    key: 'address'
   },
   {
     title: 'Tags',
@@ -47,18 +48,18 @@ const columns: TableProps<DataType>['columns'] = [
     render: (_, { tags }) => (
       <>
         {tags.map((tag) => {
-          let color = tag.length > 5 ? 'geekblue' : 'green';
+          let color = tag.length > 5 ? 'geekblue' : 'green'
           if (tag === 'loser') {
-            color = 'volcano';
+            color = 'volcano'
           }
           return (
             <Tag color={color} key={tag}>
               {tag.toUpperCase()}
             </Tag>
-          );
+          )
         })}
       </>
-    ),
+    )
   },
   {
     title: 'Action',
@@ -68,9 +69,9 @@ const columns: TableProps<DataType>['columns'] = [
         <a>Invite {record.name}</a>
         <a>Delete</a>
       </Space>
-    ),
-  },
-];
+    )
+  }
+]
 
 const data: DataType[] = [
   {
@@ -79,7 +80,7 @@ const data: DataType[] = [
     name: 'John Brown',
     age: 32,
     address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
+    tags: ['nice', 'developer']
   },
   {
     key: '2',
@@ -87,7 +88,7 @@ const data: DataType[] = [
     name: 'Jim Green',
     age: 42,
     address: 'London No. 1 Lake Park',
-    tags: ['loser'],
+    tags: ['loser']
   },
   {
     key: '3',
@@ -95,9 +96,9 @@ const data: DataType[] = [
     name: 'Joe Black',
     age: 32,
     address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
+    tags: ['cool', 'teacher']
+  }
+]
 
 const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }> = ({
   locationPanelForm
@@ -107,12 +108,19 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
   return (
     <>
       {showAllLocationListForm ? (
-        <div className="form-wrap" onMouseLeave={() => setHoverLoc('')}>
-          <Table<DataType> columns={columns} dataSource={data} />
-        </div>
+        <>
+          <div style={{ textAlign: 'end', width: '100%' }}>
+            <CloseSquareOutlined className="close-table-icon" />
+          </div>
+          <Table<DataType>
+            columns={columns}
+            dataSource={data}
+            style={{ backgroundColor: 'rgba(252, 248, 248, 0.1)' }}
+          />
+        </>
       ) : null}
     </>
   )
 }
 
-export default AllLocationListForm
+export default memo(AllLocationListForm)

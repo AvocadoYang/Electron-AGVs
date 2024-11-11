@@ -1,0 +1,76 @@
+
+.form-wrap-drawer {
+  position: absolute;
+  top: 80px;
+  max-height: 86%;
+  display: none;
+  overflow-y: scroll;
+  background-color: rgba(252, 248, 248, 0);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  padding: 10px 15px 0 15px;
+  transition: width 1s, height 1s, right 1s, top 1s, left 1s bottom 1s;
+  padding-left: 5px;
+  margin-bottom: 10px;
+}
+
+.left {
+  left: 220px;
+}
+
+.right {
+  right: 20px;
+}
+
+.up {
+  height: 40%;
+}
+
+.down {
+  height: 86%;
+}
+
+.hide {
+  opacity: 0.3;
+}
+
+.show {
+  opacity: 1;
+}
+.is-drawer-open{
+  min-width: 30%;
+  display: flex;
+  align-items: center;
+  overflow-x: scroll;
+  overflow-x: hidden;
+  flex-direction: column;
+  transition: 1s;
+}
+
+.close-table-icon {
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close-table-icon svg:hover {
+  fill: red;
+  transform: scale(1.2);
+}
+
+
+.button-and-direction-wrap {
+  width: 100%;
+  text-align: end;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-and-direction-wrap svg {
+  font-size: 20px;
+  fill: #2d7df6;
+  cursor: pointer;
+}
+
+.button-and-direction-wrap svg:hover {
+  fill: red;
+  transform: scale(1.5);
+}

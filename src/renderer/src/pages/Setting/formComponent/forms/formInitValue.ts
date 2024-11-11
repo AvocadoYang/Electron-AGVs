@@ -12,7 +12,6 @@ export const initialRoadValue = {
   roadType: 'twoWayRoad'
 }
 
-
 export const initialLocationFormValue = {
   locationId: 0,
   areaType: 'Extra',
