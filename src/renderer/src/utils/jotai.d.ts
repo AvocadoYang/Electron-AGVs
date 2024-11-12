@@ -22,7 +22,6 @@ export type RoadListType = {
   limit: boolean
 }
 
-
 export type Modify = {
   delete: string[]
   edit: string[]

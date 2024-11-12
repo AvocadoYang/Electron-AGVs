@@ -33,5 +33,4 @@ export const sameVersion = atom(true)
 // control which ID of draggableLine can be use.
 export const showBlockId = atom<string>('')
 
-
 export const hoverLocation = atom<string>('')

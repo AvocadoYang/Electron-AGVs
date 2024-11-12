@@ -1,4 +1,28 @@
 {
+  "utils": {
+    "yes": "Yes",
+    "no": "No",
+    "location": "Location",
+    "search": "search",
+    "reset": "reset",
+    "filter": "filter",
+    "cancel": "cancel",
+    "yaw": "Yaw",
+    "opacity": "opacity",
+    "show": "show",
+    "point_type": "Point Type",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+
+    "location_property": {
+      "none": "Normal",
+      "charge_station": "Charge Station",
+      "prepare_side": "Prepare Side",
+      "shelve": "Shelf",
+      "wait_side": "Waiting Side"
+    }
+  },
   "test_translation": "test translation",
   "open": "Open Drawer",
   "close": "Close Drawer",

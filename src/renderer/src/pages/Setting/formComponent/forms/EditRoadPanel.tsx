@@ -192,7 +192,7 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
   return (
     <>
       {openEditRoadPanel && (
-        <DraggableWindow>
+        <DraggableWindow isHide={false} width="15%">
           {
             <>
               <div

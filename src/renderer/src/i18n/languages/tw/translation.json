@@ -1,4 +1,28 @@
 {
+  "utils": {
+    "yes": "是",
+    "no": "否",
+    "search": "搜尋",
+    "reset": "重設",
+    "filter": "過濾",
+    "cancel": "取消",
+    "location": "地點",
+    "yaw": "轉角",
+    "opacity": "淡化",
+    "show": "顯示",
+    "point_type": "地點類型",
+    "save": "修改",
+    "delete": "刪除",
+    "edit": "編輯",
+
+    "location_property": {
+      "none": "點位",
+      "charge_station": "充電站",
+      "prepare_side": "預派點",
+      "shelve": "貨區",
+      "wait_side": "待命區"
+    }
+  },
   "test_translation": "測試翻譯",
   "open": "開啟表單列",
   "close": "關閉表單列",

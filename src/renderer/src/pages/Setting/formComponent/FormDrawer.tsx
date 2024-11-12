@@ -65,15 +65,6 @@ const FormDrawer: React.FC<{ locationPanelForm: FormInstance<unknown> }> = ({
         </Button>
       </div>
       {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
-      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
     </div>
   )
 }

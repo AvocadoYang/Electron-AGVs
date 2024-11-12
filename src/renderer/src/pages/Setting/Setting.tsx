@@ -7,7 +7,7 @@ import { useAtom } from 'jotai'
 import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
 import useMap from '@renderer/api/useMap'
 import { EditLocationPanel, EditRoadPanel } from './formComponent/forms'
-import { FormDrawer } from './formComponent'
+import { AllLocationListForm } from './formComponent/forms'
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
@@ -43,7 +43,7 @@ const Setting: React.FC = () => {
 
   return (
     <>
-      <Layout style={{ height: '100vh' }}>
+      <Layout style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
         <Header></Header>
         <Content>
           <Layout style={{ height: '100%', width: '100%' }}>
@@ -64,7 +64,7 @@ const Setting: React.FC = () => {
                 roadPanelForm={roadPanelForm}
                 locationPanelForm={locationPanelForm}
               ></MapView>
-              <FormDrawer locationPanelForm={locationPanelForm}></FormDrawer>
+              {/* <FormDrawer locationPanelForm={locationPanelForm}></FormDrawer> */}
             </Content>
           </Layout>
         </Content>
@@ -77,6 +77,7 @@ const Setting: React.FC = () => {
           /** 2-1 編輯路線的彈跳視窗 */
           <EditRoadPanel roadPanelForm={roadPanelForm}></EditRoadPanel>
         }
+        {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
       </Layout>
     </>
   )

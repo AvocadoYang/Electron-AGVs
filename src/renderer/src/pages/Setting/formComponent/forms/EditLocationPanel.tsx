@@ -42,6 +42,7 @@ const EditLocationPanel: React.FC<{
 
   const savePose = () => {
     const payload = locationPanelForm.getFieldsValue() as LocationType
+    console.log(payload)
     const isNegative = payload.locationId <= 0
 
     const isDuplicateId = TempEditAndStoredLocation.some((v) => {
@@ -80,7 +81,9 @@ const EditLocationPanel: React.FC<{
     const sanitizedPayload = {
       ...payload,
       locationId: Number(payload.locationId),
-      rotation: Number(payload.rotation)
+      rotation: Number(payload.rotation),
+      x: Number(payload.x),
+      y: Number(payload.y)
     }
     addModifyHandler(sanitizedPayload.locationId.toString())
     setTempEditLocationList([...TempEditLocationList, sanitizedPayload])
@@ -89,7 +92,7 @@ const EditLocationPanel: React.FC<{
   return (
     <>
       {openEditLocationPanel && (
-        <DraggableWindow>
+        <DraggableWindow width="15%" isHide={false}>
           <div
             style={{
               display: 'flex',
@@ -132,7 +135,7 @@ const EditLocationPanel: React.FC<{
               <Input type="number" />
             </Form.Item>
 
-            <Form.Item label="是否可旋轉" name="canRotate" valuePropName="checked" shouldUpdate >
+            <Form.Item label="是否可旋轉" name="canRotate" valuePropName="checked" shouldUpdate>
               <Checkbox />
             </Form.Item>
 
@@ -153,7 +156,7 @@ const EditLocationPanel: React.FC<{
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item style={{ textAlign: 'center'}}>
+            <Form.Item style={{ textAlign: 'center' }}>
               <Button onClick={savePose} type="primary">
                 {t('edit_location_panel.save')}
               </Button>
