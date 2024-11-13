@@ -3,10 +3,15 @@
   width: 75%;
   height: 72%;
   position: absolute;
-  left: 53%;
-  top: 48%;
-  transform: translate(-50%, -50%);
+  /* right: -150%;
+  top: 48%; */
+  transform: translate(150%, 18%);
   opacity: 1;
+  transition: 0.8s all;
+}
+
+.form-button-wrap-animate {
+  transform: translate(20%, 18%);
 }
 
 .hidden-close-btn-wrap {
@@ -27,7 +32,7 @@
 
 .table-wrap::-webkit-scrollbar {
   height: 10px !important;
-  display: none !important;
+  /* display: none !important; */
   width: 10px !important;
   background-color: #e6e6e7 !important;
 }

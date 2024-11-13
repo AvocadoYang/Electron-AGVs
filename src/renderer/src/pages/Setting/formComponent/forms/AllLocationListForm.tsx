@@ -421,10 +421,12 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
 
   return (
     <>
-      {showAllLocationListForm ? (
-        <>
-          {contextHolders}
-          <div className="form-button-wrap">
+      {contextHolders}
+      <div
+        className={`form-button-wrap ${showAllLocationListForm ? 'form-button-wrap-animate' : ''}`}
+      >
+        {showAllLocationListForm ? (
+          <>
             <div className="hidden-close-btn-wrap">
               <Button
                 onClick={() => {
@@ -448,7 +450,9 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
               style={{
                 height: '100%',
                 width: '100%',
-                overflow: 'scroll',
+                overflowX: 'auto',
+                overflowY: 'auto',
+                borderRadius: '15px',
                 boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
                 opacity: `${opacity === 'hide' ? '0.2' : '1'}`
               }}
@@ -479,9 +483,9 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
                 />
               </Form>
             </div>
-          </div>
-        </>
-      ) : null}
+          </>
+        ) : null}
+      </div>
     </>
   )
 }
