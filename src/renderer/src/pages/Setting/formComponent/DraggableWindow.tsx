@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 import type { DraggableData, DraggableEvent } from 'react-draggable'
 import Draggable from 'react-draggable'
-import './form.css'
+import './forms/form.css'
 
 const DraggableWindow: React.FC<{ children: React.ReactNode; width: string; isHide: boolean }> = ({
   children,

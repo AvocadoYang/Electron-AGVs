@@ -109,9 +109,9 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
 }) => {
   const searchInput = useRef<InputRef>(null)
   const [editingKey, setEditingKey] = useState<number | null>(null)
-  const [, setHoverLoc] = useAtom(hoverLocation)
   const [opacity, setOpacity] = useState<'show' | 'hide'>('show')
-  const [showAllLocationListForm] = useAtom(EditLocationListFormSwitch)
+  const [, setHoverLoc] = useAtom(hoverLocation)
+  const [showAllLocationListForm, setShowAllLocationListForm] = useAtom(EditLocationListFormSwitch)
   const [TempEditAndStoredLocation, setTempEditAndStoredLocation] =
     useAtom(tempEditAndStoredLocation)
   const [modifyLoc, setModifyLoc] = useAtom(Loc)
@@ -424,26 +424,8 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
       {showAllLocationListForm ? (
         <>
           {contextHolders}
-          <div
-            style={{
-              width: '70vw',
-              height: '85vh',
-              position: 'fixed',
-              left: '17%',
-              top: '10%',
-              opacity: '1'
-            }}
-          >
-            <div
-              style={{
-                width: '100%',
-                textAlign: 'center',
-                marginBottom: '5px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
+          <div className="form-button-wrap">
+            <div className="hidden-close-btn-wrap">
               <Button
                 onClick={() => {
                   setOpacity((pre) => {
@@ -456,18 +438,24 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
               >
                 {opacity === 'show' ? t('utils.opacity') : t('utils.show')}
               </Button>
-              <CloseSquareOutlined className="close-table-icon" />
+              <CloseSquareOutlined
+                onClick={() => setShowAllLocationListForm(false)}
+                className="close-table-icon"
+              />
             </div>
             <div
+              className="table-wrap"
               style={{
-                height: '90%',
+                height: '100%',
                 width: '100%',
                 overflow: 'scroll',
+                boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
                 opacity: `${opacity === 'hide' ? '0.2' : '1'}`
               }}
             >
               <Form form={locationPanelForm} component={false}>
                 <Table
+                  style={{ opacity: '1' }}
                   rowKey={(property) => property.locationId}
                   components={{
                     body: {

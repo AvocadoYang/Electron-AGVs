@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Button, Checkbox, Col, Form, FormInstance, InputNumber, Radio, Row, Switch } from 'antd'
-import DraggableWindow from './DraggableWindow'
+import DraggableWindow from '../DraggableWindow'
 import { useAtom } from 'jotai'
 import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { modifyRoad as Road } from '@renderer/utils/gloable'

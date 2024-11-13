@@ -43,7 +43,7 @@ const Setting: React.FC = () => {
 
   return (
     <>
-      <Layout style={{ height: '100vh', width: '100vw', overflow: 'hidden' }}>
+      <Layout style={{ height: '100vh', width: '100vw', overflow: 'hidden', position: 'relative' }}>
         <Header></Header>
         <Content>
           <Layout style={{ height: '100%', width: '100%' }}>
@@ -74,10 +74,13 @@ const Setting: React.FC = () => {
           <EditLocationPanel locationPanelForm={locationPanelForm}></EditLocationPanel>
         }
         {
+          /** 1-4 顯示地點列表 */
+          <AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>
+        }
+        {
           /** 2-1 編輯路線的彈跳視窗 */
           <EditRoadPanel roadPanelForm={roadPanelForm}></EditRoadPanel>
         }
-        {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
       </Layout>
     </>
   )
