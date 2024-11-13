@@ -7,7 +7,7 @@
   top: 48%; */
   transform: translate(150%, 18%);
   opacity: 1;
-  transition: 0.8s all;
+  transition: 0.5s all;
 }
 
 .form-button-wrap-animate {
