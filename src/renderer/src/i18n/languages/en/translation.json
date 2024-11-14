@@ -110,5 +110,11 @@
       "duplicate_id": "duplicate ID",
       "road_exists": "This road already exists"
     }
+  },
+
+  "all_location_list_form": {
+    "all_loc": "All Location",
+    "stored_loc": "Stored Location",
+    "tmp_loc": "Temporary Location"
   }
 }

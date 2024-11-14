@@ -109,5 +109,11 @@
       "duplicate_id": "ID 重複",
       "road_exists": "此路線已存在"
     }
+  },
+
+  "all_location_list_form": {
+    "all_loc": "所有點位",
+    "stored_loc": "已儲存點位",
+    "tmp_loc": "尚未儲存點位"
   }
 }

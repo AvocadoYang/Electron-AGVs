@@ -10,7 +10,8 @@ import {
   Input,
   Checkbox,
   Button,
-  message
+  message,
+  Badge
 } from 'antd'
 import { catchError, distinctUntilChanged, filter, of } from 'rxjs'
 import { useAtom } from 'jotai'
@@ -20,7 +21,11 @@ import { useRef, useState } from 'react'
 import { modifyLoc as Loc } from '@renderer/utils/gloable'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import { useTranslation } from 'react-i18next'
-import { hoverLocation, tempEditAndStoredLocation } from '@renderer/utils/gloable'
+import {
+  hoverLocation,
+  tempEditAndStoredLocation,
+  tempEditLocationList
+} from '@renderer/utils/gloable'
 import { EditLocationListFormSwitch } from '@renderer/utils/siderGloble'
 import { SearchOutlined, DeleteTwoTone, CloseSquareOutlined } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
@@ -114,6 +119,7 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
   const [showAllLocationListForm, setShowAllLocationListForm] = useAtom(EditLocationListFormSwitch)
   const [TempEditAndStoredLocation, setTempEditAndStoredLocation] =
     useAtom(tempEditAndStoredLocation)
+  const [TempEditLocationList] = useAtom(tempEditLocationList)
   const [modifyLoc, setModifyLoc] = useAtom(Loc)
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
@@ -121,8 +127,8 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
   const isEditing = (record: LocationType) => record.locationId === editingKey
 
   const edit = (record: Partial<LocationType> & { locationId: number }) => {
-    locationPanelForm.setFieldValue('x', record.x)
-    locationPanelForm.setFieldValue('y', record.y)
+    locationPanelForm.setFieldValue('x', Number(record.x))
+    locationPanelForm.setFieldValue('y', Number(record.y))
     locationPanelForm.setFieldValue('canRotate', record.canRotate)
     locationPanelForm.setFieldValue('areaType', record.areaType)
     locationPanelForm.setFieldValue('rotation', record.rotation)
@@ -203,6 +209,8 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
     },
     render: (text: string) => text
   })
+
+  // --------------------------
 
   const editModifyHandler = (id: string) => {
     const staleModify = { ...modifyLoc }
@@ -418,7 +426,6 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
       })
     }
   })
-
   return (
     <>
       {contextHolders}
@@ -428,22 +435,46 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
         {showAllLocationListForm ? (
           <>
             <div className="hidden-close-btn-wrap">
-              <Button
-                onClick={() => {
-                  setOpacity((pre) => {
-                    if (pre === 'hide') {
-                      return 'show'
-                    }
-                    return 'hide'
-                  })
-                }}
-              >
-                {opacity === 'show' ? t('utils.opacity') : t('utils.show')}
-              </Button>
-              <CloseSquareOutlined
-                onClick={() => setShowAllLocationListForm(false)}
-                className="close-table-icon"
-              />
+              <div style={{ width: '25%', textAlign: 'left' }}>
+                <Button
+                  onClick={() => {
+                    setOpacity((pre) => {
+                      if (pre === 'hide') {
+                        return 'show'
+                      }
+                      return 'hide'
+                    })
+                  }}
+                >
+                  {opacity === 'show' ? t('utils.opacity') : t('utils.show')}
+                </Button>
+              </div>
+              <div className="status-wrap" style={{ width: '50%' }}>
+                <div style={{ width: '33.32%' }} className="all_loc">
+                  <Badge
+                    color="blue"
+                    text={`${t('all_location_list_form.all_loc')}: ${TempEditAndStoredLocation.length}`}
+                  />
+                </div>
+                <div style={{ width: '33.32%' }} className="stored_loc">
+                  <Badge
+                    color="green"
+                    text={`${t('all_location_list_form.stored_loc')}: ${TempEditAndStoredLocation.length - TempEditLocationList.length}`}
+                  />
+                </div>
+                <div style={{ width: '33.32%' }} className="tmp">
+                  <Badge
+                    color="orange"
+                    text={`${t('all_location_list_form.tmp_loc')}: ${TempEditLocationList.length}`}
+                  />
+                </div>
+              </div>
+              <div style={{ width: '25%', textAlign: 'end' }}>
+                <CloseSquareOutlined
+                  onClick={() => setShowAllLocationListForm(false)}
+                  className="close-table-icon"
+                />
+              </div>
             </div>
             <div
               className="table-wrap"
@@ -454,12 +485,12 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
                 overflowY: 'auto',
                 borderRadius: '15px',
                 boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
-                opacity: `${opacity === 'hide' ? '0.2' : '1'}`
+                opacity: `${opacity === 'hide' ? '0.3' : '1'}`
               }}
             >
               <Form form={locationPanelForm} component={false}>
                 <Table
-                  style={{ opacity: '1' }}
+                  style={{ opacity: '1', borderRadius: '15px' }}
                   rowKey={(property) => property.locationId}
                   components={{
                     body: {
