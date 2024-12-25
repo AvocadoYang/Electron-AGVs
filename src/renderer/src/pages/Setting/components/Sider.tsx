@@ -117,6 +117,52 @@ const Sider: React.FC = () => {
         console.log('edit_charge_station_icon_style')
         break
       // ===================
+      // === amr ===
+      case 'edit_amr_cargo_info':
+        console.log('edit_amr_cargo_info')
+        break
+      case 'edit_amr_config':
+        console.log('edit_amr_config')
+        break
+      //=======
+      // === mission ==========
+      case 'todo_dependent_on_return_id_task':
+        console.log('todo_dependent_on_return_id_task')
+        break
+
+      case 'topic_task':
+        console.log('topic_task')
+        break
+
+      case 'idle_task':
+        console.log('idle_task')
+        break
+
+      case 'before_left_charge_station_task':
+        console.log('before_left_charge_station_task')
+        break
+
+      case 'cycle_task':
+        console.log('cycle_task')
+        break
+
+      case 'schedule_task':
+        console.log('schedule_task')
+        break
+
+      case 'charge_task':
+        console.log('charge_task')
+        break
+
+      case 'region_task':
+        console.log('region_task')
+        break
+
+      case 'edit_mission':
+        console.log('edit_mission')
+        break
+
+      //========================
     }
   }
 
