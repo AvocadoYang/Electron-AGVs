@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { memo } from 'react'
 import { LocationType } from '@renderer/utils/jotai'
-import { modifyLoc as Loc } from '@renderer/utils/gloable'
 import { useAtom } from 'jotai'
-import { Modify } from '@renderer/utils/jotai'
 import { EditLocationPanelSwitch } from '@renderer/utils/siderGloble'
 import { tempEditLocationList, tempEditAndStoredLocation } from '@renderer/utils/gloable'
 import DraggableWindow from '../DraggableWindow'
@@ -12,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { CloseOutlined } from '@ant-design/icons'
 import { Form, Input, Radio, Button, FormInstance, Checkbox } from 'antd'
 import { initialLocationFormValue } from './formInitValue'
+import { useModifyHandler } from '@renderer/hook'
 
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
@@ -19,25 +18,11 @@ const EditLocationPanel: React.FC<{
   const [TempEditLocationList, setTempEditLocationList] = useAtom(tempEditLocationList)
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
-  const [modifyLoc, setModifyLoc] = useAtom(Loc)
   const { t } = useTranslation()
+  const modifyHandler = useModifyHandler()
 
   const addModifyHandler = (id: string) => {
-    const staleModify = { ...modifyLoc }
-
-    const addList = [...staleModify.add, id]
-
-    const editList = [...staleModify.edit].filter((d) => d !== id)
-
-    const deleteList = [...staleModify.delete]
-
-    const newModify: Modify = {
-      add: [...new Set(addList)] as string[],
-      edit: editList,
-      delete: deleteList
-    }
-
-    setModifyLoc(newModify)
+    modifyHandler(id, 'add')
   }
 
   const savePose = () => {

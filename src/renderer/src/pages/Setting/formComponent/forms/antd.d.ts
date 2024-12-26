@@ -1,4 +1,4 @@
-import { LocationType } from "@renderer/utils/jotai"
+import { LocationType } from '@renderer/utils/jotai'
 /** For All Location List Form */
 export interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean

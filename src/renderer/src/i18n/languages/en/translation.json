@@ -32,8 +32,8 @@
   "page_setting": "Setting",
   "page_dashboard": "Dashboard",
   "toolbar": {
-    "location" : {
-     "locations": "Locations",
+    "location": {
+      "locations": "Locations",
       "edit_locations": "Edit Locations",
       "show_in_use_locations": "Show stored Locations",
       "show_edit_locations": "Show Edit Locations",
@@ -81,27 +81,27 @@
     "save": "save",
 
     "save_pose_notify": {
-    "empty_value": "X/Y is required",
-    "fill_in_value": "Please fill in the X/Y value",
-    "format_warn": "formate error",
-    "is_a_navigate": "Location ID can't be a negative number",
-    "duplicate_id": "duplicate ID",
-    "change_duplicate_id": "please change ID, can not be same"
-  }
+      "empty_value": "X/Y is required",
+      "fill_in_value": "Please fill in the X/Y value",
+      "format_warn": "formate error",
+      "is_a_navigate": "Location ID can't be a negative number",
+      "duplicate_id": "duplicate ID",
+      "change_duplicate_id": "please change ID, can not be same"
+    }
   },
 
   "edit_road_panel": {
-   "road": "Road",
-   "single_road": "Single Road",
+    "road": "Road",
+    "single_road": "Single Road",
     "two_way_road": "Two Way Road",
     "yaw": "Yaw",
-   "disabled": "Disable Line",
+    "disabled": "Disable Line",
     "limit": "limit tunnel",
     "start_point": "Start Point",
     "end_point": "End Point",
     "add": "Add New Road",
 
-    "save_road_notify" : {
+    "save_road_notify": {
       "warn": "road setting error",
       "warn_number_only": "Only Number",
       "warn_msg": "Start point and End point can not be same !",

@@ -7,7 +7,7 @@ import { useAtom } from 'jotai'
 import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
 import useMap from '@renderer/api/useMap'
 import { EditLocationPanel, EditRoadPanel } from './formComponent/forms'
-import { AllLocationListForm } from './formComponent/forms'
+import { AllLocationTable } from './formComponent/forms'
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
@@ -75,7 +75,7 @@ const Setting: React.FC = () => {
         }
         {
           /** 1-4 顯示地點列表 */
-          <AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>
+          <AllLocationTable locationPanelForm={locationPanelForm}></AllLocationTable>
         }
         {
           /** 2-1 編輯路線的彈跳視窗 */

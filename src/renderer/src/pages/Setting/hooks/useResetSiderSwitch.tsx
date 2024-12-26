@@ -4,7 +4,7 @@ import {
   EditLocationPanelSwitch,
   StoredLocationSwitch,
   EditingLocationSwitch,
-  EditLocationListFormSwitch,
+  EditLocationListFormSwitch
 } from '@renderer/utils/siderGloble'
 import { SideSwitchToShowForm } from '@renderer/utils/siderGloble'
 import { useEffect } from 'react'

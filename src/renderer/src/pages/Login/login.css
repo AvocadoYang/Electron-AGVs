@@ -1,9 +1,8 @@
 .background {
-  background-image: url("../../assets/View.svg");
+  background-image: url('../../assets/View.svg');
   background-size: cover;
   height: 100vh;
   width: 100vw;
-
 }
 
 .From-Wrap {
@@ -14,7 +13,6 @@
   align-items: center;
   justify-content: center;
   /* background-color: #e38e3c; */
-
 }
 
 .wrapper {
@@ -31,7 +29,7 @@
 }
 
 .Tittle {
-  background-image: url("../../assets/kenmec_without_background.png");
+  background-image: url('../../assets/kenmec_without_background.png');
   background-size: cover;
   background-position: center;
   width: 50%;

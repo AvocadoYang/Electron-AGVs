@@ -83,6 +83,6 @@ export const TextWrap = styled.div`
   align-items: center;
   height: 35px;
   overflow: hidden;
-`;
+`
 
 // ==============================

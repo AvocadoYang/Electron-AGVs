@@ -39,7 +39,7 @@ const AllEditingLocation: React.FC<{
               event.preventDefault()
             }}
             key={loc.locationId}
-            style={{ borderRadius: '50%'}}
+            style={{ borderRadius: '50%' }}
           >
             <Point
               id={loc.locationId.toString()}

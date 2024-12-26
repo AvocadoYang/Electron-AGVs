@@ -40,7 +40,7 @@ const Card: React.FC = () => {
           {/* <p style={{ textAlign: 'center', marginBottom: '0.1em' }} className="tittle">
             {'Power'}
           </p> */}
-          <p style={{ position: 'absolute', fontSize: '12px'}}>{'⚡︎'}</p>
+          <p style={{ position: 'absolute', fontSize: '12px' }}>{'⚡︎'}</p>
           <Battery></Battery>
           <p style={{ textAlign: 'center', marginBottom: '0.5em' }} className="value">
             {/* {fleetInfo.data.IO?.battery} */}

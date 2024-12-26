@@ -15,13 +15,14 @@
   overflow-y: scroll;
 }
 
-.mission-wrap::-webkit-scrollbar{
+.mission-wrap::-webkit-scrollbar {
   display: none;
 }
 
-
 /* ===== row1 start  =====*/
-.row1-file, .row1-status, .row1-cancel {
+.row1-file,
+.row1-status,
+.row1-cancel {
   text-align: center;
   font-size: 80%;
   padding: 3.5px;
@@ -29,25 +30,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
 }
 
 .row1-file {
   background-color: rgb(165, 176, 193);
-
 }
 
 .row1-status {
   background-color: rgb(96, 124, 166);
   color: white;
   font-weight: bold;
-  text-align:left;
+  text-align: left;
   font-size: 10px;
-  white-space:nowrap;
+  white-space: nowrap;
   justify-content: left;
 }
 
-@media screen and (max-width:1200px) {
+@media screen and (max-width: 1200px) {
   .row1-status {
     font-size: 7px;
   }
@@ -55,15 +54,17 @@
 
 /* ===== row1 end =====*/
 
-
 /* ===== row2 start  =====*/
-.row2-src, .row2-dis, .row2-icon{
+.row2-src,
+.row2-dis,
+.row2-icon {
   width: 32.33%;
   font-size: 11px;
   margin: 5px;
 }
 
-.row2-src, .row2-dis {
+.row2-src,
+.row2-dis {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -77,11 +78,11 @@
 .row2-describe {
   font-size: 7.5px;
   color: rgb(102, 99, 99);
-  white-space:nowrap;
+  white-space: nowrap;
   margin-top: 1px;
 }
 
-@media screen and (max-width:1200px) {
+@media screen and (max-width: 1200px) {
   .row2-id {
     font-size: 9px;
   }
@@ -90,11 +91,7 @@
   }
 }
 
-
 /* ===== row2 end =====*/
-
-
-
 
 /* ===== row3 start  =====*/
 .row3-tittle {
@@ -104,10 +101,10 @@
   display: flex;
   align-items: center;
   padding: 2px 0 0 4px;
-  font-weight:300;
+  font-weight: 300;
 }
 
-.row3-content{
+.row3-content {
   padding: 3px;
   display: flex;
   justify-content: center;
@@ -125,7 +122,7 @@
 .row3-content-num {
   font-size: 70%;
   height: 100%;
-  white-space:nowrap;
+  white-space: nowrap;
   padding: 1px;
   margin: 0 2px 0 2px;
 }
@@ -134,12 +131,12 @@
   font-size: 60%;
   height: 100%;
   color: rgb(102, 99, 99);
-  align-self:flex-end;
+  align-self: flex-end;
   margin: 0 2px 0 2px;
-  white-space:nowrap;
+  white-space: nowrap;
 }
 
-@media screen and (max-width:1360px) {
+@media screen and (max-width: 1360px) {
   .row3-content-id {
     display: none;
   }
@@ -151,7 +148,6 @@
 
 /* ===== row3 end =====*/
 
-
 /* ===== row4 start  =====*/
 .row4-tittle {
   font-size: 11px;
@@ -160,7 +156,7 @@
   display: flex;
   align-items: center;
   padding: 2px 0 0 4px;
-  font-weight:550;
+  font-weight: 550;
 }
 
 .row4-content {
@@ -169,9 +165,7 @@
   margin: 2px 0 2px 0;
 }
 
-
-@media screen and (max-width:1360px) {
-
+@media screen and (max-width: 1360px) {
   .row4-tittle {
     font-size: 9px;
   }

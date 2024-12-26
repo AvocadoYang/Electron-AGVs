@@ -32,6 +32,7 @@ import { EditableCellProps, DataIndex } from './antd'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
+import { useModifyHandler } from '@renderer/hook'
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -109,7 +110,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   )
 }
 
-const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }> = ({
+const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> = ({
   locationPanelForm
 }) => {
   const searchInput = useRef<InputRef>(null)
@@ -120,7 +121,7 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
   const [TempEditAndStoredLocation, setTempEditAndStoredLocation] =
     useAtom(tempEditAndStoredLocation)
   const [TempEditLocationList] = useAtom(tempEditLocationList)
-  const [modifyLoc, setModifyLoc] = useAtom(Loc)
+  const modifyHandler = useModifyHandler()
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
 
@@ -213,40 +214,11 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
   // --------------------------
 
   const editModifyHandler = (id: string) => {
-    const staleModify = { ...modifyLoc }
-
-    const existInAdd = modifyLoc.add.findIndex((f) => f === id)
-    if (existInAdd !== -1) return
-
-    const editList = [...staleModify.edit, id]
-    const deleteList = [...staleModify.delete].filter((d) => d !== id)
-
-    const newModify: Modify = {
-      add: staleModify.add,
-      edit: [...new Set(editList)] as string[],
-      delete: deleteList
-    }
-
-    setModifyLoc(newModify)
+    modifyHandler(id, 'edit')
   }
 
   const deleteModifyHandler = (id: string) => {
-    const staleModify = { ...modifyLoc }
-
-    const existInAdd = staleModify.add.findIndex((f) => f === id)
-
-    const deleteList = existInAdd !== -1 ? [...staleModify.delete] : [...staleModify.delete, id]
-
-    const addList = [...staleModify.add].filter((d) => d !== id)
-    const editList = [...staleModify.edit].filter((d) => d !== id)
-
-    const newModify: Modify = {
-      add: addList,
-      edit: editList,
-      delete: [...new Set(deleteList)] as string[]
-    }
-
-    setModifyLoc(newModify)
+    modifyHandler(id, 'delete')
   }
 
   const savePos = () => {
@@ -521,4 +493,4 @@ const AllLocationListForm: React.FC<{ locationPanelForm: FormInstance<unknown> }
   )
 }
 
-export default memo(AllLocationListForm)
+export default memo(AllLocationTable)

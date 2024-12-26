@@ -4,7 +4,7 @@ import './mission_info.css'
 
 const style: React.CSSProperties = {
   '--clr': 'red'
-} as React.CSSProperties;
+} as React.CSSProperties
 
 const Card: React.FC = () => {
   return (
@@ -43,7 +43,7 @@ const Card: React.FC = () => {
       </CardRow3>
       <CardRow4>
         <div className="row4-tittle">CURRENT STATUS</div>
-        <div className='row4-content'>Loc: 23004</div>
+        <div className="row4-content">Loc: 23004</div>
       </CardRow4>
     </InfoWrap>
   )

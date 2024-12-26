@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { HasCargo } from '../types';
-import { Tooltip } from 'antd';
+import { FC } from 'react'
+import styled, { keyframes } from 'styled-components'
+import { HasCargo } from '../types'
+import { Tooltip } from 'antd'
 
 const blueWhiteAnimation = keyframes`
   0% {
@@ -13,7 +13,7 @@ const blueWhiteAnimation = keyframes`
   100% {
     background-color: #499EEA;
   }
-`;
+`
 
 const Block = styled.div<HasCargo>`
   display: flex;
@@ -48,7 +48,7 @@ const Block = styled.div<HasCargo>`
     background-color: #717171;
     text-align: center;
   }
-`;
+`
 
 const BlockSpan = styled.span<{ rotate: number; hasCargo: boolean }>`
   text-align: center;
@@ -73,26 +73,22 @@ const BlockSpan = styled.span<{ rotate: number; hasCargo: boolean }>`
 
   -webkit-text-stroke-width: 0.1px;
   -webkit-text-stroke-color: black;
-`;
+`
 
 const CargoDisplay: FC<{
-  level: number;
-  levelName: string;
-  cargoValue: boolean;
+  level: number
+  levelName: string
+  cargoValue: boolean
 
-  isOccupy: boolean;
-  isAssign: boolean;
-  border: string;
-  locId: string;
-  rotate: number;
-  clickable: () => boolean;
-  handleAssignColumn: (nameLevel: string, index: number) => void;
-  handleMouseDown: (
-    e: React.MouseEvent<HTMLDivElement>,
-    locId: string,
-    level: number,
-  ) => void;
-  isShelfDisable: boolean;
+  isOccupy: boolean
+  isAssign: boolean
+  border: string
+  locId: string
+  rotate: number
+  clickable: () => boolean
+  handleAssignColumn: (nameLevel: string, index: number) => void
+  handleMouseDown: (e: React.MouseEvent<HTMLDivElement>, locId: string, level: number) => void
+  isShelfDisable: boolean
 }> = ({
   level,
   levelName,
@@ -105,7 +101,7 @@ const CargoDisplay: FC<{
   clickable,
   handleAssignColumn,
   handleMouseDown,
-  isShelfDisable,
+  isShelfDisable
 }) => {
   return (
     <Block
@@ -125,7 +121,7 @@ const CargoDisplay: FC<{
         </BlockSpan>
       </Tooltip>
     </Block>
-  );
-};
+  )
+}
 
-export default CargoDisplay;
+export default CargoDisplay
