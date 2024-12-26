@@ -27,8 +27,9 @@ const useMousePoint = (
       })),
       tap(({ clientX, clientY }) => {
         if (!mapRef.current || !mapWrapRef.current) return
-        const Left = mapWrapRef.current?.scrollLeft
-        const Top = mapWrapRef.current?.scrollTop
+        const Left = mapRef.current.scrollLeft
+        const Top = mapRef.current.scrollTop
+
         // offestTop 64
         const adjustX = clientX - mapRef.current.offsetLeft + (Left as number)
         const adjustY = clientY - mapRef.current.offsetTop + (Top as number)

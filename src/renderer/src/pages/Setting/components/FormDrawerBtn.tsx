@@ -35,9 +35,9 @@ const FormDrawerBtn = () => {
     <>
       {!sideSwitchToShowForm ? (
         <BtnWrap
-        // onClick={() => {
-        //   setSideSwitchToShowForm(true)
-        // }}
+          onClick={() => {
+            setSideSwitchToShowForm(true)
+          }}
         >
           <LeftOutlined className="open-form-drawer-btn" />
         </BtnWrap>

@@ -16,9 +16,7 @@ import {
 import { catchError, distinctUntilChanged, filter, of } from 'rxjs'
 import { useAtom } from 'jotai'
 import { LocationType } from '@renderer/utils/jotai'
-import { Modify } from '@renderer/utils/jotai'
 import { useRef, useState } from 'react'
-import { modifyLoc as Loc } from '@renderer/utils/gloable'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import { useTranslation } from 'react-i18next'
 import {

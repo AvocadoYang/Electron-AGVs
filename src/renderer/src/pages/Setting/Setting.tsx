@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Form } from 'antd'
+import { Layout, Form, Flex, Splitter, Typography } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider, FormDrawerBtn } from './components'
 import { useAtom } from 'jotai'
@@ -12,6 +12,20 @@ import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
 const { Content } = Layout
+
+const Desc = (props) => (
+  <Flex justify="center" align="center">
+    <Typography.Title
+      type="secondary"
+      level={5}
+      style={{
+        whiteSpace: 'nowrap'
+      }}
+    >
+      {props.text}
+    </Typography.Title>
+  </Flex>
+)
 
 const Setting: React.FC = () => {
   const { data } = useMap()
@@ -25,6 +39,7 @@ const Setting: React.FC = () => {
   const [roadPanelForm] = Form.useForm()
 
   const [scale, setScale] = useState(1)
+  const [sizes, setSizes] = React.useState(['50%', '50%'])
 
   useEffect(() => {
     if (!data) return
@@ -50,20 +65,29 @@ const Setting: React.FC = () => {
             <Sider></Sider>
             <Content
               style={{
-                overflow: 'scroll',
+                // overflow: 'scroll',
                 backgroundColor: 'white'
               }}
               ref={mapWrapRef}
             >
+              <Splitter>
+                <Splitter.Panel defaultSize="40%">
+                  <Desc text="First" />
+                </Splitter.Panel>
+                <Splitter.Panel defaultSize="60%" min="20%">
+                  <MapView
+                    scale={scale}
+                    mapRef={mapRef}
+                    mapWrapRef={mapWrapRef}
+                    roadPanelForm={roadPanelForm}
+                    locationPanelForm={locationPanelForm}
+                  ></MapView>
+                </Splitter.Panel>
+              </Splitter>
+
               <ZoomPad setScale={setScale}></ZoomPad>
               <FormDrawerBtn></FormDrawerBtn>
-              <MapView
-                scale={scale}
-                mapRef={mapRef}
-                mapWrapRef={mapWrapRef}
-                roadPanelForm={roadPanelForm}
-                locationPanelForm={locationPanelForm}
-              ></MapView>
+
               {/* <FormDrawer locationPanelForm={locationPanelForm}></FormDrawer> */}
             </Content>
           </Layout>

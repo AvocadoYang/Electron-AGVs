@@ -11,7 +11,7 @@ import {
   CaretDownOutlined
 } from '@ant-design/icons'
 import { SideSwitchToShowForm } from '@renderer/utils/siderGloble'
-import { AllLocationTable } from './forms'
+import { AllLocationListForm } from './forms'
 import './forms/form.css'
 const FormDrawer: React.FC<{ locationPanelForm: FormInstance<unknown> }> = ({
   locationPanelForm
@@ -64,7 +64,7 @@ const FormDrawer: React.FC<{ locationPanelForm: FormInstance<unknown> }> = ({
           {t('close')}
         </Button>
       </div>
-      {<AllLocationTable locationPanelForm={locationPanelForm}></AllLocationTable>}
+      {<AllLocationListForm locationPanelForm={locationPanelForm}></AllLocationListForm>}
     </div>
   )
 }
