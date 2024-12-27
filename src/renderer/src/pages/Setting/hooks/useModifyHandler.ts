@@ -1,15 +1,36 @@
 import { useAtom } from 'jotai'
-import { modifyLoc as Loc } from '@renderer/utils/gloable'
+import { modifyLoc as Loc, modifyRoad as Road, modifyZone as Zone } from '@renderer/utils/gloable'
 import { useCallback } from 'react'
+import { Modify } from '@renderer/utils/jotai'
 
 type ModifyAction = 'add' | 'edit' | 'delete'
+type ModifyGenre = 'loc' | 'road' | 'zone'
 
-export const useModifyHandler = (): ((id: string, action: ModifyAction) => void) => {
+export const useModifyHandler = (): ((
+  id: string,
+  genre: ModifyGenre,
+  action: ModifyAction
+) => void) => {
   const [modifyLoc, setModifyLoc] = useAtom(Loc)
+  const [modifyRoad, setModifyRoad] = useAtom(Road)
+  const [modifyZone, setModifyZone] = useAtom(Zone)
 
   const modifyHandler = useCallback(
-    (id: string, action: ModifyAction) => {
-      const staleModify = { ...modifyLoc }
+    (id: string, genre: ModifyGenre, action: ModifyAction): void => {
+      const getModifyData = (): [Modify, React.Dispatch<React.SetStateAction<Modify>>] => {
+        switch (genre) {
+          case 'loc':
+            return [modifyLoc, setModifyLoc]
+          case 'road':
+            return [modifyRoad, setModifyRoad]
+          case 'zone':
+            return [modifyZone, setModifyZone]
+          default:
+            throw new Error(`Unsupported genre: ${genre}`)
+        }
+      }
+
+      const [staleModify, setModify] = getModifyData()
 
       let addList = [...staleModify.add]
       let editList = [...staleModify.edit]
@@ -38,15 +59,15 @@ export const useModifyHandler = (): ((id: string, action: ModifyAction) => void)
           throw new Error(`Unsupported action: ${action}`)
       }
 
-      const newModify = {
+      const newModify: Modify = {
         add: addList,
         edit: editList,
         delete: deleteList
       }
 
-      setModifyLoc(newModify)
+      setModify(newModify)
     },
-    [modifyLoc, setModifyLoc]
+    [modifyLoc, setModifyLoc, modifyRoad, setModifyRoad, modifyZone, setModifyZone]
   )
 
   return modifyHandler
