@@ -214,11 +214,11 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
   // --------------------------
 
   const editModifyHandler = (id: string) => {
-    modifyHandler(id, 'edit')
+    modifyHandler(id, 'loc', 'edit')
   }
 
   const deleteModifyHandler = (id: string) => {
-    modifyHandler(id, 'delete')
+    modifyHandler(id, 'loc', 'delete')
   }
 
   const savePos = () => {

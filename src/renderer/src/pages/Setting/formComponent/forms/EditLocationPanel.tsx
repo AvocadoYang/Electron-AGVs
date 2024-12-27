@@ -22,7 +22,7 @@ const EditLocationPanel: React.FC<{
   const modifyHandler = useModifyHandler()
 
   const addModifyHandler = (id: string) => {
-    modifyHandler(id, 'add')
+    modifyHandler(id, 'loc', 'add')
   }
 
   const savePose = () => {
