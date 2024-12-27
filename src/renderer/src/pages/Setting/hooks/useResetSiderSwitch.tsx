@@ -4,7 +4,7 @@ import {
   EditLocationPanelSwitch,
   StoredLocationSwitch,
   EditingLocationSwitch,
-  EditLocationListFormSwitch
+  EditLocationListTableSwitch
 } from '@renderer/utils/siderGloble'
 import { SideSwitchToShowForm } from '@renderer/utils/siderGloble'
 import { useEffect } from 'react'
@@ -15,11 +15,11 @@ const useResetSiderSwitch = () => {
   const [, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [, setShowStoredLocation] = useAtom(StoredLocationSwitch)
   const [, setShowEditingLocation] = useAtom(EditingLocationSwitch)
-  const [, setShowAllLocationListForm] = useAtom(EditLocationListFormSwitch)
+  const [, setShowAllLocationListTable] = useAtom(EditLocationListTableSwitch)
   const [, setShowBlockId] = useAtom(showBlockId)
   useEffect(() => {
     setSideSwitchToShowForm(false)
-    setShowAllLocationListForm(false)
+    setShowAllLocationListTable(false)
     setOpenEditLocationPanel(false)
     setShowStoredLocation(true)
     setShowEditingLocation(false)

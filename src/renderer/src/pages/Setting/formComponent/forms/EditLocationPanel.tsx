@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { CloseOutlined } from '@ant-design/icons'
 import { Form, Input, Radio, Button, FormInstance, Checkbox } from 'antd'
 import { initialLocationFormValue } from './formInitValue'
-import { useModifyHandler } from '@renderer/hook'
+import { useModifyHandler } from '../../hooks'
 
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>

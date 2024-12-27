@@ -8,7 +8,9 @@ import {
   StoredLocationSwitch,
   EditingLocationSwitch,
   EditRoadPanelSwitch,
-  EditLocationListFormSwitch
+  EditLocationListTableSwitch,
+  StoredRoadSwitch,
+  EditingRoadSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -47,8 +49,13 @@ const Sider: React.FC = () => {
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
   const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch) // 1-2
   const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch) // 1-3
-  const [showAllLocationListForm, setShowAllLocationListForm] = useAtom(EditLocationListFormSwitch) // 1-4
+  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
+    EditLocationListTableSwitch
+  ) // 1-4
+
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
+  const [showStoredRoad, setShowStoredRoad] = useAtom(StoredRoadSwitch) // 2-2
+  const [showEditingRoad, setShowEditingRoad] = useAtom(EditingRoadSwitch) // 2-3
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
@@ -67,18 +74,19 @@ const Sider: React.FC = () => {
         setShowEditingLocation(!showEditingLocation)
         break
       case 'locationList':
-        setShowAllLocationListForm(!showAllLocationListForm)
+        setShowAllLocationListTable(!showAllLocationListTable)
         break
       // ===================
       // === road ===
       case 'roadPanel':
         setOpenEditRoadPanel(!openEditRoadPanel)
+        setShowEditingRoad(true)
         break
       case 'stored_roads':
-        console.log('stored_roads')
+        setShowStoredRoad(!showStoredRoad)
         break
       case 'show_edit_roads':
-        console.log('show_edit_roads')
+        setShowEditingRoad(!showEditingRoad)
         break
       case 'show_roads_table':
         console.log('show_roads_table')
@@ -197,7 +205,7 @@ const Sider: React.FC = () => {
         t('toolbar.location.show_locations_table'),
         '1-4',
         <Switch
-          checked={showAllLocationListForm}
+          checked={showAllLocationListTable}
           onChange={(checked) => handleShowPanel(checked, 'locationList')}
         />
       )

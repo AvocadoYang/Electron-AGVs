@@ -12,7 +12,10 @@ import {
 import {
   StoredLocationSwitch,
   EditingLocationSwitch,
-  EditLocationPanelSwitch
+  EditLocationPanelSwitch,
+  EditingRoadSwitch,
+  EditRoadPanelSwitch,
+  StoredRoadSwitch
 } from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
@@ -21,6 +24,7 @@ import { useMousePoint, useDraggableLine } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
 import { MousePoint, AllStoredLocation, MapImage, AllEditingLocation } from './components'
+import AllEditRoads from './components/AllEditRoads/AllEditRoads'
 
 const MapView: React.FC<{
   scale: number
@@ -45,6 +49,10 @@ const MapView: React.FC<{
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [showStoredLocation] = useAtom(StoredLocationSwitch)
   const [showEditingLocation] = useAtom(EditingLocationSwitch)
+
+  const [openEditRoadPanel] = useAtom(EditRoadPanelSwitch)
+  const [showStoredRoad] = useAtom(StoredRoadSwitch)
+  const [showEditingRoad] = useAtom(EditingRoadSwitch)
 
   if (currentVersion) {
     const defaultCookie = Cookies.get('version')
@@ -125,6 +133,8 @@ const MapView: React.FC<{
       ) : (
         <></>
       )}
+
+      {showEditingRoad ? <AllEditRoads /> : []}
     </div>
   )
 }

@@ -34,3 +34,5 @@ export const sameVersion = atom(true)
 export const showBlockId = atom<string>('')
 
 export const hoverLocation = atom<string>('')
+
+export const hoverRoad = atom('')

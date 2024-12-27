@@ -24,13 +24,13 @@ import {
   tempEditAndStoredLocation,
   tempEditLocationList
 } from '@renderer/utils/gloable'
-import { EditLocationListFormSwitch } from '@renderer/utils/siderGloble'
+import { EditLocationListTableSwitch } from '@renderer/utils/siderGloble'
 import { SearchOutlined, DeleteTwoTone, CloseSquareOutlined } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
-import { useModifyHandler } from '@renderer/hook'
+import { useModifyHandler } from '../../hooks'
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -115,7 +115,9 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
   const [editingKey, setEditingKey] = useState<number | null>(null)
   const [opacity, setOpacity] = useState<'show' | 'hide'>('show')
   const [, setHoverLoc] = useAtom(hoverLocation)
-  const [showAllLocationListForm, setShowAllLocationListForm] = useAtom(EditLocationListFormSwitch)
+  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
+    EditLocationListTableSwitch
+  )
   const [TempEditAndStoredLocation, setTempEditAndStoredLocation] =
     useAtom(tempEditAndStoredLocation)
   const [TempEditLocationList] = useAtom(tempEditLocationList)
@@ -400,9 +402,9 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
     <>
       {contextHolders}
       <div
-        className={`form-button-wrap ${showAllLocationListForm ? 'form-button-wrap-animate' : ''}`}
+        className={`form-button-wrap ${showAllLocationListTable ? 'form-button-wrap-animate' : ''}`}
       >
-        {showAllLocationListForm ? (
+        {showAllLocationListTable ? (
           <>
             <div className="hidden-close-btn-wrap">
               <div style={{ width: '25%', textAlign: 'left' }}>
@@ -441,7 +443,7 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
               </div>
               <div style={{ width: '25%', textAlign: 'end' }}>
                 <CloseSquareOutlined
-                  onClick={() => setShowAllLocationListForm(false)}
+                  onClick={() => setShowAllLocationListTable(false)}
                   className="close-table-icon"
                 />
               </div>
