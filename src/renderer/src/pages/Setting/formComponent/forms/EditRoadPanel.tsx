@@ -6,7 +6,7 @@ import DraggableWindow from '../DraggableWindow'
 import { useAtom } from 'jotai'
 import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { modifyRoad as Road } from '@renderer/utils/gloable'
-import { tempEditAndStoredLocation, tempEditAndStoredRoads } from '@renderer/utils/gloable'
+import { tempStoredLocation, tempEditAndStoredRoads } from '@renderer/utils/gloable'
 import { useTranslation } from 'react-i18next'
 import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 import { getLocationInfoById } from '../../utils/utils'
@@ -34,7 +34,7 @@ function validateArray(arr: string[]) {
 
 const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPanelForm }) => {
   const [chooseAngle, setChooseAngle] = useState<string>('')
-  const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
+  const [TempStoredLocation] = useAtom(tempStoredLocation)
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [TempEditAndStoredRoads, setEditingRoadsList] = useAtom(tempEditAndStoredRoads)
 
@@ -134,8 +134,8 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
         )
         return
       }
-      const result1 = getLocationInfoById(payload.to.toString(), TempEditAndStoredLocation)
-      const result2 = getLocationInfoById(payload.x.toString(), TempEditAndStoredLocation)
+      const result1 = getLocationInfoById(payload.to.toString(), TempStoredLocation)
+      const result2 = getLocationInfoById(payload.x.toString(), TempStoredLocation)
 
       newPayload = {
         ...payload,
@@ -167,8 +167,8 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
       }
     }
 
-    const result1 = getLocationInfoById(payload.to.toString(), TempEditAndStoredLocation)
-    const result2 = getLocationInfoById(payload.x.toString(), TempEditAndStoredLocation)
+    const result1 = getLocationInfoById(payload.to.toString(), TempStoredLocation)
+    const result2 = getLocationInfoById(payload.x.toString(), TempStoredLocation)
     newPayload = {
       ...payload,
       roadId: erId,

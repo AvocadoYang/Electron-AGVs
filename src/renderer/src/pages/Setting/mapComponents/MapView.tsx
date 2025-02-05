@@ -7,7 +7,7 @@ import { useAtom } from 'jotai'
 import {
   sameVersion,
   showBlockId as ShowBlockId,
-  tempEditAndStoredLocation
+  tempStoredLocation,
 } from '@renderer/utils/gloable'
 import {
   StoredLocationSwitch,
@@ -23,7 +23,7 @@ import { draggableLineInitialPoint, mouseLocation } from '../hooks/hook'
 import { useMousePoint, useDraggableLine } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
-import { MousePoint, AllStoredLocation, MapImage, AllEditingLocation } from './components'
+import { MousePoint, AllStoredLocation, MapImage } from './components'
 import AllEditRoads from './components/AllEditRoads/AllEditRoads'
 
 const MapView: React.FC<{
@@ -40,7 +40,7 @@ const MapView: React.FC<{
 
   /** 路線拖曳相關參數 */
   const [, setShowBlockId] = useAtom(ShowBlockId)
-  const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
+  const [TempEditAndStoredLocation] = useAtom(tempStoredLocation)
   const [initPoint, setInitPoint] = useState({} as draggableLineInitialPoint)
   const [mouseLocation, setMouseLocation] = useState({} as mouseLocation)
   const [isResizing, setIsResizing] = useState(false)
@@ -116,17 +116,6 @@ const MapView: React.FC<{
       )}
 
       {/* {showStoredLocation ? <AllCargo /> : []} */}
-
-      {showEditingLocation ? (
-        <AllEditingLocation
-          scale={scale}
-          setInitPoint={setInitPoint}
-          handleMouseDown={handleMouseDown}
-          mouseLocation={mouseLocation}
-        />
-      ) : (
-        []
-      )}
 
       {openEditLocationPanel ? (
         <MousePoint x={Number(mousePointX)} y={Number(mousePointY)}></MousePoint>

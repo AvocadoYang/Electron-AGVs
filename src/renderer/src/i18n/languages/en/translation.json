@@ -77,6 +77,7 @@
     "none": "normal",
     "charge_station": "charge station",
     "prepare_spot": "prepare location",
+    "wait_side": "wait side",
     "shelve": "shelve",
     "save": "save",
 

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, useRef, useEffect } from 'react'
-import { Layout, Form, Flex, Splitter, Typography } from 'antd'
+import { Layout, Form, Flex, Splitter, Typography, Input } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider, FormDrawerBtn } from './components'
 import { useAtom } from 'jotai'
-import { tempEditAndStoredLocation, tempEditLocationList } from '@renderer/utils/gloable'
+import { tempStoredLocation } from '@renderer/utils/gloable'
 import useMap from '@renderer/api/useMap'
 import { EditLocationPanel, EditRoadPanel } from './formComponent/forms'
 import { AllLocationTable } from './formComponent/forms'
@@ -13,33 +13,19 @@ import { useResetSiderSwitch } from './hooks'
 import './setting.css'
 const { Content } = Layout
 
-const Desc = (props) => (
-  <Flex justify="center" align="center">
-    <Typography.Title
-      type="secondary"
-      level={5}
-      style={{
-        whiteSpace: 'nowrap'
-      }}
-    >
-      {props.text}
-    </Typography.Title>
-  </Flex>
-)
+
 
 const Setting: React.FC = () => {
   const { data } = useMap()
   const mapRef = useRef(null)
 
-  const [, setTempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
-  const [TempEditLocationList] = useAtom(tempEditLocationList)
+  const [, setTempStoredLocation] = useAtom(tempStoredLocation)
 
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
 
   const [scale, setScale] = useState(1)
-  const [sizes, setSizes] = React.useState(['50%', '50%'])
 
   useEffect(() => {
     if (!data) return
@@ -51,8 +37,8 @@ const Setting: React.FC = () => {
       areaType: v.areaType,
       canRotate: v.canRotate
     }))
-    setTempEditAndStoredLocation([...storedData, ...TempEditLocationList])
-  }, [data, TempEditLocationList])
+    setTempStoredLocation([...storedData])
+  }, [data])
 
   useResetSiderSwitch()
 
@@ -72,7 +58,6 @@ const Setting: React.FC = () => {
             >
               <Splitter>
                 <Splitter.Panel defaultSize="40%">
-                  <Desc text="First" />
                 </Splitter.Panel>
                 <Splitter.Panel defaultSize="60%" min="20%">
                   <MapView

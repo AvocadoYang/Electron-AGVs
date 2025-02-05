@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { useEffect, RefObject } from 'react'
 import { useAtom } from 'jotai'
-import { tempEditAndStoredLocation } from '@renderer/utils/gloable'
+import { tempStoredLocation } from '@renderer/utils/gloable'
 import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { rad2Deg } from '@renderer/utils/utils'
 import { FormInstance } from 'antd'
@@ -17,7 +17,7 @@ const useDraggableLine = (
   setIsResizing: React.Dispatch<boolean>
 ) => {
   const [showBlockId, setShowBlockId] = useAtom(ShowBlockId)
-  const [TempEditAndStoredLocation] = useAtom(tempEditAndStoredLocation)
+  const [TempStoredLocation] = useAtom(tempStoredLocation)
 
   const handleMouseUp = (endId: string) => {
     if (endId === '') {
@@ -25,7 +25,7 @@ const useDraggableLine = (
       return
     }
     setIsResizing(!isResizing)
-    const result = getLocationInfoById(endId, TempEditAndStoredLocation)
+    const result = getLocationInfoById(endId, TempStoredLocation)
     roadPanelForm.setFieldValue('to', result.locationId)
   }
 

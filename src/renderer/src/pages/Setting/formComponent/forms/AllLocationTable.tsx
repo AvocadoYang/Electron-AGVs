@@ -21,8 +21,7 @@ import { FilterDropdownProps } from 'antd/es/table/interface'
 import { useTranslation } from 'react-i18next'
 import {
   hoverLocation,
-  tempEditAndStoredLocation,
-  tempEditLocationList
+  tempStoredLocation,
 } from '@renderer/utils/gloable'
 import { EditLocationListTableSwitch } from '@renderer/utils/siderGloble'
 import { SearchOutlined, DeleteTwoTone, CloseSquareOutlined } from '@ant-design/icons'
@@ -30,7 +29,6 @@ import { EditableCellProps, DataIndex } from './antd'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
-import { useModifyHandler } from '../../hooks'
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -118,10 +116,8 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
     EditLocationListTableSwitch
   )
-  const [TempEditAndStoredLocation, setTempEditAndStoredLocation] =
-    useAtom(tempEditAndStoredLocation)
-  const [TempEditLocationList] = useAtom(tempEditLocationList)
-  const modifyHandler = useModifyHandler()
+  const [TempStoredLocation, setTempStoredLocation] =
+    useAtom(tempStoredLocation)
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
 
@@ -213,13 +209,6 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
 
   // --------------------------
 
-  const editModifyHandler = (id: string) => {
-    modifyHandler(id, 'loc', 'edit')
-  }
-
-  const deleteModifyHandler = (id: string) => {
-    modifyHandler(id, 'loc', 'delete')
-  }
 
   const savePos = () => {
     const payload = locationPanelForm.getFieldsValue() as LocationType
@@ -228,17 +217,16 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
       locationId: Number(payload.locationId),
       rotation: Number(payload.rotation)
     }
-    const index = TempEditAndStoredLocation.findIndex((v) => {
+    const index = TempStoredLocation.findIndex((v) => {
       return v.locationId === payload.locationId
     })
 
     if (index === -1) return
 
-    const updateLocationList = [...TempEditAndStoredLocation]
+    const updateLocationList = [...TempStoredLocation]
     updateLocationList[index] = { ...sanitizedPayload }
 
-    editModifyHandler(sanitizedPayload.locationId.toString())
-    setTempEditAndStoredLocation(updateLocationList)
+    setTempStoredLocation(updateLocationList)
     void messageApi.success('ok', 1)
   }
 
@@ -252,8 +240,7 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
   }
 
   const deleteLocationInList = (id: number) => {
-    deleteModifyHandler(id.toString())
-    setTempEditAndStoredLocation((prev) => prev.filter((v) => v.locationId !== id))
+    setTempStoredLocation((prev) => prev.filter((v) => v.locationId !== id))
   }
 
   const handleHover = (id: number) => {
@@ -425,19 +412,7 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
                 <div style={{ width: '33.32%' }} className="all_loc">
                   <Badge
                     color="blue"
-                    text={`${t('all_location_list_form.all_loc')}: ${TempEditAndStoredLocation.length}`}
-                  />
-                </div>
-                <div style={{ width: '33.32%' }} className="stored_loc">
-                  <Badge
-                    color="green"
-                    text={`${t('all_location_list_form.stored_loc')}: ${TempEditAndStoredLocation.length - TempEditLocationList.length}`}
-                  />
-                </div>
-                <div style={{ width: '33.32%' }} className="tmp">
-                  <Badge
-                    color="orange"
-                    text={`${t('all_location_list_form.tmp_loc')}: ${TempEditLocationList.length}`}
+                    text={`${t('all_location_list_form.all_loc')}: ${TempStoredLocation.length}`}
                   />
                 </div>
               </div>
@@ -469,7 +444,7 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
                       cell: EditableCell
                     }
                   }}
-                  dataSource={TempEditAndStoredLocation.map((loc) => {
+                  dataSource={TempStoredLocation.map((loc) => {
                     return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
                   })}
                   columns={mergedColumns as []}
