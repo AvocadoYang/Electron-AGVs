@@ -45,7 +45,6 @@ const MapImage = () => {
         </div>
       </div>
     )
-  // if (!data) return <div className="error-image"></div>
   return (
     <>
       <img src={`${data.imageUrl}`} draggable={false} style={{ userSelect: 'none' }} />

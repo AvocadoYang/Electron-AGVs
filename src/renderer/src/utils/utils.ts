@@ -1,3 +1,6 @@
+import { MessageInstance } from 'antd/es/message/interface'
+import { ErrorResponse } from './globalType'
+
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const rosCoord2DisplayCoord = ({
   x,
@@ -41,3 +44,11 @@ export const sanitizeDeg = (deg: number) => ((deg % 360) + 360) % 360
 export const rad2Deg = (rad: number) => sanitizeDeg((rad / Math.PI) * 180)
 
 export const deg2Rad = (deg: number) => (sanitizeDeg(deg) / 180) * Math.PI
+
+export const errorHandler = (e: ErrorResponse, messageApi: MessageInstance) => {
+  console.log(e)
+
+  const errorMessage = e?.response?.data?.message || 'An unknown error occurred'
+
+  void messageApi.error(errorMessage)
+}
