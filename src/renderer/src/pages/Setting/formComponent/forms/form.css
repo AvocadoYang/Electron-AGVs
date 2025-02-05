@@ -140,3 +140,11 @@
   color: #000 !important;
   border-bottom: 1px solid #d9d9d9 !important;
 }
+
+.edit_location_panel_wrap {
+  width: 90%;
+  padding: 15px;
+  margin: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  border-radius: 5px;
+}
