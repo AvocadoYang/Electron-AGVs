@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { LocationType } from '@renderer/utils/jotai'
+import { hsl } from 'color-convert'
+import { MD5 } from 'crypto-js'
 
 export const getLocationInfoById = (locationId: string, locationList: Array<LocationType>) => {
   const result = locationList.filter((v) => v.locationId.toString() === locationId)
@@ -24,4 +26,13 @@ export const getMoveIndex = (array, dragItem) => {
     overIndex = activeIndex // 如果有問題就復位
   }
   return { activeIndex, overIndex }
+}
+
+export const borderColor = (id: string) => {
+  const seed = parseInt(`0x${MD5(id).toString()}`, 16)
+  const h = seed % 360
+  const s = (seed % 70) + 40
+  const l = (seed % 60) + 20
+  const color = `#${hsl.hex([h, s, l])}`
+  return color
 }

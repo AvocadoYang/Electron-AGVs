@@ -73,6 +73,11 @@
     }
   },
 
+  "sider_output_form_name": {
+    "locationPanel": "編輯點位",
+    "locationList": "地點表"
+  },
+
   "edit_location_panel": {
     "none": "路徑點",
     "charge_station": "充電站",

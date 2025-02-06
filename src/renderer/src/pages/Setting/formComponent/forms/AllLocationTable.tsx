@@ -30,6 +30,7 @@ import {CSS} from '@dnd-kit/utilities'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
+import { borderColor } from '../../utils/utils'
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -46,7 +47,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   const { t } = useTranslation()
-  console.log('renders')
   const pointTypeOption = [
     { value: 'Extra', label: t('utils.location_property.none') },
     { value: '充電區', label: t('utils.location_property.charge_station') },
@@ -407,10 +407,12 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown>, sor
             <div
               ref={setNodeRef}
               style={styles}
-              {...attributes}
-              {...listeners}
               className='location_list_table_wrap'
             >
+              <div className='drop_button_style' {...listeners} {...attributes}>
+              {t('sider_output_form_name.locationList')}
+              </div>
+              <hr style={{ marginTop: '1px', marginBottom: '10px', border: `2px solid ${borderColor(sortableId)}`}}></hr>
               <Form form={locationPanelForm} component={false}>
                 <Table
                   // style={{ opacity: '1', borderRadius: '15px' }}

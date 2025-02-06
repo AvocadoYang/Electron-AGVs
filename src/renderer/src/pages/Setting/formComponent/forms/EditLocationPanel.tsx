@@ -13,6 +13,7 @@ import { initialLocationFormValue } from './formInitValue'
 import client  from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
+import { borderColor } from '../../utils/utils'
 import { useSortable } from '@dnd-kit/sortable'
 import {CSS} from '@dnd-kit/utilities'
 
@@ -53,7 +54,6 @@ const EditLocationPanel: React.FC<{
 
   const savePose = () => {
     const payload = locationPanelForm.getFieldsValue() as LocationType
-    console.log(payload)
     const isNegative = payload.locationId <= 0
 
     const isDuplicateId = TempStoredLocation.some((v) => {
@@ -106,13 +106,15 @@ const EditLocationPanel: React.FC<{
         <>
           {contextHolders}
           <div
-            ref={setNodeRef}
-            className='edit_location_panel_wrap'
-            style={styles}
-            {...listeners}
-            {...attributes}
-          >
-            { sortableId==='locationPanel' ? '123333':''}
+           ref={setNodeRef}
+           className='edit_location_panel_wrap'
+           style={styles}
+           >
+          <div>
+          <div className='drop_button_style'{...listeners} {...attributes}>
+            {t('sider_output_form_name.locationPanel')}
+          </div>
+          <hr style={{ marginTop: '1px', marginBottom: '10px', border: `2px solid ${borderColor(sortableId)}`}}></hr>
             <Form
               layout="vertical"
               initialValues={initialLocationFormValue}
@@ -175,6 +177,8 @@ const EditLocationPanel: React.FC<{
                   </Form.Item>
             </Form>
             </div>
+
+          </div>
         </>
       )}
     </>

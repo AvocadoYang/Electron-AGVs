@@ -73,6 +73,11 @@
     }
   },
 
+  "sider_output_form_name": {
+    "locationPanel": "Edit Location",
+    "locationList": "Location List"
+  },
+
   "edit_location_panel": {
     "none": "normal",
     "charge_station": "charge station",

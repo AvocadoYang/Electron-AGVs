@@ -11,7 +11,6 @@ import { AllLocationTable } from './formComponent/forms'
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
-import {CSS} from '@dnd-kit/utilities'
 import { DndContext } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable'
 import { restrictToParentElement } from '@dnd-kit/modifiers'
@@ -89,6 +88,7 @@ const Setting: React.FC = () => {
                             return <EditLocationPanel  locationPanelForm={locationPanelForm} sortableId={form.key} key={form.key}></EditLocationPanel>
                           }
                           if(form.key === 'locationList'){
+                            /** 1-4 顯示地點列表 */
                             return <AllLocationTable locationPanelForm={locationPanelForm} sortableId={form.key} key={form.key}></AllLocationTable>
                           }
                           return null
