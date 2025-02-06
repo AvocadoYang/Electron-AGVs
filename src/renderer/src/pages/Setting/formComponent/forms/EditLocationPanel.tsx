@@ -13,16 +13,31 @@ import { initialLocationFormValue } from './formInitValue'
 import client  from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
+import { useSortable } from '@dnd-kit/sortable'
+import {CSS} from '@dnd-kit/utilities'
 
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
-  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
-}> = ({ locationPanelForm, listeners }) => {
+  sortableId: string
+}> = ({ locationPanelForm, sortableId }) => {
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [TempStoredLocation] = useAtom(tempStoredLocation)
   const queryClient = useQueryClient();
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
+
+  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
+    id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
+    transition: {
+        duration: 500,
+        easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+    },
+  });
+
+  const styles = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType) => {
@@ -90,7 +105,14 @@ const EditLocationPanel: React.FC<{
       {openEditLocationPanel && (
         <>
           {contextHolders}
-          <div className='edit_location_panel_wrap' {...listeners}>
+          <div
+            ref={setNodeRef}
+            className='edit_location_panel_wrap'
+            style={styles}
+            {...listeners}
+            {...attributes}
+          >
+            { sortableId==='locationPanel' ? '123333':''}
             <Form
               layout="vertical"
               initialValues={initialLocationFormValue}

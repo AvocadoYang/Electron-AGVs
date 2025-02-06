@@ -11,7 +11,6 @@ import {
   Checkbox,
   Button,
   message,
-  Badge
 } from 'antd'
 import { catchError, distinctUntilChanged, filter, of } from 'rxjs'
 import { useAtom } from 'jotai'
@@ -26,6 +25,8 @@ import {
 import { EditLocationListTableSwitch } from '@renderer/utils/siderGloble'
 import { SearchOutlined, DeleteTwoTone, CloseSquareOutlined } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
+import { useSortable } from '@dnd-kit/sortable'
+import {CSS} from '@dnd-kit/utilities'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
@@ -45,7 +46,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   const { t } = useTranslation()
-
+  console.log('renders')
   const pointTypeOption = [
     { value: 'Extra', label: t('utils.location_property.none') },
     { value: '充電區', label: t('utils.location_property.charge_station') },
@@ -106,12 +107,12 @@ const EditableCell: React.FC<EditableCellProps> = ({
   )
 }
 
-const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> = ({
-  locationPanelForm
+const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown>, sortableId: string}> = ({
+  locationPanelForm,
+  sortableId
 }) => {
   const searchInput = useRef<InputRef>(null)
   const [editingKey, setEditingKey] = useState<number | null>(null)
-  const [opacity, setOpacity] = useState<'show' | 'hide'>('show')
   const [, setHoverLoc] = useAtom(hoverLocation)
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
     EditLocationListTableSwitch
@@ -120,6 +121,19 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
     useAtom(tempStoredLocation)
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
+
+  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
+    id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
+    transition: {
+        duration: 500,
+        easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+    },
+  });
+
+  const styles = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const isEditing = (record: LocationType) => record.locationId === editingKey
 
@@ -388,56 +402,18 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
   return (
     <>
       {contextHolders}
-      <div
-        className={`form-button-wrap ${showAllLocationListTable ? 'form-button-wrap-animate' : ''}`}
-      >
         {showAllLocationListTable ? (
           <>
-            <div className="hidden-close-btn-wrap">
-              <div style={{ width: '25%', textAlign: 'left' }}>
-                <Button
-                  onClick={() => {
-                    setOpacity((pre) => {
-                      if (pre === 'hide') {
-                        return 'show'
-                      }
-                      return 'hide'
-                    })
-                  }}
-                >
-                  {opacity === 'show' ? t('utils.opacity') : t('utils.show')}
-                </Button>
-              </div>
-              <div className="status-wrap" style={{ width: '50%' }}>
-                <div style={{ width: '33.32%' }} className="all_loc">
-                  <Badge
-                    color="blue"
-                    text={`${t('all_location_list_form.all_loc')}: ${TempStoredLocation.length}`}
-                  />
-                </div>
-              </div>
-              <div style={{ width: '25%', textAlign: 'end' }}>
-                <CloseSquareOutlined
-                  onClick={() => setShowAllLocationListTable(false)}
-                  className="close-table-icon"
-                />
-              </div>
-            </div>
             <div
-              className="table-wrap"
-              style={{
-                height: '100%',
-                width: '100%',
-                overflowX: 'auto',
-                overflowY: 'auto',
-                borderRadius: '15px',
-                boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
-                opacity: `${opacity === 'hide' ? '0.3' : '1'}`
-              }}
+              ref={setNodeRef}
+              style={styles}
+              {...attributes}
+              {...listeners}
+              className='location_list_table_wrap'
             >
               <Form form={locationPanelForm} component={false}>
                 <Table
-                  style={{ opacity: '1', borderRadius: '15px' }}
+                  // style={{ opacity: '1', borderRadius: '15px' }}
                   rowKey={(property) => property.locationId}
                   components={{
                     body: {
@@ -450,20 +426,19 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown> }> =
                   columns={mergedColumns as []}
                   pagination={{
                     onChange: cancel,
-                    pageSize: 20
+                    pageSize: 8
                   }}
-                  onRow={(record) => ({
-                    onMouseEnter: () => {
-                      handleHover(record.locationId)
-                    }
-                  })}
+                  // onRow={(record) => ({
+                  //   onMouseEnter: () => {
+                  //     handleHover(record.locationId)
+                  //   }
+                  // })}
                   bordered
                 />
               </Form>
             </div>
           </>
         ) : null}
-      </div>
     </>
   )
 }

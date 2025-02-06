@@ -15,56 +15,9 @@ import {CSS} from '@dnd-kit/utilities'
 import { DndContext } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable'
 import { restrictToParentElement } from '@dnd-kit/modifiers'
+import { getMoveIndex } from './utils/utils'
+import { formList } from './components/siderElement'
 const { Content } = Layout
-
-const getMoveIndex = (array, dragItem) => {
-  const { active, over } = dragItem;
-  let activeIndex = 0;
-  let overIndex = 0;
-  try {
-      // 遍历数组，查找出active和over的index
-      array.forEach((item, index) => {
-          if (active.id === item.key) {
-              activeIndex = index;
-          }
-          if (over.id === item.key) {
-              overIndex = index;
-          }
-      });
-  } catch (error) {
-      overIndex = activeIndex; // 如果有问题，则复位
-  }
-  return { activeIndex, overIndex };
-};
-
- // 拖拽项组件
- const SortableItem: React.FC<{ locationPanelForm: FormInstance<unknown>, itemProps:{
-  key: string;
-  width: number;
-  isChecked: boolean;
-  title: string;
-}}> = ({itemProps: checkboxItem, locationPanelForm}) => {
-  // 父传子，从props里拿，建议使用其他名字（如itemProps）代替props，以免和父组件的props混淆
-  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
-      id: checkboxItem.key, // 这里传入的id属性必须和SortableContext的items数组一一对应
-      transition: {
-          duration: 500,
-          easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-      },
-  });
-  const styles = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-  };
-
-  return (
-        <div ref={setNodeRef} {...attributes} style={styles}>
-        <EditLocationPanel locationPanelForm={locationPanelForm} listeners={listeners}></EditLocationPanel>
-      </div>
-
-  );
-};
-
 
 
 const Setting: React.FC = () => {
@@ -76,12 +29,8 @@ const Setting: React.FC = () => {
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
-  const [dataList, setDataList] = useState([
-    { key: 'name', width: 0.25, isChecked: true, title: '姓名' },
-    { key: 'age', width: 0.25, isChecked: true, title: '年龄' },
-    { key: 'sex', width: 0.25, isChecked: true, title: '性别' },
-    { key: 'phone', width: 0.25, isChecked: true, title: '手机号' },
-]);
+
+  const [dataList, setDataList] = useState(formList);
 
 
   const [scale, setScale] = useState(1)
@@ -129,16 +78,22 @@ const Setting: React.FC = () => {
               ref={mapWrapRef}
             >
               <Splitter>
-                <Splitter.Panel defaultSize="40%">
+                <Splitter.Panel defaultSize="40%" style={{overflowX: 'hidden'}}>
                 <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
                   <SortableContext items={dataList.map((c) => c.key)} strategy={verticalListSortingStrategy}>
-                      {/* 这里的items接收一个数组，这个数组的值要和useSortable传入的id属性一一对应 */}
+                      {/* 這裡的items接收一個array，這個array的值要和useSortable傳入的id對應 */}
                       <div className="attrs">
-
-                              {dataList.map((checkboxItem) => (
-                                  <SortableItem itemProps={checkboxItem} key={checkboxItem.key} locationPanelForm={locationPanelForm} />
-                              ))}
-
+                        {dataList.map((form) => {
+                          if(form.key === 'locationPanel'){
+                            /** 1-1 編輯點位的彈跳視窗 */
+                            return <EditLocationPanel  locationPanelForm={locationPanelForm} sortableId={form.key} key={form.key}></EditLocationPanel>
+                          }
+                          if(form.key === 'locationList'){
+                            return <AllLocationTable locationPanelForm={locationPanelForm} sortableId={form.key} key={form.key}></AllLocationTable>
+                          }
+                          return null
+                        }
+                        )}
                       </div>
                   </SortableContext>
               </DndContext>
@@ -162,14 +117,9 @@ const Setting: React.FC = () => {
             </Content>
           </Layout>
         </Content>
-
-        {
-          /** 1-1 編輯點位的彈跳視窗 */
-          // <EditLocationPanel locationPanelForm={locationPanelForm}></EditLocationPanel>
-        }
         {
           /** 1-4 顯示地點列表 */
-          <AllLocationTable locationPanelForm={locationPanelForm}></AllLocationTable>
+          // <AllLocationTable locationPanelForm={locationPanelForm}></AllLocationTable>
         }
         {
           /** 2-1 編輯路線的彈跳視窗 */
