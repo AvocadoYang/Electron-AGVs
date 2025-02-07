@@ -43,7 +43,7 @@ const { Sider: AntdSider } = Layout
 
 const Sider: React.FC<{
   setHasOpenTool: React.Dispatch<React.SetStateAction<boolean>>
-}> = () => {
+}> = ({ setHasOpenTool }) => {
   const { data } = useMap()
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
 
@@ -56,16 +56,16 @@ const Sider: React.FC<{
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
-  // useEffect(() => {
-  //   const isOpen = [
-  //     openEditLocationPanel,
-  //     showAllLocationListTable,
-  //     openEditRoadPanel,
-  //     showEditingRoad
-  //   ].some((item) => item)
+  useEffect(() => {
+    const isOpen = [
+      openEditLocationPanel,
+      showAllLocationListTable,
+      openEditRoadPanel,
+      // showEditingRoad
+    ].some((item) => item)
 
-  //   setHasOpenTool(isOpen)
-  // }, [openEditLocationPanel, showAllLocationListTable, openEditRoadPanel, showEditingRoad])
+    setHasOpenTool(isOpen)
+  }, [openEditLocationPanel, showAllLocationListTable, openEditRoadPanel])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
     if (!data) return

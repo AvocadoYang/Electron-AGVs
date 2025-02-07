@@ -97,6 +97,8 @@ const EditLocationPanel: React.FC<{
     saveLocationMutation.mutate(sanitizedPayload)
   }
 
+  console.log(12333333)
+
   return (
     <>
       {openEditLocationPanel && (

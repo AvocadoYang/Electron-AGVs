@@ -61,7 +61,6 @@ const AllStoredLocation: React.FC<{
               }}
               style={{ borderRadius: '50%' }}
             >
-              {' '}
               <Point
                 id={loc.locationId.toString()}
                 canrotate={`${loc.canRotate}`}

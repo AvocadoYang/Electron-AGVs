@@ -18,16 +18,14 @@ import { formList } from './components/siderElement'
 const { Content } = Layout
 
 const Setting: React.FC = () => {
-  const { data } = useMap()
   const mapRef = useRef(null)
   const [hasOpenTool, setHasOpenTool] = useState(false)
-
-  const [panelSize, setPanelSize] = useState<string | undefined>('0%')
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
   const [dataList, setDataList] = useState(formList)
   const [scale, setScale] = useState(1)
+  const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%']);
 
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
@@ -38,17 +36,17 @@ const Setting: React.FC = () => {
     })
   }
 
-  // useEffect(() => {
-  //   if (hasOpenTool) {
-  //     setPanelSize('40%')
-  //     const timer = setTimeout(() => {
-  //       setPanelSize(undefined)
-  //     }, 1000)
-  //     return () => clearTimeout(timer)
-  //   } else {
-  //     setPanelSize('0%')
-  //   }
-  // }, [hasOpenTool])
+  useEffect(() => {
+    if (hasOpenTool) {
+      setSplitterSize(['30%', '100%'])
+    } else {
+      setSplitterSize(['0%', '100%'])
+    }
+  }, [hasOpenTool])
+
+  const updateSize = (size) => {
+    setSplitterSize(size)
+  }
 
   useResetSiderSwitch()
 
@@ -61,16 +59,16 @@ const Setting: React.FC = () => {
             <Sider setHasOpenTool={setHasOpenTool} />
             <Content
               style={{
-                // overflow: 'scroll',
                 backgroundColor: 'white'
               }}
               ref={mapWrapRef}
             >
-              <Splitter>
+              <Splitter onResize={updateSize}>
                 <Splitter.Panel
-                  defaultSize={'50%'}
-                  //</Splitter> size={panelSize}
-                  style={{ overflowX: 'hidden' }}
+                  size={splitterSize[0]}
+                  collapsible={hasOpenTool ? true: false}
+                  resizable={hasOpenTool ? true: false}
+                  style={{ overflowX: 'hidden'}}
                 >
                   <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
                     <SortableContext
@@ -97,7 +95,7 @@ const Setting: React.FC = () => {
                             )
                           }
                           if (form.key === 'locationList') {
-                            /** 1-4 顯示地點列表 */
+                            /** 1-2 顯示地點列表 */
                             return (
                               <AllLocationTable
                                 sortableId={form.key}
@@ -111,7 +109,7 @@ const Setting: React.FC = () => {
                     </SortableContext>
                   </DndContext>
                 </Splitter.Panel>
-                <Splitter.Panel defaultSize={'100%'}>
+                <Splitter.Panel size={splitterSize[1]}>
                   <MapView
                     scale={scale}
                     mapRef={mapRef}
@@ -129,10 +127,6 @@ const Setting: React.FC = () => {
             </Content>
           </Layout>
         </Content>
-        {
-          /** 1-4 顯示地點列表 */
-          // <AllLocationTable locationPanelForm={locationPanelForm}></AllLocationTable>
-        }
         {
           /** 2-1 編輯路線的彈跳視窗 */
           <EditRoadPanel roadPanelForm={roadPanelForm}></EditRoadPanel>
