@@ -6,15 +6,16 @@ import DraggableWindow from '../DraggableWindow'
 import { useAtom } from 'jotai'
 import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { modifyRoad as Road } from '@renderer/utils/gloable'
-import { tempStoredLocation, tempEditAndStoredRoads } from '@renderer/utils/gloable'
+import { tempEditAndStoredRoads } from '@renderer/utils/gloable'
 import { useTranslation } from 'react-i18next'
 import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 import { getLocationInfoById } from '../../utils/utils'
 import { useState } from 'react'
 import { openNotificationWithIcon } from '../../utils/notification'
-import { Modify, RoadListType } from '@renderer/utils/jotai'
+import { LocationType, Modify, RoadListType } from '@renderer/utils/jotai'
 import { CloseOutlined } from '@ant-design/icons'
 import { initialRoadValue } from './formInitValue'
+import useMap from '@renderer/api/useMap'
 
 function validateArray(arr: string[]) {
   if (arr.includes('*')) {
@@ -34,7 +35,7 @@ function validateArray(arr: string[]) {
 
 const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPanelForm }) => {
   const [chooseAngle, setChooseAngle] = useState<string>('')
-  const [TempStoredLocation] = useAtom(tempStoredLocation)
+  const { data: mapData } = useMap()
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [TempEditAndStoredRoads, setEditingRoadsList] = useAtom(tempEditAndStoredRoads)
 
@@ -134,8 +135,14 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
         )
         return
       }
-      const result1 = getLocationInfoById(payload.to.toString(), TempStoredLocation)
-      const result2 = getLocationInfoById(payload.x.toString(), TempStoredLocation)
+      const result1 = getLocationInfoById(
+        payload.to.toString(),
+        mapData?.locations as LocationType[]
+      )
+      const result2 = getLocationInfoById(
+        payload.x.toString(),
+        mapData?.locations as LocationType[]
+      )
 
       newPayload = {
         ...payload,
@@ -167,8 +174,8 @@ const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roa
       }
     }
 
-    const result1 = getLocationInfoById(payload.to.toString(), TempStoredLocation)
-    const result2 = getLocationInfoById(payload.x.toString(), TempStoredLocation)
+    const result1 = getLocationInfoById(payload.to.toString(), mapData?.locations as LocationType[])
+    const result2 = getLocationInfoById(payload.x.toString(), mapData?.locations as LocationType[])
     newPayload = {
       ...payload,
       roadId: erId,

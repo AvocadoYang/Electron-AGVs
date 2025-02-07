@@ -3,19 +3,13 @@
 import { RefObject, memo, useState } from 'react'
 import '../setting.css'
 import { FormInstance } from 'antd'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
+import { sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import {
-  sameVersion,
-  showBlockId as ShowBlockId,
-  tempStoredLocation,
-} from '@renderer/utils/gloable'
-import {
-  StoredLocationSwitch,
-  EditingLocationSwitch,
   EditLocationPanelSwitch,
-  EditingRoadSwitch,
   EditRoadPanelSwitch,
-  StoredRoadSwitch
+  isShowLocation,
+  isShowRoad
 } from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
@@ -25,6 +19,7 @@ import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
 import { MousePoint, AllStoredLocation, MapImage } from './components'
 import AllEditRoads from './components/AllEditRoads/AllEditRoads'
+import { LocationType } from '@renderer/utils/jotai'
 
 const MapView: React.FC<{
   scale: number
@@ -40,19 +35,18 @@ const MapView: React.FC<{
 
   /** 路線拖曳相關參數 */
   const [, setShowBlockId] = useAtom(ShowBlockId)
-  const [TempEditAndStoredLocation] = useAtom(tempStoredLocation)
+  const { data: mapData } = useMap()
   const [initPoint, setInitPoint] = useState({} as draggableLineInitialPoint)
   const [mouseLocation, setMouseLocation] = useState({} as mouseLocation)
   const [isResizing, setIsResizing] = useState(false)
 
   const [, setSameVersion] = useAtom(sameVersion)
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
-  const [showStoredLocation] = useAtom(StoredLocationSwitch)
-  const [showEditingLocation] = useAtom(EditingLocationSwitch)
 
   const [openEditRoadPanel] = useAtom(EditRoadPanelSwitch)
-  const [showStoredRoad] = useAtom(StoredRoadSwitch)
-  const [showEditingRoad] = useAtom(EditingRoadSwitch)
+
+  const showLocation = useAtomValue(isShowLocation)
+  const showRoad = useAtomValue(isShowRoad)
 
   if (currentVersion) {
     const defaultCookie = Cookies.get('version')
@@ -82,7 +76,7 @@ const MapView: React.FC<{
     if (!data) return
     setIsResizing(true)
     setShowBlockId(startId)
-    const result = getLocationInfoById(startId, TempEditAndStoredLocation)
+    const result = getLocationInfoById(startId, mapData?.locations as LocationType[])
     roadPanelForm.setFieldValue('x', result.locationId)
   }
 
@@ -104,7 +98,7 @@ const MapView: React.FC<{
     >
       <MapImage></MapImage>
 
-      {showStoredLocation ? (
+      {showLocation ? (
         <AllStoredLocation
           scale={scale}
           setInitPoint={setInitPoint}
@@ -123,7 +117,7 @@ const MapView: React.FC<{
         <></>
       )}
 
-      {showEditingRoad ? <AllEditRoads /> : []}
+      {showRoad ? <AllEditRoads /> : []}
     </div>
   )
 }

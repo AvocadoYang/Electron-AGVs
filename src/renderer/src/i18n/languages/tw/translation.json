@@ -14,6 +14,7 @@
     "save": "修改",
     "delete": "刪除",
     "edit": "編輯",
+    "success": "成功",
 
     "location_property": {
       "none": "點位",
@@ -26,8 +27,16 @@
   "test_translation": "測試翻譯",
   "open": "開啟表單列",
   "close": "關閉表單列",
-  "zoom_out": "縮小",
-  "zoom_in": "放大",
+
+  "map_tool": {
+    "zoom_out": "縮小",
+    "zoom_in": "放大",
+    "road": "路徑",
+    "location": "地點",
+    "road_tooltip": "路徑提示",
+    "location_tooltip": "地點提示"
+  },
+
   "page_view": "地圖",
   "page_setting": "點位設定",
   "page_dashboard": "控制中心",
@@ -35,7 +44,6 @@
     "location": {
       "locations": "點位",
       "edit_locations": "編輯點位",
-      "show_in_use_locations": "顯示現有地點",
       "show_edit_locations": "顯示編輯中地點",
       "show_locations_table": "顯示地點表",
       "show_tooltip": "顯示點位提示框"

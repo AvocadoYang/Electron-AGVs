@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useState, memo } from 'react'
+import React, { useState, memo, useEffect } from 'react'
 import { Layout, Menu, Switch } from 'antd'
 import useMap from '@renderer/api/useMap'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import {
   EditLocationPanelSwitch,
-  StoredLocationSwitch,
-  EditingLocationSwitch,
-  EditRoadPanelSwitch,
   EditLocationListTableSwitch,
-  StoredRoadSwitch,
-  EditingRoadSwitch
+  isShowLocationTooltip,
+  EditRoadPanelSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -44,20 +41,31 @@ export function getItem(
 
 const { Sider: AntdSider } = Layout
 
-const Sider: React.FC = () => {
+const Sider: React.FC<{
+  setHasOpenTool: React.Dispatch<React.SetStateAction<boolean>>
+}> = () => {
   const { data } = useMap()
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
-  const [showStoredLocation, setShowStoredLocation] = useAtom(StoredLocationSwitch) // 1-2
-  const [showEditingLocation, setShowEditingLocation] = useAtom(EditingLocationSwitch) // 1-3
+
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
     EditLocationListTableSwitch
   ) // 1-4
-
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
-  const [showStoredRoad, setShowStoredRoad] = useAtom(StoredRoadSwitch) // 2-2
-  const [showEditingRoad, setShowEditingRoad] = useAtom(EditingRoadSwitch) // 2-3
+
+  const setShowLocationToolTip = useSetAtom(isShowLocationTooltip)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
+
+  // useEffect(() => {
+  //   const isOpen = [
+  //     openEditLocationPanel,
+  //     showAllLocationListTable,
+  //     openEditRoadPanel,
+  //     showEditingRoad
+  //   ].some((item) => item)
+
+  //   setHasOpenTool(isOpen)
+  // }, [openEditLocationPanel, showAllLocationListTable, openEditRoadPanel, showEditingRoad])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
     if (!data) return
@@ -65,29 +73,20 @@ const Sider: React.FC = () => {
       // === location ===
       case 'locationPanel':
         setOpenEditLocationPanel(!openEditLocationPanel)
-        setShowEditingLocation(true)
         break
-      case 'stored_location':
-        setShowStoredLocation(!showStoredLocation)
-        break
-      case 'show_editLocation':
-        setShowEditingLocation(!showEditingLocation)
-        break
+
       case 'locationList':
         setShowAllLocationListTable(!showAllLocationListTable)
+        setShowLocationToolTip(true)
+
         break
       // ===================
       // === road ===
       case 'roadPanel':
         setOpenEditRoadPanel(!openEditRoadPanel)
-        setShowEditingRoad(true)
+
         break
-      case 'stored_roads':
-        setShowStoredRoad(!showStoredRoad)
-        break
-      case 'show_edit_roads':
-        setShowEditingRoad(!showEditingRoad)
-        break
+
       case 'show_roads_table':
         console.log('show_roads_table')
         break
@@ -184,23 +183,7 @@ const Sider: React.FC = () => {
           checked={openEditLocationPanel}
         />
       ),
-      getItem(
-        t('toolbar.location.show_in_use_locations'),
-        '1-2',
-        <Switch
-          defaultChecked
-          onChange={(checked) => handleShowPanel(checked, 'stored_location')}
-          checked={showStoredLocation}
-        />
-      ),
-      getItem(
-        t('toolbar.location.show_edit_locations'),
-        '1-3',
-        <Switch
-          onClick={(checked) => handleShowPanel(checked, 'show_editLocation')}
-          checked={showEditingLocation}
-        />
-      ),
+
       getItem(
         t('toolbar.location.show_locations_table'),
         '1-4',
@@ -217,23 +200,6 @@ const Sider: React.FC = () => {
         <Switch
           onChange={(checked) => handleShowPanel(checked, 'roadPanel')}
           checked={openEditRoadPanel}
-        />
-      ),
-      getItem(
-        t('toolbar.road.roads.show_in_use_roads'),
-        '2-2',
-        <Switch
-          defaultChecked
-          onChange={(checked) => handleShowPanel(checked, 'stored_location')}
-          checked={false}
-        />
-      ),
-      getItem(
-        t('toolbar.road.roads.show_edit_roads'),
-        '2-3',
-        <Switch
-          onChange={(checked) => handleShowPanel(checked, 'show_edit_roads')}
-          checked={false}
         />
       ),
       getItem(
