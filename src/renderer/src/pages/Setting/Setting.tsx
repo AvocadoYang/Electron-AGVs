@@ -4,9 +4,6 @@ import { Layout, Form, Splitter, Flex } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider, FormDrawerBtn } from './components'
 
-import useMap from '@renderer/api/useMap'
-import { EditLocationPanel, EditRoadPanel } from './formComponent/forms'
-import { AllLocationTable } from './formComponent/forms'
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
@@ -15,21 +12,18 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 import { getMoveIndex } from './utils/utils'
 import { formList } from './components/siderElement'
-import RoadList from './formComponent/forms/RoadList'
 import ToolComponents from './components/ToolComponents'
 const { Content } = Layout
 
 const Setting: React.FC = () => {
-  const { data } = useMap()
   const mapRef = useRef(null)
   const [hasOpenTool, setHasOpenTool] = useState(false)
-
-  const [panelSize, setPanelSize] = useState<string | undefined>('0%')
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
   const [dataList, setDataList] = useState(formList)
   const [scale, setScale] = useState(1)
+  const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
 
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
@@ -40,17 +34,17 @@ const Setting: React.FC = () => {
     })
   }
 
-  // useEffect(() => {
-  //   if (hasOpenTool) {
-  //     setPanelSize('40%')
-  //     const timer = setTimeout(() => {
-  //       setPanelSize(undefined)
-  //     }, 1000)
-  //     return () => clearTimeout(timer)
-  //   } else {
-  //     setPanelSize('0%')
-  //   }
-  // }, [hasOpenTool])
+  useEffect(() => {
+    if (hasOpenTool) {
+      setSplitterSize(['30%', '100%'])
+    } else {
+      setSplitterSize(['0%', '100%'])
+    }
+  }, [hasOpenTool])
+
+  const updateSize = (size) => {
+    setSplitterSize(size)
+  }
 
   useResetSiderSwitch()
 
@@ -63,15 +57,15 @@ const Setting: React.FC = () => {
             <Sider setHasOpenTool={setHasOpenTool} />
             <Content
               style={{
-                // overflow: 'scroll',
                 backgroundColor: 'white'
               }}
               ref={mapWrapRef}
             >
-              <Splitter>
+              <Splitter onResize={updateSize}>
                 <Splitter.Panel
-                  defaultSize={'50%'}
-                  //</Splitter> size={panelSize}
+                  size={splitterSize[0]}
+                  collapsible={hasOpenTool ? true : false}
+                  resizable={hasOpenTool ? true : false}
                   style={{ overflowX: 'hidden' }}
                 >
                   <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
@@ -97,7 +91,7 @@ const Setting: React.FC = () => {
                     </SortableContext>
                   </DndContext>
                 </Splitter.Panel>
-                <Splitter.Panel defaultSize={'100%'}>
+                <Splitter.Panel size={splitterSize[1]}>
                   <MapView
                     scale={scale}
                     mapRef={mapRef}
