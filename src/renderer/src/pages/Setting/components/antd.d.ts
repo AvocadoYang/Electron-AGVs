@@ -1,11 +1,7 @@
 export type ToolBarItemType =
   | 'locationPanel'
-  | 'stored_location'
-  | 'show_editLocation'
   | 'locationList'
   | 'roadPanel'
-  | 'stored_roads'
-  | 'show_edit_roads'
   | 'show_roads_table'
   | 'edit_zone'
   | 'show_zone_list'

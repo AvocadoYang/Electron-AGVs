@@ -1,8 +1,6 @@
 import { atom } from 'jotai'
 import { LocationType, RoadListType, Modify } from './jotai'
 
-export const tempStoredLocation = atom<Array<LocationType>>([])
-
 export const tempEditRoads = atom<Array<RoadListType>>([])
 
 export const tempEditAndStoredRoads = atom<Array<RoadListType>>([])
@@ -33,4 +31,4 @@ export const showBlockId = atom<string>('')
 
 export const hoverLocation = atom<string>('')
 
-export const hoverRoad = atom('')
+export const hoverRoad = atom(0)

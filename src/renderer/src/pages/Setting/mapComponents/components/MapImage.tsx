@@ -18,7 +18,13 @@ const MapImage = () => {
   if (isError)
     return (
       <div
-        style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        style={{
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 999
+        }}
       >
         <div
           style={{

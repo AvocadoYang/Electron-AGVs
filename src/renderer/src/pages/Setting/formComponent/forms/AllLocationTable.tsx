@@ -11,26 +11,28 @@ import {
   Checkbox,
   Button,
   message,
+  Card
 } from 'antd'
-import { catchError, distinctUntilChanged, filter, of } from 'rxjs'
-import { useAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { LocationType } from '@renderer/utils/jotai'
 import { useRef, useState } from 'react'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import { useTranslation } from 'react-i18next'
-import {
-  hoverLocation,
-  tempStoredLocation,
-} from '@renderer/utils/gloable'
+import { hoverLocation } from '@renderer/utils/gloable'
 import { EditLocationListTableSwitch } from '@renderer/utils/siderGloble'
-import { SearchOutlined, DeleteTwoTone, CloseSquareOutlined } from '@ant-design/icons'
+import { SearchOutlined, DeleteTwoTone } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
 import { useSortable } from '@dnd-kit/sortable'
-import {CSS} from '@dnd-kit/utilities'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
 import { borderColor } from '../../utils/utils'
+import cardStyle from '../../utils/cardStyle'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import client from '@renderer/api/axiosClient'
+import { ErrorResponse } from '@renderer/utils/globalType'
+import { errorHandler } from '@renderer/utils/utils'
+import useMap from '@renderer/api/useMap'
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -107,37 +109,55 @@ const EditableCell: React.FC<EditableCellProps> = ({
   )
 }
 
-const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown>, sortableId: string}> = ({
-  locationPanelForm,
-  sortableId
-}) => {
+const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
+  const [locationPanelForm] = Form.useForm()
   const searchInput = useRef<InputRef>(null)
-  const [editingKey, setEditingKey] = useState<number | null>(null)
-  const [, setHoverLoc] = useAtom(hoverLocation)
-  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
-    EditLocationListTableSwitch
-  )
-  const [TempStoredLocation, setTempStoredLocation] =
-    useAtom(tempStoredLocation)
+  const [editingKey, setEditingKey] = useState<string | null>(null)
+  const setHoverLoc = useSetAtom(hoverLocation)
+  const { data: mapData } = useMap()
+  const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch)
+
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
 
   const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
     transition: {
-        duration: 500,
-        easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-    },
-  });
+      duration: 500,
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+    }
+  })
 
-  const styles = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const styles = cardStyle(transform, transition)
+
+  const saveLocationMutation = useMutation({
+    mutationFn: (payload: LocationType) => {
+      return client.post('api/setting/save-edit-loc', payload)
+    },
+    onSuccess: () => {
+      void messageApi.success(t('utils.success'))
+      queryClient.refetchQueries({ queryKey: ['map'] })
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  })
+
+  const deleteLocationMutation = useMutation({
+    mutationFn: (locationId: string) => {
+      return client.post(`api/setting/delete-edit-loc`, {
+        locationId
+      })
+    },
+    onSuccess: () => {
+      void messageApi.success(t('utils.success'))
+      queryClient.refetchQueries({ queryKey: ['map'] })
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  })
 
   const isEditing = (record: LocationType) => record.locationId === editingKey
 
-  const edit = (record: Partial<LocationType> & { locationId: number }) => {
+  const edit = (record: Partial<LocationType> & { locationId: string }) => {
     locationPanelForm.setFieldValue('x', Number(record.x))
     locationPanelForm.setFieldValue('y', Number(record.y))
     locationPanelForm.setFieldValue('canRotate', record.canRotate)
@@ -223,25 +243,29 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown>, sor
 
   // --------------------------
 
-
   const savePos = () => {
     const payload = locationPanelForm.getFieldsValue() as LocationType
-    const sanitizedPayload = {
-      ...payload,
-      locationId: Number(payload.locationId),
-      rotation: Number(payload.rotation)
-    }
-    const index = TempStoredLocation.findIndex((v) => {
-      return v.locationId === payload.locationId
+    const isNegative = Number(payload.locationId) <= 0
+
+    const isDuplicateId = mapData?.locations.some((v) => {
+      return v.locationId === payload.locationId.toString()
     })
 
-    if (index === -1) return
+    if (isNegative) {
+      messageApi.warning(t('edit_location_panel.save_pose_notify.is_a_navigate'))
+      return
+    }
 
-    const updateLocationList = [...TempStoredLocation]
-    updateLocationList[index] = { ...sanitizedPayload }
+    if (isDuplicateId) {
+      void messageApi.warning('duplicate id')
+    }
 
-    setTempStoredLocation(updateLocationList)
-    void messageApi.success('ok', 1)
+    const sanitizedPayload = {
+      ...payload,
+      locationId: payload.locationId.toString()
+    }
+
+    saveLocationMutation.mutate(sanitizedPayload)
   }
 
   const cancel = () => {
@@ -253,24 +277,17 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown>, sor
     setEditingKey(null)
   }
 
-  const deleteLocationInList = (id: number) => {
-    setTempStoredLocation((prev) => prev.filter((v) => v.locationId !== id))
+  const deleteLocationInList = (id: string) => {
+    deleteLocationMutation.mutate(id.toString())
   }
 
-  const handleHover = (id: number) => {
+  const handleHover = (id: string) => {
     if (!id) return
-    of(id.toString())
-      .pipe(
-        distinctUntilChanged((prev, curr) => prev !== curr),
-        filter((v) => v !== undefined),
-        catchError((error) => {
-          console.log('An error occurred:', error)
-          return of('')
-        })
-      )
-      .subscribe((v) => {
-        setHoverLoc(v)
-      })
+    setHoverLoc(id)
+  }
+
+  const handleMouseLeave = () => {
+    setHoverLoc('')
   }
 
   const columns = [
@@ -280,7 +297,7 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown>, sor
       key: 'locationId',
       editable: true,
       width: '16%',
-      sorter: (a: LocationType, b: LocationType) => a.locationId - b.locationId,
+      sorter: (a: LocationType, b: LocationType) => Number(a.locationId) - Number(b.locationId),
       ...getColumnSearchProps('locationId')
     },
     {
@@ -402,45 +419,48 @@ const AllLocationTable: React.FC<{ locationPanelForm: FormInstance<unknown>, sor
   return (
     <>
       {contextHolders}
-        {showAllLocationListTable ? (
-          <>
-            <div
-              ref={setNodeRef}
-              style={styles}
-              className='location_list_table_wrap'
-            >
-              <div className='drop_button_style' {...listeners} {...attributes}>
+      {showAllLocationListTable ? (
+        <>
+          <Card ref={setNodeRef} style={styles} onMouseLeave={handleMouseLeave}>
+            <div className="drop_button_style" {...listeners} {...attributes}>
               {t('sider_output_form_name.locationList')}
-              </div>
-              <hr style={{ marginTop: '1px', marginBottom: '10px', border: `2px solid ${borderColor(sortableId)}`}}></hr>
-              <Form form={locationPanelForm} component={false}>
-                <Table
-                  // style={{ opacity: '1', borderRadius: '15px' }}
-                  rowKey={(property) => property.locationId}
-                  components={{
-                    body: {
-                      cell: EditableCell
-                    }
-                  }}
-                  dataSource={TempStoredLocation.map((loc) => {
-                    return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
-                  })}
-                  columns={mergedColumns as []}
-                  pagination={{
-                    onChange: cancel,
-                    pageSize: 8
-                  }}
-                  // onRow={(record) => ({
-                  //   onMouseEnter: () => {
-                  //     handleHover(record.locationId)
-                  //   }
-                  // })}
-                  bordered
-                />
-              </Form>
             </div>
-          </>
-        ) : null}
+
+            <hr
+              style={{
+                marginTop: '1px',
+                marginBottom: '10px',
+                border: `2px solid ${borderColor(sortableId)}`
+              }}
+            ></hr>
+            <Form form={locationPanelForm} component={false}>
+              <Table
+                // style={{ opacity: '1', borderRadius: '15px' }}
+                rowKey={(property) => property.locationId}
+                components={{
+                  body: {
+                    cell: EditableCell
+                  }
+                }}
+                dataSource={mapData?.locations.map((loc) => {
+                  return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
+                })}
+                columns={mergedColumns as []}
+                pagination={{
+                  onChange: cancel,
+                  pageSize: 8
+                }}
+                onRow={(record) => {
+                  return {
+                    onMouseEnter: () => handleHover(record.locationId)
+                  }
+                }}
+                bordered
+              />
+            </Form>
+          </Card>
+        </>
+      ) : null}
     </>
   )
 }
