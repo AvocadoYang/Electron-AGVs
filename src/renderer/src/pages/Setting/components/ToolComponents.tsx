@@ -1,6 +1,10 @@
 import { FC } from 'react'
-import { AllLocationTable, EditLocationPanel, EditRoadPanel } from '../formComponent/forms'
-import RoadList from '../formComponent/forms/RoadList'
+import {
+  AllLocationTable,
+  EditLocationPanel,
+  EditRoadPanel,
+  RoadList
+} from '../formComponent/forms'
 import { FormInstance } from 'antd'
 
 const ToolComponents: FC<{

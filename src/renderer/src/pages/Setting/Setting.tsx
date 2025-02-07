@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Layout, Form, Splitter, Flex } from 'antd'
 import Header from '../../components/Header'
-import { ZoomPad, Sider, FormDrawerBtn } from './components'
+import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components'
 
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
@@ -12,7 +12,6 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 import { getMoveIndex } from './utils/utils'
 import { formList } from './components/siderElement'
-import ToolComponents from './components/ToolComponents'
 const { Content } = Layout
 
 const Setting: React.FC = () => {
