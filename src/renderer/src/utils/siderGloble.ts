@@ -9,8 +9,8 @@ export const EditLocationListTableSwitch = atom<boolean>(false)
 /** 2-1 編輯路徑開關 */
 export const EditRoadPanelSwitch = atom<boolean>(false)
 
-/** 2-4 顯示所有路徑表單 */
-export const EditRoadListFormSwitch = atom<boolean>(false)
+/** 2-2 顯示所有路徑表單 */
+export const RoadListTableSwitch = atom<boolean>(false)
 
 export const SideSwitchToShowForm = atom<boolean>(false)
 

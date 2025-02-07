@@ -1,25 +1,20 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable react/prop-types */
-import { RefObject, memo, useState } from 'react'
+import { RefObject, memo, useRef, useState } from 'react'
 import '../setting.css'
 import { FormInstance } from 'antd'
 import { useAtom, useAtomValue } from 'jotai'
 import { sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
-import {
-  EditLocationPanelSwitch,
-  EditRoadPanelSwitch,
-  isShowLocation,
-  isShowRoad
-} from '@renderer/utils/siderGloble'
+import { EditLocationPanelSwitch, isShowLocation, isShowRoad } from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
 import { draggableLineInitialPoint, mouseLocation } from '../hooks/hook'
 import { useMousePoint, useDraggableLine } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
-import { MousePoint, AllStoredLocation, MapImage } from './components'
-import AllEditRoads from './components/AllEditRoads/AllEditRoads'
+import { MousePoint, AllLocation, MapImage } from './components'
 import { LocationType } from '@renderer/utils/jotai'
+import AllRoads from './components/AllRoads/AllRoads'
 
 const MapView: React.FC<{
   scale: number
@@ -39,11 +34,9 @@ const MapView: React.FC<{
   const [initPoint, setInitPoint] = useState({} as draggableLineInitialPoint)
   const [mouseLocation, setMouseLocation] = useState({} as mouseLocation)
   const [isResizing, setIsResizing] = useState(false)
-
+  const mapImageRef = useRef<HTMLImageElement>(null)
   const [, setSameVersion] = useAtom(sameVersion)
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
-
-  const [openEditRoadPanel] = useAtom(EditRoadPanelSwitch)
 
   const showLocation = useAtomValue(isShowLocation)
   const showRoad = useAtomValue(isShowRoad)
@@ -65,6 +58,7 @@ const MapView: React.FC<{
   useMousePoint(
     mapWrapRef,
     mapRef,
+    mapImageRef,
     scale,
     setMousePointX,
     setMousePointY,
@@ -96,10 +90,10 @@ const MapView: React.FC<{
       className="map-view"
       ref={mapRef}
     >
-      <MapImage></MapImage>
+      <MapImage ref={mapImageRef} />
 
       {showLocation ? (
-        <AllStoredLocation
+        <AllLocation
           scale={scale}
           setInitPoint={setInitPoint}
           handleMouseDown={handleMouseDown}
@@ -117,7 +111,7 @@ const MapView: React.FC<{
         <></>
       )}
 
-      {showRoad ? <AllEditRoads /> : []}
+      {showRoad ? <AllRoads /> : []}
     </div>
   )
 }

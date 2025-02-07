@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { forwardRef } from 'react'
+import { memo } from 'react'
 import useMap from '@renderer/api/useMap'
 import { Spin } from 'antd'
-import '../../setting.css'
 import { LoadingOutlined, RobotOutlined } from '@ant-design/icons'
-import { memo } from 'react'
-const MapImage = () => {
+
+const MapImage = forwardRef<HTMLImageElement>((props, ref) => {
   const { data, isLoading, isError } = useMap()
 
   if (isLoading)
@@ -15,6 +15,7 @@ const MapImage = () => {
         <Spin indicator={<LoadingOutlined style={{ fontSize: 55 }} spin />} />
       </div>
     )
+
   if (isError)
     return (
       <div
@@ -51,11 +52,16 @@ const MapImage = () => {
         </div>
       </div>
     )
+
   return (
-    <>
-      <img src={`${data.imageUrl}`} draggable={false} style={{ userSelect: 'none' }} />
-    </>
+    <img
+      ref={ref}
+      src={`${data.imageUrl}`}
+      draggable={false}
+      style={{ userSelect: 'none' }}
+      alt="Map"
+    />
   )
-}
+})
 
 export default memo(MapImage)

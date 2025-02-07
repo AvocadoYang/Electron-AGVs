@@ -11,7 +11,9 @@ import {
   Checkbox,
   Button,
   message,
-  Card
+  Card,
+  Popconfirm,
+  Flex
 } from 'antd'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { LocationType } from '@renderer/utils/jotai'
@@ -116,7 +118,7 @@ const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
   const setHoverLoc = useSetAtom(hoverLocation)
   const { data: mapData } = useMap()
   const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch)
-
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
@@ -154,6 +156,26 @@ const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   })
+
+  const deleteMultiLocationMutation = useMutation({
+    mutationFn: (locationId: string[]) => {
+      return client.post(`api/setting/delete-multi-edit-loc`, {
+        locationId
+      })
+    },
+    onSuccess: () => {
+      void messageApi.success('success')
+      queryClient.refetchQueries({ queryKey: ['map'] })
+      setSelectedRowKeys([])
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  })
+
+  const deleteMultiItem = () => {
+    if (selectedRowKeys.length === 0) return
+
+    deleteMultiLocationMutation.mutate(selectedRowKeys as string[])
+  }
 
   const isEditing = (record: LocationType) => record.locationId === editingKey
 
@@ -390,10 +412,16 @@ const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
             >
               {t('utils.edit')}
             </Typography.Link>
-            <DeleteTwoTone
-              twoToneColor="#f30303"
-              onClick={() => deleteLocationInList(record.locationId)}
-            />
+            <Popconfirm
+              title={t('utils.delete')}
+              description={t('edit_location_panel.table_notify.are_you_sure')}
+              onConfirm={() => deleteLocationInList(record.locationId)}
+              onCancel={cancel}
+              okText={t('utils.yes')}
+              cancelText={t('utils.no')}
+            >
+              <DeleteTwoTone twoToneColor="#f30303" />
+            </Popconfirm>
           </div>
         )
       }
@@ -433,31 +461,52 @@ const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
                 border: `2px solid ${borderColor(sortableId)}`
               }}
             ></hr>
-            <Form form={locationPanelForm} component={false}>
-              <Table
-                // style={{ opacity: '1', borderRadius: '15px' }}
-                rowKey={(property) => property.locationId}
-                components={{
-                  body: {
-                    cell: EditableCell
-                  }
-                }}
-                dataSource={mapData?.locations.map((loc) => {
-                  return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
-                })}
-                columns={mergedColumns as []}
-                pagination={{
-                  onChange: cancel,
-                  pageSize: 8
-                }}
-                onRow={(record) => {
-                  return {
-                    onMouseEnter: () => handleHover(record.locationId)
-                  }
-                }}
-                bordered
-              />
-            </Form>
+            <Flex
+              gap="middle"
+              justify="flex-start"
+              align="start"
+              vertical
+              onMouseLeave={handleMouseLeave}
+            >
+              <Button
+                onClick={() => deleteMultiItem()}
+                loading={deleteMultiLocationMutation.isLoading}
+                disabled={selectedRowKeys.length === 0}
+                danger
+              >
+                {t('utils.delete')}
+              </Button>
+              <Form form={locationPanelForm} component={false}>
+                <Table
+                  rowSelection={{
+                    type: 'checkbox',
+                    onChange: (selectedRowKeys: React.Key[]) => {
+                      setSelectedRowKeys([...selectedRowKeys])
+                    }
+                  }}
+                  rowKey={(property) => property.locationId}
+                  components={{
+                    body: {
+                      cell: EditableCell
+                    }
+                  }}
+                  dataSource={mapData?.locations.map((loc) => {
+                    return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
+                  })}
+                  columns={mergedColumns as []}
+                  pagination={{
+                    onChange: cancel,
+                    pageSize: 8
+                  }}
+                  onRow={(record) => {
+                    return {
+                      onMouseEnter: () => handleHover(record.locationId)
+                    }
+                  }}
+                  bordered
+                />
+              </Form>
+            </Flex>
           </Card>
         </>
       ) : null}

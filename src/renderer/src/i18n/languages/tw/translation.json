@@ -101,10 +101,15 @@
       "is_a_navigate": "點位 ID 不可為負值",
       "duplicate_id": "ID 重複",
       "change_duplicate_id": "請檢查輸入 ID,不可重複！"
+    },
+
+    "table_notify": {
+      "are_you_sure": "確定要刪除點位？"
     }
   },
 
   "edit_road_panel": {
+    "road_table": "路徑表",
     "road": "路徑",
     "single_road": "單向道",
     "two_way_road": "雙向道",

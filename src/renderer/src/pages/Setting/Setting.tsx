@@ -15,6 +15,8 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 import { getMoveIndex } from './utils/utils'
 import { formList } from './components/siderElement'
+import RoadList from './formComponent/forms/RoadList'
+import ToolComponents from './components/ToolComponents'
 const { Content } = Layout
 
 const Setting: React.FC = () => {
@@ -85,28 +87,12 @@ const Setting: React.FC = () => {
                         className="attrs"
                         style={{ padding: '1em' }}
                       >
-                        {dataList.map((form) => {
-                          if (form.key === 'locationPanel') {
-                            /** 1-1 編輯點位的彈跳視窗 */
-                            return (
-                              <EditLocationPanel
-                                locationPanelForm={locationPanelForm}
-                                sortableId={form.key}
-                                key={form.key}
-                              ></EditLocationPanel>
-                            )
-                          }
-                          if (form.key === 'locationList') {
-                            /** 1-4 顯示地點列表 */
-                            return (
-                              <AllLocationTable
-                                sortableId={form.key}
-                                key={form.key}
-                              ></AllLocationTable>
-                            )
-                          }
-                          return null
-                        })}
+                        {dataList.map((form) => (
+                          <ToolComponents
+                            formKey={form.key}
+                            locationPanelForm={locationPanelForm}
+                          />
+                        ))}
                       </Flex>
                     </SortableContext>
                   </DndContext>
@@ -129,14 +115,6 @@ const Setting: React.FC = () => {
             </Content>
           </Layout>
         </Content>
-        {
-          /** 1-4 顯示地點列表 */
-          // <AllLocationTable locationPanelForm={locationPanelForm}></AllLocationTable>
-        }
-        {
-          /** 2-1 編輯路線的彈跳視窗 */
-          <EditRoadPanel roadPanelForm={roadPanelForm}></EditRoadPanel>
-        }
       </Layout>
     </>
   )
