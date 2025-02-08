@@ -1,6 +1,7 @@
 export type ToolBarItemType =
   | 'locationPanel'
   | 'locationList'
+  | 'quickLocationPanel'
   | 'roadPanel'
   | 'show_roads_table'
   | 'edit_zone'

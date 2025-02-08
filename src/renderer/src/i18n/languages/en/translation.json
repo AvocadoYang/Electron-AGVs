@@ -44,6 +44,7 @@
     "location": {
       "locations": "Locations",
       "edit_locations": "Edit Locations",
+      "quick_edit_locations": "Quick Edit Locations",
       "show_in_use_locations": "Show stored Locations",
       "show_edit_locations": "Show Edit Locations",
       "show_locations_table": "Show Locations Table",

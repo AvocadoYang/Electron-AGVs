@@ -7,7 +7,8 @@ import {
   EditLocationPanelSwitch,
   EditLocationListTableSwitch,
   isShowLocationTooltip,
-  EditRoadPanelSwitch
+  EditRoadPanelSwitch,
+  QuickEditLocationPanelSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -46,10 +47,9 @@ const Sider: React.FC<{
 }> = ({ setHasOpenTool }) => {
   const { data } = useMap()
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
+  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch); // 1-2
+  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(EditLocationListTableSwitch) // 1-4
 
-  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
-    EditLocationListTableSwitch
-  ) // 1-4
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
 
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip)
@@ -74,7 +74,9 @@ const Sider: React.FC<{
       case 'locationPanel':
         setOpenEditLocationPanel(!openEditLocationPanel)
         break
-
+      case 'quickLocationPanel':
+        setQuickEditLocationPanel(!quickEditLocationPanel)
+        break
       case 'locationList':
         setShowAllLocationListTable(!showAllLocationListTable)
         setShowLocationToolTip(true)
@@ -183,7 +185,10 @@ const Sider: React.FC<{
           checked={openEditLocationPanel}
         />
       ),
-
+      getItem(t('toolbar.location.quick_edit_locations'),
+      '1-2',
+        <Switch onChange={(checked) => handleShowPanel(checked, 'quickLocationPanel')} />
+      ),
       getItem(
         t('toolbar.location.show_locations_table'),
         '1-4',

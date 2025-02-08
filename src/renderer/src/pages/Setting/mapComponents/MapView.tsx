@@ -39,6 +39,7 @@ const MapView: React.FC<{
   const [initPoint, setInitPoint] = useState({} as draggableLineInitialPoint)
   const [mouseLocation, setMouseLocation] = useState({} as mouseLocation)
   const [isResizing, setIsResizing] = useState(false)
+  /** end */
 
   const [, setSameVersion] = useAtom(sameVersion)
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)

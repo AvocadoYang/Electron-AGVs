@@ -3,6 +3,9 @@ import { atom } from 'jotai'
 /** 1-1 編輯點位開關 */
 export const EditLocationPanelSwitch = atom<boolean>(false)
 
+/** 1-2 快速編輯點位開關 */
+export const QuickEditLocationPanelSwitch = atom<boolean>(false)
+
 /** 1-4 顯示所有點位表單 */
 export const EditLocationListTableSwitch = atom<boolean>(false)
 
