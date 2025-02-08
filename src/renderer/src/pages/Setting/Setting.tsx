@@ -23,16 +23,14 @@ const Setting: React.FC = () => {
   const [dataList, setDataList] = useState(formList)
   const [scale, setScale] = useState(1)
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
-
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
-      const moveDataList = [...prevDataList]
+      const moveDataList = prevDataList
       const { activeIndex, overIndex } = getMoveIndex(moveDataList, dragItem)
       const newDataList = arrayMove(moveDataList, activeIndex, overIndex)
       return newDataList
     })
   }
-
   const dndContextMemo = useMemo(() => {
     return (
       <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
@@ -44,9 +42,9 @@ const Setting: React.FC = () => {
             className="attrs"
             style={{ padding: '1em' }}
           >
-            {dataList.map((form) => (
-              <ToolComponents key={form.key} formKey={form.key} locationPanelForm={locationPanelForm} />
-            ))}
+            {
+              <ToolComponents locationPanelForm={locationPanelForm} dataList={dataList}/>
+            }
           </Flex>
         </SortableContext>
       </DndContext>

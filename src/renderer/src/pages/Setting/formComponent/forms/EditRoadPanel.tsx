@@ -1,15 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Button, Card, Checkbox, Col, Form, InputNumber, message, Radio, Row, Switch } from 'antd'
-import { useAtomValue } from 'jotai'
+import { Button, Checkbox, Col, Form, InputNumber, message, Radio, Row, Switch } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 import { borderColor } from '../../utils/utils'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { initialRoadValue } from './formInitValue'
-import { useSortable } from '@dnd-kit/sortable'
-import cardStyle from '../../utils/cardStyle'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -32,22 +28,17 @@ function validateArray(arr: string[]) {
   return true
 }
 
-const EditRoadPanel: React.FC<{ sortableId: string }> = ({ sortableId }) => {
+const EditRoadPanel: React
+.FC<{ sortableId: string
+  attributes: import("@dnd-kit/core").DraggableAttributes;
+  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
+ }>
+= ({ sortableId, attributes, listeners }) => {
   const [roadPanelForm] = Form.useForm()
   const [chooseAngle, setChooseAngle] = useState<string>('')
-  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch) // 2-1
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
-    id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
-    transition: {
-      duration: 500,
-      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
-    }
-  })
-
-  const styles = cardStyle(transform, transition)
 
   const saveRoadMutation = useMutation({
     mutationFn: (payload: Road) => {
@@ -59,6 +50,8 @@ const EditRoadPanel: React.FC<{ sortableId: string }> = ({ sortableId }) => {
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   })
+
+
 
   const saveRoad = () => {
     const payload: Road = {
@@ -72,11 +65,9 @@ const EditRoadPanel: React.FC<{ sortableId: string }> = ({ sortableId }) => {
     saveRoadMutation.mutate(payload)
   }
 
-  if (!openEditRoadPanel) return []
   return (
     <>
       {contextHolders}
-      <Card ref={setNodeRef} style={styles}>
         <div className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.locationList')}
         </div>
@@ -208,9 +199,8 @@ const EditRoadPanel: React.FC<{ sortableId: string }> = ({ sortableId }) => {
             </Button>
           </Form.Item>
         </Form>
-      </Card>
     </>
   )
 }
 
-export default EditRoadPanel
+export default memo(EditRoadPanel)

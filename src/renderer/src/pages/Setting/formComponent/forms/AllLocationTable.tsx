@@ -11,7 +11,7 @@ import {
   Checkbox,
   Button,
   message,
-  Card,
+
   Popconfirm,
   Flex
 } from 'antd'
@@ -24,12 +24,12 @@ import { hoverLocation } from '@renderer/utils/gloable'
 import { EditLocationListTableSwitch } from '@renderer/utils/siderGloble'
 import { SearchOutlined, DeleteTwoTone } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
-import { useSortable } from '@dnd-kit/sortable'
+
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
 import { borderColor } from '../../utils/utils'
-import cardStyle from '../../utils/cardStyle'
+
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
@@ -111,8 +111,12 @@ const EditableCell: React.FC<EditableCellProps> = ({
   )
 }
 
-const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
-  console.log(123333)
+const AllLocationTable: React.
+FC<{ sortableId: string;
+  attributes: import("@dnd-kit/core").DraggableAttributes;
+  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
+ }>
+= ({ listeners, attributes, sortableId }) => {
   const [locationPanelForm] = Form.useForm()
   const searchInput = useRef<InputRef>(null)
   const [editingKey, setEditingKey] = useState<string | null>(null)
@@ -124,15 +128,8 @@ const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
 
-  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
-    id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
-    transition: {
-      duration: 500,
-      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
-    }
-  })
 
-  const styles = cardStyle(transform, transition)
+
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType) => {
@@ -448,9 +445,7 @@ const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
   return (
     <>
       {contextHolders}
-      {showAllLocationListTable ? (
-        <>
-          <Card ref={setNodeRef} style={styles} onMouseLeave={handleMouseLeave}>
+          <div onMouseLeave={handleMouseLeave}>
             <div className="drop_button_style" {...listeners} {...attributes}>
               {t('sider_output_form_name.locationList')}
             </div>
@@ -508,10 +503,9 @@ const AllLocationTable: React.FC<{ sortableId: string }> = ({ sortableId }) => {
                 />
               </Form>
             </Flex>
-          </Card>
+          </div>
         </>
-      ) : null}
-    </>
+
   )
 }
 

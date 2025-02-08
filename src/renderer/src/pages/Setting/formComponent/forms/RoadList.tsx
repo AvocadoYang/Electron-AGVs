@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   Flex,
   Form,
   Input,
@@ -17,23 +16,20 @@ import {
   Tooltip,
   Typography
 } from 'antd'
-import { FC, useEffect, useRef, useState } from 'react'
+import {  memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import PropTypes from 'prop-types'
 import { nanoid } from 'nanoid'
 import { FilterDropdownProps } from 'antd/es/table/interface'
-import { useAtomValue, useSetAtom } from 'jotai'
+import {  useSetAtom } from 'jotai'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useMap from '@renderer/api/useMap'
 import { hoverRoad } from '@renderer/utils/gloable'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
-import { RoadListTableSwitch } from '@renderer/utils/siderGloble'
-import { useSortable } from '@dnd-kit/sortable'
-import cardStyle from '../../utils/cardStyle'
 import { borderColor } from '../../utils/utils'
 
 type RoadListType = {
@@ -130,7 +126,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
         setYawOption(when270)
         break
       default:
-        console.log('errpr')
+        // console.log('errpr')
     }
   }, [chooseAngle])
 
@@ -239,7 +235,12 @@ const Dot = styled.div<DotStyle>`
   background-color: ${(prop) => (prop.active ? '#979797' : '#2bea00')};
 `
 
-const RoadList: React.FC<{ sortableId: string }> = ({ sortableId }) => {
+const RoadList: React
+.FC<{ sortableId: string
+  attributes: import("@dnd-kit/core").DraggableAttributes;
+  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
+}>
+= ({ sortableId, attributes, listeners }) => {
   const { data: currentMap } = useMap()
   const searchInput = useRef<InputRef>(null)
   const [messageApi, contextHolders] = message.useMessage()
@@ -249,18 +250,8 @@ const RoadList: React.FC<{ sortableId: string }> = ({ sortableId }) => {
   const isEditing = (record: RoadListType) => record.roadId === editingKey
   const setHoverRoad = useSetAtom(hoverRoad)
   const [formRoad] = Form.useForm()
-  const showRoadList = useAtomValue(RoadListTableSwitch)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
 
-  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
-    id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
-    transition: {
-      duration: 500,
-      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
-    }
-  })
-
-  const styles = cardStyle(transform, transition)
 
   const deleteRoadMutation = useMutation({
     mutationFn: (roadId: string) => {
@@ -545,11 +536,9 @@ const RoadList: React.FC<{ sortableId: string }> = ({ sortableId }) => {
     }
   })
 
-  if (!showRoadList) return []
   return (
     <>
       {contextHolders}
-      <Card style={styles}>
         <div className="drop_button_style" {...listeners} {...attributes}>
           {t('edit_road_panel.road_table')}
         </div>
@@ -600,9 +589,8 @@ const RoadList: React.FC<{ sortableId: string }> = ({ sortableId }) => {
             />
           </Form>
         </Flex>
-      </Card>
     </>
   )
 }
 
-export default RoadList
+export default memo(RoadList)

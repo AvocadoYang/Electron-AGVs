@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { LocationType } from '@renderer/utils/jotai'
-import { useAtomValue } from 'jotai'
 import './form.css'
-import { EditLocationPanelSwitch } from '@renderer/utils/siderGloble'
 import { openNotificationWithIcon } from '../../utils/notification'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -13,29 +11,20 @@ import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import { borderColor } from '../../utils/utils'
-import { useSortable } from '@dnd-kit/sortable'
-import cardStyle from '../../utils/cardStyle'
 import useMap from '@renderer/api/useMap'
 
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
   sortableId: string
-}> = ({ locationPanelForm, sortableId }) => {
-  const openEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
+  attributes: import("@dnd-kit/core").DraggableAttributes;
+  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
+}> = ({ locationPanelForm, sortableId, attributes, listeners }) => {
+
+
   const { data: mapData } = useMap()
   const queryClient = useQueryClient()
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
-
-  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
-    id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
-    transition: {
-      duration: 500,
-      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
-    }
-  })
-
-  const styles = cardStyle(transform, transition)
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType) => {
@@ -97,11 +86,9 @@ const EditLocationPanel: React.FC<{
     saveLocationMutation.mutate(sanitizedPayload)
   }
 
-  if (!openEditLocationPanel) return []
   return (
     <>
       {contextHolders}
-      <Card ref={setNodeRef} style={styles}>
         <div>
           <div className="drop_button_style" {...listeners} {...attributes}>
             {t('sider_output_form_name.locationPanel')}
@@ -170,7 +157,6 @@ const EditLocationPanel: React.FC<{
             </Form.Item>
           </Form>
         </div>
-      </Card>
     </>
   )
 }

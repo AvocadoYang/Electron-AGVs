@@ -211,7 +211,7 @@ const Sider: React.FC<{
         t('toolbar.road.roads.show_roads_table'),
         '2-4',
         <Switch
-          checked={false}
+          checked={showAllRoadListTable}
           onChange={(checked) => handleShowPanel(checked, 'show_roads_table')}
         />
       )
