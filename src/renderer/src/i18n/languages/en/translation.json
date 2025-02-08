@@ -103,10 +103,15 @@
       "is_a_navigate": "Location ID can't be a negative number",
       "duplicate_id": "duplicate ID",
       "change_duplicate_id": "please change ID, can not be same"
+    },
+
+    "table_notify": {
+      "are_you_sure": "Are you sure delete？"
     }
   },
 
   "edit_road_panel": {
+    "road_table": "Road Table",
     "road": "Road",
     "single_road": "Single Road",
     "two_way_road": "Two Way Road",

@@ -8,7 +8,8 @@ import {
   EditLocationListTableSwitch,
   isShowLocationTooltip,
   EditRoadPanelSwitch,
-  QuickEditLocationPanelSwitch
+  QuickEditLocationPanelSwitch,
+  RoadListTableSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -51,7 +52,7 @@ const Sider: React.FC<{
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(EditLocationListTableSwitch) // 1-4
 
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
-
+  const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch) // 2-2
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
@@ -86,11 +87,10 @@ const Sider: React.FC<{
       // === road ===
       case 'roadPanel':
         setOpenEditRoadPanel(!openEditRoadPanel)
-
         break
 
       case 'show_roads_table':
-        console.log('show_roads_table')
+        setShowAllRoadListTable(!showAllRoadListTable)
         break
       // ===================
       // === zone ===

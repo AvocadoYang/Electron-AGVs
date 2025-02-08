@@ -8,6 +8,7 @@ import { FormInstance } from 'antd'
 const useMousePoint = (
   mapWrapRef: RefObject<HTMLDivElement>,
   mapRef: RefObject<HTMLDivElement>,
+  mapImageRef: RefObject<HTMLImageElement>,
   scale: number,
   setMousePointX: React.Dispatch<number>,
   setMousePointY: React.Dispatch<number>,
@@ -16,7 +17,15 @@ const useMousePoint = (
 ) => {
   const { data } = useMap()
   useEffect(() => {
-    if (!mapWrapRef.current || !mapRef.current || !isMousePointStart || !data) return
+    if (
+      !mapWrapRef.current ||
+      !mapRef.current ||
+      !mapImageRef.current ||
+      !isMousePointStart ||
+      !data
+    ) {
+      return
+    }
 
     const clickEvent$ = fromEvent<MouseEvent>(mapRef.current, 'click').pipe(
       throttleTime(300),
@@ -27,9 +36,33 @@ const useMousePoint = (
       })),
       tap(({ clientX, clientY }) => {
         if (!mapRef.current || !mapWrapRef.current) return
+        const rect = mapImageRef.current!.getBoundingClientRect()
         const Left = mapRef.current.scrollLeft
         const Top = mapRef.current.scrollTop
 
+        console.log(
+          `
+          clientX:${clientX} \b
+          clientY:${clientY} \b
+          rect: ${rect.left}
+
+          mapRef left; ${Left} \b
+          mapRef Top: ${Top} \b
+
+          imgRef left: ${mapImageRef.current?.scrollLeft} \b
+          imgRef Top: ${mapImageRef.current?.scrollTop}
+         `
+        )
+
+        if (
+          clientX < rect.left ||
+          clientX > rect.right ||
+          clientY < rect.top ||
+          clientY > rect.bottom
+        ) {
+          return
+        }
+        if (!mapRef.current || !mapWrapRef.current) return
         // offestTop 64
         const adjustX = clientX - mapRef.current.offsetLeft + (Left as number)
         const adjustY = clientY - mapRef.current.offsetTop + (Top as number)

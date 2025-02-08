@@ -1,0 +1,61 @@
+import { FC, memo } from 'react'
+
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
+import useMap from '@renderer/api/useMap'
+import { useClaimedRoads } from '@renderer/api/useClaimedResources'
+import Road from './Road'
+
+const MemoizedRoad = memo(Road, (prevProps, nextProps) => {
+  return prevProps.isClaimedBy === nextProps.isClaimedBy
+})
+
+const AllRoads: FC<{}> = () => {
+  const { data } = useMap()
+  const claimedRoads = useClaimedRoads()
+
+  if (!data?.roads) return []
+
+  return (
+    <div draggable={false}>
+      {data.roads.map(({ roadId, roadType, x1, y1, x2, y2, validYawList, disabled, limit }) => {
+        const [displayX1, displayY1] = rosCoord2DisplayCoord({
+          x: x1,
+          y: y1,
+          mapHeight: data.mapHeight,
+          mapOriginX: data.mapOriginX,
+          mapOriginY: data.mapOriginY,
+          mapResolution: data.mapResolution
+        })
+
+        const [displayX2, displayY2] = rosCoord2DisplayCoord({
+          x: x2,
+          y: y2,
+          mapHeight: data.mapHeight,
+          mapOriginX: data.mapOriginX,
+          mapOriginY: data.mapOriginY,
+          mapResolution: data.mapResolution
+        })
+
+        const currentClaimedStatus = claimedRoads.get(roadId)
+
+        return (
+          <MemoizedRoad
+            key={roadId}
+            roadId={roadId}
+            roadType={roadType}
+            x1={displayX1}
+            y1={displayY1}
+            x2={displayX2}
+            y2={displayY2}
+            limit={limit}
+            disabled={disabled}
+            validYawList={validYawList}
+            isClaimedBy={currentClaimedStatus}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+export default AllRoads

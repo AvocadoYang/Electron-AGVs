@@ -28,7 +28,7 @@ const TooltipWrapper = styled.div`
     opacity: 1;
   }
 `
-const AllStoredLocation: React.FC<{
+const AllLocation: React.FC<{
   scale: number
   setInitPoint: React.Dispatch<draggableLineInitialPoint>
   handleMouseDown: (startId: string) => void
@@ -103,4 +103,4 @@ const AllStoredLocation: React.FC<{
   )
 }
 
-export default memo(AllStoredLocation)
+export default memo(AllLocation)

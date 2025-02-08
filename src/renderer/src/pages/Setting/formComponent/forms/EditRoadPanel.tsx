@@ -1,21 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Button, Checkbox, Col, Form, FormInstance, InputNumber, Radio, Row, Switch } from 'antd'
-import DraggableWindow from '../DraggableWindow'
-import { useAtom } from 'jotai'
-import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
-import { modifyRoad as Road } from '@renderer/utils/gloable'
-import { tempEditAndStoredRoads } from '@renderer/utils/gloable'
+import { Button, Card, Checkbox, Col, Form, InputNumber, message, Radio, Row, Switch } from 'antd'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
-import { getLocationInfoById } from '../../utils/utils'
+import { borderColor } from '../../utils/utils'
 import { useState } from 'react'
-import { openNotificationWithIcon } from '../../utils/notification'
-import { LocationType, Modify, RoadListType } from '@renderer/utils/jotai'
-import { CloseOutlined } from '@ant-design/icons'
 import { initialRoadValue } from './formInitValue'
-import useMap from '@renderer/api/useMap'
+import { useSortable } from '@dnd-kit/sortable'
+import cardStyle from '../../utils/cardStyle'
+import { ErrorResponse } from '@renderer/utils/globalType'
+import { errorHandler } from '@renderer/utils/utils'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Road } from './road'
+import client from '@renderer/api/axiosClient'
 
 function validateArray(arr: string[]) {
   if (arr.includes('*')) {
@@ -33,326 +32,183 @@ function validateArray(arr: string[]) {
   return true
 }
 
-const EditRoadPanel: React.FC<{ roadPanelForm: FormInstance<unknown> }> = ({ roadPanelForm }) => {
+const EditRoadPanel: React.FC<{ sortableId: string }> = ({ sortableId }) => {
+  const [roadPanelForm] = Form.useForm()
   const [chooseAngle, setChooseAngle] = useState<string>('')
-  const { data: mapData } = useMap()
-  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
-  const [TempEditAndStoredRoads, setEditingRoadsList] = useAtom(tempEditAndStoredRoads)
-
-  const [modifyRoad, setModifyRoad] = useAtom(Road)
-
-  const [, setShowBlockId] = useAtom(ShowBlockId)
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch) // 2-1
+  const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
-
-  const addModifyHandler = (id: string) => {
-    const staleModify = { ...modifyRoad }
-
-    const addList = [...staleModify.add, id]
-
-    const editList = [...staleModify.edit].filter((d) => d !== id)
-
-    const deleteList = [...staleModify.delete]
-
-    const newModify: Modify = {
-      add: [...new Set(addList)] as string[],
-      edit: editList,
-      delete: deleteList
+  const queryClient = useQueryClient()
+  const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
+    id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
+    transition: {
+      duration: 500,
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
     }
+  })
 
-    setModifyRoad(newModify)
-  }
+  const styles = cardStyle(transform, transition)
+
+  const saveRoadMutation = useMutation({
+    mutationFn: (payload: Road) => {
+      return client.post('api/setting/save-edit-road', payload)
+    },
+    onSuccess: () => {
+      void messageApi.success('success')
+      queryClient.refetchQueries({ queryKey: ['map'] })
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  })
 
   const saveRoad = () => {
-    const payload = roadPanelForm.getFieldsValue() as RoadListType
-
-    let newPayload: RoadListType
-    const x = Number(payload.x)
-    const to = Number(payload.to)
-
-    const isNotNumTo = Number.isNaN(to)
-    const isNotNumX = Number.isNaN(x)
-
-    if (isNotNumX || isNotNumTo) {
-      openNotificationWithIcon(
-        'warning',
-        t('edit_road_panel.save_road_notify.warn'),
-        t('edit_road_panel.save_road_notify.warn_number_only'),
-        'bottomLeft'
-      )
-      return
+    const payload: Road = {
+      spot1Id: (roadPanelForm.getFieldValue('x') as number).toString(),
+      spot2Id: (roadPanelForm.getFieldValue('to') as number).toString(),
+      limit: roadPanelForm.getFieldValue('limit') as boolean,
+      roadType: roadPanelForm.getFieldValue('roadType') as string,
+      validYawList: roadPanelForm.getFieldValue('validYawList') as number[] | string[],
+      disabled: roadPanelForm.getFieldValue('disabled') as boolean
     }
-
-    if (!payload.checkboxGroup) {
-      openNotificationWithIcon(
-        'warning',
-        t('edit_road_panel.save_road_notify.warn'),
-        t('edit_road_panel.save_road_notify.warn_road_yaw'),
-        'bottomLeft'
-      )
-      return
-    }
-    if (!validateArray(payload.checkboxGroup)) {
-      openNotificationWithIcon(
-        'warning',
-        t('edit_road_panel.save_road_notify.warn'),
-        t('edit_road_panel.save_road_notify.illegal_road_yaw'),
-        'bottomLeft'
-      )
-      return
-    }
-
-    if (payload.to === payload.x) {
-      openNotificationWithIcon(
-        'warning',
-        t('edit_road_panel.save_road_notify.warn'),
-        t('edit_road_panel.save_road_notify.warn_msg'),
-        'bottomLeft'
-      )
-      return
-    }
-
-    let targetYawList: string | number[]
-    let erId: string
-    if (payload.checkboxGroup.includes('*')) {
-      targetYawList = [...payload.checkboxGroup].pop() as string
-    } else {
-      targetYawList = [...payload.checkboxGroup].map((yaw) => Number(yaw))
-    }
-
-    if (payload.roadType === 'oneWayRoad') {
-      erId = `${payload.x} -> ${payload.to}`
-
-      const isDuplicateId = TempEditAndStoredRoads.some((v) => {
-        const useId = `${v.x} -> ${v.to}`
-        return useId === erId
-      })
-      if (isDuplicateId) {
-        openNotificationWithIcon(
-          'warning',
-          t('edit_road_panel.save_road_notify.duplicate_id'),
-          t('edit_road_panel.save_road_notify.road_exists'),
-          'bottomLeft'
-        )
-        return
-      }
-      const result1 = getLocationInfoById(
-        payload.to.toString(),
-        mapData?.locations as LocationType[]
-      )
-      const result2 = getLocationInfoById(
-        payload.x.toString(),
-        mapData?.locations as LocationType[]
-      )
-
-      newPayload = {
-        ...payload,
-        roadId: erId,
-        validYawList: targetYawList,
-        to: payload.to.toString(),
-        x: payload.x.toString(),
-        disabled: !!payload.disabled,
-        limit: !!payload.limit,
-        x1: result1.x,
-        y1: result1.y,
-        x2: result2.x,
-        y2: result2.y
-      } as RoadListType
-    } else {
-      erId = `${payload.x} <-> ${payload.to}`
-      const isDuplicateId = TempEditAndStoredRoads.some((v) => {
-        const useId = `${v.x} <-> ${v.to}`
-        return useId === erId
-      })
-      if (isDuplicateId) {
-        openNotificationWithIcon(
-          'warning',
-          t('edit_road_panel.save_road_notify.duplicate_id'),
-          t('edit_road_panel.save_road_notify.road_exists'),
-          'bottomLeft'
-        )
-        return
-      }
-    }
-
-    const result1 = getLocationInfoById(payload.to.toString(), mapData?.locations as LocationType[])
-    const result2 = getLocationInfoById(payload.x.toString(), mapData?.locations as LocationType[])
-    newPayload = {
-      ...payload,
-      roadId: erId,
-
-      validYawList: JSON.stringify(targetYawList).includes('*') ? '*' : targetYawList,
-      disabled: !!payload.disabled,
-      limit: !!payload.limit,
-      to: payload.to.toString(),
-      x: payload.x.toString(),
-      x1: result1.x,
-      y1: result1.y,
-      x2: result2.x,
-      y2: result2.y
-    } as RoadListType
-
-    addModifyHandler(newPayload.roadId)
-    setEditingRoadsList([...TempEditAndStoredRoads, newPayload])
-    setShowBlockId('')
+    saveRoadMutation.mutate(payload)
   }
 
+  if (!openEditRoadPanel) return []
   return (
     <>
-      {openEditRoadPanel && (
-        <DraggableWindow isHide={false} width="15%">
-          {
-            <>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'end',
-                  alignItems: 'center',
-                  width: '100%'
-                }}
-              >
-                <CloseOutlined
-                  onClick={() => {
-                    setOpenEditRoadPanel(false)
-                  }}
-                />
-              </div>
-              <Form
-                initialValues={{ ...initialRoadValue }}
-                form={roadPanelForm}
-                style={{ paddingTop: '10px' }}
-              >
-                <Form.Item label={t('edit_road_panel.road')} name="roadType" shouldUpdate>
-                  <Radio.Group buttonStyle="solid">
-                    <Radio.Button value="oneWayRoad">
-                      {t('edit_road_panel.single_road')}
-                    </Radio.Button>
-                    <Radio.Button value="twoWayRoad">
-                      {t('edit_road_panel.two_way_road')}
-                    </Radio.Button>
-                  </Radio.Group>
-                </Form.Item>
+      {contextHolders}
+      <Card ref={setNodeRef} style={styles}>
+        <div className="drop_button_style" {...listeners} {...attributes}>
+          {t('sider_output_form_name.locationList')}
+        </div>
+        <hr
+          style={{
+            marginTop: '1px',
+            marginBottom: '10px',
+            border: `2px solid ${borderColor(sortableId)}`
+          }}
+        ></hr>
+        <Form
+          initialValues={{ ...initialRoadValue }}
+          form={roadPanelForm}
+          style={{ paddingTop: '10px' }}
+        >
+          <Form.Item label={t('edit_road_panel.road')} name="roadType" shouldUpdate>
+            <Radio.Group buttonStyle="solid">
+              <Radio.Button value="oneWayRoad">{t('edit_road_panel.single_road')}</Radio.Button>
+              <Radio.Button value="twoWayRoad">{t('edit_road_panel.two_way_road')}</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
 
-                <Form.Item name="checkboxGroup" label={t('edit_road_panel.yaw')} required>
-                  <Checkbox.Group>
-                    <Row>
-                      <Col span={8}>
-                        <Checkbox
-                          value="*"
-                          disabled={
-                            chooseAngle === '0' ||
-                            chooseAngle === '90' ||
-                            chooseAngle === '180' ||
-                            chooseAngle === '270'
-                          }
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setChooseAngle('*')
-                            } else {
-                              setChooseAngle('')
-                            }
-                          }}
-                        >
-                          *
-                        </Checkbox>
-                      </Col>
-                      <Col span={8}>
-                        <Checkbox
-                          value="0"
-                          disabled={
-                            chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'
-                          }
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setChooseAngle('0')
-                            } else {
-                              setChooseAngle('')
-                            }
-                          }}
-                        >
-                          0
-                        </Checkbox>
-                      </Col>
-                      <Col span={8}>
-                        <Checkbox
-                          value="90"
-                          disabled={
-                            chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'
-                          }
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setChooseAngle('90')
-                            } else {
-                              setChooseAngle('')
-                            }
-                          }}
-                        >
-                          90
-                        </Checkbox>
-                      </Col>
-                      <Col span={13}>
-                        <Checkbox
-                          value="180"
-                          disabled={
-                            chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'
-                          }
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setChooseAngle('180')
-                            } else {
-                              setChooseAngle('')
-                            }
-                          }}
-                        >
-                          180
-                        </Checkbox>
-                      </Col>
-                      <Col span={8}>
-                        <Checkbox
-                          value="270"
-                          disabled={
-                            chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'
-                          }
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setChooseAngle('270')
-                            } else {
-                              setChooseAngle('')
-                            }
-                          }}
-                        >
-                          270
-                        </Checkbox>
-                      </Col>
-                    </Row>
-                  </Checkbox.Group>
-                </Form.Item>
+          <Form.Item name="checkboxGroup" label={t('edit_road_panel.yaw')} required>
+            <Checkbox.Group>
+              <Row>
+                <Col span={8}>
+                  <Checkbox
+                    value="*"
+                    disabled={
+                      chooseAngle === '0' ||
+                      chooseAngle === '90' ||
+                      chooseAngle === '180' ||
+                      chooseAngle === '270'
+                    }
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setChooseAngle('*')
+                      } else {
+                        setChooseAngle('')
+                      }
+                    }}
+                  >
+                    *
+                  </Checkbox>
+                </Col>
+                <Col span={8}>
+                  <Checkbox
+                    value="0"
+                    disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setChooseAngle('0')
+                      } else {
+                        setChooseAngle('')
+                      }
+                    }}
+                  >
+                    0
+                  </Checkbox>
+                </Col>
+                <Col span={8}>
+                  <Checkbox
+                    value="90"
+                    disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setChooseAngle('90')
+                      } else {
+                        setChooseAngle('')
+                      }
+                    }}
+                  >
+                    90
+                  </Checkbox>
+                </Col>
+                <Col span={13}>
+                  <Checkbox
+                    value="180"
+                    disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setChooseAngle('180')
+                      } else {
+                        setChooseAngle('')
+                      }
+                    }}
+                  >
+                    180
+                  </Checkbox>
+                </Col>
+                <Col span={8}>
+                  <Checkbox
+                    value="270"
+                    disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setChooseAngle('270')
+                      } else {
+                        setChooseAngle('')
+                      }
+                    }}
+                  >
+                    270
+                  </Checkbox>
+                </Col>
+              </Row>
+            </Checkbox.Group>
+          </Form.Item>
 
-                <Form.Item name="disabled" label={t('edit_road_panel.disabled')} shouldUpdate>
-                  <Switch />
-                </Form.Item>
+          <Form.Item name="disabled" label={t('edit_road_panel.disabled')} shouldUpdate>
+            <Switch />
+          </Form.Item>
 
-                <Form.Item name="limit" label={t('edit_road_panel.limit')}>
-                  <Switch />
-                </Form.Item>
+          <Form.Item name="limit" label={t('edit_road_panel.limit')}>
+            <Switch />
+          </Form.Item>
 
-                <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
-                  <InputNumber />
-                </Form.Item>
+          <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
+            <InputNumber />
+          </Form.Item>
 
-                <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
-                  <InputNumber />
-                </Form.Item>
+          <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
+            <InputNumber />
+          </Form.Item>
 
-                <Form.Item style={{ textAlign: 'center' }}>
-                  <Button onClick={() => saveRoad()} type="primary">
-                    {t('edit_road_panel.add')}
-                  </Button>
-                </Form.Item>
-              </Form>
-            </>
-          }
-        </DraggableWindow>
-      )}
+          <Form.Item style={{ textAlign: 'center' }}>
+            <Button onClick={() => saveRoad()} type="primary">
+              {t('edit_road_panel.add')}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
     </>
   )
 }

@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useMemo } from 'react'
 import { Layout, Form, Splitter, Flex } from 'antd'
 import Header from '../../components/Header'
-import { ZoomPad, Sider, FormDrawerBtn } from './components'
+import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components'
 
-import useMap from '@renderer/api/useMap'
-import { EditLocationPanel, EditRoadPanel } from './formComponent/forms'
-import { AllLocationTable } from './formComponent/forms'
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
@@ -25,7 +22,7 @@ const Setting: React.FC = () => {
   const [roadPanelForm] = Form.useForm()
   const [dataList, setDataList] = useState(formList)
   const [scale, setScale] = useState(1)
-  const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%']);
+  const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
 
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
@@ -35,6 +32,26 @@ const Setting: React.FC = () => {
       return newDataList
     })
   }
+
+  const dndContextMemo = useMemo(() => {
+    return (
+      <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
+        <SortableContext items={dataList.map((c) => c.key)} strategy={verticalListSortingStrategy}>
+          <Flex
+            vertical
+            gap="middle"
+            align="start"
+            className="attrs"
+            style={{ padding: '1em' }}
+          >
+            {dataList.map((form) => (
+              <ToolComponents key={form.key} formKey={form.key} locationPanelForm={locationPanelForm} />
+            ))}
+          </Flex>
+        </SortableContext>
+      </DndContext>
+    )
+  }, [dataList, locationPanelForm])
 
   useEffect(() => {
     if (hasOpenTool) {
@@ -66,48 +83,11 @@ const Setting: React.FC = () => {
               <Splitter onResize={updateSize}>
                 <Splitter.Panel
                   size={splitterSize[0]}
-                  collapsible={hasOpenTool ? true: false}
-                  resizable={hasOpenTool ? true: false}
-                  style={{ overflowX: 'hidden'}}
+                  collapsible={hasOpenTool ? true : false}
+                  resizable={hasOpenTool ? true : false}
+                  style={{ overflowX: 'hidden' }}
                 >
-                  <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
-                    <SortableContext
-                      items={dataList.map((c) => c.key)}
-                      strategy={verticalListSortingStrategy}
-                    >
-                      {/* 這裡的items接收一個array，這個array的值要和useSortable傳入的id對應 */}
-                      <Flex
-                        vertical
-                        gap="middle"
-                        align="start"
-                        className="attrs"
-                        style={{ padding: '1em' }}
-                      >
-                        {dataList.map((form) => {
-                          if (form.key === 'locationPanel') {
-                            /** 1-1 編輯點位的彈跳視窗 */
-                            return (
-                              <EditLocationPanel
-                                locationPanelForm={locationPanelForm}
-                                sortableId={form.key}
-                                key={form.key}
-                              ></EditLocationPanel>
-                            )
-                          }
-                          if (form.key === 'locationList') {
-                            /** 1-2 顯示地點列表 */
-                            return (
-                              <AllLocationTable
-                                sortableId={form.key}
-                                key={form.key}
-                              ></AllLocationTable>
-                            )
-                          }
-                          return null
-                        })}
-                      </Flex>
-                    </SortableContext>
-                  </DndContext>
+                {dndContextMemo}
                 </Splitter.Panel>
                 <Splitter.Panel size={splitterSize[1]}>
                   <MapView
@@ -122,15 +102,9 @@ const Setting: React.FC = () => {
 
               <ZoomPad setScale={setScale}></ZoomPad>
               <FormDrawerBtn></FormDrawerBtn>
-
-              {/* <FormDrawer locationPanelForm={locationPanelForm}></FormDrawer> */}
             </Content>
           </Layout>
         </Content>
-        {
-          /** 2-1 編輯路線的彈跳視窗 */
-          <EditRoadPanel roadPanelForm={roadPanelForm}></EditRoadPanel>
-        }
       </Layout>
     </>
   )

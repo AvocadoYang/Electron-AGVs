@@ -1,5 +1,5 @@
 export type LocationType = {
-  locationId: string
+  locationId: str
   x: number
   y: number
   areaType: string

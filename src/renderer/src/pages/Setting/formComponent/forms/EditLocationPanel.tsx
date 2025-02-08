@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { memo } from 'react'
 import { LocationType } from '@renderer/utils/jotai'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import './form.css'
 import { EditLocationPanelSwitch } from '@renderer/utils/siderGloble'
 import { openNotificationWithIcon } from '../../utils/notification'
@@ -21,7 +21,7 @@ const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
   sortableId: string
 }> = ({ locationPanelForm, sortableId }) => {
-  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch)
+  const openEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
   const { data: mapData } = useMap()
   const queryClient = useQueryClient()
   const [messageApi, contextHolders] = message.useMessage()
@@ -97,88 +97,80 @@ const EditLocationPanel: React.FC<{
     saveLocationMutation.mutate(sanitizedPayload)
   }
 
-
+  if (!openEditLocationPanel) return []
   return (
     <>
-      {openEditLocationPanel && (
-        <>
-          {contextHolders}
-          <Card ref={setNodeRef} style={styles}>
-            <div>
-              <div className="drop_button_style" {...listeners} {...attributes}>
-                {t('sider_output_form_name.locationPanel')}
-              </div>
-              <hr
-                style={{
-                  marginTop: '1px',
-                  marginBottom: '10px',
-                  border: `2px solid ${borderColor(sortableId)}`
-                }}
-              ></hr>
-              <Form
-                layout="vertical"
-                initialValues={initialLocationFormValue}
-                form={locationPanelForm}
-              >
-                <Form.Item label="X" name="x" style={{ marginBottom: 16 }} required>
-                  <Input />
-                </Form.Item>
+      {contextHolders}
+      <Card ref={setNodeRef} style={styles}>
+        <div>
+          <div className="drop_button_style" {...listeners} {...attributes}>
+            {t('sider_output_form_name.locationPanel')}
+          </div>
+          <hr
+            style={{
+              marginTop: '1px',
+              marginBottom: '10px',
+              border: `2px solid ${borderColor(sortableId)}`
+            }}
+          ></hr>
+          <Form layout="vertical" initialValues={initialLocationFormValue} form={locationPanelForm}>
+            <Form.Item label="X" name="x" style={{ marginBottom: 16 }} required>
+              <Input />
+            </Form.Item>
 
-                <Form.Item label="Y" name="y" style={{ marginBottom: 16 }} required>
-                  <Input />
-                </Form.Item>
+            <Form.Item label="Y" name="y" style={{ marginBottom: 16 }} required>
+              <Input />
+            </Form.Item>
 
-                <Form.Item
-                  label="θ"
-                  name="rotation"
-                  style={{ marginBottom: 16 }}
-                  rules={[
-                    { required: true, message: '必填' },
-                    { max: 360, message: '不可超過360' },
-                    { min: -360, message: '不可小於-360' }
-                  ]}
-                >
-                  <Input type="number" />
-                </Form.Item>
+            <Form.Item
+              label="θ"
+              name="rotation"
+              style={{ marginBottom: 16 }}
+              rules={[
+                { required: true, message: '必填' },
+                { max: 360, message: '不可超過360' },
+                { min: -360, message: '不可小於-360' }
+              ]}
+            >
+              <Input type="number" />
+            </Form.Item>
 
-                <Form.Item
-                  label="是否可旋轉"
-                  name="canRotate"
-                  valuePropName="checked"
-                  shouldUpdate
-                  style={{ marginBottom: 16 }}
-                >
-                  <Checkbox />
-                </Form.Item>
+            <Form.Item
+              label="是否可旋轉"
+              name="canRotate"
+              valuePropName="checked"
+              shouldUpdate
+              style={{ marginBottom: 16 }}
+            >
+              <Checkbox />
+            </Form.Item>
 
-                <Form.Item
-                  label="ID"
-                  name="locationId"
-                  style={{ marginBottom: 16 }}
-                  rules={[{ required: true, message: '必填' }]}
-                >
-                  <Input type="number" />
-                </Form.Item>
+            <Form.Item
+              label="ID"
+              name="locationId"
+              style={{ marginBottom: 16 }}
+              rules={[{ required: true, message: '必填' }]}
+            >
+              <Input type="number" />
+            </Form.Item>
 
-                <Form.Item label={'功能'} name="areaType" style={{ marginBottom: 16 }}>
-                  <Radio.Group>
-                    <Radio value="Extra">{t('edit_location_panel.none')}</Radio>
-                    <Radio value="充電區">{t('edit_location_panel.charge_station')}</Radio>
-                    <Radio value="預派點">{t('edit_location_panel.prepare_spot')}</Radio>
-                    <Radio value="待命區">{t('edit_location_panel.wait_side')}</Radio>
-                    <Radio value="存貨區">{t('edit_location_panel.shelve')}</Radio>
-                  </Radio.Group>
-                </Form.Item>
-                <Form.Item style={{ textAlign: 'center' }}>
-                  <Button onClick={savePose} type="primary">
-                    {t('edit_location_panel.save')}
-                  </Button>
-                </Form.Item>
-              </Form>
-            </div>
-          </Card>
-        </>
-      )}
+            <Form.Item label={'功能'} name="areaType" style={{ marginBottom: 16 }}>
+              <Radio.Group>
+                <Radio value="Extra">{t('edit_location_panel.none')}</Radio>
+                <Radio value="充電區">{t('edit_location_panel.charge_station')}</Radio>
+                <Radio value="預派點">{t('edit_location_panel.prepare_spot')}</Radio>
+                <Radio value="待命區">{t('edit_location_panel.wait_side')}</Radio>
+                <Radio value="存貨區">{t('edit_location_panel.shelve')}</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item style={{ textAlign: 'center' }}>
+              <Button onClick={savePose} type="primary">
+                {t('edit_location_panel.save')}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </Card>
     </>
   )
 }
