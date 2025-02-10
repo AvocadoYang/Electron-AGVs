@@ -37,22 +37,8 @@ const useMousePoint = (
       tap(({ clientX, clientY }) => {
         if (!mapRef.current || !mapWrapRef.current) return
         const rect = mapImageRef.current!.getBoundingClientRect()
-        const Left = mapRef.current.scrollLeft
-        const Top = mapRef.current.scrollTop
-
-        console.log(
-          `
-          clientX:${clientX} \b
-          clientY:${clientY} \b
-          rect: ${rect.left}
-
-          mapRef left; ${Left} \b
-          mapRef Top: ${Top} \b
-
-          imgRef left: ${mapImageRef.current?.scrollLeft} \b
-          imgRef Top: ${mapImageRef.current?.scrollTop}
-         `
-        )
+        const Left = mapWrapRef.current.scrollLeft
+        const Top = mapWrapRef.current.scrollTop
 
         if (
           clientX < rect.left ||
