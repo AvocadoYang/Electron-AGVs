@@ -12,6 +12,7 @@
   background-color: white;
   /* background-color: #ffa153; */
   border-radius: 0 0 2px 2px;
+  border-bottom: 1.5px solid gainsboro;
 }
 
 .custom-header > ul {

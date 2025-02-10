@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Layout, Menu, Flex } from 'antd'
+import { Layout, Menu, Flex, ConfigProvider } from 'antd'
 import '../components/component.css'
 import { useNavigate } from 'react-router-dom'
 import { Select } from 'antd'
@@ -36,35 +36,45 @@ const Header: React.FC = () => {
   }
 
   return (
-    <AntdHeader
-      style={{ display: 'flex', alignItems: 'center', padding: '0 1px 0 1px' }}
-      className="custom-header"
+    <ConfigProvider
+      theme={{
+        components: {
+          Layout: {
+            headerBg: '#fc9f13'
+          }
+        }
+      }}
     >
-      <div className="demo-logo" />
-      <Menu
-        theme="dark"
-        mode="horizontal"
-        items={items}
-        style={{ flex: 1, minWidth: 0 }}
-        onClick={handleMenuClick}
-        className="custom-menu"
-      />
+      <AntdHeader
+        style={{ display: 'flex', alignItems: 'center', padding: '0 1px 0 1px' }}
+        className="custom-header"
+      >
+        <div className="demo-logo" />
+        <Menu
+          theme="dark"
+          mode="horizontal"
+          items={items}
+          style={{ flex: 1, minWidth: 0 }}
+          onClick={handleMenuClick}
+          className="custom-menu"
+        />
 
-      <Flex gap="middle" align="start" style={{ marginRight: '10px' }}>
-        <Select
-          defaultValue="ch.tw"
-          style={{ width: 120 }}
-          onChange={() => console.log(123)}
-          options={[
-            { value: 'en', label: 'English' },
-            { value: 'ch.tw', label: 'Chinese' }
-          ]}
-        />
-        <UserOutlined
-          style={{ color: 'blue', textAlign: 'center', fontSize: '150%', marginTop: '5px' }}
-        />
-      </Flex>
-    </AntdHeader>
+        <Flex gap="middle" align="start" style={{ marginRight: '10px' }}>
+          <Select
+            defaultValue="ch.tw"
+            style={{ width: 120 }}
+            onChange={() => console.log(123)}
+            options={[
+              { value: 'en', label: 'English' },
+              { value: 'ch.tw', label: 'Chinese' }
+            ]}
+          />
+          <UserOutlined
+            style={{ color: 'blue', textAlign: 'center', fontSize: '150%', marginTop: '5px' }}
+          />
+        </Flex>
+      </AntdHeader>
+    </ConfigProvider>
   )
 }
 
