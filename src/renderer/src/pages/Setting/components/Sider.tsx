@@ -61,12 +61,13 @@ const Sider: React.FC<{
     const isOpen = [
       openEditLocationPanel,
       showAllLocationListTable,
+      quickEditLocationPanel,
       openEditRoadPanel,
       // showEditingRoad
     ].some((item) => item)
 
     setHasOpenTool(isOpen)
-  }, [openEditLocationPanel, showAllLocationListTable, openEditRoadPanel])
+  }, [openEditLocationPanel, showAllLocationListTable, openEditRoadPanel, quickEditLocationPanel])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
     if (!data) return

@@ -23,6 +23,7 @@ const Setting: React.FC = () => {
   const [dataList, setDataList] = useState(formList)
   const [scale, setScale] = useState(1)
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
+
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
       const moveDataList = prevDataList
@@ -31,6 +32,7 @@ const Setting: React.FC = () => {
       return newDataList
     })
   }
+
   const dndContextMemo = useMemo(() => {
     return (
       <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>

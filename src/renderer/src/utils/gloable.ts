@@ -1,25 +1,5 @@
 import { atom } from 'jotai'
-import { RoadListType, Modify } from './jotai'
-
-export const tempEditAndStoredRoads = atom<Array<RoadListType>>([])
-
-export const modifyLoc = atom<Modify>({
-  delete: [],
-  edit: [],
-  add: []
-})
-
-export const modifyRoad = atom<Modify>({
-  delete: [],
-  edit: [],
-  add: []
-})
-
-export const modifyZone = atom<Modify>({
-  delete: [],
-  edit: [],
-  add: []
-})
+import { LocationType } from './jotai'
 
 // record the version of map's points
 export const sameVersion = atom(true)
@@ -30,3 +10,11 @@ export const showBlockId = atom<string>('')
 export const hoverLocation = atom<string>('')
 
 export const hoverRoad = atom<string>('')
+
+export const mousePoint_X = atom<number>(-5) // MousePoint 編輯點位小紅點
+export const mousePoint_Y = atom<number>(-5) // MousePoint 編輯點位小紅點
+
+export const locationXForQuickEditLocationPanel = atom<number>(0)
+export const locationYForQuickEditLocationPanel = atom<number>(0)
+
+export const TempStoredLocationsForQuickEditPanel = atom<LocationType[]>([])

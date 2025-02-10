@@ -11,7 +11,6 @@ import {
   Checkbox,
   Button,
   message,
-
   Popconfirm,
   Flex
 } from 'antd'
@@ -24,7 +23,6 @@ import { hoverLocation } from '@renderer/utils/gloable'
 import { EditLocationListTableSwitch } from '@renderer/utils/siderGloble'
 import { SearchOutlined, DeleteTwoTone } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
-
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
@@ -111,12 +109,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
   )
 }
 
-const AllLocationTable: React.
-FC<{ sortableId: string;
-  attributes: import("@dnd-kit/core").DraggableAttributes;
-  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
- }>
-= ({ listeners, attributes, sortableId }) => {
+const AllLocationTable: React.FC<{
+  sortableId: string
+  attributes: import('@dnd-kit/core').DraggableAttributes
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+}> = ({ listeners, attributes, sortableId }) => {
   const [locationPanelForm] = Form.useForm()
   const searchInput = useRef<InputRef>(null)
   const [editingKey, setEditingKey] = useState<string | null>(null)
@@ -127,9 +124,6 @@ FC<{ sortableId: string;
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-
-
-
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType) => {
@@ -445,67 +439,66 @@ FC<{ sortableId: string;
   return (
     <>
       {contextHolders}
-          <div onMouseLeave={handleMouseLeave}>
-            <div className="drop_button_style" {...listeners} {...attributes}>
-              {t('sider_output_form_name.locationList')}
-            </div>
+      <div onMouseLeave={handleMouseLeave}>
+        <h3 className="drop_button_style" {...listeners} {...attributes}>
+          {t('sider_output_form_name.locationList')}
+        </h3>
 
-            <hr
-              style={{
-                marginTop: '1px',
-                marginBottom: '10px',
-                border: `2px solid ${borderColor(sortableId)}`
+        <hr
+          style={{
+            marginTop: '1px',
+            marginBottom: '10px',
+            border: `4px solid ${borderColor(sortableId)}`
+          }}
+        ></hr>
+        <Flex
+          gap="middle"
+          justify="flex-start"
+          align="start"
+          vertical
+          onMouseLeave={handleMouseLeave}
+        >
+          <Button
+            onClick={() => deleteMultiItem()}
+            loading={deleteMultiLocationMutation.isLoading}
+            disabled={selectedRowKeys.length === 0}
+            danger
+          >
+            {t('utils.delete')}
+          </Button>
+          <Form form={locationPanelForm} component={false}>
+            <Table
+              rowSelection={{
+                type: 'checkbox',
+                onChange: (selectedRowKeys: React.Key[]) => {
+                  setSelectedRowKeys([...selectedRowKeys])
+                }
               }}
-            ></hr>
-            <Flex
-              gap="middle"
-              justify="flex-start"
-              align="start"
-              vertical
-              onMouseLeave={handleMouseLeave}
-            >
-              <Button
-                onClick={() => deleteMultiItem()}
-                loading={deleteMultiLocationMutation.isLoading}
-                disabled={selectedRowKeys.length === 0}
-                danger
-              >
-                {t('utils.delete')}
-              </Button>
-              <Form form={locationPanelForm} component={false}>
-                <Table
-                  rowSelection={{
-                    type: 'checkbox',
-                    onChange: (selectedRowKeys: React.Key[]) => {
-                      setSelectedRowKeys([...selectedRowKeys])
-                    }
-                  }}
-                  rowKey={(property) => property.locationId}
-                  components={{
-                    body: {
-                      cell: EditableCell
-                    }
-                  }}
-                  dataSource={mapData?.locations.map((loc) => {
-                    return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
-                  })}
-                  columns={mergedColumns as []}
-                  pagination={{
-                    onChange: cancel,
-                    pageSize: 8
-                  }}
-                  onRow={(record) => {
-                    return {
-                      onMouseEnter: () => handleHover(record.locationId)
-                    }
-                  }}
-                  bordered
-                />
-              </Form>
-            </Flex>
-          </div>
-        </>
-
+              rowKey={(property) => property.locationId}
+              components={{
+                body: {
+                  cell: EditableCell
+                }
+              }}
+              dataSource={mapData?.locations.map((loc) => {
+                return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
+              })}
+              columns={mergedColumns as []}
+              pagination={{
+                onChange: cancel,
+                pageSize: 8
+              }}
+              onRow={(record) => {
+                return {
+                  onMouseEnter: () => handleHover(record.locationId)
+                }
+              }}
+              bordered
+            />
+          </Form>
+        </Flex>
+      </div>
+    </>
   )
 }
 

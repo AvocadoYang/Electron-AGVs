@@ -88,6 +88,23 @@
     "locationList": "Location List"
   },
 
+  "quick_edit_location_panel": {
+    "quick_edit_location_panel": "Quick Edit locations",
+    "areaType": "AreaType",
+    "location": "Location",
+    "x_gap": "x gap",
+    "y_gap": "y gap",
+    "dir_x": "x direction",
+    "dir_y": "y direction",
+    "is_connect_road": "Auto Produce Road",
+    "save": "Save",
+
+    "save_pose_notify": {
+      "is_a_navigate": "Location ID can't be a negative number or zero",
+      "duplicate_id": "ID is duplicated with existing ID"
+    }
+  },
+
   "edit_location_panel": {
     "none": "normal",
     "charge_station": "charge station",
