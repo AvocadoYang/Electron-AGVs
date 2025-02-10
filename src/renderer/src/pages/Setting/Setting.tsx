@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, useRef, useEffect, useMemo } from 'react'
-import { Layout, Form, Splitter, Flex } from 'antd'
+import { Layout, Form, Splitter, Flex, ConfigProvider } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components'
 
@@ -37,16 +37,8 @@ const Setting: React.FC = () => {
     return (
       <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
         <SortableContext items={dataList.map((c) => c.key)} strategy={verticalListSortingStrategy}>
-          <Flex
-            vertical
-            gap="middle"
-            align="start"
-            className="attrs"
-            style={{ padding: '1em' }}
-          >
-            {
-              <ToolComponents locationPanelForm={locationPanelForm} dataList={dataList}/>
-            }
+          <Flex vertical gap="middle" align="start" className="attrs" style={{ padding: '1em' }}>
+            {<ToolComponents locationPanelForm={locationPanelForm} dataList={dataList} />}
           </Flex>
         </SortableContext>
       </DndContext>
@@ -79,6 +71,15 @@ const Setting: React.FC = () => {
                 backgroundColor: 'white'
               }}
             >
+              {/* <ConfigProvider
+                theme={{
+                  components: {
+                    Splitter: {
+                      colorFill: '#fccb23'
+                    }
+                  }
+                }}
+              > */}
               <Splitter onResize={updateSize}>
                 <Splitter.Panel
                   size={splitterSize[0]}
@@ -86,20 +87,24 @@ const Setting: React.FC = () => {
                   resizable={hasOpenTool ? true : false}
                   style={{ overflowX: 'hidden' }}
                 >
-                {dndContextMemo}
+                  {dndContextMemo}
                 </Splitter.Panel>
-                <Splitter.Panel  size={splitterSize[1]} style={{ overflow: 'hidden'}}>
-                  <div style={{ height:'100%', width: '100%', overflow: 'scroll'}} ref={mapWrapRef}>
-                  <MapView
-                    scale={scale}
-                    mapRef={mapRef}
-                    mapWrapRef={mapWrapRef}
-                    roadPanelForm={roadPanelForm}
-                    locationPanelForm={locationPanelForm}
+                <Splitter.Panel size={splitterSize[1]} style={{ overflow: 'hidden' }}>
+                  <div
+                    style={{ height: '100%', width: '100%', overflow: 'scroll' }}
+                    ref={mapWrapRef}
+                  >
+                    <MapView
+                      scale={scale}
+                      mapRef={mapRef}
+                      mapWrapRef={mapWrapRef}
+                      roadPanelForm={roadPanelForm}
+                      locationPanelForm={locationPanelForm}
                     ></MapView>
                   </div>
                 </Splitter.Panel>
               </Splitter>
+              {/* </ConfigProvider> */}
 
               <ZoomPad setScale={setScale}></ZoomPad>
               <FormDrawerBtn></FormDrawerBtn>
