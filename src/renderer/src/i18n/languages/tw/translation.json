@@ -152,5 +152,27 @@
     "all_loc": "所有點位",
     "stored_loc": "已儲存點位",
     "tmp_loc": "尚未儲存點位"
+  },
+
+  "shelf": {
+    "shelf": "貨架",
+    "cargo_mission": {
+      "location_name": "地名",
+      "region_name": "區域名稱",
+      "load_mission": "取貨任務",
+      "offload_mission": "放貨任務",
+      "yaw": "轉角"
+    },
+    "layer_form": {
+      "mission": "任務",
+      "level": "貨架層數",
+      "column_name": "庫格名稱",
+      "disable": "貨架鎖定",
+      "has_cargo": "有貨",
+      "no_cargo": "無貨",
+      "cargo_name": "貨名",
+      "cargo_limit": "貨架高度鎖定",
+      "pallet": "板"
+    }
   }
 }

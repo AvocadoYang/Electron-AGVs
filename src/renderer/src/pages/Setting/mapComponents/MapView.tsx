@@ -16,6 +16,7 @@ import useVerityVersion from '@renderer/api/useVerityVersion'
 import { MousePoint, AllLocation, MapImage } from './components'
 import { LocationType } from '@renderer/utils/jotai'
 import AllRoads from './components/AllRoads/AllRoads'
+import AllCargo from '../AllCargo.tsx/AllCargo'
 
 const MapView: React.FC<{
   scale: number
@@ -103,7 +104,7 @@ const MapView: React.FC<{
         []
       )}
 
-      {/* {showStoredLocation ? <AllCargo /> : []} */}
+      {showLocation ? <AllCargo /> : []}
 
       { openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> :[]}
 

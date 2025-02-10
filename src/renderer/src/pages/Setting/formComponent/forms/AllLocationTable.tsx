@@ -127,7 +127,7 @@ const AllLocationTable: React.FC<{
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType) => {
-      return client.post('api/setting/save-edit-loc', payload)
+      return client.post('api/setting/edit-edit-loc', payload)
     },
     onSuccess: () => {
       void messageApi.success(t('utils.success'))

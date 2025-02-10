@@ -1,5 +1,6 @@
 import { atom } from 'jotai'
 import { LocationType } from './jotai'
+import { LocWithoutArr } from '@renderer/api/useLoc'
 
 // record the version of map's points
 export const sameVersion = atom(true)
@@ -11,6 +12,8 @@ export const hoverLocation = atom<string>('')
 
 export const hoverRoad = atom<string>('')
 
+// ** 貨架樣式 */
+export const cargoStyle = atom<LocWithoutArr[]>([])
 export const mousePoint_X = atom<number>(-5) // MousePoint 編輯點位小紅點
 export const mousePoint_Y = atom<number>(-5) // MousePoint 編輯點位小紅點
 
