@@ -1,5 +1,6 @@
 import { atom } from 'jotai'
 import { RoadListType, Modify } from './jotai'
+import { LocWithoutArr } from '@renderer/pages/Setting/AllCargo.tsx/types'
 
 export const tempEditAndStoredRoads = atom<Array<RoadListType>>([])
 
@@ -30,3 +31,6 @@ export const showBlockId = atom<string>('')
 export const hoverLocation = atom<string>('')
 
 export const hoverRoad = atom<string>('')
+
+// ** 貨架樣式 */
+export const cargoStyle = atom<LocWithoutArr[]>([])

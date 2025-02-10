@@ -137,5 +137,27 @@
     "all_loc": "All Location",
     "stored_loc": "Stored Location",
     "tmp_loc": "Temporary Location"
+  },
+
+  "shelf": {
+    "shelf": "Shelf",
+    "cargo_mission": {
+      "location_name": "Location Name",
+      "region_name": "Region Name",
+      "load_mission": "Load Mission",
+      "offload_mission": "Offload Mission",
+      "yaw": "Yaw"
+    },
+    "layer_form": {
+      "mission": "Mission",
+      "level": "Level",
+      "column_name": "Column Name",
+      "disable": "Disable",
+      "has_cargo": "Has Cargo",
+      "no_cargo": "No Cargo",
+      "cargo_name": "Cargo Name",
+      "cargo_limit": "Cargo Limit",
+      "pallet": "Pallet"
+    }
   }
 }
