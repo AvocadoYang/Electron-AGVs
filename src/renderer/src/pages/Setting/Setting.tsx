@@ -23,6 +23,7 @@ const Setting: React.FC = () => {
   const [dataList, setDataList] = useState(formList)
   const [scale, setScale] = useState(1)
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
+
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
       const moveDataList = prevDataList
@@ -31,6 +32,7 @@ const Setting: React.FC = () => {
       return newDataList
     })
   }
+
   const dndContextMemo = useMemo(() => {
     return (
       <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
@@ -76,7 +78,6 @@ const Setting: React.FC = () => {
               style={{
                 backgroundColor: 'white'
               }}
-              ref={mapWrapRef}
             >
               <Splitter onResize={updateSize}>
                 <Splitter.Panel
@@ -87,14 +88,16 @@ const Setting: React.FC = () => {
                 >
                 {dndContextMemo}
                 </Splitter.Panel>
-                <Splitter.Panel size={splitterSize[1]}>
+                <Splitter.Panel  size={splitterSize[1]} style={{ overflow: 'hidden'}}>
+                  <div style={{ height:'100%', width: '100%', overflow: 'scroll'}} ref={mapWrapRef}>
                   <MapView
                     scale={scale}
                     mapRef={mapRef}
                     mapWrapRef={mapWrapRef}
                     roadPanelForm={roadPanelForm}
                     locationPanelForm={locationPanelForm}
-                  ></MapView>
+                    ></MapView>
+                  </div>
                 </Splitter.Panel>
               </Splitter>
 

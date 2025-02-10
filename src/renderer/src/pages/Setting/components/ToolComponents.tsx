@@ -3,10 +3,11 @@ import {
   AllLocationTable,
   EditLocationPanel,
   EditRoadPanel,
+  QuickEditLocationPanel,
   RoadList
 } from '../formComponent/forms'
 import { Card, FormInstance } from 'antd'
-import { EditLocationListTableSwitch, EditLocationPanelSwitch, EditRoadPanelSwitch, RoadListTableSwitch } from '@renderer/utils/siderGloble'
+import { EditLocationListTableSwitch, EditLocationPanelSwitch, EditRoadPanelSwitch, QuickEditLocationPanelSwitch, RoadListTableSwitch } from '@renderer/utils/siderGloble'
 import { useAtomValue } from 'jotai'
 import { formListType } from './siderElement'
 import { useSortable } from '@dnd-kit/sortable'
@@ -30,6 +31,9 @@ const SortableWrap: FC<{sortableId: string; locationPanelForm:FormInstance<unkno
               // 1-1 編輯點位的彈跳視窗
             case 'show_edit_location_panel':
               return <EditLocationPanel sortableId={sortableId} locationPanelForm={locationPanelForm} attributes={attributes} listeners={listeners}/>
+              // 1-2 快速編輯點位的彈跳視窗
+            case 'show_quick_edit_location_panel':
+              return <QuickEditLocationPanel sortableId={sortableId} locationPanelForm={locationPanelForm} attributes={attributes} listeners={listeners}/>
             case 'show_all_location_table':
               // 1-3 顯示地點列表
               return  <AllLocationTable sortableId={sortableId} attributes={attributes} listeners={listeners}></AllLocationTable>
@@ -52,13 +56,18 @@ const ToolComponents: FC<{
   locationPanelForm: FormInstance<unknown>
   dataList: formListType
 }> = ({ locationPanelForm, dataList }) => {
-  const openEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
+  const showEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
+  const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch)
   const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const showRoadList = useAtomValue(RoadListTableSwitch)
+
   return dataList.map((form) => {
     const {key: formKey} = form
-    if(formKey==='show_edit_location_panel' && openEditLocationPanel){
+    if(formKey==='show_edit_location_panel' && showEditLocationPanel){
+      return <SortableWrap sortableId={formKey} key={formKey} locationPanelForm={locationPanelForm}></SortableWrap>
+    }
+    if(formKey==='show_quick_edit_location_panel' && showQuickEditLocationPanel){
       return <SortableWrap sortableId={formKey} key={formKey} locationPanelForm={locationPanelForm}></SortableWrap>
     }
     if(formKey==='show_all_location_table' && showAllLocationListTable){

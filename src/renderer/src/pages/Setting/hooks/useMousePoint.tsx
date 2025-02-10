@@ -4,24 +4,31 @@ import { fromEvent, throttleTime, debounceTime, map, tap } from 'rxjs'
 import { rvizCoord } from '@renderer/utils/utils'
 import useMap from '@renderer/api/useMap'
 import { FormInstance } from 'antd'
+import { useAtom, useAtomValue } from 'jotai'
+import { locationXForQuickEditLocationPanel, locationYForQuickEditLocationPanel, mousePoint_X, mousePoint_Y } from '@renderer/utils/gloable'
+import { QuickEditLocationPanelSwitch } from '@renderer/utils/siderGloble'
 
 const useMousePoint = (
   mapWrapRef: RefObject<HTMLDivElement>,
   mapRef: RefObject<HTMLDivElement>,
   mapImageRef: RefObject<HTMLImageElement>,
   scale: number,
-  setMousePointX: React.Dispatch<number>,
-  setMousePointY: React.Dispatch<number>,
   locationPanelForm: FormInstance<unknown>,
-  isMousePointStart: boolean
+  showEditLocationPanel: boolean
 ) => {
+  const [, setMousePointX] = useAtom(mousePoint_X) // MousePoint 編輯點位小紅點
+  const [, setMousePointY] = useAtom(mousePoint_Y) // MousePoint 編輯點位小紅點
+  const [,setLocationXForQuickEditLocationPanel] = useAtom(locationXForQuickEditLocationPanel)
+  const [,setLocationYForQuickEditLocationPanel] = useAtom(locationYForQuickEditLocationPanel)
+  const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch)
+
   const { data } = useMap()
   useEffect(() => {
     if (
       !mapWrapRef.current ||
       !mapRef.current ||
       !mapImageRef.current ||
-      !isMousePointStart ||
+      (!showEditLocationPanel && !showQuickEditLocationPanel) ||
       !data
     ) {
       return
@@ -37,22 +44,8 @@ const useMousePoint = (
       tap(({ clientX, clientY }) => {
         if (!mapRef.current || !mapWrapRef.current) return
         const rect = mapImageRef.current!.getBoundingClientRect()
-        const Left = mapRef.current.scrollLeft
-        const Top = mapRef.current.scrollTop
-
-        console.log(
-          `
-          clientX:${clientX} \b
-          clientY:${clientY} \b
-          rect: ${rect.left}
-
-          mapRef left; ${Left} \b
-          mapRef Top: ${Top} \b
-
-          imgRef left: ${mapImageRef.current?.scrollLeft} \b
-          imgRef Top: ${mapImageRef.current?.scrollTop}
-         `
-        )
+        const Left = mapWrapRef.current.scrollLeft
+        const Top = mapWrapRef.current.scrollTop
 
         if (
           clientX < rect.left ||
@@ -78,6 +71,8 @@ const useMousePoint = (
 
         setMousePointX(adjustX / scale)
         setMousePointY(adjustY / scale)
+        setLocationXForQuickEditLocationPanel(Number(rx.toFixed(5)))
+        setLocationYForQuickEditLocationPanel(Number(ry.toFixed(5)))
         locationPanelForm.setFieldValue('x', Number(rx.toFixed(5)))
         locationPanelForm.setFieldValue('y', Number(ry.toFixed(5)))
       })
@@ -86,9 +81,10 @@ const useMousePoint = (
     const subscription = clickEvent$.subscribe()
 
     return () => {
+      console.log('觸發')
       subscription.unsubscribe()
     }
-  }, [mapRef, mapWrapRef, scale, isMousePointStart])
+  }, [mapRef, mapWrapRef, scale, showEditLocationPanel, showQuickEditLocationPanel])
 }
 
 export default useMousePoint

@@ -87,6 +87,23 @@
     "locationList": "地點表"
   },
 
+  "quick_edit_location_panel": {
+    "quick_edit_location_panel": "快速編輯點位",
+    "areaType": "地點功能",
+    "location": "地點",
+    "x_gap": "x 間隔",
+    "y_gap": "y 間隔",
+    "dir_x": "方向 x",
+    "dir_y": "方向 y",
+    "is_connect_road": "自動產生路線",
+    "save": "新增點位",
+
+    "save_pose_notify": {
+      "is_a_navigate": "存在負值點位,ID不可為負值或0",
+      "duplicate_id": "點位ID與現存ID重複"
+    }
+  },
+
   "edit_location_panel": {
     "none": "路徑點",
     "charge_station": "充電站",

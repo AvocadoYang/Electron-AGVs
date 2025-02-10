@@ -4,10 +4,11 @@ import { RefObject, memo, useRef, useState } from 'react'
 import '../setting.css'
 import { FormInstance } from 'antd'
 import { useAtom, useAtomValue } from 'jotai'
-import { sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
-import { EditLocationPanelSwitch, isShowLocation, isShowRoad } from '@renderer/utils/siderGloble'
+import {  sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
+import { EditLocationPanelSwitch, isShowLocation, isShowRoad, QuickEditLocationPanelSwitch } from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
+import TempLocations from './components/TempResources/TempLocations'
 import { draggableLineInitialPoint, mouseLocation } from '../hooks/hook'
 import { useMousePoint, useDraggableLine } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
@@ -25,8 +26,6 @@ const MapView: React.FC<{
   mapWrapRef: RefObject<HTMLDivElement>
 }> = ({ scale, mapRef, locationPanelForm, roadPanelForm, mapWrapRef }) => {
   const { data } = useMap()
-  const [mousePointX, setMousePointX] = useState(-3) // MousePoint 編輯點位小紅點
-  const [mousePointY, setMousePointY] = useState(-3) // MousePoint 編輯點位小紅點
   const { data: currentVersion } = useVerityVersion()
 
   /** 路線拖曳相關參數 */
@@ -40,6 +39,7 @@ const MapView: React.FC<{
   const mapImageRef = useRef<HTMLImageElement>(null)
   const [, setSameVersion] = useAtom(sameVersion)
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
+  const [openQuickEditLocationPanelSwitch] = useAtom(QuickEditLocationPanelSwitch)
 
   const showLocation = useAtomValue(isShowLocation)
   const showRoad = useAtomValue(isShowRoad)
@@ -63,8 +63,6 @@ const MapView: React.FC<{
     mapRef,
     mapImageRef,
     scale,
-    setMousePointX,
-    setMousePointY,
     locationPanelForm,
     openEditLocationPanel
   )
@@ -108,11 +106,16 @@ const MapView: React.FC<{
 
       {showLocation ? <AllCargo /> : []}
 
-      {openEditLocationPanel ? (
-        <MousePoint x={Number(mousePointX)} y={Number(mousePointY)}></MousePoint>
+      { openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> :[]}
+
+      {(openEditLocationPanel || openQuickEditLocationPanelSwitch) ? (
+        //編輯點位跟快速編輯點位時的小紅點
+        <MousePoint></MousePoint>
       ) : (
         <></>
       )}
+
+
 
       {showRoad ? <AllRoads /> : []}
     </div>

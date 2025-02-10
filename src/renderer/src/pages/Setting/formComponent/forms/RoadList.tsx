@@ -16,14 +16,14 @@ import {
   Tooltip,
   Typography
 } from 'antd'
-import {  memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
 import PropTypes from 'prop-types'
 import { nanoid } from 'nanoid'
 import { FilterDropdownProps } from 'antd/es/table/interface'
-import {  useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useMap from '@renderer/api/useMap'
 import { hoverRoad } from '@renderer/utils/gloable'
@@ -126,7 +126,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
         setYawOption(when270)
         break
       default:
-        // console.log('errpr')
+      // console.log('errpr')
     }
   }, [chooseAngle])
 
@@ -235,12 +235,11 @@ const Dot = styled.div<DotStyle>`
   background-color: ${(prop) => (prop.active ? '#979797' : '#2bea00')};
 `
 
-const RoadList: React
-.FC<{ sortableId: string
-  attributes: import("@dnd-kit/core").DraggableAttributes;
-  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
-}>
-= ({ sortableId, attributes, listeners }) => {
+const RoadList: React.FC<{
+  sortableId: string
+  attributes: import('@dnd-kit/core').DraggableAttributes
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+}> = ({ sortableId, attributes, listeners }) => {
   const { data: currentMap } = useMap()
   const searchInput = useRef<InputRef>(null)
   const [messageApi, contextHolders] = message.useMessage()
@@ -251,7 +250,6 @@ const RoadList: React
   const setHoverRoad = useSetAtom(hoverRoad)
   const [formRoad] = Form.useForm()
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-
 
   const deleteRoadMutation = useMutation({
     mutationFn: (roadId: string) => {
@@ -539,56 +537,56 @@ const RoadList: React
   return (
     <>
       {contextHolders}
-        <div className="drop_button_style" {...listeners} {...attributes}>
-          {t('edit_road_panel.road_table')}
-        </div>
+      <h3 className="drop_button_style" {...listeners} {...attributes}>
+        {t('edit_road_panel.road_table')}
+      </h3>
 
-        <hr
-          style={{
-            marginTop: '1px',
-            marginBottom: '10px',
-            border: `2px solid ${borderColor(sortableId)}`
-          }}
-        ></hr>
-        <Flex
-          gap="middle"
-          justify="flex-start"
-          align="start"
-          vertical
-          onMouseLeave={handleMouseLeave}
+      <hr
+        style={{
+          marginTop: '1px',
+          marginBottom: '10px',
+          border: `4px solid ${borderColor(sortableId)}`
+        }}
+      ></hr>
+      <Flex
+        gap="middle"
+        justify="flex-start"
+        align="start"
+        vertical
+        onMouseLeave={handleMouseLeave}
+      >
+        <Button
+          onClick={() => deleteMultiItem()}
+          loading={deleteMultiRoadMutation.isLoading}
+          disabled={selectedRowKeys.length === 0}
+          danger
         >
-          <Button
-            onClick={() => deleteMultiItem()}
-            loading={deleteMultiRoadMutation.isLoading}
-            disabled={selectedRowKeys.length === 0}
-            danger
-          >
-            {t('utils.delete')}
-          </Button>
-          <Form form={formRoad} component={false}>
-            <Table
-              dataSource={currentMap?.roads}
-              rowKey={(v) => v.roadId}
-              rowSelection={{
-                type: 'checkbox',
-                onChange: (selectedRowKeys: React.Key[]) => {
-                  setSelectedRowKeys([...selectedRowKeys])
-                }
-              }}
-              components={{
-                body: {
-                  cell: EditableCell
-                }
-              }}
-              onRow={(record) => ({
-                onMouseEnter: () => {
-                  handleHover(record.roadId)
-                }
-              })}
-              columns={mergedColumns as []}
-            />
-          </Form>
-        </Flex>
+          {t('utils.delete')}
+        </Button>
+        <Form form={formRoad} component={false}>
+          <Table
+            dataSource={currentMap?.roads}
+            rowKey={(v) => v.roadId}
+            rowSelection={{
+              type: 'checkbox',
+              onChange: (selectedRowKeys: React.Key[]) => {
+                setSelectedRowKeys([...selectedRowKeys])
+              }
+            }}
+            components={{
+              body: {
+                cell: EditableCell
+              }
+            }}
+            onRow={(record) => ({
+              onMouseEnter: () => {
+                handleHover(record.roadId)
+              }
+            })}
+            columns={mergedColumns as []}
+          />
+        </Form>
+      </Flex>
     </>
   )
 }

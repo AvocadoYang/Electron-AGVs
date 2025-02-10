@@ -440,15 +440,15 @@ const AllLocationTable: React.FC<{
     <>
       {contextHolders}
       <div onMouseLeave={handleMouseLeave}>
-        <div className="drop_button_style" {...listeners} {...attributes}>
+        <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.locationList')}
-        </div>
+        </h3>
 
         <hr
           style={{
             marginTop: '1px',
             marginBottom: '10px',
-            border: `2px solid ${borderColor(sortableId)}`
+            border: `4px solid ${borderColor(sortableId)}`
           }}
         ></hr>
         <Flex

@@ -28,12 +28,11 @@ function validateArray(arr: string[]) {
   return true
 }
 
-const EditRoadPanel: React
-.FC<{ sortableId: string
-  attributes: import("@dnd-kit/core").DraggableAttributes;
-  listeners: import("@dnd-kit/core/dist/hooks/utilities").SyntheticListenerMap | undefined;
- }>
-= ({ sortableId, attributes, listeners }) => {
+const EditRoadPanel: React.FC<{
+  sortableId: string
+  attributes: import('@dnd-kit/core').DraggableAttributes
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+}> = ({ sortableId, attributes, listeners }) => {
   const [roadPanelForm] = Form.useForm()
   const [chooseAngle, setChooseAngle] = useState<string>('')
   const [messageApi, contextHolders] = message.useMessage()
@@ -51,8 +50,6 @@ const EditRoadPanel: React
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   })
 
-
-
   const saveRoad = () => {
     const payload: Road = {
       spot1Id: (roadPanelForm.getFieldValue('x') as number).toString(),
@@ -68,137 +65,137 @@ const EditRoadPanel: React
   return (
     <>
       {contextHolders}
-        <div className="drop_button_style" {...listeners} {...attributes}>
-          {t('sider_output_form_name.locationList')}
-        </div>
-        <hr
-          style={{
-            marginTop: '1px',
-            marginBottom: '10px',
-            border: `2px solid ${borderColor(sortableId)}`
-          }}
-        ></hr>
-        <Form
-          initialValues={{ ...initialRoadValue }}
-          form={roadPanelForm}
-          style={{ paddingTop: '10px' }}
-        >
-          <Form.Item label={t('edit_road_panel.road')} name="roadType" shouldUpdate>
-            <Radio.Group buttonStyle="solid">
-              <Radio.Button value="oneWayRoad">{t('edit_road_panel.single_road')}</Radio.Button>
-              <Radio.Button value="twoWayRoad">{t('edit_road_panel.two_way_road')}</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
+      <h3 className="drop_button_style" {...listeners} {...attributes}>
+        {t('sider_output_form_name.locationList')}
+      </h3>
+      <hr
+        style={{
+          marginTop: '1px',
+          marginBottom: '10px',
+          border: `4px solid ${borderColor(sortableId)}`
+        }}
+      ></hr>
+      <Form
+        initialValues={{ ...initialRoadValue }}
+        form={roadPanelForm}
+        style={{ paddingTop: '10px' }}
+      >
+        <Form.Item label={t('edit_road_panel.road')} name="roadType" shouldUpdate>
+          <Radio.Group buttonStyle="solid">
+            <Radio.Button value="oneWayRoad">{t('edit_road_panel.single_road')}</Radio.Button>
+            <Radio.Button value="twoWayRoad">{t('edit_road_panel.two_way_road')}</Radio.Button>
+          </Radio.Group>
+        </Form.Item>
 
-          <Form.Item name="checkboxGroup" label={t('edit_road_panel.yaw')} required>
-            <Checkbox.Group>
-              <Row>
-                <Col span={8}>
-                  <Checkbox
-                    value="*"
-                    disabled={
-                      chooseAngle === '0' ||
-                      chooseAngle === '90' ||
-                      chooseAngle === '180' ||
-                      chooseAngle === '270'
+        <Form.Item name="checkboxGroup" label={t('edit_road_panel.yaw')} required>
+          <Checkbox.Group>
+            <Row>
+              <Col span={8}>
+                <Checkbox
+                  value="*"
+                  disabled={
+                    chooseAngle === '0' ||
+                    chooseAngle === '90' ||
+                    chooseAngle === '180' ||
+                    chooseAngle === '270'
+                  }
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setChooseAngle('*')
+                    } else {
+                      setChooseAngle('')
                     }
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('*')
-                      } else {
-                        setChooseAngle('')
-                      }
-                    }}
-                  >
-                    *
-                  </Checkbox>
-                </Col>
-                <Col span={8}>
-                  <Checkbox
-                    value="0"
-                    disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('0')
-                      } else {
-                        setChooseAngle('')
-                      }
-                    }}
-                  >
-                    0
-                  </Checkbox>
-                </Col>
-                <Col span={8}>
-                  <Checkbox
-                    value="90"
-                    disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('90')
-                      } else {
-                        setChooseAngle('')
-                      }
-                    }}
-                  >
-                    90
-                  </Checkbox>
-                </Col>
-                <Col span={13}>
-                  <Checkbox
-                    value="180"
-                    disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('180')
-                      } else {
-                        setChooseAngle('')
-                      }
-                    }}
-                  >
-                    180
-                  </Checkbox>
-                </Col>
-                <Col span={8}>
-                  <Checkbox
-                    value="270"
-                    disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('270')
-                      } else {
-                        setChooseAngle('')
-                      }
-                    }}
-                  >
-                    270
-                  </Checkbox>
-                </Col>
-              </Row>
-            </Checkbox.Group>
-          </Form.Item>
+                  }}
+                >
+                  *
+                </Checkbox>
+              </Col>
+              <Col span={8}>
+                <Checkbox
+                  value="0"
+                  disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setChooseAngle('0')
+                    } else {
+                      setChooseAngle('')
+                    }
+                  }}
+                >
+                  0
+                </Checkbox>
+              </Col>
+              <Col span={8}>
+                <Checkbox
+                  value="90"
+                  disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setChooseAngle('90')
+                    } else {
+                      setChooseAngle('')
+                    }
+                  }}
+                >
+                  90
+                </Checkbox>
+              </Col>
+              <Col span={13}>
+                <Checkbox
+                  value="180"
+                  disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setChooseAngle('180')
+                    } else {
+                      setChooseAngle('')
+                    }
+                  }}
+                >
+                  180
+                </Checkbox>
+              </Col>
+              <Col span={8}>
+                <Checkbox
+                  value="270"
+                  disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setChooseAngle('270')
+                    } else {
+                      setChooseAngle('')
+                    }
+                  }}
+                >
+                  270
+                </Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
+        </Form.Item>
 
-          <Form.Item name="disabled" label={t('edit_road_panel.disabled')} shouldUpdate>
-            <Switch />
-          </Form.Item>
+        <Form.Item name="disabled" label={t('edit_road_panel.disabled')} shouldUpdate>
+          <Switch />
+        </Form.Item>
 
-          <Form.Item name="limit" label={t('edit_road_panel.limit')}>
-            <Switch />
-          </Form.Item>
+        <Form.Item name="limit" label={t('edit_road_panel.limit')}>
+          <Switch />
+        </Form.Item>
 
-          <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
-            <InputNumber />
-          </Form.Item>
+        <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
+          <InputNumber />
+        </Form.Item>
 
-          <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
-            <InputNumber />
-          </Form.Item>
+        <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
+          <InputNumber />
+        </Form.Item>
 
-          <Form.Item style={{ textAlign: 'center' }}>
-            <Button onClick={() => saveRoad()} type="primary">
-              {t('edit_road_panel.add')}
-            </Button>
-          </Form.Item>
-        </Form>
+        <Form.Item style={{ textAlign: 'center' }}>
+          <Button onClick={() => saveRoad()} type="primary">
+            {t('edit_road_panel.add')}
+          </Button>
+        </Form.Item>
+      </Form>
     </>
   )
 }

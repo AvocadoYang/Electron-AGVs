@@ -1,26 +1,6 @@
 import { atom } from 'jotai'
-import { RoadListType, Modify } from './jotai'
-import { LocWithoutArr } from '@renderer/pages/Setting/AllCargo.tsx/types'
-
-export const tempEditAndStoredRoads = atom<Array<RoadListType>>([])
-
-export const modifyLoc = atom<Modify>({
-  delete: [],
-  edit: [],
-  add: []
-})
-
-export const modifyRoad = atom<Modify>({
-  delete: [],
-  edit: [],
-  add: []
-})
-
-export const modifyZone = atom<Modify>({
-  delete: [],
-  edit: [],
-  add: []
-})
+import { LocationType } from './jotai'
+import { LocWithoutArr } from '@renderer/api/useLoc'
 
 // record the version of map's points
 export const sameVersion = atom(true)
@@ -34,3 +14,10 @@ export const hoverRoad = atom<string>('')
 
 // ** 貨架樣式 */
 export const cargoStyle = atom<LocWithoutArr[]>([])
+export const mousePoint_X = atom<number>(-5) // MousePoint 編輯點位小紅點
+export const mousePoint_Y = atom<number>(-5) // MousePoint 編輯點位小紅點
+
+export const locationXForQuickEditLocationPanel = atom<number>(0)
+export const locationYForQuickEditLocationPanel = atom<number>(0)
+
+export const TempStoredLocationsForQuickEditPanel = atom<LocationType[]>([])

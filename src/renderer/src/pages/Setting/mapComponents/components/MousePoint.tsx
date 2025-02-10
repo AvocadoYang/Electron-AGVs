@@ -2,6 +2,8 @@
 import { FC, memo } from 'react'
 import styled from 'styled-components'
 import useMap from '@renderer/api/useMap'
+import { mousePoint_X, mousePoint_Y } from '@renderer/utils/gloable';
+import { useAtom } from 'jotai';
 
 const Container = styled.div.attrs<{ left: number; top: number }>(({ left, top }) => ({
   style: { left, top }
@@ -20,17 +22,18 @@ const Circle = styled.div`
   transform: translate(-50%, -50%);
 `
 
-const Point: FC<{
-  x: number
-  y: number
-}> = ({ x, y }) => {
+const Point: FC = () => {
+  const [x,] = useAtom(mousePoint_X) // MousePoint 編輯點位小紅點
+  const [y,] = useAtom(mousePoint_Y) // MousePoint 編輯點位小紅點
   const { data } = useMap()
   if (!data) return null
   return (
-    <Container left={x} top={y}>
+    <Container left={Number(x)} top={Number(y)}>
       <Circle />
     </Container>
   )
 }
 
 export default memo(Point)
+
+
