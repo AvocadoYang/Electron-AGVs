@@ -9,6 +9,7 @@ import {
   EditLocationPanelSwitch,
   EditZoneSwitch,
   isShowLocation,
+  isShowLocationTooltip,
   isShowRoad,
   QuickEditLocationPanelSwitch
 } from '@renderer/utils/siderGloble'
@@ -24,6 +25,7 @@ import { LocationType } from '@renderer/utils/jotai'
 import AllRoads from './components/AllRoads/AllRoads'
 import AllCargo from '../AllCargo.tsx/AllCargo'
 import ZoneIconHint from './components/ZoneIconHint'
+import ToolTip from '../components/ToolTip'
 
 const MapView: React.FC<{
   scale: number
@@ -53,6 +55,7 @@ const MapView: React.FC<{
   const [openQuickEditLocationPanelSwitch] = useAtom(QuickEditLocationPanelSwitch)
   const openEditZone = useAtomValue(EditZoneSwitch)
 
+  const showLocationToolTip = useAtomValue(isShowLocationTooltip)
   const showLocation = useAtomValue(isShowLocation)
   const showRoad = useAtomValue(isShowRoad)
 
@@ -115,11 +118,18 @@ const MapView: React.FC<{
         []
       )}
 
-      {/* {showLocation ? <AllCargo /> : []} */}
+      {showLocation ? (
+        <AllCargo
+          scale={scale}
+          setInitPoint={setInitPoint}
+          handleMouseDown={handleMouseDown}
+          mouseLocation={mouseLocation}
+        />
+      ) : (
+        []
+      )}
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
-
-      {showRoad ? <AllRoads /> : []}
 
       {openEditZone ? (
         <ZoneIconHint
@@ -139,6 +149,10 @@ const MapView: React.FC<{
       ) : (
         <></>
       )}
+
+      {showRoad ? <AllRoads /> : []}
+
+      {showLocationToolTip ? <ToolTip /> : []}
     </div>
   )
 }

@@ -3,42 +3,36 @@ import useMap from '@renderer/api/useMap'
 // import { Location } from './components'
 import { nanoid } from 'nanoid'
 import { memo } from 'react'
-import { useAtom, useAtomValue } from 'jotai'
-import { hoverLocation, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { showBlockId as ShowBlockId, tooltipProp } from '@renderer/utils/gloable'
 import { draggableLineInitialPoint, mouseLocation } from '@renderer/pages/Setting/hooks/hook'
 import { Point, DraggableLine } from './components/PointAndLine'
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { EditRoadPanelSwitch, isShowLocationTooltip } from '@renderer/utils/siderGloble'
-import styled from 'styled-components'
+import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 
-const TooltipWrapper = styled.div`
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 10;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
-
-  &.show {
-    opacity: 1;
-  }
-`
 const AllLocation: React.FC<{
   scale: number
   setInitPoint: React.Dispatch<draggableLineInitialPoint>
   handleMouseDown: (startId: string) => void
   mouseLocation: mouseLocation
 }> = ({ scale, setInitPoint, handleMouseDown, mouseLocation }) => {
-  const showLocationToolTip = useAtomValue(isShowLocationTooltip)
-  const [locationIdOnHover, setLocationIdOnHover] = useAtom(hoverLocation)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
+  const setTooltip = useSetAtom(tooltipProp)
   const { data } = useMap()
   const [showBlockId] = useAtom(ShowBlockId)
+
+  const handleEnter = (locationId: string, x: number, y: number) => {
+    setTooltip({
+      x,
+      y,
+      locationId
+    })
+  }
+
+  const handleLeave = () => {
+    setTooltip(null)
+  }
+
   if (!data) return
   return (
     <>
@@ -68,26 +62,14 @@ const AllLocation: React.FC<{
                 left={displayX}
                 top={displayY}
                 key={nanoid()}
-                onMouseEnter={() => setLocationIdOnHover(loc.locationId)}
-                onMouseLeave={() => setLocationIdOnHover('')}
+                onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
+                onMouseLeave={() => handleLeave()}
                 onMouseDown={(e) => {
                   if (!openEditRoadPanel) return
                   setInitPoint({ clientX: e.clientX, clientY: e.clientY })
                   handleMouseDown((e.target as HTMLInputElement).id)
                 }}
-              >
-                <TooltipWrapper
-                  className={
-                    locationIdOnHover.toString() === loc.locationId && showLocationToolTip
-                      ? 'show'
-                      : ''
-                  }
-                  style={{ top: -25, left: 10 }}
-                >
-                  {' '}
-                  {loc.locationId}
-                </TooltipWrapper>
-              </Point>
+              ></Point>
               <DraggableLine
                 id={loc.locationId.toString()}
                 left={displayX}

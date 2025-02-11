@@ -9,6 +9,8 @@
     "src/@type/*"
 , "src/configs"  ],
   "compilerOptions": {
+    "module": "es2020",
+    "moduleResolution": "bundler",
     "composite": true,
     "jsx": "react-jsx",
     "baseUrl": ".",

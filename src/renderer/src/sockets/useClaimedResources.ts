@@ -1,6 +1,7 @@
 import { io } from '@renderer/sockets/socketConnect'
 import { useEffect, useState } from 'react'
-import { from, fromEventPattern, share, switchMap } from 'rxjs'
+import { distinctUntilChanged, filter, from, fromEventPattern, share, switchMap } from 'rxjs'
+import { isDefined } from 'ts-extras'
 import { array, object, string, ValidationError } from 'yup'
 
 const schema = () =>
@@ -39,6 +40,8 @@ const claimedResource$ = fromEventPattern(
         })
     )
   ),
+  filter(isDefined),
+  distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
   share()
 )
 
@@ -46,8 +49,8 @@ export const useClaimedRoads = () => {
   const [claimedRoads, setClaimedRoads] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
-    const sub = claimedResource$.subscribe((info) => {
-      setClaimedRoads(new Map(info?.roads.map(({ roadId, amrId }) => [roadId, amrId])))
+    const sub = claimedResource$.subscribe(({ roads }) => {
+      setClaimedRoads(new Map(roads.map(({ roadId, amrId }) => [roadId, amrId])))
     })
 
     return () => {
@@ -62,10 +65,8 @@ export const useClaimedLocations = () => {
   const [claimedLocations, setClaimedLocations] = useState<Map<string, string>>(new Map())
 
   useEffect(() => {
-    const sub = claimedResource$.subscribe((info) => {
-      setClaimedLocations(
-        new Map(info?.locations.map(({ locationId, amrId }) => [locationId, amrId]))
-      )
+    const sub = claimedResource$.subscribe(({ locations }) => {
+      setClaimedLocations(new Map(locations.map(({ locationId, amrId }) => [locationId, amrId])))
     })
 
     return () => {

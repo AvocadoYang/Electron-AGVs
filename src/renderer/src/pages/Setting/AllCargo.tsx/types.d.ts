@@ -26,9 +26,7 @@ export type CargoArea = {
 
 export type HasCargo = {
   hasCargo: boolean
-  clickable: boolean
   border: string
-  isOccupy: boolean
   isDisable: boolean
 }
 

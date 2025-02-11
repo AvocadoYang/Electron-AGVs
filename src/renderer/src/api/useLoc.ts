@@ -22,7 +22,7 @@ const getLoc = async () => {
 }
 
 const useLoc = (locId: string | undefined) => {
-  return useQuery(['loc-only'], {
+  return useQuery(['loc-only', locId], {
     queryFn: getLoc,
     select: (data) => {
       if (locId) {
