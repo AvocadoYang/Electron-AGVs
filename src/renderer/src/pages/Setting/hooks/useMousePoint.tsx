@@ -5,7 +5,12 @@ import { rvizCoord } from '@renderer/utils/utils'
 import useMap from '@renderer/api/useMap'
 import { FormInstance } from 'antd'
 import { useAtom, useAtomValue } from 'jotai'
-import { locationXForQuickEditLocationPanel, locationYForQuickEditLocationPanel, mousePoint_X, mousePoint_Y } from '@renderer/utils/gloable'
+import {
+  locationXForQuickEditLocationPanel,
+  locationYForQuickEditLocationPanel,
+  mousePoint_X,
+  mousePoint_Y
+} from '@renderer/utils/gloable'
 import { QuickEditLocationPanelSwitch } from '@renderer/utils/siderGloble'
 
 const useMousePoint = (
@@ -18,8 +23,8 @@ const useMousePoint = (
 ) => {
   const [, setMousePointX] = useAtom(mousePoint_X) // MousePoint 編輯點位小紅點
   const [, setMousePointY] = useAtom(mousePoint_Y) // MousePoint 編輯點位小紅點
-  const [,setLocationXForQuickEditLocationPanel] = useAtom(locationXForQuickEditLocationPanel)
-  const [,setLocationYForQuickEditLocationPanel] = useAtom(locationYForQuickEditLocationPanel)
+  const [, setLocationXForQuickEditLocationPanel] = useAtom(locationXForQuickEditLocationPanel)
+  const [, setLocationYForQuickEditLocationPanel] = useAtom(locationYForQuickEditLocationPanel)
   const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch)
 
   const { data } = useMap()
@@ -46,7 +51,6 @@ const useMousePoint = (
         const rect = mapImageRef.current!.getBoundingClientRect()
         const Left = mapWrapRef.current.scrollLeft
         const Top = mapWrapRef.current.scrollTop
-
         if (
           clientX < rect.left ||
           clientX > rect.right ||
@@ -81,7 +85,6 @@ const useMousePoint = (
     const subscription = clickEvent$.subscribe()
 
     return () => {
-      console.log('觸發')
       subscription.unsubscribe()
     }
   }, [mapRef, mapWrapRef, scale, showEditLocationPanel, showQuickEditLocationPanel])

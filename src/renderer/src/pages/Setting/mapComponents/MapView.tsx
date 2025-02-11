@@ -7,6 +7,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import {
   EditLocationPanelSwitch,
+  EditZoneSwitch,
   isShowLocation,
   isShowRoad,
   QuickEditLocationPanelSwitch
@@ -14,14 +15,15 @@ import {
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
 import TempLocations from './components/TempResources/TempLocations'
-import { draggableLineInitialPoint, mouseLocation } from '../hooks/hook'
-import { useMousePoint, useDraggableLine } from '../hooks'
+import { draggableLineInitialPoint, mouseLocation, MouseLocationForFrame } from '../hooks/hook'
+import { useMousePoint, useDraggableLine, useZoneFrame } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
 import { MousePoint, AllLocation, MapImage } from './components'
 import { LocationType } from '@renderer/utils/jotai'
 import AllRoads from './components/AllRoads/AllRoads'
 import AllCargo from '../AllCargo.tsx/AllCargo'
+import ZoneIconHint from './components/ZoneIconHint'
 
 const MapView: React.FC<{
   scale: number
@@ -41,10 +43,15 @@ const MapView: React.FC<{
   const [isResizing, setIsResizing] = useState(false)
   /** end */
 
+  /** 拖曳區域相關參數 */
+  const [isDragging, setIsDragging] = useState(false)
+  /** */
+
   const mapImageRef = useRef<HTMLImageElement>(null)
   const [, setSameVersion] = useAtom(sameVersion)
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [openQuickEditLocationPanelSwitch] = useAtom(QuickEditLocationPanelSwitch)
+  const openEditZone = useAtomValue(EditZoneSwitch)
 
   const showLocation = useAtomValue(isShowLocation)
   const showRoad = useAtomValue(isShowRoad)
@@ -63,7 +70,14 @@ const MapView: React.FC<{
     }
   }
 
+  //控制編輯點位的小紅點
   useMousePoint(mapWrapRef, mapRef, mapImageRef, scale, locationPanelForm, openEditLocationPanel)
+
+  //控制區域圈選
+  useZoneFrame(mapWrapRef, mapRef, mapImageRef, scale, setIsDragging)
+
+  //控制編輯路線時的箭頭拖曳
+  useDraggableLine(mapRef, roadPanelForm, initPoint, setMouseLocation, isResizing, setIsResizing)
 
   const handleMouseDown = (startId: string) => {
     if (!data) return
@@ -73,12 +87,11 @@ const MapView: React.FC<{
     roadPanelForm.setFieldValue('x', result.locationId)
   }
 
-  useDraggableLine(mapRef, roadPanelForm, initPoint, setMouseLocation, isResizing, setIsResizing)
-
   window.addEventListener('beforeunload', () => {
     if (!currentVersion) return
     Cookies.set('version', currentVersion.version)
   })
+
   return (
     <div
       style={{
@@ -106,14 +119,26 @@ const MapView: React.FC<{
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 
+      {showRoad ? <AllRoads /> : []}
+
+      {openEditZone ? (
+        <ZoneIconHint
+          mapWrapRef={mapWrapRef}
+          mapRef={mapRef}
+          mapImageRef={mapImageRef}
+          scale={scale}
+          isDragging={isDragging}
+        />
+      ) : (
+        []
+      )}
+
       {openEditLocationPanel || openQuickEditLocationPanelSwitch ? (
         //編輯點位跟快速編輯點位時的小紅點
         <MousePoint></MousePoint>
       ) : (
         <></>
       )}
-
-      {showRoad ? <AllRoads /> : []}
     </div>
   )
 }

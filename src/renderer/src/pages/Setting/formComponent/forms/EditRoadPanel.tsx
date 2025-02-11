@@ -67,7 +67,7 @@ const EditRoadPanel: React.FC<{
       {contextHolders}
       <div style={{ width: '23em' }}>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
-          {t('sider_output_form_name.locationList')}
+          {t('sider_output_form_name.roadPanel')}
         </h3>
         <hr
           style={{

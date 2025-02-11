@@ -83,8 +83,9 @@
   },
 
   "sider_output_form_name": {
-    "locationPanel": "編輯路線",
-    "locationList": "路線表"
+    "locationPanel": "編輯點位",
+    "roadPanel": "編輯路徑",
+    "locationList": "點位表"
   },
 
   "quick_edit_location_panel": {

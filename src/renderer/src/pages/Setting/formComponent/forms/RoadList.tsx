@@ -584,6 +584,9 @@ const RoadList: React.FC<{
               }
             })}
             columns={mergedColumns as []}
+            pagination={{
+              pageSize: 8
+            }}
           />
         </Form>
       </Flex>

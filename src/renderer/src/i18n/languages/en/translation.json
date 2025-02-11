@@ -84,8 +84,9 @@
   },
 
   "sider_output_form_name": {
-    "locationPanel": "Edit Road",
-    "locationList": "Road List"
+    "locationPanel": "Edit Location",
+    "roadPanel": "Edit Road",
+    "locationList": "Location List"
   },
 
   "quick_edit_location_panel": {

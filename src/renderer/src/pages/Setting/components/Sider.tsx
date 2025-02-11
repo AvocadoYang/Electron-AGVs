@@ -9,7 +9,8 @@ import {
   isShowLocationTooltip,
   EditRoadPanelSwitch,
   QuickEditLocationPanelSwitch,
-  RoadListTableSwitch
+  RoadListTableSwitch,
+  EditZoneSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -48,11 +49,15 @@ const Sider: React.FC<{
 }> = ({ setHasOpenTool }) => {
   const { data } = useMap()
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
-  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch); // 1-2
-  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(EditLocationListTableSwitch) // 1-4
+  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch) // 1-2
+  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
+    EditLocationListTableSwitch
+  ) // 1-4
 
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch) // 2-2
+
+  const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch) // 3-1
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip)
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
@@ -62,7 +67,7 @@ const Sider: React.FC<{
       openEditLocationPanel,
       showAllLocationListTable,
       quickEditLocationPanel,
-      openEditRoadPanel,
+      openEditRoadPanel
       // showEditingRoad
     ].some((item) => item)
 
@@ -96,7 +101,7 @@ const Sider: React.FC<{
       // ===================
       // === zone ===
       case 'edit_zone':
-        console.log('edit_zone')
+        setOpenEditZone(!openEditZone)
         break
       case 'show_zone_list':
         console.log('show_zone_list')
@@ -186,8 +191,9 @@ const Sider: React.FC<{
           checked={openEditLocationPanel}
         />
       ),
-      getItem(t('toolbar.location.quick_edit_locations'),
-      '1-2',
+      getItem(
+        t('toolbar.location.quick_edit_locations'),
+        '1-2',
         <Switch onChange={(checked) => handleShowPanel(checked, 'quickLocationPanel')} />
       ),
       getItem(

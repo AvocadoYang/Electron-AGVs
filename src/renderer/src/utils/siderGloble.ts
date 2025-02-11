@@ -15,6 +15,9 @@ export const EditRoadPanelSwitch = atom<boolean>(false)
 /** 2-2 顯示所有路徑表單 */
 export const RoadListTableSwitch = atom<boolean>(false)
 
+/** 3-1 編輯區域開關 */
+export const EditZoneSwitch = atom<boolean>(false)
+
 export const SideSwitchToShowForm = atom<boolean>(false)
 
 /** 地點tooltip */
