@@ -6,7 +6,6 @@ import { useAtomValue } from 'jotai'
 import { Tooltip } from 'antd'
 import { rad2Deg } from '@renderer/utils/utils'
 import { isShowRoadTooltip } from '@renderer/utils/siderGloble'
-import { hoverRoad } from '@renderer/utils/gloable'
 
 const Container = styled.div.attrs<{
   left: number
@@ -83,11 +82,12 @@ const Road: FC<{
   disabled: boolean
   isClaimedBy?: string
   limit: boolean
-}> = ({ roadId, roadType, x1, y1, x2, y2, isClaimedBy, limit, disabled }) => {
+  isRoadOnHover: boolean
+}> = ({ roadId, roadType, x1, y1, x2, y2, isClaimedBy, limit, disabled, isRoadOnHover }) => {
   const ref = useRef(null)
   const length = Math.hypot(x1 - x2, y1 - y2)
   const angle = rad2Deg(Math.atan2(y2 - y1, x2 - x1))
-  const roadOnHover = useAtomValue(hoverRoad)
+
   const showRoadTooltip = useAtomValue(isShowRoadTooltip)
 
   return (
@@ -100,7 +100,7 @@ const Road: FC<{
           isOneWayRoad={roadType === 'oneWayRoad'}
           isClaimed={isClaimedBy !== undefined}
           limit={!!limit}
-          isOnHover={roadOnHover === roadId}
+          isOnHover={isRoadOnHover}
         >
           {disabled && (
             <p

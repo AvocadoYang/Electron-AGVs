@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Form, message } from 'antd'
 import { FC, memo, useCallback, useState } from 'react'
-import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { LocWithoutArr, WrapperType } from './types'
+import { WrapperType } from './types'
 import styled from 'styled-components'
 import { useCargoMutations } from './hook/useCargoMutations'
 import CargoDisplay from './CargoDisplay'
 import CargoModal from './CargoModal'
-import { LoadingStation } from './LoadingStation'
-import useCargoInfo, { Info } from '@renderer/sockets/useCargoInfo'
-import { cargoStyle } from '@renderer/utils/gloable'
-import useLoc from '@renderer/api/useLoc'
+import { Info } from '@renderer/sockets/useCargoInfo'
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -54,8 +50,6 @@ const Cargo: FC<{
   const [isEditLayer, setIsEditLayer] = useState(false)
 
   const { editColumnMutation } = useCargoMutations(messageApi)
-  // const { data: locInfo } = useLoc(locId)
-  // const [cStyle] = useAtom(cargoStyle)
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>, targetId: string, targetLevel: number) => {
       if (event.button !== 1) return

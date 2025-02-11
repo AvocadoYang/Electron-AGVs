@@ -48,8 +48,10 @@ const Sider: React.FC<{
 }> = ({ setHasOpenTool }) => {
   const { data } = useMap()
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
-  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch); // 1-2
-  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(EditLocationListTableSwitch) // 1-4
+  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch) // 1-2
+  const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
+    EditLocationListTableSwitch
+  ) // 1-4
 
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
   const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch) // 2-2
@@ -63,11 +65,17 @@ const Sider: React.FC<{
       showAllLocationListTable,
       quickEditLocationPanel,
       openEditRoadPanel,
-      // showEditingRoad
+      showAllRoadListTable
     ].some((item) => item)
 
     setHasOpenTool(isOpen)
-  }, [openEditLocationPanel, showAllLocationListTable, openEditRoadPanel, quickEditLocationPanel])
+  }, [
+    openEditLocationPanel,
+    showAllLocationListTable,
+    openEditRoadPanel,
+    quickEditLocationPanel,
+    showAllRoadListTable
+  ])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
     if (!data) return
@@ -186,8 +194,9 @@ const Sider: React.FC<{
           checked={openEditLocationPanel}
         />
       ),
-      getItem(t('toolbar.location.quick_edit_locations'),
-      '1-2',
+      getItem(
+        t('toolbar.location.quick_edit_locations'),
+        '1-2',
         <Switch onChange={(checked) => handleShowPanel(checked, 'quickLocationPanel')} />
       ),
       getItem(
