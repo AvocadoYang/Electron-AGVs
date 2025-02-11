@@ -37,6 +37,7 @@ const DraggableLineDiv = styled.div.attrs<{
   top: number
   deg: number
   width: number
+  openEditRoadPanel: boolean
   scale?: number
   showblockid?: string
 }>(({ left, top, deg, width, scale }) => ({
@@ -47,7 +48,8 @@ const DraggableLineDiv = styled.div.attrs<{
     width: width ? width / (scale || 1) : 5
   }
 }))`
-  display: ${(props) => (props.showblockid === props.id ? 'block' : 'none')};
+  display: ${(props) =>
+    props.showblockid === props.id && props.openEditRoadPanel ? 'block' : 'none'};
   position: absolute;
   background-color: black;
   height: 3px;

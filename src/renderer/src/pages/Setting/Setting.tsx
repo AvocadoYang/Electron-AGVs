@@ -71,15 +71,6 @@ const Setting: React.FC = () => {
                 backgroundColor: 'white'
               }}
             >
-              {/* <ConfigProvider
-                theme={{
-                  components: {
-                    Splitter: {
-                      colorFill: '#fccb23'
-                    }
-                  }
-                }}
-              > */}
               <Splitter onResize={updateSize}>
                 <Splitter.Panel
                   size={splitterSize[0]}
@@ -91,7 +82,12 @@ const Setting: React.FC = () => {
                 </Splitter.Panel>
                 <Splitter.Panel size={splitterSize[1]} style={{ overflow: 'hidden' }}>
                   <div
-                    style={{ height: '100%', width: '100%', overflow: 'scroll' }}
+                    style={{
+                      height: '100%',
+                      width: '100%',
+                      overflow: 'scroll'
+                    }}
+                    draggable={false}
                     ref={mapWrapRef}
                   >
                     <MapView
@@ -104,8 +100,6 @@ const Setting: React.FC = () => {
                   </div>
                 </Splitter.Panel>
               </Splitter>
-              {/* </ConfigProvider> */}
-
               <ZoomPad setScale={setScale}></ZoomPad>
               <FormDrawerBtn></FormDrawerBtn>
             </Content>

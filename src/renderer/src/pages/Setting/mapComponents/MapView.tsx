@@ -4,8 +4,13 @@ import { RefObject, memo, useRef, useState } from 'react'
 import '../setting.css'
 import { FormInstance } from 'antd'
 import { useAtom, useAtomValue } from 'jotai'
-import {  sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
-import { EditLocationPanelSwitch, isShowLocation, isShowRoad, QuickEditLocationPanelSwitch } from '@renderer/utils/siderGloble'
+import { sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
+import {
+  EditLocationPanelSwitch,
+  isShowLocation,
+  isShowRoad,
+  QuickEditLocationPanelSwitch
+} from '@renderer/utils/siderGloble'
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
 import TempLocations from './components/TempResources/TempLocations'
@@ -58,14 +63,7 @@ const MapView: React.FC<{
     }
   }
 
-  useMousePoint(
-    mapWrapRef,
-    mapRef,
-    mapImageRef,
-    scale,
-    locationPanelForm,
-    openEditLocationPanel
-  )
+  useMousePoint(mapWrapRef, mapRef, mapImageRef, scale, locationPanelForm, openEditLocationPanel)
 
   const handleMouseDown = (startId: string) => {
     if (!data) return
@@ -104,18 +102,16 @@ const MapView: React.FC<{
         []
       )}
 
-      {showLocation ? <AllCargo /> : []}
+      {/* {showLocation ? <AllCargo /> : []} */}
 
-      { openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> :[]}
+      {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 
-      {(openEditLocationPanel || openQuickEditLocationPanelSwitch) ? (
+      {openEditLocationPanel || openQuickEditLocationPanelSwitch ? (
         //編輯點位跟快速編輯點位時的小紅點
         <MousePoint></MousePoint>
       ) : (
         <></>
       )}
-
-
 
       {showRoad ? <AllRoads /> : []}
     </div>

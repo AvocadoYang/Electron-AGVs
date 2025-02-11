@@ -8,7 +8,7 @@ import { hoverLocation, showBlockId as ShowBlockId } from '@renderer/utils/gloab
 import { draggableLineInitialPoint, mouseLocation } from '@renderer/pages/Setting/hooks/hook'
 import { Point, DraggableLine } from './components/PointAndLine'
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { isShowLocationTooltip } from '@renderer/utils/siderGloble'
+import { EditRoadPanelSwitch, isShowLocationTooltip } from '@renderer/utils/siderGloble'
 import styled from 'styled-components'
 
 const TooltipWrapper = styled.div`
@@ -36,6 +36,7 @@ const AllLocation: React.FC<{
 }> = ({ scale, setInitPoint, handleMouseDown, mouseLocation }) => {
   const showLocationToolTip = useAtomValue(isShowLocationTooltip)
   const [locationIdOnHover, setLocationIdOnHover] = useAtom(hoverLocation)
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const { data } = useMap()
   const [showBlockId] = useAtom(ShowBlockId)
   if (!data) return
@@ -70,6 +71,7 @@ const AllLocation: React.FC<{
                 onMouseEnter={() => setLocationIdOnHover(loc.locationId)}
                 onMouseLeave={() => setLocationIdOnHover('')}
                 onMouseDown={(e) => {
+                  if (!openEditRoadPanel) return
                   setInitPoint({ clientX: e.clientX, clientY: e.clientY })
                   handleMouseDown((e.target as HTMLInputElement).id)
                 }}
@@ -91,6 +93,7 @@ const AllLocation: React.FC<{
                 left={displayX}
                 top={displayY}
                 scale={scale}
+                openEditRoadPanel={openEditRoadPanel}
                 deg={mouseLocation.deg as number}
                 width={mouseLocation.width as number}
                 showblockid={showBlockId}

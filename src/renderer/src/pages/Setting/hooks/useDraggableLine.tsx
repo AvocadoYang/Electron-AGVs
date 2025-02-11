@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { useEffect, RefObject } from 'react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { rad2Deg } from '@renderer/utils/utils'
 import { FormInstance } from 'antd'
@@ -8,6 +8,7 @@ import { draggableLineInitialPoint, mouseLocation } from './hook'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useMap from '@renderer/api/useMap'
 import { LocationType } from '@renderer/utils/jotai'
+import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 
 const useDraggableLine = (
   mapRef: RefObject<HTMLDivElement>,
@@ -18,6 +19,7 @@ const useDraggableLine = (
   setIsResizing: React.Dispatch<boolean>
 ) => {
   const [showBlockId, setShowBlockId] = useAtom(ShowBlockId)
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const { data: mapData } = useMap()
 
   const handleMouseUp = (endId: string) => {
@@ -80,7 +82,7 @@ const useDraggableLine = (
   }
 
   useEffect(() => {
-    if (showBlockId === '') return
+    if (showBlockId === '' || !openEditRoadPanel) return
     let mapPanelRefCopy: HTMLDivElement
     if (mapRef && mapRef.current) {
       mapPanelRefCopy = mapRef.current
