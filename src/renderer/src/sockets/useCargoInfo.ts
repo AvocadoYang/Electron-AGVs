@@ -59,16 +59,16 @@ const profiles$ = fromEventPattern(
         })
     )
   ),
+  distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
   share()
 )
 
-const useCargoInfo = (locId: string) => {
-  const [cargoInfo, setCargoInfo] = useState<Info>()
+const useCargoInfo = () => {
+  const [cargoInfo, setCargoInfo] = useState<Info[]>()
 
   useEffect(() => {
     const subscription = profiles$
       .pipe(
-        map((data) => data?.find((profile) => profile.areaId === locId)),
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)) // Avoid state update if data is identical
       )
       .subscribe((filteredData) => {
@@ -80,7 +80,7 @@ const useCargoInfo = (locId: string) => {
     return () => {
       subscription.unsubscribe()
     }
-  }, [locId])
+  }, [])
 
   return cargoInfo
 }

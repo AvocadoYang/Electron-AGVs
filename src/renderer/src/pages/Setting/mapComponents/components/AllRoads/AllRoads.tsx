@@ -2,7 +2,7 @@ import { FC, memo } from 'react'
 
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
 import useMap from '@renderer/api/useMap'
-import { useClaimedRoads } from '@renderer/api/useClaimedResources'
+import { useClaimedRoads } from '@renderer/sockets/useClaimedResources'
 import Road from './Road'
 
 const MemoizedRoad = memo(Road, (prevProps, nextProps) => {

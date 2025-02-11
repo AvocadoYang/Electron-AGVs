@@ -8,6 +8,7 @@ import { sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable
 import {
   EditLocationPanelSwitch,
   isShowLocation,
+  isShowLocationTooltip,
   isShowRoad,
   QuickEditLocationPanelSwitch
 } from '@renderer/utils/siderGloble'
@@ -22,6 +23,7 @@ import { MousePoint, AllLocation, MapImage } from './components'
 import { LocationType } from '@renderer/utils/jotai'
 import AllRoads from './components/AllRoads/AllRoads'
 import AllCargo from '../AllCargo.tsx/AllCargo'
+import ToolTip from '../components/ToolTip'
 
 const MapView: React.FC<{
   scale: number
@@ -45,7 +47,7 @@ const MapView: React.FC<{
   const [, setSameVersion] = useAtom(sameVersion)
   const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
   const [openQuickEditLocationPanelSwitch] = useAtom(QuickEditLocationPanelSwitch)
-
+  const showLocationToolTip = useAtomValue(isShowLocationTooltip)
   const showLocation = useAtomValue(isShowLocation)
   const showRoad = useAtomValue(isShowRoad)
 
@@ -102,7 +104,16 @@ const MapView: React.FC<{
         []
       )}
 
-      {/* {showLocation ? <AllCargo /> : []} */}
+      {showLocation ? (
+        <AllCargo
+          scale={scale}
+          setInitPoint={setInitPoint}
+          handleMouseDown={handleMouseDown}
+          mouseLocation={mouseLocation}
+        />
+      ) : (
+        []
+      )}
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 
@@ -114,6 +125,8 @@ const MapView: React.FC<{
       )}
 
       {showRoad ? <AllRoads /> : []}
+
+      {showLocationToolTip ? <ToolTip /> : []}
     </div>
   )
 }

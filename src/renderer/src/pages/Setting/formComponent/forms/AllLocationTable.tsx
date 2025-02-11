@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import './form.css'
 import {
-  FormInstance,
   InputNumber,
   Select,
   InputRef,
@@ -14,13 +13,12 @@ import {
   Popconfirm,
   Flex
 } from 'antd'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { LocationType } from '@renderer/utils/jotai'
 import { useRef, useState } from 'react'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import { useTranslation } from 'react-i18next'
-import { hoverLocation } from '@renderer/utils/gloable'
-import { EditLocationListTableSwitch } from '@renderer/utils/siderGloble'
+import { tooltipProp } from '@renderer/utils/gloable'
 import { SearchOutlined, DeleteTwoTone } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
 
@@ -117,9 +115,8 @@ const AllLocationTable: React.FC<{
   const [locationPanelForm] = Form.useForm()
   const searchInput = useRef<InputRef>(null)
   const [editingKey, setEditingKey] = useState<string | null>(null)
-  const setHoverLoc = useSetAtom(hoverLocation)
   const { data: mapData } = useMap()
-  const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch)
+  const setTooltip = useSetAtom(tooltipProp)
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
@@ -295,13 +292,16 @@ const AllLocationTable: React.FC<{
     deleteLocationMutation.mutate(id.toString())
   }
 
-  const handleHover = (id: string) => {
-    if (!id) return
-    setHoverLoc(id)
+  const handleHover = (locationId: string, x: number, y: number) => {
+    setTooltip({
+      x,
+      y,
+      locationId
+    })
   }
 
   const handleMouseLeave = () => {
-    setHoverLoc('')
+    setTooltip(null)
   }
 
   const columns = [
@@ -490,7 +490,8 @@ const AllLocationTable: React.FC<{
               }}
               onRow={(record) => {
                 return {
-                  onMouseEnter: () => handleHover(record.locationId)
+                  onMouseEnter: () =>
+                    handleHover(record.locationId, Number(record.x), Number(record.y))
                 }
               }}
               bordered

@@ -8,8 +8,6 @@ export const sameVersion = atom(true)
 // control which ID of draggableLine can be use.
 export const showBlockId = atom<string>('')
 
-export const hoverLocation = atom<string>('')
-
 export const hoverRoad = atom<string>('')
 
 // ** 貨架樣式 */
@@ -21,3 +19,9 @@ export const locationXForQuickEditLocationPanel = atom<number>(0)
 export const locationYForQuickEditLocationPanel = atom<number>(0)
 
 export const TempStoredLocationsForQuickEditPanel = atom<LocationType[]>([])
+
+export const tooltipProp = atom<{
+  x: number
+  y: number
+  locationId: string
+} | null>(null)
