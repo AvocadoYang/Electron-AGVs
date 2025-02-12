@@ -16,7 +16,12 @@ import {
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
 import TempLocations from './components/TempResources/TempLocations'
-import { draggableLineInitialPoint, mouseLocation, MouseLocationForFrame } from '../hooks/hook'
+import {
+  draggableLineInitialPoint,
+  mouseLocation,
+  MouseLocationForFrame,
+  RectInfo
+} from '../hooks/hook'
 import { useMousePoint, useDraggableLine, useZoneFrame } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
@@ -46,6 +51,21 @@ const MapView: React.FC<{
 
   /** 拖曳區域相關參數 */
   const [isDragging, setIsDragging] = useState(false)
+  const [initPointRecord, setInitPointRecord] = useState({
+    rvizX: 0,
+    rvizY: 0
+  } as MouseLocationForFrame)
+  const [endPointRecord, setEndPointRecord] = useState({
+    rvizX: 0,
+    rvizY: 0
+  } as MouseLocationForFrame)
+
+  const [rectInfo, setRectInfo] = useState({
+    axisX: -5000,
+    axisY: -5000,
+    width: 0,
+    height: 0
+  } as RectInfo)
   /** */
 
   const mapImageRef = useRef<HTMLImageElement>(null)
@@ -76,7 +96,16 @@ const MapView: React.FC<{
   useMousePoint(mapWrapRef, mapRef, mapImageRef, scale, locationPanelForm, openEditLocationPanel)
 
   //控制區域圈選
-  useZoneFrame(mapWrapRef, mapRef, mapImageRef, scale, setIsDragging)
+  useZoneFrame(
+    mapWrapRef,
+    mapRef,
+    mapImageRef,
+    scale,
+    setIsDragging,
+    setInitPointRecord,
+    setEndPointRecord,
+    setRectInfo
+  )
 
   //控制編輯路線時的箭頭拖曳
   useDraggableLine(mapRef, roadPanelForm, initPoint, setMouseLocation, isResizing, setIsResizing)
@@ -118,7 +147,7 @@ const MapView: React.FC<{
         []
       )}
 
-      {showLocation ? (
+      {/* {showLocation ? (
         <AllCargo
           scale={scale}
           setInitPoint={setInitPoint}
@@ -127,7 +156,7 @@ const MapView: React.FC<{
         />
       ) : (
         []
-      )}
+      )} */}
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 
@@ -143,6 +172,8 @@ const MapView: React.FC<{
       ) : (
         []
       )}
+
+      {openEditZone ? <DragFrame rectInfo={rectInfo}></DragFrame> : []}
 
       {openEditLocationPanel || openQuickEditLocationPanelSwitch ? (
         //編輯點位跟快速編輯點位時的小紅點

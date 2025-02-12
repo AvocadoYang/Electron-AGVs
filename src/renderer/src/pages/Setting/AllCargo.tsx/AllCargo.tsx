@@ -58,7 +58,7 @@ const AllCargo: React.FC<{
           const translateY = info?.find((i) => i.locationId === loc.locationId)?.translateY || 0
           const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 270
           const LocScale = info?.find((i) => i.locationId === loc.locationId)?.scale || 1
-
+          console.log(loc.locationId.toString())
           return (
             <div
               draggable={false}

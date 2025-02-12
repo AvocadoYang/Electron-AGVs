@@ -33,6 +33,7 @@ const CargoModal: FC<{
 }) => {
   const [messageApi, contextHolders] = message.useMessage()
   const { editMutation } = useCargoMutations(messageApi)
+
   const { t } = useTranslation()
   const handleEditOk = () => {
     const payload = settingForm.getFieldsValue() as FormCargo

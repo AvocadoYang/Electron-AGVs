@@ -8,7 +8,7 @@ import { showBlockId as ShowBlockId, tooltipProp } from '@renderer/utils/gloable
 import { draggableLineInitialPoint, mouseLocation } from '@renderer/pages/Setting/hooks/hook'
 import { Point, DraggableLine } from './components/PointAndLine'
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
+import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble'
 
 const AllLocation: React.FC<{
   scale: number
@@ -19,6 +19,7 @@ const AllLocation: React.FC<{
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const setTooltip = useSetAtom(tooltipProp)
   const { data } = useMap()
+  const openEditZone = useAtomValue(EditZoneSwitch)
   const [showBlockId] = useAtom(ShowBlockId)
 
   const handleEnter = (locationId: string, x: number, y: number) => {
@@ -65,7 +66,7 @@ const AllLocation: React.FC<{
                 onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
                 onMouseLeave={() => handleLeave()}
                 onMouseDown={(e) => {
-                  if (!openEditRoadPanel) return
+                  if (!openEditRoadPanel || openEditZone) return
                   setInitPoint({ clientX: e.clientX, clientY: e.clientY })
                   handleMouseDown((e.target as HTMLInputElement).id)
                 }}

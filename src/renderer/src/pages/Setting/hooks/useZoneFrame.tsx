@@ -1,59 +1,93 @@
 import useMap from '@renderer/api/useMap'
 import { EditZoneSwitch } from '@renderer/utils/siderGloble'
 import { useAtomValue } from 'jotai'
-import { RefObject, useEffect, useState } from 'react'
-import { fromEvent, map, switchMap, takeUntil, tap, EMPTY, take, merge } from 'rxjs'
+import { RefObject, useEffect } from 'react'
+import { fromEvent, switchMap, takeUntil, tap, EMPTY, take, merge } from 'rxjs'
 import { rvizCoord } from '@renderer/utils/utils'
+import { MouseLocationForFrame, RectInfo } from './hook'
 
 const useZoneFrame = (
   mapWrapRef: RefObject<HTMLDivElement>,
   mapRef: RefObject<HTMLDivElement>,
   mapImageRef: RefObject<HTMLImageElement>,
   scale: number,
-  setIsDragging: React.Dispatch<boolean>
+  setIsDragging: React.Dispatch<boolean>,
+  setInitPointRecord: React.Dispatch<MouseLocationForFrame>,
+  setEndPointRecord: React.Dispatch<MouseLocationForFrame>,
+  setRectInfo: React.Dispatch<RectInfo>
 ) => {
   const { data } = useMap()
   const openEditZone = useAtomValue(EditZoneSwitch)
 
   useEffect(() => {
-    console.log('refetch')
     if (!mapWrapRef.current || !mapRef.current || !mapImageRef.current || !data || !openEditZone)
       return
     const mapPanel = mapRef.current
     const mapWrap = mapWrapRef.current
 
-    // RxJS 事件流: 點擊開始拖曳
+    //點擊開始拖曳
     const mouseDown$ = fromEvent<MouseEvent>(mapRef.current, 'mousedown').pipe(
       switchMap((startEvent) => {
         if (!mapPanel || !mapWrap || !mapImageRef) return EMPTY
         setIsDragging(true)
         startEvent.preventDefault()
-        console.log('綁定')
+        setRectInfo({
+          axisX: -5000,
+          axisY: -5000,
+          width: 0,
+          height: 0
+        })
         if ((mapImageRef.current as HTMLElement).nodeName !== 'IMG') return EMPTY
-        const startX = startEvent.clientX - mapPanel.offsetLeft + mapWrap.scrollLeft
-        const startY = startEvent.clientY - mapPanel.offsetTop + mapWrap.scrollTop
-        console.log(startX, startY)
+        const startX = startEvent.clientX
+        const startY = startEvent.clientY
+        const startXForDisplay = startX - mapPanel.offsetLeft + mapWrap.scrollLeft
+        const startYForDisplay = startY - mapPanel.offsetTop + mapWrap.scrollTop
+
+        const [rx, ry] = rvizCoord({
+          displayX: startXForDisplay,
+          displayY: startYForDisplay,
+          mapResolution: data?.mapResolution,
+          mapOriginX: data?.mapOriginX,
+          mapOriginY: data?.mapOriginY,
+          mapHeight: data?.mapHeight,
+          scaleSize: scale
+        })
+        setInitPointRecord({
+          rvizX: rx,
+          rvizY: ry
+        })
         return fromEvent<MouseEvent>(mapRef.current, 'mousemove').pipe(
-          map((moveEvent) => {
+          tap((moveEvent) => {
+            //這裡可以傳遞矩形範圍給 state 或其他處理函數
             const endX = moveEvent.clientX - mapPanel.offsetLeft + mapWrap.scrollLeft
             const endY = moveEvent.clientY - mapPanel.offsetTop + mapWrap.scrollTop
-
-            return {
-              startX: startX / scale,
-              startY: startY / scale,
-              endX: endX / scale,
-              endY: endY / scale
-            }
-          }),
-          tap(({ startX, startY, endX, endY }) => {
-            // console.log('繪製矩形範圍:', { startX, startY, endX, endY })
-            // 這裡可以傳遞矩形範圍給 state 或其他處理函數
+            setRectInfo({
+              axisX: Math.min(endX, startXForDisplay),
+              axisY: Math.min(endY, startYForDisplay),
+              width: Math.abs(endX - startXForDisplay),
+              height: Math.abs(endY - startYForDisplay)
+            })
           }),
           takeUntil(
             merge(
               fromEvent<MouseEvent>(mapPanel, 'mouseup').pipe(
-                tap(() => {
+                tap((e) => {
+                  const endXForDisplay = e.clientX - mapPanel.offsetLeft + mapWrap.scrollLeft
+                  const endYForDisplay = e.clientY - mapPanel.offsetTop + mapWrap.scrollTop
                   console.log('mouseup 事件，停止拖曳')
+                  const [rx, ry] = rvizCoord({
+                    displayX: endXForDisplay,
+                    displayY: endYForDisplay,
+                    mapResolution: data?.mapResolution,
+                    mapOriginX: data?.mapOriginX,
+                    mapOriginY: data?.mapOriginY,
+                    mapHeight: data?.mapHeight,
+                    scaleSize: scale
+                  })
+                  setEndPointRecord({
+                    rvizX: rx,
+                    rvizY: ry
+                  })
                   setIsDragging(false)
                 }),
                 take(1)
@@ -62,6 +96,12 @@ const useZoneFrame = (
                 tap(() => {
                   console.log('mouseleave 事件，停止拖曳')
                   setIsDragging(false)
+                  setRectInfo({
+                    axisX: -5000,
+                    axisY: -5000,
+                    width: 0,
+                    height: 0
+                  })
                 }),
                 take(1)
               )

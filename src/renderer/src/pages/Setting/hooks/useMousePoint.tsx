@@ -11,7 +11,7 @@ import {
   mousePoint_X,
   mousePoint_Y
 } from '@renderer/utils/gloable'
-import { QuickEditLocationPanelSwitch } from '@renderer/utils/siderGloble'
+import { EditZoneSwitch, QuickEditLocationPanelSwitch } from '@renderer/utils/siderGloble'
 
 const useMousePoint = (
   mapWrapRef: RefObject<HTMLDivElement>,
@@ -26,6 +26,7 @@ const useMousePoint = (
   const [, setLocationXForQuickEditLocationPanel] = useAtom(locationXForQuickEditLocationPanel)
   const [, setLocationYForQuickEditLocationPanel] = useAtom(locationYForQuickEditLocationPanel)
   const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch)
+  const openEditZone = useAtomValue(EditZoneSwitch)
 
   const { data } = useMap()
   useEffect(() => {
@@ -34,6 +35,7 @@ const useMousePoint = (
       !mapRef.current ||
       !mapImageRef.current ||
       (!showEditLocationPanel && !showQuickEditLocationPanel) ||
+      openEditZone ||
       !data
     ) {
       return
@@ -87,7 +89,7 @@ const useMousePoint = (
     return () => {
       subscription.unsubscribe()
     }
-  }, [mapRef, mapWrapRef, scale, showEditLocationPanel, showQuickEditLocationPanel])
+  }, [mapRef, mapWrapRef, scale, showEditLocationPanel, showQuickEditLocationPanel, openEditZone])
 }
 
 export default useMousePoint

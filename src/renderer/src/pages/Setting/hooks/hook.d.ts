@@ -8,6 +8,13 @@ export type mouseLocation = {
 }
 
 export type MouseLocationForFrame = {
-  displayX?: number | undefined
-  displayY?: number | undefined
+  rvizX: number
+  rvizY: number
+}
+
+export type RectInfo = {
+  axisX: number
+  axisY: number
+  width: number
+  height: number
 }

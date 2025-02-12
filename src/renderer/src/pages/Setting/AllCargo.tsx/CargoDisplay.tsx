@@ -80,7 +80,7 @@ const CargoDisplay: FC<{
       border={border}
       onMouseDown={(e) => handleMouseDown(e, locId, level)}
     >
-      <BlockSpan hasCargo={cargoValue} rotate={rotate}>
+      <BlockSpan hasCargo={cargoValue} rotate={rotate} id={locId}>
         {levelName}
       </BlockSpan>
     </Block>

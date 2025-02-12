@@ -9,6 +9,8 @@ import { useCargoMutations } from './hook/useCargoMutations'
 import CargoDisplay from './CargoDisplay'
 import CargoModal from './CargoModal'
 import { Info } from '@renderer/sockets/useCargoInfo'
+import { useAtomValue } from 'jotai'
+import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble'
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -47,6 +49,8 @@ const Cargo: FC<{
   const { t } = useTranslation()
   const [messageApi, contextHolder] = message.useMessage()
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const openEditZone = useAtomValue(EditZoneSwitch)
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const [isEditLayer, setIsEditLayer] = useState(false)
 
   const { editColumnMutation } = useCargoMutations(messageApi)
@@ -71,6 +75,7 @@ const Cargo: FC<{
         scale={scale}
         rotate={rotate}
         onClick={() => {
+          if (openEditRoadPanel || openEditZone) return
           setIsEditModalOpen(true)
         }}
       >
