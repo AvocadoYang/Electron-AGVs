@@ -1,20 +1,24 @@
 import { FC, memo } from 'react'
-
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
 import useMap from '@renderer/api/useMap'
 import { useClaimedRoads } from '@renderer/sockets/useClaimedResources'
 import Road from './Road'
+import { hoverRoad } from '@renderer/utils/gloable'
+import { useAtomValue } from 'jotai'
 
 const MemoizedRoad = memo(Road, (prevProps, nextProps) => {
-  return prevProps.isClaimedBy === nextProps.isClaimedBy
+  return (
+    prevProps.isClaimedBy === nextProps.isClaimedBy &&
+    prevProps.isRoadOnHover === nextProps.isRoadOnHover
+  )
 })
 
 const AllRoads: FC<{}> = () => {
   const { data } = useMap()
   const claimedRoads = useClaimedRoads()
+  const roadOnHover = useAtomValue(hoverRoad)
 
   if (!data?.roads) return []
-
   return (
     <div draggable={false}>
       {data.roads.map(({ roadId, roadType, x1, y1, x2, y2, validYawList, disabled, limit }) => {
@@ -51,6 +55,7 @@ const AllRoads: FC<{}> = () => {
             disabled={disabled}
             validYawList={validYawList}
             isClaimedBy={currentClaimedStatus}
+            isRoadOnHover={roadOnHover === roadId}
           />
         )
       })}
@@ -58,4 +63,4 @@ const AllRoads: FC<{}> = () => {
   )
 }
 
-export default memo(AllRoads)
+export default AllRoads

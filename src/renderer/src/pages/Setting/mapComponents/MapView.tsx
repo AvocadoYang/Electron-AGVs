@@ -117,7 +117,7 @@ const MapView: React.FC<{
       ) : (
         []
       )}
-      {/*
+
       {showLocation ? (
         <AllCargo
           scale={scale}
@@ -127,7 +127,7 @@ const MapView: React.FC<{
         />
       ) : (
         []
-      )} */}
+      )}
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 

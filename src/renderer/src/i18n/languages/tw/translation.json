@@ -15,6 +15,8 @@
     "delete": "刪除",
     "edit": "編輯",
     "success": "成功",
+    "fail": "失敗",
+    "submit": "送出",
 
     "location_property": {
       "none": "點位",
@@ -175,5 +177,23 @@
       "cargo_limit": "貨架高度鎖定",
       "pallet": "板"
     }
+  },
+
+  "edit_shelf_panel": {
+    "edit_shelf": "編輯貨架",
+    "category": "貨架種類",
+    "load_mission": "取貨任務",
+    "offload_mission": "放貨任務",
+    "yaw": "轉角",
+    "region_name": "區域名稱",
+    "location_id": "地點",
+    "level": "貨架層數",
+    "column_name": "庫格名稱",
+    "cargo_limit": "貨架高度鎖定",
+    "detail": "詳細資訊",
+    "setting": "調整貨架",
+    "disabled": "停用",
+    "height": "高度",
+    "save": "儲存"
   }
 }

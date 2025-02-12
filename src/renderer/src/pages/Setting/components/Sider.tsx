@@ -10,7 +10,11 @@ import {
   EditRoadPanelSwitch,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch,
-  EditZoneSwitch
+  EditZoneSwitch,
+  EditShelfPanelSwitch,
+  EditShelfCategoryPanelSwitch,
+  EditShelfYawPanelSwitch,
+  EditPalletSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -20,9 +24,11 @@ import {
   DeploymentUnitOutlined
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
-import { ToolBarItemType } from './antd'
 import type { MenuProps } from 'antd'
 import '../setting.css'
+import { ToolBarItemType } from './siderElement'
+import { useQueryClient } from '@tanstack/react-query'
+import { isEditCargo } from '@renderer/utils/gloable'
 
 export type MenuItem = Required<MenuProps>['items'][number]
 
@@ -48,6 +54,9 @@ const Sider: React.FC<{
   setHasOpenTool: React.Dispatch<React.SetStateAction<boolean>>
 }> = ({ setHasOpenTool }) => {
   const { data } = useMap()
+  const queryClient = useQueryClient()
+
+  const setEditCargo = useSetAtom(isEditCargo)
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
   const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch) // 1-2
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
@@ -58,7 +67,12 @@ const Sider: React.FC<{
   const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch) // 2-2
 
   const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch) // 3-1
-  const setShowLocationToolTip = useSetAtom(isShowLocationTooltip)
+  const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch) //4-1
+  const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch) //4-2
+  const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch) //4-3
+  const [openPalletTable, setOpenPalletTable] = useAtom(EditPalletSwitch) //4-4
+
+  const setShowLocationToolTip = useSetAtom(isShowLocationTooltip) //地點tooltip
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
 
@@ -67,37 +81,73 @@ const Sider: React.FC<{
       openEditLocationPanel,
       showAllLocationListTable,
       quickEditLocationPanel,
-      openEditRoadPanel
-      // showEditingRoad
+      openEditRoadPanel,
+      showAllRoadListTable,
+      openEditShelfPanel,
+      openEditShelfCategory,
+      openYawTable,
+      openPalletTable
     ].some((item) => item)
 
     setHasOpenTool(isOpen)
-  }, [openEditLocationPanel, showAllLocationListTable, openEditRoadPanel, quickEditLocationPanel])
+  }, [
+    openEditLocationPanel,
+    showAllLocationListTable,
+    quickEditLocationPanel,
+    openEditRoadPanel,
+    showAllRoadListTable,
+    openEditShelfPanel,
+    openEditShelfCategory,
+    openYawTable,
+    openPalletTable
+  ])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
     if (!data) return
     switch (itemType) {
       // === location ===
       case 'locationPanel':
-        setOpenEditLocationPanel(!openEditLocationPanel)
+        setOpenEditLocationPanel(check)
         break
       case 'quickLocationPanel':
-        setQuickEditLocationPanel(!quickEditLocationPanel)
+        setQuickEditLocationPanel(check)
         break
       case 'locationList':
-        setShowAllLocationListTable(!showAllLocationListTable)
+        setShowAllLocationListTable(check)
         setShowLocationToolTip(true)
 
         break
       // ===================
       // === road ===
       case 'roadPanel':
-        setOpenEditRoadPanel(!openEditRoadPanel)
+        setOpenEditRoadPanel(check)
         break
 
       case 'show_roads_table':
-        setShowAllRoadListTable(!showAllRoadListTable)
+        setShowAllRoadListTable(check)
         break
+
+      // ===================
+      // === shelf ===
+
+      case 'edit_shelve':
+        await queryClient.refetchQueries({ queryKey: ['shelf'] })
+        setEditCargo(false)
+        setOpenEditShelf(check)
+        break
+      case 'edit_shelve_type':
+        await queryClient.refetchQueries({ queryKey: ['all-shelf-category'] })
+        setOpenEditShelfCategory(check)
+        break
+      case 'edit_yaw':
+        await queryClient.refetchQueries({ queryKey: ['yaw'] })
+        setOpenYawTable(check)
+        break
+
+      case 'edit_pallet':
+        setOpenPalletTable(check)
+        break
+
       // ===================
       // === zone ===
       case 'edit_zone':
@@ -122,9 +172,9 @@ const Sider: React.FC<{
         break
       // ===================
       // === others ===
-      case 'edit_gauge':
-        console.log('edit_gauge')
-        break
+      // case 'edit_gauge':
+      //   console.log('edit_gauge')
+      //   break
       case 'edit_tag':
         console.log('edit_tag')
         break
@@ -145,11 +195,11 @@ const Sider: React.FC<{
         console.log('todo_dependent_on_return_id_task')
         break
 
-      case 'topic_task':
+      case 'topic_mission':
         console.log('topic_task')
         break
 
-      case 'idle_task':
+      case 'idle_mission':
         console.log('idle_task')
         break
 
@@ -157,24 +207,16 @@ const Sider: React.FC<{
         console.log('before_left_charge_station_task')
         break
 
-      case 'cycle_task':
+      case 'cycle_mission':
         console.log('cycle_task')
         break
 
-      case 'schedule_task':
+      case 'schedule_mission':
         console.log('schedule_task')
         break
 
-      case 'charge_task':
+      case 'charge_mission':
         console.log('charge_task')
-        break
-
-      case 'region_task':
-        console.log('region_task')
-        break
-
-      case 'edit_mission':
-        console.log('edit_mission')
         break
 
       //========================
@@ -246,31 +288,38 @@ const Sider: React.FC<{
         getItem(
           t('toolbar.shelve.shelves.edit_shelve'),
           '4-1',
-          <Switch onChange={(checked) => handleShowPanel(checked, 'edit_shelve')} />
+          <Switch
+            checked={openEditShelfPanel}
+            onChange={(checked) => handleShowPanel(checked, 'edit_shelve')}
+          />
         ),
         getItem(
           t('toolbar.shelve.shelves.edit_shelve_type'),
           '4-2',
-          <Switch onChange={(checked) => handleShowPanel(checked, 'edit_shelve_type')} />
+          <Switch
+            checked={openEditShelfCategory}
+            onChange={(checked) => handleShowPanel(checked, 'edit_shelve_type')}
+          />
         ),
         getItem(
           t('toolbar.shelve.shelves.edit_yaw'),
           '4-3',
-          <Switch onChange={(checked) => handleShowPanel(checked, 'edit_yaw')} />
+          <Switch
+            checked={openYawTable}
+            onChange={(checked) => handleShowPanel(checked, 'edit_yaw')}
+          />
         ),
         getItem(
           t('toolbar.shelve.shelves.edit_pallet'),
           '4-4',
-          <Switch checked={false} onChange={(checked) => handleShowPanel(checked, 'edit_pallet')} />
+          <Switch
+            checked={openPalletTable}
+            onChange={(checked) => handleShowPanel(checked, 'edit_pallet')}
+          />
         )
       ]
     ),
     getItem(t('toolbar.others.others'), '7', <DeploymentUnitOutlined />, [
-      getItem(
-        t('toolbar.others.edit_gauge'),
-        '7-1',
-        <Switch checked={false} onChange={(checked) => handleShowPanel(checked, 'edit_gauge')} />
-      ),
       getItem(
         t('toolbar.others.edit_tag'),
         '7-2',

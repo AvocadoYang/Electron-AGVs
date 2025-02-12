@@ -25,3 +25,6 @@ export const tooltipProp = atom<{
   y: number
   locationId: string
 } | null>(null)
+
+// 於編輯頁面正在編輯
+export const isEditCargo = atom(false)

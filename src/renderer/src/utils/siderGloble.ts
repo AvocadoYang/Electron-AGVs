@@ -17,6 +17,17 @@ export const RoadListTableSwitch = atom<boolean>(false)
 
 /** 3-1 編輯區域開關 */
 export const EditZoneSwitch = atom<boolean>(false)
+/** 4-1 顯示 編輯貨架 */
+export const EditShelfPanelSwitch = atom<boolean>(false)
+
+/** 4-2 顯示 編輯貨架種類 */
+export const EditShelfCategoryPanelSwitch = atom<boolean>(false)
+
+/** 4-3 顯示 編輯YAW */
+export const EditShelfYawPanelSwitch = atom<boolean>(false)
+
+/** 4-4 顯示 編輯棧版 */
+export const EditPalletSwitch = atom<boolean>(false)
 
 export const SideSwitchToShowForm = atom<boolean>(false)
 
