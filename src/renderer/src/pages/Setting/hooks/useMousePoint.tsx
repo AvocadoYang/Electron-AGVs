@@ -60,7 +60,7 @@ const useMousePoint = (
           return
         }
         if (!mapRef.current || !mapWrapRef.current) return
-        // offestTop 64
+
         const adjustX = clientX - mapRef.current.offsetLeft + (Left as number)
         const adjustY = clientY - mapRef.current.offsetTop + (Top as number)
         const [rx, ry] = rvizCoord({

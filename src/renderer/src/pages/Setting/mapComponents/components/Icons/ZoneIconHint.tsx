@@ -1,5 +1,5 @@
 import { FC, memo, RefObject, useEffect, useState } from 'react'
-import { MouseLocationForFrame } from '../../hooks/hook'
+import { MouseLocationForFrame } from '../../../hooks/hook'
 import useMap from '@renderer/api/useMap'
 import styled from 'styled-components'
 import { useAtomValue } from 'jotai'
@@ -57,18 +57,12 @@ const ZoneIconHint: FC<{
   isDragging: boolean
 }> = ({ mapWrapRef, mapRef, mapImageRef, scale, isDragging }) => {
   const openEditZone = useAtomValue(EditZoneSwitch)
-  const [mouseMoveLocationForFrame, setMouseMoveLocationForFrame] = useState(
-    {} as MouseLocationForFrame
-  )
+  const [mouseMoveLocationForFrame, setMouseMoveLocationForFrame] = useState({
+    displayX: -4000,
+    displayY: -4000
+  } as MouseLocationForFrame)
 
   useEffect(() => {
-    if (!mapWrapRef.current || !mapRef.current || !mapImageRef.current || !data || !openEditZone)
-      return
-    if (isDragging) {
-      setMouseMoveLocationForFrame({ displayX: -1000, displayY: -1000 })
-      return
-    }
-    // 原本的 mousemove 事件
     const mouseMoveEventForMapRef = (e: MouseEvent) => {
       if (!mapRef.current || !mapWrapRef.current || isDragging) return
       const { clientX, clientY } = e
@@ -86,6 +80,11 @@ const ZoneIconHint: FC<{
       setMouseMoveLocationForFrame({ displayX: -1000, displayY: -1000 })
     }
 
+    if (!mapWrapRef.current || !mapRef.current || !mapImageRef.current || !data || !openEditZone)
+      return
+    if (isDragging) {
+      setMouseMoveLocationForFrame({ displayX: -1000, displayY: -1000 })
+    }
     const mapPanel = mapRef.current
     // 綁定滑鼠移動事件
     mapPanel.addEventListener('mousemove', mouseMoveEventForMapRef)

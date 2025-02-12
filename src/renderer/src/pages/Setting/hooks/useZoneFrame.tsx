@@ -2,7 +2,7 @@ import useMap from '@renderer/api/useMap'
 import { EditZoneSwitch } from '@renderer/utils/siderGloble'
 import { useAtomValue } from 'jotai'
 import { RefObject, useEffect, useState } from 'react'
-import { fromEvent, map, switchMap, takeUntil, tap, EMPTY, throttleTime, debounceTime } from 'rxjs'
+import { fromEvent, map, switchMap, takeUntil, tap, EMPTY, take, merge } from 'rxjs'
 import { rvizCoord } from '@renderer/utils/utils'
 
 const useZoneFrame = (
@@ -16,23 +16,23 @@ const useZoneFrame = (
   const openEditZone = useAtomValue(EditZoneSwitch)
 
   useEffect(() => {
+    console.log('refetch')
     if (!mapWrapRef.current || !mapRef.current || !mapImageRef.current || !data || !openEditZone)
       return
     const mapPanel = mapRef.current
     const mapWrap = mapWrapRef.current
 
     // RxJS 事件流: 點擊開始拖曳
-    const mouseDown$ = fromEvent<MouseEvent>(mapPanel, 'mousedown').pipe(
-      tap(() => {
-        console.log('?????????????????????')
-        setIsDragging(true)
-      }),
+    const mouseDown$ = fromEvent<MouseEvent>(mapRef.current, 'mousedown').pipe(
       switchMap((startEvent) => {
-        if (!mapPanel || !mapWrap) return EMPTY
-
+        if (!mapPanel || !mapWrap || !mapImageRef) return EMPTY
+        setIsDragging(true)
+        startEvent.preventDefault()
+        console.log('綁定')
+        if ((mapImageRef.current as HTMLElement).nodeName !== 'IMG') return EMPTY
         const startX = startEvent.clientX - mapPanel.offsetLeft + mapWrap.scrollLeft
         const startY = startEvent.clientY - mapPanel.offsetTop + mapWrap.scrollTop
-
+        console.log(startX, startY)
         return fromEvent<MouseEvent>(mapRef.current, 'mousemove').pipe(
           map((moveEvent) => {
             const endX = moveEvent.clientX - mapPanel.offsetLeft + mapWrap.scrollLeft
@@ -50,8 +50,23 @@ const useZoneFrame = (
             // 這裡可以傳遞矩形範圍給 state 或其他處理函數
           }),
           takeUntil(
-            fromEvent<MouseEvent>(mapPanel, 'mouseup').pipe(tap(() => setIsDragging(false)))
-          ) // 當 mouseup 發生時，結束事件流
+            merge(
+              fromEvent<MouseEvent>(mapPanel, 'mouseup').pipe(
+                tap(() => {
+                  console.log('mouseup 事件，停止拖曳')
+                  setIsDragging(false)
+                }),
+                take(1)
+              ),
+              fromEvent<MouseEvent>(mapPanel, 'mouseleave').pipe(
+                tap(() => {
+                  console.log('mouseleave 事件，停止拖曳')
+                  setIsDragging(false)
+                }),
+                take(1)
+              )
+            )
+          )
         )
       })
     )

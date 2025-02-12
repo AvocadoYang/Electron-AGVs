@@ -20,11 +20,10 @@ import { draggableLineInitialPoint, mouseLocation, MouseLocationForFrame } from 
 import { useMousePoint, useDraggableLine, useZoneFrame } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
-import { MousePoint, AllLocation, MapImage } from './components'
+import { MousePoint, AllLocation, MapImage, ZoneIconHint, DragFrame } from './components'
 import { LocationType } from '@renderer/utils/jotai'
 import AllRoads from './components/AllRoads/AllRoads'
 import AllCargo from '../AllCargo.tsx/AllCargo'
-import ZoneIconHint from './components/ZoneIconHint'
 import ToolTip from '../components/ToolTip'
 
 const MapView: React.FC<{
@@ -104,6 +103,7 @@ const MapView: React.FC<{
       }}
       className="map-view"
       ref={mapRef}
+      draggable={false}
     >
       <MapImage ref={mapImageRef} />
 
@@ -117,7 +117,7 @@ const MapView: React.FC<{
       ) : (
         []
       )}
-
+      {/*
       {showLocation ? (
         <AllCargo
           scale={scale}
@@ -127,11 +127,12 @@ const MapView: React.FC<{
         />
       ) : (
         []
-      )}
+      )} */}
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 
       {openEditZone ? (
+        //開啟編輯區域時的提示Icon
         <ZoneIconHint
           mapWrapRef={mapWrapRef}
           mapRef={mapRef}
