@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, useRef, useEffect, useMemo } from 'react'
-import { Layout, Form, Splitter, Flex, ConfigProvider } from 'antd'
+import { Layout, Form, Splitter, Flex } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components'
 
@@ -11,7 +11,7 @@ import { DndContext } from '@dnd-kit/core'
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { restrictToParentElement } from '@dnd-kit/modifiers'
 import { getMoveIndex } from './utils/utils'
-import { formList } from './components/siderElement'
+import { toolbarState } from './components/siderElement'
 const { Content } = Layout
 
 const Setting: React.FC = () => {
@@ -20,7 +20,7 @@ const Setting: React.FC = () => {
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
-  const [dataList, setDataList] = useState(formList)
+  const [dataList, setDataList] = useState(toolbarState)
   const [scale, setScale] = useState(1)
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
 
