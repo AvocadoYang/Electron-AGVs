@@ -103,6 +103,7 @@ const Setting: React.FC = () => {
                       mapWrapRef={mapWrapRef}
                       roadPanelForm={roadPanelForm}
                       locationPanelForm={locationPanelForm}
+                      zonePanelForm={zonePanelForm}
                     ></MapView>
                   </div>
                 </Splitter.Panel>

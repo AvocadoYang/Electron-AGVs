@@ -4,7 +4,7 @@ import { memo } from 'react'
 import Cargo from './Cargo'
 import { tooltipProp } from '@renderer/utils/gloable'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { EditRoadPanelSwitch, isShowLocation } from '@renderer/utils/siderGloble'
+import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/utils/siderGloble'
 import { draggableLineInitialPoint } from '../hooks/hook'
 import {
   DraggableLine,
@@ -23,6 +23,8 @@ const AllCargo: React.FC<{
   const showLocation = useAtomValue(isShowLocation)
   const { data } = useMap()
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
+  const openEditZone = useAtomValue(EditZoneSwitch)
+
   const { data: locInfo } = useLoc(undefined)
   const handleEnter = (locationId: string, x: number, y: number) => {
     setTooltip({
@@ -74,7 +76,7 @@ const AllCargo: React.FC<{
                 onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
                 onMouseLeave={() => handleLeave()}
                 onMouseDown={(e) => {
-                  if (!openEditRoadPanel) return
+                  if (!openEditRoadPanel || openEditZone) return
                   setInitPoint({ clientX: e.clientX, clientY: e.clientY })
                   handleMouseDown((e.target as HTMLInputElement).id)
                 }}

@@ -23,6 +23,7 @@ import { errorHandler } from '@renderer/utils/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Road } from './road'
 import client from '@renderer/api/axiosClient'
+import FormHr from '../../utils/FormHr'
 
 function validateArray(arr: string[]) {
   if (arr.includes('*')) {
@@ -81,13 +82,7 @@ const EditRoadPanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.roadPanel')}
         </h3>
-        <hr
-          style={{
-            marginTop: '1px',
-            marginBottom: '10px',
-            border: `4px solid ${borderColor(sortableId)}`
-          }}
-        ></hr>
+        <FormHr sortableId={sortableId}></FormHr>
         <Form
           initialValues={{ ...initialRoadValue }}
           form={roadPanelForm}

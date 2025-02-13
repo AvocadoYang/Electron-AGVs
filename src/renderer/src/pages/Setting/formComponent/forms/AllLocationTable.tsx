@@ -31,6 +31,7 @@ import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import useMap from '@renderer/api/useMap'
+import FormHr from '../../utils/FormHr'
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -443,14 +444,7 @@ const AllLocationTable: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.locationList')}
         </h3>
-
-        <hr
-          style={{
-            marginTop: '1px',
-            marginBottom: '10px',
-            border: `4px solid ${borderColor(sortableId)}`
-          }}
-        ></hr>
+        <FormHr sortableId={sortableId}></FormHr>
         <Flex
           gap="middle"
           justify="flex-start"

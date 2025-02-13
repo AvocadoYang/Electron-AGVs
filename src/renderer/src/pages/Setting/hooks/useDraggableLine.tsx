@@ -8,7 +8,7 @@ import { draggableLineInitialPoint, mouseLocation } from './hook'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useMap from '@renderer/api/useMap'
 import { LocationType } from '@renderer/utils/jotai'
-import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
+import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble'
 
 const useDraggableLine = (
   mapRef: RefObject<HTMLDivElement>,
@@ -21,6 +21,7 @@ const useDraggableLine = (
   const [showBlockId, setShowBlockId] = useAtom(ShowBlockId)
   const [, setDragLineInfo] = useAtom(DragLineInfo)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
+  const openEditZone = useAtomValue(EditZoneSwitch)
   const { data: mapData } = useMap()
 
   const handleMouseUp = (endId: string) => {
@@ -84,7 +85,7 @@ const useDraggableLine = (
   }
 
   useEffect(() => {
-    if (showBlockId === '' || !openEditRoadPanel) return
+    if (showBlockId === '' || !openEditRoadPanel || openEditZone) return
     let mapPanelRefCopy: HTMLDivElement
     if (mapRef && mapRef.current) {
       mapPanelRefCopy = mapRef.current

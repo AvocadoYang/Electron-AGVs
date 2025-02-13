@@ -7,6 +7,16 @@ export type LocationType = {
   canRotate: boolean
 }
 
+export type ZoneType = {
+  name?: string
+  color?: AggregationColor2
+  category?: string[]
+  startX: number
+  startY: number
+  endX: number
+  endY: number
+}
+
 export type RoadListType = {
   roadId: string
   validYawList: string | number[]

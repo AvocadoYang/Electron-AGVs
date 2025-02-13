@@ -18,3 +18,10 @@ export const initialLocationFormValue = {
   rotation: 0,
   canRotate: false
 }
+
+export const initialZoneValue = {
+  startX: 0,
+  startY: 0,
+  endX: 0,
+  endY: 0
+}
