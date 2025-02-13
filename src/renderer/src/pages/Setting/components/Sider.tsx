@@ -81,6 +81,7 @@ const Sider: React.FC<{
       quickEditLocationPanel,
       openEditRoadPanel,
       showAllRoadListTable,
+      openEditZone,
       openEditShelfPanel,
       openEditShelfCategory,
       openYawTable,
@@ -94,6 +95,7 @@ const Sider: React.FC<{
     quickEditLocationPanel,
     openEditRoadPanel,
     showAllRoadListTable,
+    openEditZone,
     openEditShelfPanel,
     openEditShelfCategory,
     openYawTable,
@@ -148,7 +150,7 @@ const Sider: React.FC<{
       // ===================
       // === zone ===
       case 'edit_zone':
-        setOpenEditZone(!openEditZone)
+        setOpenEditZone(check)
         break
       case 'show_zone_list':
         console.log('show_zone_list')
@@ -323,7 +325,6 @@ const Sider: React.FC<{
   ]
 
   return (
-    // en=300, tw=230
     <>
       <AntdSider
         collapsible

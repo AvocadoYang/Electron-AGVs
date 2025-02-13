@@ -1,13 +1,13 @@
 import { FormatPainterOutlined } from '@ant-design/icons'
 import { Flex, Skeleton, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import { FC, memo, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import styled from 'styled-components'
 import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 import useYaw from '@renderer/api/useYaw'
-import { cargoStyle } from '@renderer/utils/gloable'
+import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable'
 import useShelf from '@renderer/api/useShelf'
 import { ShelfWithoutList } from '@renderer/api/type/useShelf'
 import SettingCargoStyleForm from './SettingCargoStyleForm'
@@ -20,7 +20,7 @@ const Wrapper = styled.div<{ hasSelect: boolean }>`
 
 type ShelfCell = {
   Loc: {
-    loc: string
+    locationId: string
   }
 }
 
@@ -49,7 +49,7 @@ EditableCell.propTypes = {
     Loc: PropTypes.shape({
       dirId: PropTypes.string,
       id: PropTypes.string.isRequired,
-      loc: PropTypes.string.isRequired,
+      locationId: PropTypes.string.isRequired,
       areaType: PropTypes.string
     }).isRequired,
     ShelfCategory: PropTypes.shape({
@@ -82,6 +82,7 @@ const ShelfTable: FC<{
   const [selectId, setSelectId] = useState<string | null>(null)
   const { data: yaw } = useYaw()
   const setCStyle = useSetAtom(cargoStyle)
+  const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId)
   const { data: shelfDataSource, isLoading: isLoadingShelf } = useShelf()
   const { t } = useTranslation()
   const handleEdit = (id: string) => {
@@ -91,8 +92,8 @@ const ShelfTable: FC<{
   const columns: ColumnsType<ShelfWithoutList> = [
     {
       title: t('edit_shelf_panel.location_id'),
-      dataIndex: 'loc',
-      key: 'loc',
+      dataIndex: 'locationId',
+      key: 'locationId',
       sorter: (a, b) => Number(a.Loc.locationId) - Number(b.Loc.locationId),
       sortDirections: ['ascend', 'descend'],
       defaultSortOrder: 'ascend',
@@ -163,6 +164,7 @@ const ShelfTable: FC<{
   const cancelEditStyle = () => {
     setSelectId(null)
     setCStyle(null)
+    setShelfSelectedStyle('')
   }
 
   const rowSelection = {

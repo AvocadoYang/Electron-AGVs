@@ -87,6 +87,7 @@
   "sider_output_form_name": {
     "locationPanel": "編輯點位",
     "roadPanel": "編輯路徑",
+    "zonePanel": "編輯區域",
     "locationList": "點位表"
   },
 

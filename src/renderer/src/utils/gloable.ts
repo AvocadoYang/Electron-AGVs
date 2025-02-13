@@ -1,5 +1,6 @@
 import { atom } from 'jotai'
 import { LocationType } from './jotai'
+import { mouseLocation } from '@renderer/pages/Setting/hooks/hook'
 
 // record the version of map's points
 export const sameVersion = atom(true)
@@ -7,16 +8,21 @@ export const sameVersion = atom(true)
 // control which ID of draggableLine can be use.
 export const showBlockId = atom<string>('')
 
+// record the drag line information
+export const DragLineInfo = atom<mouseLocation>({})
+
 export const hoverRoad = atom<string>('')
 
 // ** 貨架樣式 */
 export const cargoStyle = atom<{
-  locationId: string
   translateX: number
   translateY: number
   rotate: number
   scale: number
 } | null>(null)
+
+export const shelfSelectedStyleLocationId = atom<string>('')
+
 export const mousePoint_X = atom<number>(-5) // MousePoint 編輯點位小紅點
 export const mousePoint_Y = atom<number>(-5) // MousePoint 編輯點位小紅點
 

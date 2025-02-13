@@ -1,7 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/prop-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Button, Checkbox, Col, Form, InputNumber, message, Radio, Row, Switch } from 'antd'
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  FormInstance,
+  InputNumber,
+  message,
+  Radio,
+  Row,
+  Space,
+  Switch
+} from 'antd'
 import { useTranslation } from 'react-i18next'
 import { borderColor } from '../../utils/utils'
 import { memo, useState } from 'react'
@@ -32,8 +44,8 @@ const EditRoadPanel: React.FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
-  const [roadPanelForm] = Form.useForm()
+  roadPanelForm: FormInstance<unknown>
+}> = ({ sortableId, attributes, listeners, roadPanelForm }) => {
   const [chooseAngle, setChooseAngle] = useState<string>('')
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
@@ -175,21 +187,25 @@ const EditRoadPanel: React.FC<{
             </Checkbox.Group>
           </Form.Item>
 
-          <Form.Item name="disabled" label={t('edit_road_panel.disabled')} shouldUpdate>
-            <Switch />
-          </Form.Item>
+          <Space size={'large'} style={{ marginBottom: '15px', overflow: 'hidden' }}>
+            <Form.Item name="disabled" label={t('edit_road_panel.disabled')} shouldUpdate>
+              <Switch />
+            </Form.Item>
 
-          <Form.Item name="limit" label={t('edit_road_panel.limit')}>
-            <Switch />
-          </Form.Item>
+            <Form.Item name="limit" label={t('edit_road_panel.limit')}>
+              <Switch />
+            </Form.Item>
+          </Space>
 
-          <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
-            <InputNumber />
-          </Form.Item>
+          <Space size={'large'} style={{ marginBottom: '15px', overflow: 'hidden' }}>
+            <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
+              <InputNumber />
+            </Form.Item>
 
-          <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
-            <InputNumber />
-          </Form.Item>
+            <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
+              <InputNumber />
+            </Form.Item>
+          </Space>
 
           <Form.Item style={{ textAlign: 'center' }}>
             <Button onClick={() => saveRoad()} type="primary">

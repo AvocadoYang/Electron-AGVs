@@ -14,7 +14,7 @@ import { FC, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { cargoStyle } from '@renderer/utils/gloable'
+import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable'
 import client from '@renderer/api/axiosClient'
 import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
 import { ErrorResponse } from '@renderer/utils/globalType'
@@ -56,6 +56,7 @@ const SettingCargoStyleForm: FC<{
   cancelEditStyle: () => void
 }> = ({ selectId, cancelEditStyle }) => {
   const [cStyle, setCStyle] = useAtom(cargoStyle)
+  const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId)
   const [form] = Form.useForm()
   const intervalId = useRef<ReturnType<typeof setInterval> | null>(null)
   const queryClient = useQueryClient()
@@ -69,6 +70,9 @@ const SettingCargoStyleForm: FC<{
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['cargoLoc-mission']
+      })
+      await queryClient.refetchQueries({
+        queryKey: ['loc-only']
       })
       messageApi.success(t('utils.success'))
     },
@@ -94,7 +98,6 @@ const SettingCargoStyleForm: FC<{
     setCStyle((prev) => {
       if (!prev) return null
       return {
-        locationId: prev.locationId,
         translateX: val.input === 'translateX' ? val.value : prev.translateX,
         translateY: val.input === 'translateY' ? val.value : prev.translateY,
         rotate: val.input === 'rotate' ? val.value : prev.rotate,
@@ -107,7 +110,6 @@ const SettingCargoStyleForm: FC<{
     setCStyle((prev) => {
       if (!prev) return null
       return {
-        locationId: prev.locationId,
         translateX: val.input === 'translateX' ? val.value + prev.translateX : prev.translateX,
         translateY: val.input === 'translateY' ? val.value + prev.translateY : prev.translateY,
         rotate: val.input === 'rotate' ? val.value + prev.rotate : prev.rotate,
@@ -152,9 +154,8 @@ const SettingCargoStyleForm: FC<{
     const thisLocData = (data as LocWithoutArr[]).find((v) => v.id === selectId)
 
     if (!thisLocData) return
-
+    setShelfSelectedStyle(thisLocData.locationId)
     setCStyle({
-      locationId: thisLocData.locationId,
       translateX: thisLocData.translateX,
       translateY: thisLocData.translateY,
       rotate: thisLocData.rotate,

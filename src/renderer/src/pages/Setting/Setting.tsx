@@ -20,10 +20,10 @@ const Setting: React.FC = () => {
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
+  const [zonePanelForm] = Form.useForm()
   const [dataList, setDataList] = useState(toolbarState)
   const [scale, setScale] = useState(1)
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
-
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
       const moveDataList = prevDataList
@@ -38,7 +38,14 @@ const Setting: React.FC = () => {
       <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
         <SortableContext items={dataList.map((c) => c.key)} strategy={verticalListSortingStrategy}>
           <Flex vertical gap="middle" align="start" className="attrs" style={{ padding: '1em' }}>
-            {<ToolComponents locationPanelForm={locationPanelForm} dataList={dataList} />}
+            {
+              <ToolComponents
+                locationPanelForm={locationPanelForm}
+                roadPanelForm={roadPanelForm}
+                zonePanelForm={zonePanelForm}
+                dataList={dataList}
+              />
+            }
           </Flex>
         </SortableContext>
       </DndContext>

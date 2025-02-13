@@ -2,39 +2,37 @@
 import useMap from '@renderer/api/useMap'
 // import { Location } from './components'
 import { nanoid } from 'nanoid'
-import { memo } from 'react'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { showBlockId as ShowBlockId, tooltipProp } from '@renderer/utils/gloable'
-import { draggableLineInitialPoint, mouseLocation } from '@renderer/pages/Setting/hooks/hook'
+import { FC, memo, useCallback } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { tooltipProp } from '@renderer/utils/gloable'
+import { draggableLineInitialPoint } from '@renderer/pages/Setting/hooks/hook'
 import { Point, DraggableLine } from './components/PointAndLine'
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble'
+import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/utils/siderGloble'
 
-const AllLocation: React.FC<{
-  scale: number
+const AllLocation: FC<{
   setInitPoint: React.Dispatch<draggableLineInitialPoint>
   handleMouseDown: (startId: string) => void
-  mouseLocation: mouseLocation
-}> = ({ scale, setInitPoint, handleMouseDown, mouseLocation }) => {
+}> = ({ setInitPoint, handleMouseDown }) => {
+  const showLocation = useAtomValue(isShowLocation)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const setTooltip = useSetAtom(tooltipProp)
   const { data } = useMap()
   const openEditZone = useAtomValue(EditZoneSwitch)
-  const [showBlockId] = useAtom(ShowBlockId)
 
-  const handleEnter = (locationId: string, x: number, y: number) => {
+  const handleEnter = useCallback((locationId: string, x: number, y: number) => {
     setTooltip({
       x,
       y,
       locationId
     })
-  }
+  }, [])
 
-  const handleLeave = () => {
+  const handleLeave = useCallback(() => {
     setTooltip(null)
-  }
+  }, [])
 
-  if (!data) return
+  if (!data || !showLocation) return
   return (
     <>
       {data.locations
@@ -56,6 +54,7 @@ const AllLocation: React.FC<{
                 event.preventDefault()
               }}
               style={{ borderRadius: '50%' }}
+              id={loc.locationId.toString()}
             >
               <Point
                 id={loc.locationId.toString()}
@@ -72,14 +71,9 @@ const AllLocation: React.FC<{
                 }}
               ></Point>
               <DraggableLine
-                id={loc.locationId.toString()}
+                locId={loc.locationId.toString()}
                 left={displayX}
                 top={displayY}
-                scale={scale}
-                openEditRoadPanel={openEditRoadPanel}
-                deg={mouseLocation.deg as number}
-                width={mouseLocation.width as number}
-                showblockid={showBlockId}
                 key={nanoid()}
               ></DraggableLine>
             </div>

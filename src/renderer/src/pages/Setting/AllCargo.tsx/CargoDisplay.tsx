@@ -1,24 +1,12 @@
 import { FC } from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { HasCargo } from './types'
-
-const blueWhiteAnimation = keyframes`
-  0% {
-    background-color: #499EEA;
-  }
-  50% {
-    background-color: #DDEEFE;
-  }
-  100% {
-    background-color: #499EEA;
-  }
-`
 
 const Block = styled.div<HasCargo>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ hasCargo }) => (hasCargo ? '#ffe73c73' : '#f5f5f538')};
+  background-color: ${({ has_cargo }) => (has_cargo ? '#ffe73c73' : '#f5f5f538')};
   pointer-events: 'auto';
   cursor: 'pointer';
   border: ${({ border }) => `2px dashed ${border}`};
@@ -28,7 +16,7 @@ const Block = styled.div<HasCargo>`
   transition: transform 0.2s;
 
   :after {
-    content: ${({ isDisable }) => (isDisable ? '"X"' : 'none')};
+    content: ${({ is_disable }) => (is_disable ? '"X"' : 'none')};
     width: 98%;
     height: 98%;
     position: absolute;
@@ -37,7 +25,7 @@ const Block = styled.div<HasCargo>`
   }
 `
 
-const BlockSpan = styled.span<{ rotate: number; hasCargo: boolean }>`
+const BlockSpan = styled.span<{ rotate: number; has_cargo: boolean }>`
   text-align: center;
   user-select: none;
   -webkit-user-select: none;
@@ -53,7 +41,7 @@ const BlockSpan = styled.span<{ rotate: number; hasCargo: boolean }>`
   transform: ${({ rotate }) => `rotate(${-rotate}deg) translateY(1px)`};
   display: inline-block;
   white-space: break-spaces;
-  color: ${({ hasCargo }) => (hasCargo ? '#000000fff' : 'black')};
+  color: ${({ has_cargo }) => (has_cargo ? '#000000fff' : 'black')};
   height: 100%;
   text-align: center;
   margin: 0px;
@@ -75,12 +63,12 @@ const CargoDisplay: FC<{
   return (
     <Block
       key={level}
-      hasCargo={cargoValue}
-      isDisable={isDisable}
+      has_cargo={cargoValue}
+      is_disable={isDisable}
       border={border}
       onMouseDown={(e) => handleMouseDown(e, locId, level)}
     >
-      <BlockSpan hasCargo={cargoValue} rotate={rotate} id={locId}>
+      <BlockSpan has_cargo={cargoValue} rotate={rotate} id={locId}>
         {levelName}
       </BlockSpan>
     </Block>

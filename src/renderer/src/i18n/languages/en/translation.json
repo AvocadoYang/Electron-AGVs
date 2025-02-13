@@ -88,6 +88,7 @@
   "sider_output_form_name": {
     "locationPanel": "Edit Location",
     "roadPanel": "Edit Road",
+    "zonePanel": "Edit Zone",
     "locationList": "Location List"
   },
 

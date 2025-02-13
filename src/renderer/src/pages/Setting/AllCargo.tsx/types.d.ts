@@ -25,14 +25,14 @@ export type CargoArea = {
 }
 
 export type HasCargo = {
-  hasCargo: boolean
+  has_cargo: boolean
   border: string
-  isDisable: boolean
+  is_disable: boolean
 }
 
 export type WrapperType = {
-  translateX: number
-  translateY: number
+  translatex: number
+  translatey: number
   scale: number
   rotate: number
 }

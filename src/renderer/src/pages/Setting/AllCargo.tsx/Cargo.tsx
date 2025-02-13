@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Form, message } from 'antd'
 import { FC, memo, useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { WrapperType } from './types'
 import styled from 'styled-components'
@@ -11,6 +10,7 @@ import CargoModal from './CargoModal'
 import { Info } from '@renderer/sockets/useCargoInfo'
 import { useAtomValue } from 'jotai'
 import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble'
+import { LoadingStation } from './LoadingStation'
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -21,7 +21,7 @@ const Wrapper = styled.div<WrapperType>`
   flex-direction: row;
   border-radius: 1px;
   transform: ${(props) =>
-    `translate(${props.translateX}em, ${props.translateY}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
+    `translate(${props.translatex}em, ${props.translatey}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
 `
 
 const WrapperDiv = memo(Wrapper)
@@ -46,8 +46,8 @@ const Cargo: FC<{
 }> = ({ locId, translateX, translateY, rotate, scale, shelfInfo }) => {
   const [settingForm] = Form.useForm()
   const [layerForm] = Form.useForm()
-  const { t } = useTranslation()
   const [messageApi, contextHolder] = message.useMessage()
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const openEditZone = useAtomValue(EditZoneSwitch)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
@@ -62,16 +62,13 @@ const Cargo: FC<{
     [editColumnMutation]
   )
 
-  // const targetStyle = cStyle.find((item) => item.locationId === locId) as LocWithoutArr
-
-  // if (!shelfInfo) return <LoadingStation />
-
+  if (!shelfInfo) return <LoadingStation />
   return (
     <>
       {contextHolder}
       <WrapperDiv
-        translateX={translateX}
-        translateY={translateY}
+        translatex={translateX}
+        translatey={translateY}
         scale={scale}
         rotate={rotate}
         onClick={() => {
@@ -92,6 +89,7 @@ const Cargo: FC<{
 
           return (
             <MemoizedCargo
+              key={`${locId}-${level}`}
               level={level}
               levelName={nameLevel}
               cargoValue={cargoValue}
@@ -119,6 +117,5 @@ const Cargo: FC<{
 }
 
 export default memo(Cargo, (prev, next) => {
-  console.log(prev.locId !== next.locId)
   return prev.locId !== next.locId
 })
