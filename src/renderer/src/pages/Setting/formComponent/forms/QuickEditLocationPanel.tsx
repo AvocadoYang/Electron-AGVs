@@ -30,6 +30,7 @@ import {
   mousePoint_Y,
   TempStoredLocationsForQuickEditPanel
 } from '@renderer/utils/gloable'
+import FormHr from '../../utils/FormHr'
 
 const initialFormDate = {
   genre: 'Extra',
@@ -274,13 +275,7 @@ const QuickEditLocationPanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('quick_edit_location_panel.quick_edit_location_panel')}
         </h3>
-        <hr
-          style={{
-            marginTop: '1px',
-            marginBottom: '10px',
-            border: `4px solid ${borderColor(sortableId)}`
-          }}
-        ></hr>
+        <FormHr sortableId={sortableId}></FormHr>
         <Form
           form={form}
           title="設定依照車輛回傳的id來做任務"

@@ -29,9 +29,10 @@ const MapView: React.FC<{
   scale: number
   roadPanelForm: FormInstance<unknown>
   locationPanelForm: FormInstance<unknown>
+  zonePanelForm: FormInstance<unknown>
   mapRef: RefObject<HTMLDivElement>
   mapWrapRef: RefObject<HTMLDivElement>
-}> = ({ scale, mapRef, locationPanelForm, roadPanelForm, mapWrapRef }) => {
+}> = ({ scale, mapRef, locationPanelForm, roadPanelForm, mapWrapRef, zonePanelForm }) => {
   const { data } = useMap()
   const { data: currentVersion } = useVerityVersion()
 
@@ -97,7 +98,8 @@ const MapView: React.FC<{
     setIsDragging,
     setInitPointRecord,
     setEndPointRecord,
-    setRectInfo
+    setRectInfo,
+    zonePanelForm
   )
 
   //控制編輯路線時的箭頭拖曳

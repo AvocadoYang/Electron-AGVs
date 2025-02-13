@@ -23,6 +23,7 @@ import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import { borderColor } from '../../utils/utils'
 import useMap from '@renderer/api/useMap'
+import FormHr from '../../utils/FormHr'
 
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
@@ -102,13 +103,7 @@ const EditLocationPanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.locationPanel')}
         </h3>
-        <hr
-          style={{
-            marginTop: '1px',
-            marginBottom: '10px',
-            border: `4px solid ${borderColor(sortableId)}`
-          }}
-        ></hr>
+        <FormHr sortableId={sortableId}></FormHr>
         <Form
           layout="vertical"
           initialValues={initialLocationFormValue}

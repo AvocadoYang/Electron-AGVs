@@ -5,6 +5,7 @@ import { RefObject, useEffect } from 'react'
 import { fromEvent, switchMap, takeUntil, tap, EMPTY, take, merge } from 'rxjs'
 import { rvizCoord } from '@renderer/utils/utils'
 import { MouseLocationForFrame, RectInfo } from './hook'
+import { FormInstance } from 'antd'
 
 const useZoneFrame = (
   mapWrapRef: RefObject<HTMLDivElement>,
@@ -14,7 +15,8 @@ const useZoneFrame = (
   setIsDragging: React.Dispatch<boolean>,
   setInitPointRecord: React.Dispatch<MouseLocationForFrame>,
   setEndPointRecord: React.Dispatch<MouseLocationForFrame>,
-  setRectInfo: React.Dispatch<RectInfo>
+  setRectInfo: React.Dispatch<RectInfo>,
+  zonePanelForm: FormInstance<unknown>
 ) => {
   const { data } = useMap()
   const openEditZone = useAtomValue(EditZoneSwitch)
@@ -28,6 +30,7 @@ const useZoneFrame = (
     //點擊開始拖曳
     const mouseDown$ = fromEvent<MouseEvent>(mapRef.current, 'mousedown').pipe(
       switchMap((startEvent) => {
+        zonePanelForm.resetFields()
         if (!mapPanel || !mapWrap || !mapImageRef) return EMPTY
         setIsDragging(true)
         startEvent.preventDefault()
@@ -56,6 +59,8 @@ const useZoneFrame = (
           rvizX: rx,
           rvizY: ry
         })
+        zonePanelForm.setFieldValue('startX', Number(rx).toFixed(3))
+        zonePanelForm.setFieldValue('startY', Number(ry).toFixed(3))
         return fromEvent<MouseEvent>(mapRef.current, 'mousemove').pipe(
           tap((moveEvent) => {
             //這裡可以傳遞矩形範圍給 state 或其他處理函數
@@ -88,6 +93,8 @@ const useZoneFrame = (
                     rvizX: rx,
                     rvizY: ry
                   })
+                  zonePanelForm.setFieldValue('endX', Number(rx).toFixed(3))
+                  zonePanelForm.setFieldValue('endY', Number(ry).toFixed(3))
                   setIsDragging(false)
                 }),
                 take(1)

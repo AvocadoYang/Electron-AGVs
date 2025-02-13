@@ -160,6 +160,22 @@
     "tmp_loc": "Temporary Location"
   },
 
+  "edit_zone_panel": {
+    "start_x": "Start X",
+    "start_y": "Start Y",
+    "end_x": "End X",
+    "end_y": "End Y",
+    "category": "Category",
+    "color": "Display color",
+    "name": "Zone Name",
+    "waring": {
+      "name_empty_error": "Name field cannot be empty",
+      "name_duplicated_error": "Zone name already exists",
+      "color_error": "Please choose a color for zone",
+      "invalid_frame": "Invalid selection"
+    }
+  },
+
   "shelf": {
     "shelf": "Shelf",
     "cargo_mission": {

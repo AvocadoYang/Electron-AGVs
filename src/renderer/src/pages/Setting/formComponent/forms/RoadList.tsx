@@ -31,6 +31,7 @@ import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import { borderColor } from '../../utils/utils'
+import FormHr from '../../utils/FormHr'
 
 type RoadListType = {
   roadId: string
@@ -540,14 +541,7 @@ const RoadList: React.FC<{
       <h3 className="drop_button_style" {...listeners} {...attributes}>
         {t('edit_road_panel.road_table')}
       </h3>
-
-      <hr
-        style={{
-          marginTop: '1px',
-          marginBottom: '10px',
-          border: `4px solid ${borderColor(sortableId)}`
-        }}
-      ></hr>
+      <FormHr sortableId={sortableId}></FormHr>
       <Flex
         gap="middle"
         justify="flex-start"
