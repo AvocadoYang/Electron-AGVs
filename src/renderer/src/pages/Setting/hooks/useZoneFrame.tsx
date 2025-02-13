@@ -62,10 +62,10 @@ const useZoneFrame = (
             const endX = moveEvent.clientX - mapPanel.offsetLeft + mapWrap.scrollLeft
             const endY = moveEvent.clientY - mapPanel.offsetTop + mapWrap.scrollTop
             setRectInfo({
-              axisX: Math.min(endX, startXForDisplay),
-              axisY: Math.min(endY, startYForDisplay),
-              width: Math.abs(endX - startXForDisplay),
-              height: Math.abs(endY - startYForDisplay)
+              axisX: Math.min(endX / scale, startXForDisplay / scale),
+              axisY: Math.min(endY / scale, startYForDisplay / scale),
+              width: Math.abs((endX - startXForDisplay) / scale),
+              height: Math.abs((endY - startYForDisplay) / scale)
             })
           }),
           takeUntil(

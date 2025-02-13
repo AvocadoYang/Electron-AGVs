@@ -40,7 +40,7 @@ const MapView: React.FC<{
   const { data: mapData } = useMap()
   const [initPoint, setInitPoint] = useState({} as draggableLineInitialPoint)
   const [isResizing, setIsResizing] = useState(false)
-  const [dragLineInfo, setDragLineInfo] = useAtom(DragLineInfo)
+  const [, setDragLineInfo] = useAtom(DragLineInfo)
   /** end */
 
   /** 拖曳區域相關參數 */
