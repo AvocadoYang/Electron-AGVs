@@ -40,7 +40,7 @@ const ShelfPanel: React.FC<{
           border: `4px solid ${borderColor(sortableId)}`
         }}
       ></hr>
-      {/* <Form form={form} labelCol={{ span: 6 }} autoComplete="off">
+      <Form form={form} labelCol={{ span: 6 }} autoComplete="off">
         <Form.Item label={t('edit_shelf_panel.category')} name="category" style={{ width: 500 }}>
           <Select
             style={{ width: 200 }}
@@ -108,7 +108,7 @@ const ShelfPanel: React.FC<{
             })}
           />
         </Form.Item>
-      </Form> */}
+      </Form>
 
       <ShelfTable selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys} />
     </>

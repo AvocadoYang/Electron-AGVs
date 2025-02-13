@@ -23,7 +23,6 @@ const Setting: React.FC = () => {
   const [dataList, setDataList] = useState(toolbarState)
   const [scale, setScale] = useState(1)
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
-
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
       const moveDataList = prevDataList
@@ -38,7 +37,13 @@ const Setting: React.FC = () => {
       <DndContext onDragEnd={dragEndEvent} modifiers={[restrictToParentElement]}>
         <SortableContext items={dataList.map((c) => c.key)} strategy={verticalListSortingStrategy}>
           <Flex vertical gap="middle" align="start" className="attrs" style={{ padding: '1em' }}>
-            {<ToolComponents locationPanelForm={locationPanelForm} dataList={dataList} />}
+            {
+              <ToolComponents
+                locationPanelForm={locationPanelForm}
+                roadPanelForm={roadPanelForm}
+                dataList={dataList}
+              />
+            }
           </Flex>
         </SortableContext>
       </DndContext>

@@ -4,7 +4,7 @@ import { memo } from 'react'
 import Cargo from './Cargo'
 import { showBlockId as ShowBlockId, tooltipProp } from '@renderer/utils/gloable'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
+import { EditRoadPanelSwitch, isShowLocation } from '@renderer/utils/siderGloble'
 import { draggableLineInitialPoint, mouseLocation } from '../hooks/hook'
 import {
   DraggableLine,
@@ -15,15 +15,13 @@ import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
 import useCargoInfo from '@renderer/sockets/useCargoInfo'
 
 const AllCargo: React.FC<{
-  scale: number
   setInitPoint: React.Dispatch<draggableLineInitialPoint>
   handleMouseDown: (startId: string) => void
-  mouseLocation: mouseLocation
-}> = ({ scale, setInitPoint, handleMouseDown, mouseLocation }) => {
+}> = ({ setInitPoint, handleMouseDown }) => {
   const setTooltip = useSetAtom(tooltipProp)
   const shelfInfo = useCargoInfo()
+  const showLocation = useAtomValue(isShowLocation)
   const { data } = useMap()
-  const [showBlockId] = useAtom(ShowBlockId)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const { data: locInfo } = useLoc(undefined)
   const handleEnter = (locationId: string, x: number, y: number) => {
@@ -37,7 +35,7 @@ const AllCargo: React.FC<{
   const handleLeave = () => {
     setTooltip(null)
   }
-  if (!data) return
+  if (!data || !showLocation) return
   return (
     <>
       {data.locations
@@ -58,7 +56,6 @@ const AllCargo: React.FC<{
           const translateY = info?.find((i) => i.locationId === loc.locationId)?.translateY || 0
           const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 270
           const LocScale = info?.find((i) => i.locationId === loc.locationId)?.scale || 1
-          console.log(loc.locationId.toString())
           return (
             <div
               draggable={false}
@@ -93,14 +90,9 @@ const AllCargo: React.FC<{
               </Point>
 
               <DraggableLine
-                id={loc.locationId.toString()}
+                locId={loc.locationId.toString()}
                 left={displayX}
                 top={displayY}
-                scale={scale}
-                openEditRoadPanel={openEditRoadPanel}
-                deg={mouseLocation.deg as number}
-                width={mouseLocation.width as number}
-                showblockid={showBlockId}
                 key={nanoid()}
               ></DraggableLine>
             </div>

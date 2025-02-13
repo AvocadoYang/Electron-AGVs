@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { useEffect, RefObject } from 'react'
 import { useAtom, useAtomValue } from 'jotai'
-import { showBlockId as ShowBlockId } from '@renderer/utils/gloable'
+import { DragLineInfo, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import { rad2Deg } from '@renderer/utils/utils'
 import { FormInstance } from 'antd'
 import { draggableLineInitialPoint, mouseLocation } from './hook'
@@ -14,11 +14,12 @@ const useDraggableLine = (
   mapRef: RefObject<HTMLDivElement>,
   roadPanelForm: FormInstance<unknown>,
   initPoint: draggableLineInitialPoint,
-  setMouseLocation: React.Dispatch<mouseLocation | React.SetStateAction<mouseLocation>>,
   isResizing: boolean,
-  setIsResizing: React.Dispatch<boolean>
+  setIsResizing: React.Dispatch<boolean>,
+  scale: number
 ) => {
   const [showBlockId, setShowBlockId] = useAtom(ShowBlockId)
+  const [, setDragLineInfo] = useAtom(DragLineInfo)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const { data: mapData } = useMap()
 
@@ -41,11 +42,12 @@ const useDraggableLine = (
     )
     const newLocation = {
       deg,
-      width,
+      width: width / (scale || 1),
+      // width ? width / (scale || 1) : 5,
       endDisplayX1: e.clientX,
       endDisplayY1: e.clientY
     }
-    setMouseLocation(() => {
+    setDragLineInfo(() => {
       return {
         ...newLocation
       }
@@ -58,7 +60,7 @@ const useDraggableLine = (
     const targetTag = (e.target as HTMLInputElement).tagName
     if (targetTag === 'IMG' && (e.target as HTMLInputElement).id === '') {
       setShowBlockId('')
-      setMouseLocation({
+      setDragLineInfo({
         deg: 90,
         endDisplayX1: initPoint.clientX,
         endDisplayY1: initPoint.clientY,
@@ -68,7 +70,7 @@ const useDraggableLine = (
     }
     if (showBlockId === (e.target as HTMLInputElement).id) {
       setShowBlockId('')
-      setMouseLocation({
+      setDragLineInfo({
         deg: 90,
         endDisplayX1: initPoint.clientX,
         endDisplayY1: initPoint.clientY,

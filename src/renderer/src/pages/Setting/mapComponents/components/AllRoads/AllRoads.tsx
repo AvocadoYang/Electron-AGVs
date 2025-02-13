@@ -63,4 +63,4 @@ const AllRoads: FC<{}> = () => {
   )
 }
 
-export default AllRoads
+export default memo(AllRoads)

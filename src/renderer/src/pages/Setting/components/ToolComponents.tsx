@@ -16,7 +16,7 @@ import {
   RoadListTableSwitch
 } from '@renderer/utils/siderGloble'
 import { useAtomValue } from 'jotai'
-import { formListType, ToolBarItemType, ToolBarType } from './siderElement'
+import { ToolBarItemType, ToolBarType } from './siderElement'
 import { useSortable } from '@dnd-kit/sortable'
 import cardStyle from '../utils/cardStyle'
 import ShelfPanel from '../shelfComponents/ShelfPanel'
@@ -24,7 +24,8 @@ import ShelfPanel from '../shelfComponents/ShelfPanel'
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
   locationPanelForm: FormInstance<unknown>
-}> = ({ sortableId, locationPanelForm }) => {
+  roadPanelForm?: FormInstance<unknown>
+}> = ({ sortableId, locationPanelForm, roadPanelForm }) => {
   const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
     transition: {
@@ -77,6 +78,7 @@ const SortableWrap: FC<{
             return (
               <Card style={styles} ref={setNodeRef}>
                 <EditRoadPanel
+                  roadPanelForm={roadPanelForm as FormInstance<unknown>}
                   sortableId={sortableId}
                   attributes={attributes}
                   listeners={listeners}
@@ -107,8 +109,9 @@ const SortableWrap: FC<{
 
 const ToolComponents: FC<{
   locationPanelForm: FormInstance<unknown>
+  roadPanelForm: FormInstance<unknown>
   dataList: ToolBarType
-}> = ({ locationPanelForm, dataList }) => {
+}> = ({ locationPanelForm, dataList, roadPanelForm }) => {
   const showEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
   const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch)
   const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch)
@@ -152,6 +155,7 @@ const ToolComponents: FC<{
           sortableId={formKey}
           key={formKey}
           locationPanelForm={locationPanelForm}
+          roadPanelForm={roadPanelForm}
         ></SortableWrap>
       )
     }
@@ -161,6 +165,7 @@ const ToolComponents: FC<{
           sortableId={formKey}
           key={formKey}
           locationPanelForm={locationPanelForm}
+          roadPanelForm={roadPanelForm}
         ></SortableWrap>
       )
     }

@@ -1,12 +1,16 @@
 import { atom } from 'jotai'
 import { LocationType } from './jotai'
 import { LocWithoutArr } from '@renderer/api/useLoc'
+import { mouseLocation } from '@renderer/pages/Setting/hooks/hook'
 
 // record the version of map's points
 export const sameVersion = atom(true)
 
 // control which ID of draggableLine can be use.
 export const showBlockId = atom<string>('')
+
+// record the drag line information
+export const DragLineInfo = atom<mouseLocation>({})
 
 export const hoverRoad = atom<string>('')
 

@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable react/prop-types */
-import { RefObject, memo, useRef, useState } from 'react'
+import { RefObject, memo, useCallback, useRef, useState } from 'react'
 import '../setting.css'
 import { FormInstance } from 'antd'
 import { useAtom, useAtomValue } from 'jotai'
-import { sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
+import { DragLineInfo, sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
 import {
   EditLocationPanelSwitch,
   EditZoneSwitch,
-  isShowLocation,
   isShowLocationTooltip,
   isShowRoad,
   QuickEditLocationPanelSwitch
@@ -16,12 +15,7 @@ import {
 import useMap from '@renderer/api/useMap'
 import Cookies from 'js-cookie'
 import TempLocations from './components/TempResources/TempLocations'
-import {
-  draggableLineInitialPoint,
-  mouseLocation,
-  MouseLocationForFrame,
-  RectInfo
-} from '../hooks/hook'
+import { draggableLineInitialPoint, MouseLocationForFrame, RectInfo } from '../hooks/hook'
 import { useMousePoint, useDraggableLine, useZoneFrame } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
@@ -45,8 +39,8 @@ const MapView: React.FC<{
   const [, setShowBlockId] = useAtom(ShowBlockId)
   const { data: mapData } = useMap()
   const [initPoint, setInitPoint] = useState({} as draggableLineInitialPoint)
-  const [mouseLocation, setMouseLocation] = useState({} as mouseLocation)
   const [isResizing, setIsResizing] = useState(false)
+  const [dragLineInfo, setDragLineInfo] = useAtom(DragLineInfo)
   /** end */
 
   /** 拖曳區域相關參數 */
@@ -75,7 +69,6 @@ const MapView: React.FC<{
   const openEditZone = useAtomValue(EditZoneSwitch)
 
   const showLocationToolTip = useAtomValue(isShowLocationTooltip)
-  const showLocation = useAtomValue(isShowLocation)
   const showRoad = useAtomValue(isShowRoad)
 
   if (currentVersion) {
@@ -108,15 +101,22 @@ const MapView: React.FC<{
   )
 
   //控制編輯路線時的箭頭拖曳
-  useDraggableLine(mapRef, roadPanelForm, initPoint, setMouseLocation, isResizing, setIsResizing)
+  useDraggableLine(mapRef, roadPanelForm, initPoint, isResizing, setIsResizing, scale)
 
-  const handleMouseDown = (startId: string) => {
-    if (!data) return
-    setIsResizing(true)
-    setShowBlockId(startId)
-    const result = getLocationInfoById(startId, mapData?.locations as LocationType[])
-    roadPanelForm.setFieldValue('x', result.locationId)
-  }
+  const handleMouseDown = useCallback(
+    (startId: string) => {
+      if (!data) return
+      setIsResizing(true)
+      setShowBlockId(startId)
+      const result = getLocationInfoById(startId, mapData?.locations as LocationType[])
+      setDragLineInfo((pre) => {
+        return { ...pre, width: 1 }
+      })
+      roadPanelForm.setFieldValue('x', result.locationId)
+      roadPanelForm.setFieldValue('to', undefined)
+    },
+    [data, roadPanelForm]
+  )
 
   window.addEventListener('beforeunload', () => {
     if (!currentVersion) return
@@ -136,27 +136,9 @@ const MapView: React.FC<{
     >
       <MapImage ref={mapImageRef} />
 
-      {showLocation ? (
-        <AllLocation
-          scale={scale}
-          setInitPoint={setInitPoint}
-          handleMouseDown={handleMouseDown}
-          mouseLocation={mouseLocation}
-        />
-      ) : (
-        []
-      )}
+      <AllLocation setInitPoint={setInitPoint} handleMouseDown={handleMouseDown} />
 
-      {/* {showLocation ? (
-        <AllCargo
-          scale={scale}
-          setInitPoint={setInitPoint}
-          handleMouseDown={handleMouseDown}
-          mouseLocation={mouseLocation}
-        />
-      ) : (
-        []
-      )} */}
+      <AllCargo setInitPoint={setInitPoint} handleMouseDown={handleMouseDown} />
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 
