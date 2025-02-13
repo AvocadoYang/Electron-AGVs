@@ -28,7 +28,6 @@ import type { MenuProps } from 'antd'
 import '../setting.css'
 import { ToolBarItemType } from './siderElement'
 import { useQueryClient } from '@tanstack/react-query'
-import { isEditCargo } from '@renderer/utils/gloable'
 
 export type MenuItem = Required<MenuProps>['items'][number]
 
@@ -56,7 +55,6 @@ const Sider: React.FC<{
   const { data } = useMap()
   const queryClient = useQueryClient()
 
-  const setEditCargo = useSetAtom(isEditCargo)
   const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
   const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch) // 1-2
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
@@ -132,7 +130,6 @@ const Sider: React.FC<{
 
       case 'edit_shelve':
         await queryClient.refetchQueries({ queryKey: ['shelf'] })
-        setEditCargo(false)
         setOpenEditShelf(check)
         break
       case 'edit_shelve_type':
@@ -158,18 +155,7 @@ const Sider: React.FC<{
         break
       // ===================
       // === shelves ===
-      case 'edit_shelve':
-        console.log('edit_shelve')
-        break
-      case 'edit_shelve_type':
-        console.log('edit_shelve_type')
-        break
-      case 'edit_yaw':
-        console.log('edit_yaw')
-        break
-      case 'edit_pallet':
-        console.log('edit_pallet')
-        break
+
       // ===================
       // === others ===
       // case 'edit_gauge':

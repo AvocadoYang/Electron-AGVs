@@ -176,6 +176,9 @@
       "cargo_name": "貨名",
       "cargo_limit": "貨架高度鎖定",
       "pallet": "板"
+    },
+    "error": {
+      "info_error": "貨架讀取錯誤"
     }
   },
 

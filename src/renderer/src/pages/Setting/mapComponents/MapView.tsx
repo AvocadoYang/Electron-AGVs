@@ -38,7 +38,6 @@ const MapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>
   mapWrapRef: RefObject<HTMLDivElement>
 }> = ({ scale, mapRef, locationPanelForm, roadPanelForm, mapWrapRef }) => {
-  const { data } = useMap()
   const { data: currentVersion } = useVerityVersion()
 
   /** 路線拖曳相關參數 */
@@ -111,7 +110,7 @@ const MapView: React.FC<{
   useDraggableLine(mapRef, roadPanelForm, initPoint, setMouseLocation, isResizing, setIsResizing)
 
   const handleMouseDown = (startId: string) => {
-    if (!data) return
+    if (!mapData) return
     setIsResizing(true)
     setShowBlockId(startId)
     const result = getLocationInfoById(startId, mapData?.locations as LocationType[])
@@ -147,7 +146,7 @@ const MapView: React.FC<{
         []
       )}
 
-      {/* {showLocation ? (
+      {showLocation ? (
         <AllCargo
           scale={scale}
           setInitPoint={setInitPoint}
@@ -156,7 +155,7 @@ const MapView: React.FC<{
         />
       ) : (
         []
-      )} */}
+      )}
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 

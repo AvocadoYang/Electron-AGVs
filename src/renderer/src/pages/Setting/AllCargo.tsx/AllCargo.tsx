@@ -2,7 +2,7 @@ import useMap from '@renderer/api/useMap'
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
 import { memo } from 'react'
 import Cargo from './Cargo'
-import { showBlockId as ShowBlockId, tooltipProp } from '@renderer/utils/gloable'
+import { cargoStyle, showBlockId as ShowBlockId, tooltipProp } from '@renderer/utils/gloable'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
 import { draggableLineInitialPoint, mouseLocation } from '../hooks/hook'
@@ -23,7 +23,8 @@ const AllCargo: React.FC<{
   const setTooltip = useSetAtom(tooltipProp)
   const shelfInfo = useCargoInfo()
   const { data } = useMap()
-  const [showBlockId] = useAtom(ShowBlockId)
+  const cStyle = useAtomValue(cargoStyle)
+  const showBlockId = useAtomValue(ShowBlockId)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const { data: locInfo } = useLoc(undefined)
   const handleEnter = (locationId: string, x: number, y: number) => {
@@ -58,7 +59,7 @@ const AllCargo: React.FC<{
           const translateY = info?.find((i) => i.locationId === loc.locationId)?.translateY || 0
           const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 270
           const LocScale = info?.find((i) => i.locationId === loc.locationId)?.scale || 1
-          console.log(loc.locationId.toString())
+
           return (
             <div
               draggable={false}
@@ -84,10 +85,14 @@ const AllCargo: React.FC<{
               >
                 <Cargo
                   locId={loc.locationId}
-                  translateX={translateX}
-                  translateY={translateY}
-                  scale={LocScale}
-                  rotate={rotate}
+                  translateX={
+                    cStyle && cStyle.locationId === loc.locationId ? cStyle.translateX : translateX
+                  }
+                  translateY={
+                    cStyle && cStyle.locationId === loc.locationId ? cStyle.translateY : translateY
+                  }
+                  scale={cStyle && cStyle.locationId === loc.locationId ? cStyle.scale : LocScale}
+                  rotate={cStyle && cStyle.locationId === loc.locationId ? cStyle.rotate : rotate}
                   shelfInfo={shelfInfo?.find((s) => s.areaId === loc.locationId)}
                 />
               </Point>

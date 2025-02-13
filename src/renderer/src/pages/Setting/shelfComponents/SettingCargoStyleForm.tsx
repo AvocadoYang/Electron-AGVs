@@ -9,14 +9,14 @@ import {
   FullscreenExitOutlined
 } from '@ant-design/icons'
 import { Button, Card, Col, Form, Input, message, Row } from 'antd'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { FC, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { cargoStyle } from '@renderer/utils/gloable'
 import client from '@renderer/api/axiosClient'
-import { LocWithoutArr } from '@renderer/api/useLoc'
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 
@@ -51,13 +51,16 @@ const BtnWrapper = styled.div`
   gap: 1em;
 `
 
-const SettingCargoStyleForm: FC<{ selectId: string }> = ({ selectId }) => {
+const SettingCargoStyleForm: FC<{
+  selectId: string
+  cancelEditStyle: () => void
+}> = ({ selectId, cancelEditStyle }) => {
   const [cStyle, setCStyle] = useAtom(cargoStyle)
   const [form] = Form.useForm()
   const intervalId = useRef<ReturnType<typeof setInterval> | null>(null)
-  const targetIndex = cStyle.findIndex((v) => v.id === selectId)
   const queryClient = useQueryClient()
   const { t } = useTranslation()
+  const { data } = useLoc(undefined)
   const [messageApi, contextHolder] = message.useMessage()
   const submitMutation = useMutation({
     mutationFn: (editValue: SubmitValue) => {
@@ -84,47 +87,32 @@ const SettingCargoStyleForm: FC<{ selectId: string }> = ({ selectId }) => {
       rotate: r,
       scale: s
     })
+    cancelEditStyle()
   }
 
   const handChange = (val: Val) => {
     setCStyle((prev) => {
-      const newC = [...prev]
-      const stale = prev[targetIndex]
-
-      const newData: LocWithoutArr = {
-        id: stale.id,
-        locationId: stale.locationId,
-        areaType: stale.areaType,
-        translateX: val.input === 'translateX' ? val.value : stale.translateX,
-        translateY: val.input === 'translateY' ? val.value : stale.translateY,
-        rotate: val.input === 'rotate' ? val.value : stale.rotate,
-        scale: val.input === 'scale' ? val.value : stale.scale
+      if (!prev) return null
+      return {
+        locationId: prev.locationId,
+        translateX: val.input === 'translateX' ? val.value : prev.translateX,
+        translateY: val.input === 'translateY' ? val.value : prev.translateY,
+        rotate: val.input === 'rotate' ? val.value : prev.rotate,
+        scale: val.input === 'scale' ? val.value : prev.scale
       }
-
-      newC[targetIndex] = newData
-
-      return newC
     })
   }
 
   const handleBtnChange = (val: Val) => {
     setCStyle((prev) => {
-      const newC = [...prev]
-      const stale = prev[targetIndex]
-
-      const newData: LocWithoutArr = {
-        id: stale.id,
-        locationId: stale.locationId,
-        areaType: stale.areaType,
-        translateX: val.input === 'translateX' ? val.value + stale.translateX : stale.translateX,
-        translateY: val.input === 'translateY' ? val.value + stale.translateY : stale.translateY,
-        rotate: val.input === 'rotate' ? val.value + stale.rotate : stale.rotate,
-        scale: val.input === 'scale' ? val.value + stale.scale : stale.scale
+      if (!prev) return null
+      return {
+        locationId: prev.locationId,
+        translateX: val.input === 'translateX' ? val.value + prev.translateX : prev.translateX,
+        translateY: val.input === 'translateY' ? val.value + prev.translateY : prev.translateY,
+        rotate: val.input === 'rotate' ? val.value + prev.rotate : prev.rotate,
+        scale: val.input === 'scale' ? val.value + prev.scale : prev.scale
       }
-
-      newC[targetIndex] = newData
-
-      return newC
     })
   }
 
@@ -160,14 +148,31 @@ const SettingCargoStyleForm: FC<{ selectId: string }> = ({ selectId }) => {
   }
 
   useEffect(() => {
-    //    console.log(cStyle.find((v) => v.id === selectId));
+    if (!data) return
+    const thisLocData = (data as LocWithoutArr[]).find((v) => v.id === selectId)
 
-    form.setFieldValue('translateX', cStyle.find((v) => v.id === selectId)?.translateX)
-    form.setFieldValue('translateY', cStyle.find((v) => v.id === selectId)?.translateY)
-    form.setFieldValue('scale', cStyle.find((v) => v.id === selectId)?.scale)
-    form.setFieldValue('rotate', cStyle.find((v) => v.id === selectId)?.rotate)
-    //  eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectId, cStyle])
+    if (!thisLocData) return
+
+    setCStyle({
+      locationId: thisLocData.locationId,
+      translateX: thisLocData.translateX,
+      translateY: thisLocData.translateY,
+      rotate: thisLocData.rotate,
+      scale: thisLocData.scale
+    })
+    form.setFieldValue('translateX', thisLocData.translateX)
+    form.setFieldValue('translateY', thisLocData.translateY)
+    form.setFieldValue('scale', thisLocData.scale)
+    form.setFieldValue('rotate', thisLocData.rotate)
+  }, [selectId, data])
+
+  useEffect(() => {
+    if (!cStyle) return
+    form.setFieldValue('translateX', cStyle.translateX)
+    form.setFieldValue('translateY', cStyle.translateY)
+    form.setFieldValue('scale', cStyle.scale)
+    form.setFieldValue('rotate', cStyle.rotate)
+  }, [cStyle])
 
   // Function to handle the button press and start the transformations
   const handleButtonPress = (event: Event) => {
@@ -197,6 +202,7 @@ const SettingCargoStyleForm: FC<{ selectId: string }> = ({ selectId }) => {
           <Col span={24}>
             {' '}
             <BtnWrapper>
+              <Button onClick={cancelEditStyle}>{t('utils.cancel')}</Button>
               <Button onClick={() => saveStyle()} type="primary">
                 {t('edit_shelf_panel.save')}
               </Button>

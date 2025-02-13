@@ -1,21 +1,21 @@
 import { FormatPainterOutlined } from '@ant-design/icons'
-import { Skeleton, Table } from 'antd'
+import { Flex, Skeleton, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { FC, memo, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
-import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
 import useYaw from '@renderer/api/useYaw'
-import { cargoStyle, isEditCargo } from '@renderer/utils/gloable'
+import { cargoStyle } from '@renderer/utils/gloable'
 import useShelf from '@renderer/api/useShelf'
 import { ShelfWithoutList } from '@renderer/api/type/useShelf'
 import SettingCargoStyleForm from './SettingCargoStyleForm'
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ hasSelect: boolean }>`
   display: flex;
   align-items: center;
+  display: ${(prop) => (prop.hasSelect ? 'none' : 'flex')};
 `
 
 type ShelfCell = {
@@ -79,22 +79,14 @@ const ShelfTable: FC<{
   selectedRowKeys: React.Key[]
   setSelectedRowKeys: React.Dispatch<React.SetStateAction<React.Key[]>>
 }> = ({ selectedRowKeys, setSelectedRowKeys }) => {
-  const [selectId, setSelectId] = useState('')
-  const setEditCargo = useSetAtom(isEditCargo)
-  const { data } = useLoc(undefined)
+  const [selectId, setSelectId] = useState<string | null>(null)
   const { data: yaw } = useYaw()
   const setCStyle = useSetAtom(cargoStyle)
   const { data: shelfDataSource, isLoading: isLoadingShelf } = useShelf()
   const { t } = useTranslation()
   const handleEdit = (id: string) => {
     setSelectId(id)
-    setEditCargo(true)
   }
-
-  useEffect(() => {
-    if (!data) return
-    setCStyle(data as LocWithoutArr[])
-  }, [data, setCStyle])
 
   const columns: ColumnsType<ShelfWithoutList> = [
     {
@@ -154,42 +146,6 @@ const ShelfTable: FC<{
     },
 
     {
-      title: t('edit_shelf_panel.detail'),
-      dataIndex: 'detail1',
-      key: 'detail1',
-      render: (_v, recorder) => {
-        return recorder.ShelfConfig.sort((a, b) => a.level - b.level).map((item) => {
-          return (
-            <>
-              <p>
-                {t('edit_shelf_panel.level')}: {item.level + 1}, {t('edit_shelf_panel.disabled')}:{' '}
-                {item.disable ? t('utils.yes') : t('utils.no')}
-              </p>
-            </>
-          )
-        })
-      }
-    },
-
-    {
-      title: t('edit_shelf_panel.cargo_limit'),
-      dataIndex: 'detail2',
-      key: 'detail2',
-      render: (_v, recorder) => {
-        return recorder.ShelfConfig.sort((a, b) => a.level - b.level).map((item) => {
-          return (
-            <>
-              <p>
-                {t('edit_shelf_panel.level')}: {item.level + 1}, {t('edit_shelf_panel.height')}:{' '}
-                {item.cargo_limit}
-              </p>
-            </>
-          )
-        })
-      }
-    },
-
-    {
       title: t('edit_shelf_panel.setting'),
       dataIndex: 'operation',
       key: 'operation',
@@ -202,6 +158,11 @@ const ShelfTable: FC<{
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys)
+  }
+
+  const cancelEditStyle = () => {
+    setSelectId(null)
+    setCStyle(null)
   }
 
   const rowSelection = {
@@ -220,22 +181,61 @@ const ShelfTable: FC<{
 
   if (isLoadingShelf) return <Skeleton active />
   return (
-    <Wrapper>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell
-          }
-        }}
-        rowSelection={rowSelection}
-        dataSource={shelfDataSource as []}
-        columns={mergedColumns as unknown as undefined}
-        rowKey={(record: ShelfWithoutList) => record.id}
-        pagination={{ pageSize: 8 }}
-      />
-      {selectId ? <SettingCargoStyleForm selectId={selectId} /> : []}
-    </Wrapper>
+    <>
+      <Wrapper hasSelect={selectId !== null}>
+        <Table
+          components={{
+            body: {
+              cell: EditableCell
+            }
+          }}
+          rowSelection={rowSelection}
+          dataSource={shelfDataSource as []}
+          columns={mergedColumns as unknown as undefined}
+          rowKey={(record: ShelfWithoutList) => record.id}
+          pagination={{ pageSize: 8 }}
+          expandable={{
+            expandedRowRender: (record) => (
+              <>
+                <Flex justify="center" gap="large">
+                  <p>
+                    {record.ShelfConfig.sort((a, b) => a.level - b.level).map((item) => {
+                      return (
+                        <>
+                          <p>
+                            {t('edit_shelf_panel.level')}: {item.level + 1},{' '}
+                            {t('edit_shelf_panel.disabled')}:{' '}
+                            {item.disable ? t('utils.yes') : t('utils.no')}
+                          </p>
+                        </>
+                      )
+                    })}
+                  </p>
+                  <p>
+                    {record.ShelfConfig.sort((a, b) => a.level - b.level).map((item) => {
+                      return (
+                        <>
+                          <p>
+                            {t('edit_shelf_panel.level')}: {item.level + 1},{' '}
+                            {t('edit_shelf_panel.height')}: {item.cargo_limit}
+                          </p>
+                        </>
+                      )
+                    })}
+                  </p>
+                </Flex>
+              </>
+            )
+          }}
+        />
+      </Wrapper>
+      {selectId ? (
+        <SettingCargoStyleForm selectId={selectId} cancelEditStyle={cancelEditStyle} />
+      ) : (
+        []
+      )}
+    </>
   )
 }
 
-export default memo(ShelfTable)
+export default ShelfTable
