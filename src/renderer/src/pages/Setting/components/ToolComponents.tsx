@@ -11,6 +11,7 @@ import { Card, FormInstance } from 'antd'
 import {
   EditLocationListTableSwitch,
   EditLocationPanelSwitch,
+  EditPalletSwitch,
   EditRoadPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfPanelSwitch,
@@ -26,6 +27,7 @@ import cardStyle from '../utils/cardStyle'
 import { ShelfPanel } from '../shelfComponents/editShelf'
 import { ShelfCategoryPanel } from '../shelfComponents/category'
 import { YawPanel } from '../shelfComponents/yaw'
+import { PalletTable } from '../shelfComponents/pallet'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -136,6 +138,17 @@ const SortableWrap: FC<{
                 <YawPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             )
+          case 'edit_pallet':
+            // 3-4 顯示編輯類型
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <PalletTable
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
 
           default:
             return null
@@ -160,6 +173,7 @@ const ToolComponents: FC<{
   const openEditShelf = useAtomValue(EditShelfPanelSwitch)
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
+  const openEditPalletTable = useAtomValue(EditPalletSwitch)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -221,33 +235,19 @@ const ToolComponents: FC<{
       )
     }
     if (formKey === 'edit_shelve' && openEditShelf) {
-      return (
-        <SortableWrap
-          sortableId={formKey}
-          key={formKey}
-          locationPanelForm={locationPanelForm}
-        ></SortableWrap>
-      )
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
 
     if (formKey === 'edit_shelve_type' && openEditShelfCategory) {
-      return (
-        <SortableWrap
-          sortableId={formKey}
-          key={formKey}
-          locationPanelForm={locationPanelForm}
-        ></SortableWrap>
-      )
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
 
     if (formKey === 'edit_yaw' && openEditShelfYaw) {
-      return (
-        <SortableWrap
-          sortableId={formKey}
-          key={formKey}
-          locationPanelForm={locationPanelForm}
-        ></SortableWrap>
-      )
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+
+    if (formKey === 'edit_pallet' && openEditPalletTable) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     return []
   })

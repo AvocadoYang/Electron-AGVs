@@ -236,5 +236,11 @@
     "edit_yaw": "編輯轉向角",
     "add": "新增",
     "input_warning": "請輸入角度"
+  },
+  "edit_pallet": {
+    "edit_pallet": "編輯棧板",
+    "edit_default_warning": "不可編輯預設棧板",
+    "type": "棧版類型",
+    "color": "顏色"
   }
 }

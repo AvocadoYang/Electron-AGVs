@@ -128,6 +128,16 @@ const Sider: React.FC<{
         break
 
       // ===================
+
+      // === zone ===
+      case 'edit_zone':
+        setOpenEditZone(check)
+        break
+      case 'show_zone_list':
+        console.log('show_zone_list')
+        break
+      // ===================
+      // === shelves ===
       // === shelf ===
 
       case 'edit_shelve':
@@ -148,15 +158,6 @@ const Sider: React.FC<{
         break
 
       // ===================
-      // === zone ===
-      case 'edit_zone':
-        setOpenEditZone(check)
-        break
-      case 'show_zone_list':
-        console.log('show_zone_list')
-        break
-      // ===================
-      // === shelves ===
 
       // ===================
       // === others ===

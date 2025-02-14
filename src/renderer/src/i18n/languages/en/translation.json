@@ -238,5 +238,11 @@
     "edit_yaw": "Edit Yaw",
     "add": "Add",
     "input_warning": "please inert right number"
+  },
+  "edit_pallet": {
+    "edit_pallet": "Edit Pallet",
+    "edit_default_warning": "Can not edit default pallet",
+    "type": "Type",
+    "color": "Color"
   }
 }
