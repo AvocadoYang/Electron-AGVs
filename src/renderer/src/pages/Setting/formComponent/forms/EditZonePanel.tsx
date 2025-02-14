@@ -22,6 +22,7 @@ import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import { useMutation } from '@tanstack/react-query'
+import useMap from '@renderer/api/useMap'
 
 type TagRender = SelectProps['tagRender']
 
@@ -72,6 +73,7 @@ const EditZonePanel: React.FC<{
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ attributes, listeners, sortableId, zonePanelForm }) => {
   const { t } = useTranslation()
+  const { data } = useMap()
   const [messageApi, contextHolders] = message.useMessage()
 
   const saveZoneMutation = useMutation({
@@ -88,6 +90,7 @@ const EditZonePanel: React.FC<{
     if (!zonePanelForm.getFieldsValue()) return
     const { name, color, category, startX, startY, endX, endY } =
       zonePanelForm.getFieldsValue() as ZoneType
+    console.log(color)
     if ((startX === endX && startY === endY) || !startX || !startY) {
       openNotificationWithIcon(
         'warning',
@@ -106,15 +109,20 @@ const EditZonePanel: React.FC<{
       )
       return
     }
-    // if (name === storedName) {
-    //   openNotificationWithIcon(
-    //     'warning',
-    //     t('edit_zone_panel.waring.name_duplicated_error'),
-    //     t('edit_zone_panel.waring.name_duplicated_error'),
-    //     'bottomLeft'
-    //   )
-    //   return
-    // }
+
+    const exists = data!.zones.some((zone) => {
+      return zone.name.trim() === name.trim()
+    })
+
+    if (exists) {
+      openNotificationWithIcon(
+        'warning',
+        t('edit_zone_panel.waring.name_duplicated_error'),
+        t('edit_zone_panel.waring.name_duplicated_error'),
+        'bottomLeft'
+      )
+      return
+    }
     if (!color) {
       openNotificationWithIcon(
         'warning',
@@ -142,7 +150,7 @@ const EditZonePanel: React.FC<{
     saveZoneMutation.mutate(newZone)
     zonePanelForm.resetFields()
   }
-
+  if (!data) return []
   return (
     <>
       {contextHolders}

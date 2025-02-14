@@ -17,6 +17,10 @@ export const RoadListTableSwitch = atom<boolean>(false)
 
 /** 3-1 編輯區域開關 */
 export const EditZoneSwitch = atom<boolean>(false)
+
+/** 3-2 顯示區域開關 */
+export const showAllZonesSwitch = atom<boolean>(true)
+
 /** 4-1 顯示 編輯貨架 */
 export const EditShelfPanelSwitch = atom<boolean>(false)
 

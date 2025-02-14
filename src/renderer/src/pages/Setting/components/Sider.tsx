@@ -14,7 +14,8 @@ import {
   EditShelfPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfYawPanelSwitch,
-  EditPalletSwitch
+  EditPalletSwitch,
+  showAllZonesSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -65,6 +66,8 @@ const Sider: React.FC<{
   const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch) // 2-2
 
   const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch) // 3-1
+  const [showAllZones, setShowAllZones] = useAtom(showAllZonesSwitch) // 3-2
+
   const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch) //4-1
   const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch) //4-2
   const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch) //4-3
@@ -73,7 +76,6 @@ const Sider: React.FC<{
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip) //地點tooltip
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
-
   useEffect(() => {
     const isOpen = [
       openEditLocationPanel,
@@ -153,7 +155,7 @@ const Sider: React.FC<{
         setOpenEditZone(check)
         break
       case 'show_zone_list':
-        console.log('show_zone_list')
+        setShowAllZones(check)
         break
       // ===================
       // === shelves ===
@@ -263,7 +265,7 @@ const Sider: React.FC<{
         t('toolbar.zone.zones.show_zone_list'),
         '3-2',
         <Switch
-          defaultChecked={false}
+          defaultChecked={showAllZones}
           onChange={(checked) => handleShowPanel(checked, 'show_zone_list')}
         />
       )
