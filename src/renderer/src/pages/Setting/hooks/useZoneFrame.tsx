@@ -30,7 +30,7 @@ const useZoneFrame = (
     //點擊開始拖曳
     const mouseDown$ = fromEvent<MouseEvent>(mapRef.current, 'mousedown').pipe(
       switchMap((startEvent) => {
-        zonePanelForm.resetFields()
+        // zonePanelForm.resetFields()
         if (!mapPanel || !mapWrap || !mapImageRef) return EMPTY
         setIsDragging(true)
         startEvent.preventDefault()
