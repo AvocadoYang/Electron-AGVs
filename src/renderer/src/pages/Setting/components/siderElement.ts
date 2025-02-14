@@ -1,12 +1,12 @@
 export const formList = [
   // ===================
   // === location ===
-  { key: 'locationPanel' },
-  { key: 'locationList' },
-  { key: 'quickLocationPanel' },
+  { key: 'location_panel' },
+  { key: 'location_list' },
+  { key: 'quick_location_panel' },
   // ===================
   // === road ===
-  { key: 'roadPanel' },
+  { key: 'road_panel' },
   { key: 'show_roads_table' },
   // ===================
   // === zone ===

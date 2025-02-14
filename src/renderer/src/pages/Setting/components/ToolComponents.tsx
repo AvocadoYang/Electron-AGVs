@@ -42,7 +42,7 @@ const SortableWrap: FC<{
       {(() => {
         switch (sortableId) {
           // 1-1 編輯點位的彈跳視窗
-          case 'locationPanel':
+          case 'location_panel':
             return (
               <Card style={styles} ref={setNodeRef}>
                 <EditLocationPanel
@@ -54,7 +54,7 @@ const SortableWrap: FC<{
               </Card>
             )
           // 1-2 快速編輯點位的彈跳視窗
-          case 'locationList':
+          case 'location_list':
             return (
               <Card style={styles} ref={setNodeRef}>
                 <QuickEditLocationPanel
@@ -65,7 +65,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             )
-          case 'quickLocationPanel':
+          case 'quick_location_panel':
             // 1-3 顯示地點列表
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -76,7 +76,7 @@ const SortableWrap: FC<{
                 ></AllLocationTable>
               </Card>
             )
-          case 'roadPanel':
+          case 'road_panel':
             // 2-1 編輯路徑
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -139,7 +139,7 @@ const ToolComponents: FC<{
   return dataList.map((form) => {
     const { key: formKey } = form
 
-    if (formKey === 'locationPanel' && showEditLocationPanel) {
+    if (formKey === 'location_panel' && showEditLocationPanel) {
       return (
         <SortableWrap
           sortableId={formKey}
@@ -148,7 +148,7 @@ const ToolComponents: FC<{
         ></SortableWrap>
       )
     }
-    if (formKey === 'locationList' && showQuickEditLocationPanel) {
+    if (formKey === 'location_list' && showQuickEditLocationPanel) {
       return (
         <SortableWrap
           sortableId={formKey}
@@ -157,7 +157,7 @@ const ToolComponents: FC<{
         ></SortableWrap>
       )
     }
-    if (formKey === 'quickLocationPanel' && showAllLocationListTable) {
+    if (formKey === 'quick_location_panel' && showAllLocationListTable) {
       return (
         <SortableWrap
           sortableId={formKey}
@@ -166,7 +166,7 @@ const ToolComponents: FC<{
         ></SortableWrap>
       )
     }
-    if (formKey === 'roadPanel' && openEditRoadPanel) {
+    if (formKey === 'road_panel' && openEditRoadPanel) {
       return (
         <SortableWrap
           sortableId={formKey}

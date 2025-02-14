@@ -1,27 +1,15 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { memo, useMemo } from 'react'
+import React, { memo } from 'react'
 import { LocationType } from '@renderer/utils/jotai'
 import './form.css'
 import { openNotificationWithIcon } from '../../utils/notification'
 import { useTranslation } from 'react-i18next'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-  Form,
-  Input,
-  Radio,
-  Button,
-  FormInstance,
-  Checkbox,
-  message,
-  Card,
-  Space,
-  InputNumber
-} from 'antd'
+import { Form, Input, Radio, Button, FormInstance, Checkbox, message, Space } from 'antd'
 import { initialLocationFormValue } from './formInitValue'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
-import { borderColor } from '../../utils/utils'
 import useMap from '@renderer/api/useMap'
 import FormHr from '../../utils/FormHr'
 

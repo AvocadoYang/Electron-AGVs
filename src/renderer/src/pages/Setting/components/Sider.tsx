@@ -106,20 +106,20 @@ const Sider: React.FC<{
     if (!data) return
     switch (itemType) {
       // === location ===
-      case 'locationPanel':
+      case 'location_panel':
         setOpenEditLocationPanel(check)
         break
-      case 'quickLocationPanel':
+      case 'quick_location_panel':
         setQuickEditLocationPanel(check)
         break
-      case 'locationList':
+      case 'location_list':
         setShowAllLocationListTable(check)
         setShowLocationToolTip(true)
 
         break
       // ===================
       // === road ===
-      case 'roadPanel':
+      case 'road_panel':
         setOpenEditRoadPanel(check)
         break
 
@@ -217,21 +217,21 @@ const Sider: React.FC<{
         t('toolbar.location.edit_locations'),
         '1-1',
         <Switch
-          onChange={(checked) => handleShowPanel(checked, 'locationPanel')}
+          onChange={(checked) => handleShowPanel(checked, 'location_panel')}
           checked={openEditLocationPanel}
         />
       ),
       getItem(
         t('toolbar.location.quick_edit_locations'),
         '1-2',
-        <Switch onChange={(checked) => handleShowPanel(checked, 'quickLocationPanel')} />
+        <Switch onChange={(checked) => handleShowPanel(checked, 'quick_location_panel')} />
       ),
       getItem(
         t('toolbar.location.show_locations_table'),
         '1-4',
         <Switch
           checked={showAllLocationListTable}
-          onChange={(checked) => handleShowPanel(checked, 'locationList')}
+          onChange={(checked) => handleShowPanel(checked, 'location_list')}
         />
       )
     ]),
@@ -240,7 +240,7 @@ const Sider: React.FC<{
         t('toolbar.road.roads.edit_roads'),
         '2-1',
         <Switch
-          onChange={(checked) => handleShowPanel(checked, 'roadPanel')}
+          onChange={(checked) => handleShowPanel(checked, 'road_panel')}
           checked={openEditRoadPanel}
         />
       ),

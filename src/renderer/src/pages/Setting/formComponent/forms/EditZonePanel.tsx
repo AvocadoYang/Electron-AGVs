@@ -8,6 +8,7 @@ import {
   Form,
   FormInstance,
   Input,
+  message,
   Select,
   SelectProps,
   Space,
@@ -16,7 +17,11 @@ import {
 import FormHr from '../../utils/FormHr'
 import { initialZoneValue } from './formInitValue'
 import { openNotificationWithIcon } from '../../utils/notification'
-import { ZoneType } from '@renderer/utils/jotai'
+import { LocationType, ZoneType } from '@renderer/utils/jotai'
+import client from '@renderer/api/axiosClient'
+import { ErrorResponse } from '@renderer/utils/globalType'
+import { errorHandler } from '@renderer/utils/utils'
+import { useMutation } from '@tanstack/react-query'
 
 type TagRender = SelectProps['tagRender']
 
@@ -26,6 +31,20 @@ const zoneType: SelectProps['options'] = [
   { value: '限高區' },
   { value: '禁止區' }
 ]
+
+type Save_Zone = {
+  name: string
+  backgroundColor: string
+  category: string[]
+  startPoint: {
+    startX: number
+    startY: number
+  }
+  endPoint: {
+    endX: number
+    endY: number
+  }
+}
 
 const tagRender: TagRender = (props) => {
   const { label, value, closable, onClose } = props
@@ -53,6 +72,17 @@ const EditZonePanel: React.FC<{
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ attributes, listeners, sortableId, zonePanelForm }) => {
   const { t } = useTranslation()
+  const [messageApi, contextHolders] = message.useMessage()
+
+  const saveZoneMutation = useMutation({
+    mutationFn: (payload: Save_Zone) => {
+      return client.post('api/setting/save-new-zone', payload)
+    },
+    onSuccess: () => {
+      void messageApi.success('success')
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  })
 
   const save = () => {
     if (!zonePanelForm.getFieldsValue()) return
@@ -109,12 +139,13 @@ const EditZonePanel: React.FC<{
       }
     }
 
-    console.log(newZone)
+    saveZoneMutation.mutate(newZone)
     zonePanelForm.resetFields()
   }
 
   return (
     <>
+      {contextHolders}
       <div style={{ width: '23em' }}>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.zonePanel')}

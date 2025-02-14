@@ -42,13 +42,18 @@ const getMap = async () => {
     ).required(),
     zones: array(
       object({
-        x1: number().required(),
-        x2: number().required(),
-        y1: number().required(),
-        y2: number().required(),
-        zoneId: string().required(),
-        zoneType: string().required(),
-        color: string().required()
+        id: string().required(),
+        name: string().required(),
+        backgroundColor: string().required(),
+        category: array(string().required()).required(),
+        startPoint: object({
+          startX: number().required(),
+          startY: number().required()
+        }).required(),
+        endPoint: object({
+          endX: number().required(),
+          endY: number().required()
+        }).required()
       })
     ).required(),
     mapWidth: number().positive().required(),
