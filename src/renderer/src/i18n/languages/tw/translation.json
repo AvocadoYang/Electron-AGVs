@@ -17,6 +17,8 @@
     "success": "成功",
     "fail": "失敗",
     "submit": "送出",
+    "add": "新增",
+    "error": "錯誤",
 
     "location_property": {
       "none": "點位",
@@ -215,5 +217,19 @@
     "disabled": "停用",
     "height": "高度",
     "save": "儲存"
+  },
+  "edit_shelf_category": {
+    "edit_shelf_category": "編輯貨架種類",
+    "add_shelf": "新增貨架",
+    "name": "名稱",
+    "style": "樣式",
+    "type_1": "type 1",
+    "type_2": "type 2",
+    "f1": "第",
+    "f2": "層",
+    "every_level": "各層高度",
+    "add_number_warning": "只能數字",
+    "add_duplicate_warning": "資料重複",
+    "delete_warning": "刪除會讓使用此類型的貨架便會預設值."
   }
 }

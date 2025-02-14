@@ -1,12 +1,16 @@
 import { FC } from 'react'
 import styled from 'styled-components'
-import { HasCargo } from './types'
 
-const Block = styled.div<HasCargo>`
+interface BlockProps {
+  $hasCargo: boolean
+  $isDisable: boolean
+  border: string
+}
+const Block = styled.div<BlockProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ has_cargo }) => (has_cargo ? '#ffe73c73' : '#f5f5f538')};
+  background-color: ${({ $hasCargo }) => ($hasCargo ? '#ffe73c73' : '#f5f5f538')};
   pointer-events: 'auto';
   cursor: 'pointer';
   border: ${({ border }) => `2px dashed ${border}`};
@@ -16,7 +20,7 @@ const Block = styled.div<HasCargo>`
   transition: transform 0.2s;
 
   :after {
-    content: ${({ is_disable }) => (is_disable ? '"X"' : 'none')};
+    content: ${({ $isDisable }) => ($isDisable ? '"X"' : 'none')};
     width: 98%;
     height: 98%;
     position: absolute;
@@ -25,7 +29,7 @@ const Block = styled.div<HasCargo>`
   }
 `
 
-const BlockSpan = styled.span<{ rotate: number; has_cargo: boolean }>`
+const BlockSpan = styled.span<{ rotate: number; $hasCargo: boolean }>`
   text-align: center;
   user-select: none;
   -webkit-user-select: none;
@@ -41,7 +45,7 @@ const BlockSpan = styled.span<{ rotate: number; has_cargo: boolean }>`
   transform: ${({ rotate }) => `rotate(${-rotate}deg) translateY(1px)`};
   display: inline-block;
   white-space: break-spaces;
-  color: ${({ has_cargo }) => (has_cargo ? '#000000fff' : 'black')};
+  color: ${({ $hasCargo }) => ($hasCargo ? '#000000fff' : 'black')};
   height: 100%;
   text-align: center;
   margin: 0px;
@@ -63,12 +67,12 @@ const CargoDisplay: FC<{
   return (
     <Block
       key={level}
-      has_cargo={cargoValue}
-      is_disable={isDisable}
+      $hasCargo={cargoValue}
+      $isDisable={isDisable}
       border={border}
       onMouseDown={(e) => handleMouseDown(e, locId, level)}
     >
-      <BlockSpan has_cargo={cargoValue} rotate={rotate} id={locId}>
+      <BlockSpan $hasCargo={cargoValue} rotate={rotate} id={locId}>
         {levelName}
       </BlockSpan>
     </Block>

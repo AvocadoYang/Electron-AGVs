@@ -17,6 +17,8 @@
     "success": "Success",
     "fail": "Fail",
     "submit": "Submit",
+    "add": "Add",
+    "error": "Error",
 
     "location_property": {
       "none": "Normal",
@@ -216,6 +218,20 @@
     "setting": "Setting Style",
     "disabled": "Disable",
     "height": "Height",
-    "save": "儲存"
+    "save": "save"
+  },
+  "edit_shelf_category": {
+    "edit_shelf_category": "Edit Shelf Category",
+    "add_shelf": "Add Shelf",
+    "name": "Name",
+    "style": "Style",
+    "type_1": "type 1",
+    "type_2": "type 2",
+    "f1": "Floor",
+    "f2": "",
+    "every_level": "Every Level Height",
+    "add_number_warning": "number only",
+    "add_duplicate_warning": "Duplicate Date",
+    "delete_warning": "Delete will cause other shelf is using this category become default shelf."
   }
 }

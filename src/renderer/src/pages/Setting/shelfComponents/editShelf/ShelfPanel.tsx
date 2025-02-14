@@ -3,8 +3,8 @@ import { Button, Flex } from 'antd'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ShelfTable from './ShelfTable'
-import { borderColor } from '../utils/utils'
 import ShelfDrawer from './ShelfDrawer'
+import { borderColor } from '../../utils/utils'
 
 const ShelfPanel: React.FC<{
   sortableId: string

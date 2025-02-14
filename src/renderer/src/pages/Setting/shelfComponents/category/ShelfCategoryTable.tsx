@@ -1,0 +1,131 @@
+import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
+import client from '@renderer/api/axiosClient'
+import useShelfCategory, { ShelfCategoryWithoutList } from '@renderer/api/useShelfCategory'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Row, Col, Table, Popconfirm, Card, Button } from 'antd'
+import { ColumnsType } from 'antd/es/table'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+
+const ShelfCategoryTable: FC<{
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setSelectId: React.Dispatch<React.SetStateAction<string>>
+}> = ({ setOpen, setSelectId }) => {
+  const queryClient = useQueryClient()
+  const { data, isLoading } = useShelfCategory()
+  const { t } = useTranslation()
+
+  const addMutation = useMutation({
+    mutationFn: () => {
+      return client.post(`api/setting/add-shelf-category`)
+    },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: ['all-shelf-category']
+      })
+      await queryClient.refetchQueries({
+        queryKey: ['shelf']
+      })
+    }
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => {
+      return client.post<unknown>(`api/setting/delete-shelf-category`, {
+        id
+      })
+    },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['shelf'] })
+      await queryClient.refetchQueries({
+        queryKey: ['all-shelf-category']
+      })
+    }
+  })
+
+  const addHandler = () => [addMutation.mutate()]
+
+  const handleDelete = (id: string) => {
+    deleteMutation.mutate(id)
+  }
+
+  const handleEdit = (id: string) => {
+    setOpen(true)
+    setSelectId(id)
+  }
+
+  const columns: ColumnsType<ShelfCategoryWithoutList> = [
+    {
+      title: t('edit_shelf_category.name'),
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: t('edit_shelf_category.style'),
+      dataIndex: 'shelf_style',
+      key: 'shelf_style',
+      render: (_v, record) => {
+        switch (record.shelf_style) {
+          case 'type_1':
+            return <>{t('edit_shelf_category.type_1')}</>
+
+          case 'type_2':
+            return <>{t('edit_shelf_category.type_2')}</>
+
+          default:
+            return <></>
+        }
+      }
+    },
+    {
+      title: t('edit_shelf_category.every_level'),
+      dataIndex: 'height',
+      key: 'height',
+      render: (_v, recorder) => {
+        const sortedHeight = recorder.Height?.sort((a, b) => a.height - b.height)
+
+        return sortedHeight?.map((k) => <p key={k.id}>{k.height}</p>)
+      }
+    },
+    {
+      title: '',
+      dataIndex: '',
+      width: 150,
+      render: (_v, record) => {
+        return (
+          <>
+            <Row gutter={16}>
+              <Col className="gutter-row" span={12}>
+                <Popconfirm
+                  title={t('edit_shelf_category.delete_warning')}
+                  onConfirm={() => handleDelete(record.id)}
+                >
+                  <DeleteTwoTone twoToneColor="#a61d24" />
+                </Popconfirm>
+              </Col>
+              <Col className="gutter-row" span={12}>
+                <EditTwoTone twoToneColor="#33bcb7" onClick={() => handleEdit(record.id)} />
+              </Col>
+            </Row>
+          </>
+        )
+      }
+    }
+  ]
+
+  if (isLoading) return []
+  return (
+    <>
+      <Button onClick={addHandler} type="primary" style={{ marginBottom: 16 }}>
+        {t('edit_shelf_category.add_shelf')}
+      </Button>
+      <Table
+        dataSource={data as ShelfCategoryWithoutList[]}
+        columns={columns}
+        rowKey={(record) => record.id}
+      />
+    </>
+  )
+}
+
+export default ShelfCategoryTable

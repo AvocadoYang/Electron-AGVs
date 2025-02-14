@@ -12,6 +12,7 @@ import {
   EditLocationListTableSwitch,
   EditLocationPanelSwitch,
   EditRoadPanelSwitch,
+  EditShelfCategoryPanelSwitch,
   EditShelfPanelSwitch,
   EditZoneSwitch,
   QuickEditLocationPanelSwitch,
@@ -21,7 +22,8 @@ import { useAtomValue } from 'jotai'
 import { ToolBarItemType, ToolBarType } from './siderElement'
 import { useSortable } from '@dnd-kit/sortable'
 import cardStyle from '../utils/cardStyle'
-import ShelfPanel from '../shelfComponents/ShelfPanel'
+import { ShelfPanel } from '../shelfComponents/editShelf'
+import { ShelfCategoryPanel } from '../shelfComponents/category'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -114,6 +116,17 @@ const SortableWrap: FC<{
                 <ShelfPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             )
+          case 'edit_shelve_type':
+            // 3-2 顯示編輯類型
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <ShelfCategoryPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
           default:
             return null
         }
@@ -135,6 +148,7 @@ const ToolComponents: FC<{
   const showRoadList = useAtomValue(RoadListTableSwitch)
   const openZonePanel = useAtomValue(EditZoneSwitch)
   const openEditShelf = useAtomValue(EditShelfPanelSwitch)
+  const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -196,6 +210,16 @@ const ToolComponents: FC<{
       )
     }
     if (formKey === 'edit_shelve' && openEditShelf) {
+      return (
+        <SortableWrap
+          sortableId={formKey}
+          key={formKey}
+          locationPanelForm={locationPanelForm}
+        ></SortableWrap>
+      )
+    }
+
+    if (formKey === 'edit_shelve_type' && openEditShelfCategory) {
       return (
         <SortableWrap
           sortableId={formKey}

@@ -20,25 +20,25 @@ const Container = styled.div.attrs<{
 const Line = styled.div.attrs<{
   length: number
   angle: number
-  isOneWayRoad: boolean
-  isClaimed: boolean
-  limit: boolean
-  isOnHover: boolean
-}>(({ length, angle, isOneWayRoad, isClaimed, isOnHover }) => ({
+  $isOneWayRoad: boolean
+  $isClaimed: boolean
+  $limit: boolean
+  $isOnHover: boolean
+}>(({ length, angle, $isOneWayRoad, $isClaimed, $isOnHover }) => ({
   style: {
     width: length,
-    height: isOnHover ? '2px' : '1px',
+    height: $isOnHover ? '2px' : '1px',
     transform: `rotate(${angle}deg) translateY(-50%)`,
-    backgroundColor: isOneWayRoad ? '#ffffff5' : 'rgb(0 68 255 / 0%)',
-    border: isClaimed || isOnHover ? '1px solid #ff9646' : '2px solid #cccccc47'
+    backgroundColor: $isOneWayRoad ? '#ffffff5' : 'rgb(0 68 255 / 0%)',
+    border: $isClaimed || $isOnHover ? '1px solid #ff9646' : '2px solid #cccccc47'
   }
 }))<{
   length: number
   angle: number
-  isOneWayRoad: boolean
-  isClaimed: boolean
-  limit: boolean
-  isOnHover: boolean
+  $isOneWayRoad: boolean
+  $isClaimed: boolean
+  $limit: boolean
+  $isOnHover: boolean
 }>`
   height: 4px;
   transform-origin: top left;
@@ -49,8 +49,8 @@ const Line = styled.div.attrs<{
     height: 6px;
   }
 
-  ${({ isOneWayRoad }) =>
-    isOneWayRoad &&
+  ${({ $isOneWayRoad }) =>
+    $isOneWayRoad &&
     css`
       ::before {
         content: '';
@@ -97,10 +97,10 @@ const Road: FC<{
           length={length}
           angle={angle}
           ref={ref}
-          isOneWayRoad={roadType === 'oneWayRoad'}
-          isClaimed={isClaimedBy !== undefined}
-          limit={!!limit}
-          isOnHover={isRoadOnHover}
+          $isOneWayRoad={roadType === 'oneWayRoad'}
+          $isClaimed={isClaimedBy !== undefined}
+          $limit={!!limit}
+          $isOnHover={isRoadOnHover}
         >
           {disabled && (
             <p
