@@ -231,5 +231,10 @@
     "add_number_warning": "只能數字",
     "add_duplicate_warning": "資料重複",
     "delete_warning": "刪除會讓使用此類型的貨架便會預設值."
+  },
+  "edit_yaw": {
+    "edit_yaw": "編輯轉向角",
+    "add": "新增",
+    "input_warning": "請輸入角度"
   }
 }

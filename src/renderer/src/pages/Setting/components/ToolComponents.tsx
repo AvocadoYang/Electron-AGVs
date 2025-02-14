@@ -14,6 +14,7 @@ import {
   EditRoadPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfPanelSwitch,
+  EditShelfYawPanelSwitch,
   EditZoneSwitch,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch
@@ -24,6 +25,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import cardStyle from '../utils/cardStyle'
 import { ShelfPanel } from '../shelfComponents/editShelf'
 import { ShelfCategoryPanel } from '../shelfComponents/category'
+import { YawPanel } from '../shelfComponents/yaw'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -127,6 +129,14 @@ const SortableWrap: FC<{
                 />
               </Card>
             )
+          case 'edit_yaw':
+            // 3-3 顯示編輯類型
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <YawPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
+              </Card>
+            )
+
           default:
             return null
         }
@@ -149,6 +159,7 @@ const ToolComponents: FC<{
   const openZonePanel = useAtomValue(EditZoneSwitch)
   const openEditShelf = useAtomValue(EditShelfPanelSwitch)
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
+  const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -220,6 +231,16 @@ const ToolComponents: FC<{
     }
 
     if (formKey === 'edit_shelve_type' && openEditShelfCategory) {
+      return (
+        <SortableWrap
+          sortableId={formKey}
+          key={formKey}
+          locationPanelForm={locationPanelForm}
+        ></SortableWrap>
+      )
+    }
+
+    if (formKey === 'edit_yaw' && openEditShelfYaw) {
       return (
         <SortableWrap
           sortableId={formKey}

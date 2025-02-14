@@ -233,5 +233,10 @@
     "add_number_warning": "number only",
     "add_duplicate_warning": "Duplicate Date",
     "delete_warning": "Delete will cause other shelf is using this category become default shelf."
+  },
+  "edit_yaw": {
+    "edit_yaw": "Edit Yaw",
+    "add": "Add",
+    "input_warning": "please inert right number"
   }
 }

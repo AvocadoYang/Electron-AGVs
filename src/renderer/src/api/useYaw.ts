@@ -5,7 +5,6 @@ import client from './axiosClient'
 const yawSchema = array(
   object({
     id: string().required(),
-    name: string().required(),
     yaw: number().required()
   }).required()
 )
@@ -27,7 +26,6 @@ export type YawType = InferType<typeof yawSchema>
 
 export type YawTypeWithoutList = {
   id: string
-  name: string
   yaw: number
 }
 
