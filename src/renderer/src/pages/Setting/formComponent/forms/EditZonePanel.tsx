@@ -21,7 +21,7 @@ import { LocationType, ZoneType } from '@renderer/utils/jotai'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import useMap from '@renderer/api/useMap'
 
 type TagRender = SelectProps['tagRender']
@@ -74,6 +74,7 @@ const EditZonePanel: React.FC<{
 }> = ({ attributes, listeners, sortableId, zonePanelForm }) => {
   const { t } = useTranslation()
   const { data } = useMap()
+  const queryClient = useQueryClient()
   const [messageApi, contextHolders] = message.useMessage()
 
   const saveZoneMutation = useMutation({
@@ -82,6 +83,7 @@ const EditZonePanel: React.FC<{
     },
     onSuccess: () => {
       void messageApi.success('success')
+      queryClient.refetchQueries({ queryKey: ['map'] })
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   })
@@ -131,7 +133,7 @@ const EditZonePanel: React.FC<{
         'bottomLeft'
       )
     }
-    const rgba = `rgba(${color.metaColor.r}, ${color.metaColor.g}, ${color.metaColor.b} , 0.3)`
+    const rgba = `rgba(${color.metaColor.r}, ${color.metaColor.g}, ${color.metaColor.b} , 0.1)`
 
     const newZone = {
       name,
