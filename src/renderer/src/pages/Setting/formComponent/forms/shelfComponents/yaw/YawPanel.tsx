@@ -8,7 +8,7 @@ import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import YawTable from './YawTable'
 import YawForm from './YawForm'
-import FormHr from '../../utils/FormHr'
+import FormHr from '../../../../utils/FormHr'
 
 type FieldType = {
   yaw?: string

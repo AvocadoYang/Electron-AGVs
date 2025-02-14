@@ -24,10 +24,11 @@ import { useAtomValue } from 'jotai'
 import { ToolBarItemType, ToolBarType } from './siderElement'
 import { useSortable } from '@dnd-kit/sortable'
 import cardStyle from '../utils/cardStyle'
-import { ShelfPanel } from '../shelfComponents/editShelf'
-import { ShelfCategoryPanel } from '../shelfComponents/category'
-import { YawPanel } from '../shelfComponents/yaw'
-import { PalletTable } from '../shelfComponents/pallet'
+import { ShelfPanel } from '../formComponent/forms/shelfComponents/editShelf'
+import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/category'
+import { YawPanel } from '../formComponent/forms/shelfComponents/yaw'
+import { PalletTable } from '../formComponent/forms/shelfComponents/pallet'
+import FormCloseBtn from '../utils/FormCloseBtn'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -51,6 +52,7 @@ const SortableWrap: FC<{
           case 'location_panel':
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} />
                 <EditLocationPanel
                   sortableId={sortableId}
                   locationPanelForm={locationPanelForm as FormInstance<unknown>}
@@ -63,6 +65,7 @@ const SortableWrap: FC<{
           case 'location_list':
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} />
                 <QuickEditLocationPanel
                   sortableId={sortableId}
                   locationPanelForm={locationPanelForm as FormInstance<unknown>}
@@ -75,6 +78,7 @@ const SortableWrap: FC<{
             // 1-3 顯示地點列表
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} />
                 <AllLocationTable
                   sortableId={sortableId}
                   attributes={attributes}
@@ -86,6 +90,7 @@ const SortableWrap: FC<{
             // 2-1 編輯路徑
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} />
                 <EditRoadPanel
                   roadPanelForm={roadPanelForm as FormInstance<unknown>}
                   sortableId={sortableId}
@@ -98,6 +103,7 @@ const SortableWrap: FC<{
             // 2-2 顯示路徑列表
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} />
                 <RoadList sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             )
@@ -105,6 +111,7 @@ const SortableWrap: FC<{
             // 3-1 編輯區域
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} />
                 <EditZonePanel
                   zonePanelForm={zonePanelForm as FormInstance<unknown>}
                   sortableId={sortableId}
@@ -117,6 +124,7 @@ const SortableWrap: FC<{
             // 3-1 顯示編輯貨架
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} />
                 <ShelfPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             )

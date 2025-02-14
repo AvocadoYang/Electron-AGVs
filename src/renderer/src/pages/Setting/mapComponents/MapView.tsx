@@ -19,12 +19,12 @@ import { draggableLineInitialPoint, MouseLocationForFrame, RectInfo } from '../h
 import { useMousePoint, useDraggableLine, useZoneFrame } from '../hooks'
 import { getLocationInfoById } from '@renderer/pages/Setting/utils/utils'
 import useVerityVersion from '@renderer/api/useVerityVersion'
-import { MousePoint, AllLocation, MapImage, ZoneIconHint, DragFrame } from './components'
+import { MousePoint, AllLocation, MapImage, ZoneIconHint, DragFrame, AllZones } from './components'
 import { LocationType } from '@renderer/utils/jotai'
 import AllRoads from './components/AllRoads/AllRoads'
-import AllCargo from '../AllCargo.tsx/AllCargo'
+import AllCargo from './components/AllCargo.tsx/AllCargo'
 import ToolTip from '../components/ToolTip'
-import SudoCargo from '../AllCargo.tsx/SudoCargo'
+import SudoCargo from './components/AllCargo.tsx/SudoCargo'
 
 const MapView: React.FC<{
   scale: number
@@ -65,8 +65,8 @@ const MapView: React.FC<{
 
   const mapImageRef = useRef<HTMLImageElement>(null)
   const [, setSameVersion] = useAtom(sameVersion)
-  const [openEditLocationPanel] = useAtom(EditLocationPanelSwitch)
-  const [openQuickEditLocationPanelSwitch] = useAtom(QuickEditLocationPanelSwitch)
+  const openEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
+  const openQuickEditLocationPanelSwitch = useAtomValue(QuickEditLocationPanelSwitch)
   const openEditZone = useAtomValue(EditZoneSwitch)
 
   const showLocationToolTip = useAtomValue(isShowLocationTooltip)
@@ -141,6 +141,8 @@ const MapView: React.FC<{
       <AllLocation setInitPoint={setInitPoint} handleMouseDown={handleMouseDown} />
 
       <AllCargo setInitPoint={setInitPoint} handleMouseDown={handleMouseDown} />
+
+      <AllZones scale={scale}></AllZones>
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 

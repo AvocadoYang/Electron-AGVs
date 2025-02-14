@@ -5,11 +5,8 @@ import Cargo from './Cargo'
 import { tooltipProp } from '@renderer/utils/gloable'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/utils/siderGloble'
-import { draggableLineInitialPoint } from '../hooks/hook'
-import {
-  DraggableLine,
-  Point
-} from '../mapComponents/components/AllLocation/components/PointAndLine'
+import { draggableLineInitialPoint } from '../../../hooks/hook'
+import { DraggableLine, Point } from '../AllLocation/components/PointAndLine'
 import { nanoid } from 'nanoid'
 import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
 import useCargoInfo from '@renderer/sockets/useCargoInfo'

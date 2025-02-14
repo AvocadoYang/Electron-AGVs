@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ShelfTable from './ShelfTable'
 import ShelfDrawer from './ShelfDrawer'
-import { borderColor } from '../../utils/utils'
+import FormHr from '../../../../utils/FormHr'
 
 const ShelfPanel: React.FC<{
   sortableId: string
@@ -22,13 +22,7 @@ const ShelfPanel: React.FC<{
         {t('edit_shelf_panel.edit_shelf')}
       </h3>
 
-      <hr
-        style={{
-          marginTop: '1px',
-          marginBottom: '10px',
-          border: `4px solid ${borderColor(sortableId)}`
-        }}
-      ></hr>
+      <FormHr sortableId={sortableId}></FormHr>
 
       <Flex vertical align="start" gap="middle">
         <Button onClick={() => setOpenDrawer(true)} disabled={selectedRowKeys.length === 0}>

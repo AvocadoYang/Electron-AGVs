@@ -6,7 +6,8 @@ import {
   SideSwitchToShowForm,
   QuickEditLocationPanelSwitch,
   EditRoadPanelSwitch,
-  EditZoneSwitch
+  EditZoneSwitch,
+  showAllZonesSwitch
 } from '@renderer/utils/siderGloble'
 import { useEffect } from 'react'
 import { showBlockId } from '@renderer/utils/gloable'
@@ -18,6 +19,7 @@ const useResetSiderSwitch = () => {
   const [, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch)
   const [, setShowAllLocationListTable] = useAtom(EditLocationListTableSwitch)
   const [, setOpenEditZone] = useAtom(EditZoneSwitch)
+  const [, setShowAllZonesSwitch] = useAtom(showAllZonesSwitch)
   const [, setShowBlockId] = useAtom(showBlockId)
   useEffect(() => {
     setSideSwitchToShowForm(false)
@@ -26,6 +28,7 @@ const useResetSiderSwitch = () => {
     setEditRoadPanelSwitch(false)
     setQuickEditLocationPanel(false)
     setOpenEditZone(false)
+    setShowAllZonesSwitch(true)
     setShowBlockId('')
   }, [])
 }

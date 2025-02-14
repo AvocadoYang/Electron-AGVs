@@ -21,7 +21,7 @@ import { useMutation } from '@tanstack/react-query'
 import styled from 'styled-components'
 import usePallet from '@renderer/api/usePallet'
 import client from '@renderer/api/axiosClient'
-import FormHr from '../../utils/FormHr'
+import FormHr from '../../../../utils/FormHr'
 
 const BtnWrapper = styled.div`
   display: flex;
