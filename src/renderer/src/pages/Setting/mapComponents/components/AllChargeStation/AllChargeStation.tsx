@@ -1,0 +1,105 @@
+/* eslint-disable react/prop-types */
+import useMap from '@renderer/api/useMap'
+// import { Location } from './components'
+import { nanoid } from 'nanoid'
+import { FC, memo, useCallback, useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { tooltipProp } from '@renderer/utils/gloable'
+import { draggableLineInitialPoint } from '@renderer/pages/Setting/hooks/hook'
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
+import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/utils/siderGloble'
+import { DraggableLine, Point } from '../AllLocation/components/PointAndLine'
+import styled, { keyframes } from 'styled-components'
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
+import Station from './Station'
+
+const AllChargeStation: FC<{
+  setInitPoint: React.Dispatch<draggableLineInitialPoint>
+  handleMouseDown: (startId: string) => void
+}> = ({ setInitPoint, handleMouseDown }) => {
+  const showLocation = useAtomValue(isShowLocation)
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
+  const setTooltip = useSetAtom(tooltipProp)
+  const { data } = useMap()
+  const openEditZone = useAtomValue(EditZoneSwitch)
+  const { data: locInfo } = useLoc(undefined)
+  const handleEnter = useCallback((locationId: string, x: number, y: number) => {
+    setTooltip({
+      x,
+      y,
+      locationId
+    })
+  }, [])
+
+  const handleLeave = useCallback(() => {
+    setTooltip(null)
+  }, [])
+
+  if (!data || !showLocation) return
+  return (
+    <>
+      {data.locations
+        .filter(({ areaType }) => areaType === '充電區')
+        .map((loc) => {
+          const [displayX, displayY] = rosCoord2DisplayCoord({
+            x: loc.x,
+            y: loc.y,
+            mapHeight: data?.mapHeight,
+            mapOriginX: data?.mapOriginX,
+            mapOriginY: data.mapOriginY,
+            mapResolution: data.mapResolution
+          })
+
+          const info = locInfo as LocWithoutArr[]
+
+          const translateX = info?.find((i) => i.locationId === loc.locationId)?.translateX || 0
+          const translateY = info?.find((i) => i.locationId === loc.locationId)?.translateY || 0
+          const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 270
+          const LocScale = info?.find((i) => i.locationId === loc.locationId)?.scale || 1
+
+          return (
+            <div
+              draggable={false}
+              key={loc.locationId}
+              onDragStart={(event) => {
+                event.preventDefault()
+              }}
+              style={{ borderRadius: '50%' }}
+              id={loc.locationId.toString()}
+            >
+              <Point
+                id={loc.locationId.toString()}
+                canrotate={`${loc.canRotate}`}
+                left={displayX}
+                top={displayY}
+                key={nanoid()}
+                onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
+                onMouseLeave={() => handleLeave()}
+                onMouseDown={(e) => {
+                  if (!openEditRoadPanel || openEditZone) return
+                  setInitPoint({ clientX: e.clientX, clientY: e.clientY })
+                  handleMouseDown((e.target as HTMLInputElement).id)
+                }}
+              >
+                <Station
+                  locationId={loc.locationId}
+                  translateX={translateX}
+                  translateY={translateY}
+                  rotate={rotate}
+                  scale={LocScale}
+                />
+              </Point>
+              <DraggableLine
+                locId={loc.locationId.toString()}
+                left={displayX}
+                top={displayY}
+                key={nanoid()}
+              ></DraggableLine>
+            </div>
+          )
+        })}
+    </>
+  )
+}
+
+export default memo(AllChargeStation)

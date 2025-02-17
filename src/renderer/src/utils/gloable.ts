@@ -36,3 +36,8 @@ export const tooltipProp = atom<{
   y: number
   locationId: string
 } | null>(null)
+
+export const chargeStationModelProp = atom<{
+  open: boolean
+  location: string
+} | null>(null)

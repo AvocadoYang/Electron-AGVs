@@ -244,5 +244,50 @@
     "edit_default_warning": "Can not edit default pallet",
     "type": "Type",
     "color": "Color"
+  },
+
+  "charge": {
+    "id": "id",
+    "coreFail": "no connect",
+    "active": "Active",
+    "name": "mission name",
+    "amrId": "amrId",
+    "aggressive": "aggressive charge percent",
+    "full_rate": "full percent",
+    "active_idle": "active idle charge",
+    "idle_full": "idle full charge percent",
+    "idle_wait_time": "idle wait time",
+    "available_get_task": "available get task percent",
+    "active_time_zone": "active time zone charge",
+    "time_zone": "time zone charge",
+    "mins": "mins",
+    "charge": "charge",
+
+    "updateTime": "update time",
+
+    "auto_mode": "auto mode",
+    "current": "current",
+    "complete": "complete",
+    "fault": "fault",
+    "process": "process",
+    "standby": "standby",
+
+    "error": "error",
+    "moduleCommunicationFailure": "module communication failure",
+    "reverseBetterConnection": "reverse battery connection",
+    "batteryNotConnected": "battery not connected",
+    "shortCircuit": "short circuit",
+    "overVoltage": "over voltage",
+    "overCurrent": "over current",
+    "totalFault": "total fault",
+
+    "other": "other",
+    "infraredInPlace": "infrared in place",
+    "compress": "compress",
+    "scalingFault": "scaling fault",
+    "reachOutCharge": "reach out charge",
+    "returning": "returning",
+    "isStretching": "is stretching",
+    "reset": "reset"
   }
 }

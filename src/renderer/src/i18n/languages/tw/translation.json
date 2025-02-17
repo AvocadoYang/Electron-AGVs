@@ -242,5 +242,50 @@
     "edit_default_warning": "不可編輯預設棧板",
     "type": "棧版類型",
     "color": "顏色"
+  },
+
+  "charge": {
+    "id": "充電站編號",
+    "coreFail": "完全無法詢問到內容",
+    "active": "啟動",
+    "name": "任務名",
+    "amrId": "車輛",
+    "aggressive": "強制充電",
+    "full_rate": "滿電",
+    "active_idle": "啟動閒置充電",
+    "idle_full": "閒置停止充電",
+    "idle_wait_time": "閒置等待時間",
+    "available_get_task": "可接任務",
+    "active_time_zone": "啟動定時充電",
+    "time_zone": "定時充電時區",
+    "mins": "分鐘",
+    "charge": "充電",
+
+    "updateTime": "更新時間",
+
+    "auto_mode": "自動模式",
+    "current": "狀態",
+    "complete": "完成",
+    "fault": "失敗",
+    "process": "進行",
+    "standby": "待命",
+
+    "error": "錯誤",
+    "moduleCommunicationFailure": "模塊通訊故障",
+    "reverseBetterConnection": "電池反接",
+    "batteryNotConnected": "電池未接",
+    "shortCircuit": "短路",
+    "overVoltage": "過壓",
+    "overCurrent": "過流",
+    "totalFault": "總故障",
+
+    "other": "其他",
+    "infraredInPlace": "紅外到位",
+    "compress": "緊壓",
+    "scalingFault": "伸縮故障",
+    "reachOutCharge": "伸出充電",
+    "returning": "正在退回",
+    "isStretching": "正在伸出",
+    "reset": "歸位"
   }
 }

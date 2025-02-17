@@ -25,6 +25,8 @@ import AllRoads from './components/AllRoads/AllRoads'
 import AllCargo from './components/AllCargo.tsx/AllCargo'
 import ToolTip from '../components/ToolTip'
 import SudoCargo from './components/AllCargo.tsx/SudoCargo'
+import { AllChargeStation } from './components/AllChargeStation'
+import ChargeStationModel from './components/AllChargeStation/ChargeStationModel'
 
 const MapView: React.FC<{
   scale: number
@@ -144,6 +146,8 @@ const MapView: React.FC<{
 
       <AllZones scale={scale}></AllZones>
 
+      <AllChargeStation setInitPoint={setInitPoint} handleMouseDown={handleMouseDown} />
+
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 
       {openEditZone ? (
@@ -173,6 +177,8 @@ const MapView: React.FC<{
       {showLocationToolTip ? <ToolTip /> : []}
 
       <SudoCargo />
+
+      <ChargeStationModel />
     </div>
   )
 }
