@@ -17,6 +17,7 @@ import {
   EditShelfPanelSwitch,
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
+  isShowEditChargeMission,
   isShowEditMission,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch
@@ -30,7 +31,8 @@ import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/categ
 import { YawPanel } from '../formComponent/forms/shelfComponents/yaw'
 import { PalletTable } from '../formComponent/forms/shelfComponents/pallet'
 import FormCloseBtn from '../utils/FormCloseBtn'
-import EditMissionPanel from '../formComponent/forms/missionComponents/MissionPanel'
+import EditMissionPanel from '../formComponent/forms/missionComponents/editMission/MissionPanel'
+import { ChargePanel } from '../formComponent/forms/missionComponents/chargeMission'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -172,6 +174,18 @@ const SortableWrap: FC<{
               </Card>
             )
 
+          case 'charge_mission':
+            // 5-2 顯示充電任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <ChargePanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
           default:
             return null
         }
@@ -197,6 +211,7 @@ const ToolComponents: FC<{
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
   const openEditPalletTable = useAtomValue(EditPalletSwitch)
   const openMissionPallet = useAtomValue(isShowEditMission)
+  const openChargePallet = useAtomValue(isShowEditChargeMission)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -274,6 +289,10 @@ const ToolComponents: FC<{
     }
 
     if (formKey === 'edit_mission' && openMissionPallet) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+
+    if (formKey === 'charge_mission' && openChargePallet) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     return []

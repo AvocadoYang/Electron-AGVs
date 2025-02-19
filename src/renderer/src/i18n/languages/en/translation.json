@@ -19,6 +19,8 @@
     "submit": "Submit",
     "add": "Add",
     "error": "Error",
+    "active": "Active",
+    "inactive": "Inactive",
 
     "location_property": {
       "none": "Normal",
@@ -354,14 +356,20 @@
       "in_use": "Use This Action",
       "stop_this_process": "Disable This Action",
       "import_mission": "import mission"
+    },
+
+    "charge_mission": {
+      "charge_mission": "Charge mission",
+      "executing": "運行中",
+      "stale": "閒置中"
     }
   },
 
   "car_control_translate": {
-    "cargo_limit": "貨架高度鎖定",
-    "move": "枒杈前後",
-    "load": "取貨",
-    "offload": "放貨",
-    "charge": "充電"
+    "cargo_limit": "Cargo limit",
+    "move": "move",
+    "load": "load",
+    "offload": "offload",
+    "charge": "charge"
   }
 }

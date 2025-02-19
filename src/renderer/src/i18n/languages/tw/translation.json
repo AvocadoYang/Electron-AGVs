@@ -19,6 +19,8 @@
     "submit": "送出",
     "add": "新增",
     "error": "錯誤",
+    "active": "啟動",
+    "inactive": "停止",
 
     "location_property": {
       "none": "點位",
@@ -352,14 +354,20 @@
       "in_use": "使用此動作",
       "stop_this_process": "停用次動作",
       "import_mission": "引入任務"
+    },
+
+    "charge_mission": {
+      "charge_mission": "充電任務",
+      "executing": "運行中",
+      "stale": "閒置中"
     }
   },
 
   "car_control_translate": {
-    "cargo_limit": "Cargo limit",
-    "move": "move",
-    "load": "load",
-    "offload": "offload",
-    "charge": "charge"
+    "cargo_limit": "貨架高度鎖定",
+    "move": "枒杈前後",
+    "load": "取貨",
+    "offload": "放貨",
+    "charge": "充電"
   }
 }
