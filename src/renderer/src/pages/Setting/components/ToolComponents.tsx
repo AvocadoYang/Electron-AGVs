@@ -17,6 +17,7 @@ import {
   EditShelfPanelSwitch,
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
+  isShowEditMission,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch
 } from '@renderer/utils/siderGloble'
@@ -29,6 +30,7 @@ import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/categ
 import { YawPanel } from '../formComponent/forms/shelfComponents/yaw'
 import { PalletTable } from '../formComponent/forms/shelfComponents/pallet'
 import FormCloseBtn from '../utils/FormCloseBtn'
+import EditMissionPanel from '../formComponent/forms/missionComponents/MissionPanel'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -158,6 +160,18 @@ const SortableWrap: FC<{
               </Card>
             )
 
+          case 'edit_mission':
+            // 5-1 顯示編輯任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <EditMissionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
           default:
             return null
         }
@@ -182,6 +196,7 @@ const ToolComponents: FC<{
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
   const openEditPalletTable = useAtomValue(EditPalletSwitch)
+  const openMissionPallet = useAtomValue(isShowEditMission)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -255,6 +270,10 @@ const ToolComponents: FC<{
     }
 
     if (formKey === 'edit_pallet' && openEditPalletTable) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+
+    if (formKey === 'edit_mission' && openMissionPallet) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     return []

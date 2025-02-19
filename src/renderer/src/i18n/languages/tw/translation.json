@@ -78,6 +78,16 @@
         "edit_pallet": "編輯棧板"
       }
     },
+    "mission": {
+      "mission": "任務",
+      "edit_mission": "編輯任務",
+      "charge_mission": "充電任務",
+      "cycle_mission": "循環任務",
+      "before_left_charge_station_mission": "離開充電站強制任務",
+      "schedule_mission": "定時任務",
+      "idle_mission": "閒置任務",
+      "topic_mission": "Topic任務"
+    },
     "others": {
       "others": "其它",
       "edit_gauge": "編輯錶頭",
@@ -287,5 +297,69 @@
     "returning": "正在退回",
     "isStretching": "正在伸出",
     "reset": "歸位"
+  },
+
+  "mission": {
+    "add_mission": {
+      "title": "編輯任務",
+      "empty_warn": "任務名稱不可為空",
+      "empty_car_warn": "車輛類別不可為空",
+      "duplicate_warn": "已有相同任務名稱存在",
+
+      "name": "任務名稱",
+      "create_mission": "新增任務",
+      "search_mission": "搜尋任務",
+      "name_placeholder": "請輸入任務名稱",
+      "car": "車輛類型",
+      "car_type_placeholder": "請選擇",
+      "tag": " 標籤"
+    },
+    "mission_list": {
+      "wait_required_warn": "不須等待請填 0",
+      "yaw_required_warn": "yaw 為必填",
+      "edit_mission": "編輯任務",
+      "create_mission": "新增任務",
+      "copy_mission": "複製任務",
+      "previous": "上一頁"
+    },
+    "task_table": {
+      "sort": "順序",
+      "status": "狀態",
+      "active": "啟動",
+      "inactive": "停用中",
+      "action": "行動類型",
+      "wait": "等待秒數",
+      "is_custom_location": "是否自定義地點",
+      "custom": "自定",
+      "auto": "自動",
+      "is_selectable": "快速指派時選擇",
+      "location": "地點",
+      "is_custom_yaw": "轉角選項",
+      "yaw": "轉角",
+      "auto_preparatory_point": "自動預備點",
+      "is_define_heigh": "枒杈高度選項",
+      "height": "高度",
+      "by_target_shelf_setting": "帶入貨架設定值",
+      "calculate_by_agv_and_shelf_angle": "由交管計算車輛與目標地點夾角",
+      "has_cargo_to_process": "貨架狀態",
+      "has_cargo_true": "貨架有貨（卸貨被阻止）",
+      "has_cargo_false": "貨架無貨（卸貨允許）",
+      "amr_list": "車輛",
+      "active_wait_amr": "啟動等待其他車輛",
+      "wait_genre": "等待類別",
+      "execute_first": "先執行",
+      "wait_other_finish": "後執行",
+      "in_use": "使用此動作",
+      "stop_this_process": "停用次動作",
+      "import_mission": "引入任務"
+    }
+  },
+
+  "car_control_translate": {
+    "cargo_limit": "Cargo limit",
+    "move": "move",
+    "load": "load",
+    "offload": "offload",
+    "charge": "charge"
   }
 }

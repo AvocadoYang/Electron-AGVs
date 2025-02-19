@@ -98,16 +98,6 @@ const ShelfDrawer: FC<{
               </Select>
             </Form.Item>
 
-            <Form.Item label={t('edit_shelf_panel.yaw')} name="yaw">
-              <Select disabled={selectedRowKeys.length === 0} allowClear>
-                {yaw?.map((v) => (
-                  <Select.Option key={v.id} value={v.id}>
-                    {v.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-
             <Form.Item label={t('edit_shelf_panel.cargo_limit')} name="cargo_limit">
               <InputNumber disabled={selectedRowKeys.length === 0} />
             </Form.Item>
