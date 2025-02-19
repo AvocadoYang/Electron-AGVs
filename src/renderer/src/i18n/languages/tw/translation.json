@@ -403,6 +403,16 @@
       "status": "狀態",
       "executing": "運行中",
       "stale": "閒置中"
+    },
+    "topic_mission": {
+      "topic_mission": "Topic任務",
+      "car": "車輛",
+      "mission": "任務",
+      "missed": "少填資料",
+      "amr_warn": "少填資料",
+      "status": "狀態",
+      "executing": "運行中",
+      "stale": "閒置中"
     }
   },
 

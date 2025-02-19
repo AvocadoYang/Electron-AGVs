@@ -405,6 +405,16 @@
       "status": "Status",
       "executing": "Execution",
       "stale": "Stale"
+    },
+    "topic_mission": {
+      "topic_mission": "Topic mission",
+      "car": "Car",
+      "mission": "Mission",
+      "missed": "missed",
+      "amr_warn": "amr is required",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
     }
   },
 

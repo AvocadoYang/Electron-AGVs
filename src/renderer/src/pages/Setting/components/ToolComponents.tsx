@@ -23,6 +23,7 @@ import {
   isShowEditIdleMission,
   isShowEditMission,
   isShowEditScheduleMission,
+  isShowEditTopicMission,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch
 } from '@renderer/utils/siderGloble'
@@ -41,6 +42,7 @@ import { CycleMIssionPanel } from '../formComponent/forms/missionComponents/cycl
 import { BeforeLeftChargeStationPanel } from '../formComponent/forms/missionComponents/beforLeftChargeStationMission'
 import { SchedulePanel } from '../formComponent/forms/missionComponents/scheduleMission'
 import { IdleMissionPanel } from '../formComponent/forms/missionComponents/idleMission'
+import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topicMission'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -242,6 +244,18 @@ const SortableWrap: FC<{
               </Card>
             )
 
+          case 'topic_mission':
+            // 5-6 顯示定時任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <TopicMissionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
           default:
             return null
         }
@@ -272,6 +286,7 @@ const ToolComponents: FC<{
   const openBLCSPanel = useAtomValue(isShowEditBeforeLeftChargeStationMission)
   const openSchedulePanel = useAtomValue(isShowEditScheduleMission)
   const openIdlePanel = useAtomValue(isShowEditIdleMission)
+  const openTopicPanel = useAtomValue(isShowEditTopicMission)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -365,6 +380,9 @@ const ToolComponents: FC<{
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     if (formKey === 'idle_mission' && openIdlePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'topic_mission' && openTopicPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     return []
