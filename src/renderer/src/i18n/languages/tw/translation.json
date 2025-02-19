@@ -360,6 +360,17 @@
       "charge_mission": "充電任務",
       "executing": "運行中",
       "stale": "閒置中"
+    },
+
+    "cycle_mission": {
+      "cycle_mission": "循環任務",
+      "random": "隨機",
+      "mission_is_required": "任務為必填",
+      "mission": "任務",
+      "car": "車輛",
+      "status": "狀態",
+      "executing": "運行中",
+      "stale": "閒置中"
     }
   },
 

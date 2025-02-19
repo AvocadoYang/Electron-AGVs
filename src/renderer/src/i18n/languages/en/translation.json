@@ -360,8 +360,19 @@
 
     "charge_mission": {
       "charge_mission": "Charge mission",
-      "executing": "運行中",
-      "stale": "閒置中"
+      "executing": "Execution",
+      "stale": "Stale"
+    },
+
+    "cycle_mission": {
+      "cycle_mission": "Cycle Mission",
+      "random": "Random",
+      "mission_is_required": "Mission is required",
+      "mission": "Mission",
+      "car": "Car",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
     }
   },
 

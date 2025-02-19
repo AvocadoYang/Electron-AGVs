@@ -18,6 +18,7 @@ import {
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
   isShowEditChargeMission,
+  isShowEditCycleMission,
   isShowEditMission,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch
@@ -33,6 +34,7 @@ import { PalletTable } from '../formComponent/forms/shelfComponents/pallet'
 import FormCloseBtn from '../utils/FormCloseBtn'
 import EditMissionPanel from '../formComponent/forms/missionComponents/editMission/MissionPanel'
 import { ChargePanel } from '../formComponent/forms/missionComponents/chargeMission'
+import { CycleMIssionPanel } from '../formComponent/forms/missionComponents/cycleMission'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -186,6 +188,18 @@ const SortableWrap: FC<{
               </Card>
             )
 
+          case 'cycle_mission':
+            // 5-2 顯示充電任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <CycleMIssionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
           default:
             return null
         }
@@ -210,8 +224,9 @@ const ToolComponents: FC<{
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
   const openEditPalletTable = useAtomValue(EditPalletSwitch)
-  const openMissionPallet = useAtomValue(isShowEditMission)
-  const openChargePallet = useAtomValue(isShowEditChargeMission)
+  const openMissionPanel = useAtomValue(isShowEditMission)
+  const openChargePanel = useAtomValue(isShowEditChargeMission)
+  const openCyclePanel = useAtomValue(isShowEditCycleMission)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -288,11 +303,14 @@ const ToolComponents: FC<{
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
 
-    if (formKey === 'edit_mission' && openMissionPallet) {
+    if (formKey === 'edit_mission' && openMissionPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
 
-    if (formKey === 'charge_mission' && openChargePallet) {
+    if (formKey === 'charge_mission' && openChargePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'cycle_mission' && openCyclePanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     return []
