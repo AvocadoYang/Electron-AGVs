@@ -382,6 +382,17 @@
       "status": "Status",
       "executing": "Execution",
       "stale": "Stale"
+    },
+
+    "schedule_mission": {
+      "schedule_mission": "Schedule mission",
+      "car": "Car",
+      "mission": "Mission",
+      "week": "Week",
+      "what_time": "Time",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
     }
   },
 

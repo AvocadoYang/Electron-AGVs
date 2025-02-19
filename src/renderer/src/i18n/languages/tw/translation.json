@@ -380,6 +380,17 @@
       "status": "狀態",
       "executing": "運行中",
       "stale": "閒置中"
+    },
+
+    "schedule_mission": {
+      "schedule_mission": "定時任務",
+      "car": "車輛",
+      "mission": "任務",
+      "week": "星期",
+      "what_time": "幾點",
+      "status": "狀態",
+      "executing": "運行中",
+      "stale": "閒置中"
     }
   },
 
