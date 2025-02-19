@@ -88,8 +88,8 @@ const Zone: FC<{ id: string; info: ZoneInfo; scale: number }> = ({ id, info, sca
 
     setAxis({ x: Math.min(startXDisplay, endXDisplay), y: Math.min(startYDisplay, endYDisplay) })
     setSize({
-      width: Math.abs((endXDisplay - startXDisplay) / scale),
-      height: Math.abs((endYDisplay - startYDisplay) / scale)
+      width: Math.abs(endXDisplay - startXDisplay),
+      height: Math.abs(endYDisplay - startYDisplay)
     })
   }, [info, data])
 

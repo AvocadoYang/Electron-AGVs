@@ -25,3 +25,17 @@ export const initialZoneValue = {
   endX: 0,
   endY: 0
 }
+
+export const initialTagSettingValue = {
+  speed_limit: undefined,
+  hight_limit: undefined,
+  all_forbidden: undefined,
+  forbidden: undefined
+}
+
+export type TagSettingFormType = {
+  speed_limit?: number
+  hight_limit?: number
+  all_forbidden?: boolean
+  forbidden?: string[]
+}

@@ -15,7 +15,8 @@ import {
   EditShelfCategoryPanelSwitch,
   EditShelfYawPanelSwitch,
   EditPalletSwitch,
-  showAllZonesSwitch
+  showAllZonesSwitch,
+  showZonesTableSwitch
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -67,6 +68,7 @@ const Sider: React.FC<{
 
   const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch) // 3-1
   const [showAllZones, setShowAllZones] = useAtom(showAllZonesSwitch) // 3-2
+  const [showZonesTable, setShowZonesTable] = useAtom(showZonesTableSwitch) // 3-3
 
   const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch) //4-1
   const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch) //4-2
@@ -84,6 +86,7 @@ const Sider: React.FC<{
       openEditRoadPanel,
       showAllRoadListTable,
       openEditZone,
+      showZonesTable,
       openEditShelfPanel,
       openEditShelfCategory,
       openYawTable,
@@ -98,6 +101,7 @@ const Sider: React.FC<{
     openEditRoadPanel,
     showAllRoadListTable,
     openEditZone,
+    showZonesTable,
     openEditShelfPanel,
     openEditShelfCategory,
     openYawTable,
@@ -124,7 +128,6 @@ const Sider: React.FC<{
       case 'road_panel':
         setOpenEditRoadPanel(check)
         break
-
       case 'show_roads_table':
         setShowAllRoadListTable(check)
         break
@@ -136,7 +139,10 @@ const Sider: React.FC<{
         setOpenEditZone(check)
         break
       case 'show_zone_list':
-        console.log('show_zone_list')
+        setShowAllZones(check)
+        break
+      case 'show_zone_table':
+        setShowZonesTable(check)
         break
       // ===================
       // === shelves ===
@@ -268,6 +274,14 @@ const Sider: React.FC<{
         <Switch
           defaultChecked={showAllZones}
           onChange={(checked) => handleShowPanel(checked, 'show_zone_list')}
+        />
+      ),
+      getItem(
+        t('toolbar.zone.zones.show_zone_table'),
+        '3-3',
+        <Switch
+          defaultChecked={showZonesTable}
+          onChange={(checked) => handleShowPanel(checked, 'show_zone_table')}
         />
       )
     ]),

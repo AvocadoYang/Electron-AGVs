@@ -24,7 +24,6 @@ import { EditableCellProps, DataIndex } from './antd'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
-import { borderColor } from '../../utils/utils'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import client from '@renderer/api/axiosClient'

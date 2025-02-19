@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, useRef, useEffect, useMemo } from 'react'
-import { Layout, Form, Splitter, Flex } from 'antd'
+import { Layout, Form, Splitter, Flex, Col, Row } from 'antd'
 import Header from '../../components/Header'
 import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components'
-
 import MapView from './mapComponents/MapView'
 import { useResetSiderSwitch } from './hooks'
 import './setting.css'
@@ -21,6 +20,7 @@ const Setting: React.FC = () => {
   const [locationPanelForm] = Form.useForm()
   const [roadPanelForm] = Form.useForm()
   const [zonePanelForm] = Form.useForm()
+  const [tagSettingForm] = Form.useForm()
   const [dataList, setDataList] = useState(toolbarState)
   const [scale, setScale] = useState(1)
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
@@ -43,6 +43,7 @@ const Setting: React.FC = () => {
                 locationPanelForm={locationPanelForm}
                 roadPanelForm={roadPanelForm}
                 zonePanelForm={zonePanelForm}
+                tagSettingForm={tagSettingForm}
                 dataList={dataList}
               />
             }

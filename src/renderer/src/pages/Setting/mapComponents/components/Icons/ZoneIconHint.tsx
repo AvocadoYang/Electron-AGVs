@@ -58,9 +58,9 @@ const ZoneIconHint: FC<{
 }> = ({ mapWrapRef, mapRef, mapImageRef, scale, isDragging }) => {
   const openEditZone = useAtomValue(EditZoneSwitch)
   const [mouseMoveLocationForFrame, setMouseMoveLocationForFrame] = useState({
-    displayX: -4000,
-    displayY: -4000
-  } as MouseLocationForFrame)
+    displayX: -1000,
+    displayY: -1000
+  })
 
   useEffect(() => {
     const mouseMoveEventForMapRef = (e: MouseEvent) => {
@@ -94,7 +94,7 @@ const ZoneIconHint: FC<{
       mapPanel.removeEventListener('mousemove', mouseMoveEventForMapRef)
       mapPanel.removeEventListener('mouseleave', mouseLeaveEventForMapRef)
     }
-  }, [isDragging])
+  }, [isDragging, scale])
 
   const { displayX: x, displayY: y } = mouseMoveLocationForFrame
   const { data } = useMap()

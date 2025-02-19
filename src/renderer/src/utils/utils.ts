@@ -39,6 +39,27 @@ export const rvizCoord = ({
   (mapHeight - displayY / scaleSize) * mapResolution + mapOriginY
 ]
 
+export const rvizCoord2 = ({
+  displayX,
+  displayY,
+  mapResolution,
+  mapOriginX,
+  mapOriginY,
+  mapHeight,
+  scaleSize
+}: {
+  displayX: number
+  displayY: number
+  mapResolution: number
+  mapOriginX: number
+  mapOriginY: number
+  mapHeight: number
+  scaleSize: number
+}) => [
+  displayX * scaleSize * mapResolution + mapOriginX,
+  (mapHeight - displayY * scaleSize) * mapResolution + mapOriginY
+]
+
 export const sanitizeDeg = (deg: number) => ((deg % 360) + 360) % 360
 
 export const rad2Deg = (rad: number) => sanitizeDeg((rad / Math.PI) * 180)
