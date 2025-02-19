@@ -391,6 +391,18 @@
       "status": "狀態",
       "executing": "運行中",
       "stale": "閒置中"
+    },
+    "idle_mission": {
+      "idle_mission": "閒置任務",
+      "car": "車輛",
+      "mission": "任務",
+      "idle_min": "閒制時間",
+      "forbidden": "停用地點",
+      "amr_warn": "amrId少填資",
+      "min_warn": "不可少於3分鐘",
+      "status": "狀態",
+      "executing": "運行中",
+      "stale": "閒置中"
     }
   },
 

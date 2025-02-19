@@ -404,7 +404,7 @@ const Sider: React.FC<{
         t('toolbar.mission.topic_mission'),
         '5-7',
         <Switch
-          checked={openIdleMissionPanel}
+          checked={openTopicMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'topic_mission')}
         />
       )

@@ -393,6 +393,18 @@
       "status": "Status",
       "executing": "Execution",
       "stale": "Stale"
+    },
+    "idle_mission": {
+      "idle_mission": "Idle mission",
+      "car": "Car",
+      "mission": "Mission",
+      "idle_min": "Idle Min",
+      "forbidden": "Forbidden",
+      "amr_warn": "amr is required",
+      "min_warn": "at least 3 mins",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
     }
   },
 
