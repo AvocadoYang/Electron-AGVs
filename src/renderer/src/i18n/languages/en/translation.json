@@ -373,6 +373,15 @@
       "status": "Status",
       "executing": "Execution",
       "stale": "Stale"
+    },
+    "before_left_charge_station_mission": {
+      "before_left_charge_station_mission": "Before left charge station mission",
+      "field_required": "field data missed, please double check",
+      "car": "Car",
+      "mission": "Mission",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
     }
   },
 

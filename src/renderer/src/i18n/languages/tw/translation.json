@@ -371,6 +371,15 @@
       "status": "狀態",
       "executing": "運行中",
       "stale": "閒置中"
+    },
+    "before_left_charge_station_mission": {
+      "before_left_charge_station_mission": "離開充電站強制任務",
+      "field_required": "輸入資料有缺少",
+      "car": "車輛",
+      "mission": "任務",
+      "status": "狀態",
+      "executing": "運行中",
+      "stale": "閒置中"
     }
   },
 
