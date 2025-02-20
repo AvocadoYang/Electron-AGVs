@@ -175,7 +175,10 @@ const ZoneTable: React.FC<{
         <Form form={ZonePanelForm} component={false}>
           <Table
             rowSelection={{
-              type: 'checkbox'
+              type: 'checkbox',
+              onChange: (selectedRowKeys: React.Key[]) => {
+                console.log(selectedRowKeys)
+              }
             }}
             rowKey={(record) => record.id}
             columns={columns}

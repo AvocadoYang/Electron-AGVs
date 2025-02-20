@@ -169,7 +169,7 @@ const EditZonePanel: React.FC<{
       return
     }
 
-    const { speed_limit, hight_limit, all_forbidden, forbidden } =
+    const { speed_limit, hight_limit, forbidden } =
       tagSettingForm.getFieldsValue() as TagSettingType
 
     let rgba = `rgba(${color.metaColor.r}, ${color.metaColor.g}, ${color.metaColor.b} , 0.05)`
@@ -179,7 +179,7 @@ const EditZonePanel: React.FC<{
       category: {
         tags: category || [],
         forbidden_car:
-          (category?.includes('禁止區') && allVehicleForbidden) == true ? ['all'] : forbidden,
+          (category?.includes('禁止區') && allVehicleForbidden) == true ? ['*'] : forbidden,
         speed_limit: category?.includes('減速區') ? Number(speed_limit) : undefined,
         hight_limit: category?.includes('限高區') ? Number(hight_limit) : undefined
       },
@@ -293,7 +293,7 @@ const EditZonePanel: React.FC<{
           <Form.Item
             label={t('edit_zone_panel.category')}
             name="category"
-            style={{ marginBottom: '5px' }}
+            style={{ marginBottom: `${zoneTags?.length ? '5px' : '20px'}` }}
           >
             <Select
               placeholder={'請選擇區域屬性'}
@@ -305,7 +305,7 @@ const EditZonePanel: React.FC<{
             />
           </Form.Item>
           {zoneTags?.length ? (
-            <Form.Item style={{ textAlign: 'right', marginBottom: '0' }}>
+            <Form.Item style={{ textAlign: 'right', marginBottom: `8px` }}>
               <Space>
                 {isHint ? <p style={{ color: 'red' }}>{t('edit_zone_panel.hint')}</p> : <p>✅</p>}
                 <ConfigProvider
@@ -340,7 +340,9 @@ const EditZonePanel: React.FC<{
       <Modal
         title={t('edit_zone_panel.tag_setting')}
         open={isModalOpen}
+        maskClosable={false}
         onOk={handleCancel}
+        getContainer={false}
         onCancel={handleCancel}
         cancelButtonProps={{ style: { display: 'none' } }}
         mask={false}
