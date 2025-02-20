@@ -95,6 +95,14 @@
       "edit_gauge": "編輯錶頭",
       "edit_tag": "標籤設定",
       "edit_charge_station_icon_style": "充電站 Icon"
+    },
+    "file_setting": {
+      "file_setting": "檔案設定",
+      "warning_id": "告警id設定",
+      "backup_file": "備份檔案"
+    },
+    "restart": {
+      "restart": "重起系統"
     }
   },
 
@@ -427,6 +435,27 @@
     "edit_charge_station_icon_style": {
       "title": "調整充電站icon位置",
       "edit_position": "調整位置"
+    }
+  },
+
+  "file": {
+    "warning_list": {
+      "warning_table": "錯誤處理表",
+      "genre": "種類",
+      "error_code": "錯誤編號",
+      "buzzer": "警報鈴",
+      "info": "錯誤原因",
+      "solution": "排除方法",
+      "sensor": "感測器位置",
+      "info_ch": "錯誤原因(中)",
+      "info_en": "錯誤原因(英)",
+      "solution_ch": "排除方法(中)",
+      "solution_en": "排除方法(英)",
+      "sensor_location_en": "感測器位置(英)",
+      "sensor_location_ch": "感測器位置(中)",
+      "genre_name_ch": "種類(中)",
+      "genre_name_en": "種類(英)",
+      "add_new_genre": "新增種類"
     }
   },
 

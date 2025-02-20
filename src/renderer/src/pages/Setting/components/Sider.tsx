@@ -24,7 +24,9 @@ import {
   isShowEditIdleMission,
   isShowEditTopicMission,
   isShowEditMissionTag,
-  isShowEditChargeStationPosition
+  isShowEditChargeStationPosition,
+  isShowEditWarningId,
+  isShowEditBackup
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -32,7 +34,8 @@ import {
   BorderOuterOutlined,
   GoldOutlined,
   DeploymentUnitOutlined,
-  ScheduleOutlined
+  ScheduleOutlined,
+  FileOutlined
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import type { MenuProps } from 'antd'
@@ -93,10 +96,13 @@ const Sider: React.FC<{
   const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission) // 5-6
   const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission) // 5-7
 
-  const [openTagMissionPanel, setOpenTagMissionPanel] = useAtom(isShowEditMissionTag) // 5-7
+  const [openTagMissionPanel, setOpenTagMissionPanel] = useAtom(isShowEditMissionTag) // 6-1
   const [openEditChargeStationIconPanel, setOpenEditChargeStationIconPanel] = useAtom(
     isShowEditChargeStationPosition
-  ) // 5-7
+  ) // 6-2
+
+  const [openWarningId, setOpenWarningId] = useAtom(isShowEditWarningId) // 7-1
+  const [openBackup, setOpenBackup] = useAtom(isShowEditBackup) // 7-2
 
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip) //地點tooltip
   const [collapsed, setCollapsed] = useState(true)
@@ -121,7 +127,9 @@ const Sider: React.FC<{
       openIdleMissionPanel,
       openTopicMissionPanel,
       openTagMissionPanel,
-      openEditChargeStationIconPanel
+      openEditChargeStationIconPanel,
+      openWarningId,
+      openBackup
     ].some((item) => item)
 
     setHasOpenTool(isOpen)
@@ -144,7 +152,9 @@ const Sider: React.FC<{
     openIdleMissionPanel,
     openTopicMissionPanel,
     openTagMissionPanel,
-    openEditChargeStationIconPanel
+    openEditChargeStationIconPanel,
+    openWarningId,
+    openBackup
   ])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
@@ -248,12 +258,12 @@ const Sider: React.FC<{
         setOpenEditChargeStationIconPanel(check)
         break
       // ===================
-      // === amr ===
-      case 'edit_amr_cargo_info':
-        console.log('edit_amr_cargo_info')
+      // === file ===
+      case 'warning_id':
+        setOpenWarningId(check)
         break
-      case 'edit_amr_config':
-        console.log('edit_amr_config')
+      case 'backup_file':
+        setOpenBackup(check)
         break
       //=======
     }
@@ -437,6 +447,26 @@ const Sider: React.FC<{
           onChange={(checked) => handleShowPanel(checked, 'edit_charge_station_icon_style')}
         />
       )
+    ]),
+
+    getItem(t('toolbar.file_setting.file_setting'), '8', <FileOutlined />, [
+      getItem(
+        t('toolbar.file_setting.warning_id'),
+        '8-1',
+        <Switch
+          checked={openWarningId}
+          onChange={(checked) => handleShowPanel(checked, 'warning_id')}
+        />
+      ),
+      getItem(
+        t('toolbar.file_setting.backup_file'),
+        '8-2',
+        <Switch
+          checked={openBackup}
+          onChange={(checked) => handleShowPanel(checked, 'backup_file')}
+        />
+      ),
+      getItem(t('toolbar.restart.restart'), '8-3')
     ])
   ]
 

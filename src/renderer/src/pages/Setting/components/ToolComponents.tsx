@@ -26,6 +26,7 @@ import {
   isShowEditMissionTag,
   isShowEditScheduleMission,
   isShowEditTopicMission,
+  isShowEditWarningId,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch
 } from '@renderer/utils/siderGloble'
@@ -47,6 +48,7 @@ import { IdleMissionPanel } from '../formComponent/forms/missionComponents/idleM
 import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topicMission'
 import { EditTagPanel } from '../formComponent/forms/other/editTag'
 import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon'
+import { EditWarningListPanel } from '../formComponent/forms/file/warningId'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -283,6 +285,17 @@ const SortableWrap: FC<{
                 />
               </Card>
             )
+          case 'warning_id':
+            // 6-2 顯示編輯標籤
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <EditWarningListPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
 
           default:
             return null
@@ -317,6 +330,7 @@ const ToolComponents: FC<{
   const openTopicPanel = useAtomValue(isShowEditTopicMission)
   const openTagPanel = useAtomValue(isShowEditMissionTag)
   const openChargeStylePanel = useAtomValue(isShowEditChargeStationPosition)
+  const openWarningPanel = useAtomValue(isShowEditWarningId)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -419,6 +433,9 @@ const ToolComponents: FC<{
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     if (formKey === 'edit_charge_station_icon_style' && openChargeStylePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'warning_id' && openWarningPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
 

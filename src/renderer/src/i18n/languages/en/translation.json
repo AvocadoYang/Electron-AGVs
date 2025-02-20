@@ -96,6 +96,14 @@
       "edit_gauge": "Edit Gauge",
       "edit_tag": "Edit Tag",
       "edit_charge_station_icon_style": "Edit charge station icon style"
+    },
+    "file_setting": {
+      "file_setting": "File Setting",
+      "warning_id": "Warning ID Setting",
+      "backup_file": "Backup"
+    },
+    "restart": {
+      "restart": "restart system"
     }
   },
 
@@ -429,6 +437,27 @@
     "edit_charge_station_icon_style": {
       "title": "edit charge station icon style",
       "edit_position": "調整位置"
+    }
+  },
+
+  "file": {
+    "warning_list": {
+      "warning_table": "Warning Table",
+      "genre": "Genre",
+      "error_code": "Code",
+      "buzzer": "Buzzer",
+      "info": "Info",
+      "solution": "Solution",
+      "sensor": "Sensor",
+      "info_ch": "Error info (chinese)",
+      "info_en": "Error info(english)",
+      "solution_ch": "Solution(chinese)",
+      "solution_en": "Solution(english)",
+      "sensor_location_en": "Sensor(english)",
+      "sensor_location_ch": "Sensor(chinese)",
+      "genre_name_ch": "Genre(chinese)",
+      "genre_name_en": "Genre(english)",
+      "add_new_genre": "Add New Genre"
     }
   },
 
