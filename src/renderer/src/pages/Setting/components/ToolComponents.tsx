@@ -18,6 +18,13 @@ import {
   EditShelfPanelSwitch,
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
+  isShowEditBeforeLeftChargeStationMission,
+  isShowEditChargeMission,
+  isShowEditCycleMission,
+  isShowEditIdleMission,
+  isShowEditMission,
+  isShowEditScheduleMission,
+  isShowEditTopicMission,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch,
   showZonesTableSwitch
@@ -31,6 +38,13 @@ import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/categ
 import { YawPanel } from '../formComponent/forms/shelfComponents/yaw'
 import { PalletTable } from '../formComponent/forms/shelfComponents/pallet'
 import FormCloseBtn from '../utils/FormCloseBtn'
+import EditMissionPanel from '../formComponent/forms/missionComponents/editMission/MissionPanel'
+import { ChargePanel } from '../formComponent/forms/missionComponents/chargeMission'
+import { CycleMIssionPanel } from '../formComponent/forms/missionComponents/cycleMission'
+import { BeforeLeftChargeStationPanel } from '../formComponent/forms/missionComponents/beforLeftChargeStationMission'
+import { SchedulePanel } from '../formComponent/forms/missionComponents/scheduleMission'
+import { IdleMissionPanel } from '../formComponent/forms/missionComponents/idleMission'
+import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topicMission'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -174,6 +188,90 @@ const SortableWrap: FC<{
               </Card>
             )
 
+          case 'edit_mission':
+            // 5-1 顯示編輯任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <EditMissionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'charge_mission':
+            // 5-2 顯示充電任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <ChargePanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'cycle_mission':
+            // 5-2 顯示充電任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <CycleMIssionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'before_left_charge_station_task':
+            // 5-3 顯示充電任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <BeforeLeftChargeStationPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'schedule_mission':
+            // 5-4 顯示定時任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <SchedulePanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'idle_mission':
+            // 5-5 顯示定時任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <IdleMissionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'topic_mission':
+            // 5-6 顯示定時任務
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <TopicMissionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
           default:
             return null
         }
@@ -200,6 +298,13 @@ const ToolComponents: FC<{
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
   const openEditPalletTable = useAtomValue(EditPalletSwitch)
+  const openMissionPanel = useAtomValue(isShowEditMission)
+  const openChargePanel = useAtomValue(isShowEditChargeMission)
+  const openCyclePanel = useAtomValue(isShowEditCycleMission)
+  const openBLCSPanel = useAtomValue(isShowEditBeforeLeftChargeStationMission)
+  const openSchedulePanel = useAtomValue(isShowEditScheduleMission)
+  const openIdlePanel = useAtomValue(isShowEditIdleMission)
+  const openTopicPanel = useAtomValue(isShowEditTopicMission)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -277,6 +382,29 @@ const ToolComponents: FC<{
     }
 
     if (formKey === 'edit_pallet' && openEditPalletTable) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+
+    if (formKey === 'edit_mission' && openMissionPanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+
+    if (formKey === 'charge_mission' && openChargePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'cycle_mission' && openCyclePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'before_left_charge_station_task' && openBLCSPanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'schedule_mission' && openSchedulePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'idle_mission' && openIdlePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'topic_mission' && openTopicPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     return []

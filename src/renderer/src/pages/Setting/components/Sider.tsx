@@ -16,14 +16,22 @@ import {
   EditShelfYawPanelSwitch,
   EditPalletSwitch,
   showAllZonesSwitch,
-  showZonesTableSwitch
+  showZonesTableSwitch,
+  isShowEditMission,
+  isShowEditChargeMission,
+  isShowEditCycleMission,
+  isShowEditBeforeLeftChargeStationMission,
+  isShowEditScheduleMission,
+  isShowEditIdleMission,
+  isShowEditTopicMission
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
   NodeIndexOutlined,
   BorderOuterOutlined,
   GoldOutlined,
-  DeploymentUnitOutlined
+  DeploymentUnitOutlined,
+  ScheduleOutlined
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import type { MenuProps } from 'antd'
@@ -75,6 +83,16 @@ const Sider: React.FC<{
   const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch) //4-3
   const [openPalletTable, setOpenPalletTable] = useAtom(EditPalletSwitch) //4-4
 
+  const [openMissionPanel, setOpenMissionPanel] = useAtom(isShowEditMission) // 5-1
+  const [openChargeMissionPanel, setOpenChargeMissionPanel] = useAtom(isShowEditChargeMission) // 5-2
+  const [openCycleMissionPanel, setOpenCycleMissionPanel] = useAtom(isShowEditCycleMission) // 5-3
+  const [openBeforeLeftStationMissionPanel, setOpenBeforeLeftStationMissionPanel] = useAtom(
+    isShowEditBeforeLeftChargeStationMission
+  ) // 5-4
+  const [openScheduleMissionPanel, setOpenScheduleMissionPanel] = useAtom(isShowEditScheduleMission) // 5-5
+  const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission) // 5-6
+  const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission) // 5-7
+
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip) //地點tooltip
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
@@ -90,7 +108,14 @@ const Sider: React.FC<{
       openEditShelfPanel,
       openEditShelfCategory,
       openYawTable,
-      openPalletTable
+      openPalletTable,
+      openMissionPanel,
+      openChargeMissionPanel,
+      openCycleMissionPanel,
+      openBeforeLeftStationMissionPanel,
+      openScheduleMissionPanel,
+      openIdleMissionPanel,
+      openTopicMissionPanel
     ].some((item) => item)
 
     setHasOpenTool(isOpen)
@@ -105,7 +130,14 @@ const Sider: React.FC<{
     openEditShelfPanel,
     openEditShelfCategory,
     openYawTable,
-    openPalletTable
+    openPalletTable,
+    openMissionPanel,
+    openChargeMissionPanel,
+    openCycleMissionPanel,
+    openBeforeLeftStationMissionPanel,
+    openScheduleMissionPanel,
+    openIdleMissionPanel,
+    openTopicMissionPanel
   ])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
@@ -168,6 +200,38 @@ const Sider: React.FC<{
       // ===================
 
       // ===================
+      // === missions ===
+
+      case 'edit_mission':
+        setOpenMissionPanel(check)
+        break
+
+      case 'charge_mission':
+        setOpenChargeMissionPanel(check)
+        break
+
+      case 'cycle_mission':
+        setOpenCycleMissionPanel(check)
+        break
+
+      case 'before_left_charge_station_task':
+        setOpenBeforeLeftStationMissionPanel(check)
+        break
+
+      case 'idle_mission':
+        setOpenIdleMissionPanel(check)
+        break
+
+      case 'schedule_mission':
+        setOpenScheduleMissionPanel(check)
+        break
+
+      case 'topic_mission':
+        setOpenTopicMissionPanel(check)
+        break
+      // ===================
+
+      // ===================
       // === others ===
       // case 'edit_gauge':
       //   console.log('edit_gauge')
@@ -187,36 +251,6 @@ const Sider: React.FC<{
         console.log('edit_amr_config')
         break
       //=======
-      // === mission ==========
-      case 'todo_dependent_on_return_id_task':
-        console.log('todo_dependent_on_return_id_task')
-        break
-
-      case 'topic_mission':
-        console.log('topic_task')
-        break
-
-      case 'idle_mission':
-        console.log('idle_task')
-        break
-
-      case 'before_left_charge_station_task':
-        console.log('before_left_charge_station_task')
-        break
-
-      case 'cycle_mission':
-        console.log('cycle_task')
-        break
-
-      case 'schedule_mission':
-        console.log('schedule_task')
-        break
-
-      case 'charge_mission':
-        console.log('charge_task')
-        break
-
-      //========================
     }
   }
 
@@ -324,6 +358,71 @@ const Sider: React.FC<{
         )
       ]
     ),
+    getItem(t('toolbar.mission.mission'), '6', <ScheduleOutlined />, [
+      getItem(
+        t('toolbar.mission.edit_mission'),
+        '5-1',
+        <Switch
+          checked={openMissionPanel}
+          onChange={(checked) => handleShowPanel(checked, 'edit_mission')}
+        />
+      ),
+
+      getItem(
+        t('toolbar.mission.charge_mission'),
+        '5-2',
+        <Switch
+          checked={openChargeMissionPanel}
+          onChange={(checked) => handleShowPanel(checked, 'charge_mission')}
+        />
+      ),
+
+      getItem(
+        t('toolbar.mission.cycle_mission'),
+        '5-3',
+        <Switch
+          onChange={(checked) => handleShowPanel(checked, 'cycle_mission')}
+          checked={openCycleMissionPanel}
+        />
+      ),
+
+      getItem(
+        t('toolbar.mission.before_left_charge_station_mission'),
+        '5-4',
+        <Switch
+          onChange={(checked) => handleShowPanel(checked, 'before_left_charge_station_task')}
+          checked={openBeforeLeftStationMissionPanel}
+        />
+      ),
+
+      getItem(
+        t('toolbar.mission.schedule_mission'),
+        '5-5',
+        <Switch
+          defaultChecked={false}
+          onChange={(checked) => handleShowPanel(checked, 'schedule_mission')}
+          checked={openScheduleMissionPanel}
+        />
+      ),
+
+      getItem(
+        t('toolbar.mission.idle_mission'),
+        '5-6',
+        <Switch
+          checked={openIdleMissionPanel}
+          onChange={(checked) => handleShowPanel(checked, 'idle_mission')}
+        />
+      ),
+
+      getItem(
+        t('toolbar.mission.topic_mission'),
+        '5-7',
+        <Switch
+          checked={openTopicMissionPanel}
+          onChange={(checked) => handleShowPanel(checked, 'topic_mission')}
+        />
+      )
+    ]),
     getItem(t('toolbar.others.others'), '7', <DeploymentUnitOutlined />, [
       getItem(
         t('toolbar.others.edit_tag'),

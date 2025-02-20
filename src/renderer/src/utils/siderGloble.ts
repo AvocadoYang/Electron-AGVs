@@ -49,3 +49,24 @@ export const isShowLocation = atom<boolean>(true)
 
 /** 顯示目前路徑 */
 export const isShowRoad = atom<boolean>(true)
+
+/** 5-1 顯示編輯任務 */
+export const isShowEditMission = atom<boolean>(false)
+
+/** 5-2 顯示編輯充電任務 */
+export const isShowEditChargeMission = atom<boolean>(false)
+
+/** 5-3 顯示循環任務 */
+export const isShowEditCycleMission = atom<boolean>(false)
+
+/** 5-4 顯示編輯離開充電站強制任務 */
+export const isShowEditBeforeLeftChargeStationMission = atom<boolean>(false)
+
+/** 5-5 顯示定時任務 */
+export const isShowEditScheduleMission = atom<boolean>(false)
+
+/** 5-6 顯示閒置任務 */
+export const isShowEditIdleMission = atom<boolean>(false)
+
+/** 5-7 顯示topic任務 */
+export const isShowEditTopicMission = atom<boolean>(false)

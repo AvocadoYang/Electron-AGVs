@@ -1,0 +1,166 @@
+import { CaretRightOutlined, ControlTwoTone, DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
+import client from '@renderer/api/axiosClient'
+import { MTType } from '@renderer/api/useMissionTitle'
+import { Err } from '@renderer/utils/responseErr'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { Col, message, Popconfirm, Row, Table, Tag } from 'antd'
+import { ColumnsType } from 'antd/es/table'
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+import { TitleMission } from './mission'
+
+const TagWrapper = styled.div`
+  display: flex;
+  gap: 1em;
+`
+
+const MissionTable: FC<{
+  setEditMissionKey: React.Dispatch<React.SetStateAction<string>>
+  setOpenMissionModel: React.Dispatch<React.SetStateAction<boolean>>
+  selectedMissionKey: string
+  setSelectedMissionKey: React.Dispatch<React.SetStateAction<string>>
+  setSelectedMissionCar: React.Dispatch<React.SetStateAction<string>>
+  allMissionTitle: MTType
+}> = ({
+  setEditMissionKey,
+  setOpenMissionModel,
+  selectedMissionKey,
+  setSelectedMissionKey,
+  setSelectedMissionCar,
+  allMissionTitle
+}) => {
+  const queryClient = useQueryClient()
+  const { t } = useTranslation()
+  const [messageApi, contextHolders] = message.useMessage()
+  const deleteMutation = useMutation({
+    mutationFn: (deleteId: string) => {
+      return client.post(
+        `api/setting/delete-mission-title`,
+        {
+          id: deleteId
+        },
+        {
+          headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
+        }
+      )
+    },
+    onSuccess: async () => {
+      await queryClient.refetchQueries({
+        queryKey: ['all-mission-title']
+      })
+      await queryClient.refetchQueries({
+        queryKey: ['all-relate-task']
+      })
+
+      setSelectedMissionKey('')
+    },
+    onError(error: Err) {
+      messageApi.error(error.response.data.msg)
+    }
+  })
+
+  const handleDelete = (key: string) => {
+    deleteMutation.mutate(key)
+  }
+
+  const handleClick = async (record: TitleMission) => {
+    if (record.Car) {
+      setSelectedMissionCar(record.Car.value)
+    }
+    setSelectedMissionKey(record.id)
+    try {
+      await queryClient.refetchQueries({ queryKey: ['all-relate-task'] })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const showModal = (key: string) => {
+    setEditMissionKey(key)
+    setOpenMissionModel(true)
+    setSelectedMissionKey('')
+  }
+
+  const columns: ColumnsType<TitleMission> = [
+    {
+      title: t('mission.add_mission.name'),
+      dataIndex: 'name',
+      key: 'name',
+      render: (text: string) => <p>{text}</p>,
+      // sorter: (a, b) => a.name.localeCompare(b.name),
+      defaultSortOrder: 'ascend'
+    },
+    {
+      title: t('mission.add_mission.car'),
+      dataIndex: 'car_type',
+      key: 'car_type',
+      render: (_, record) => {
+        return <p>{record.Car?.name}</p>
+      },
+      sorter: (a, b) => a.name.localeCompare(b.name)
+    },
+    {
+      title: t('mission.add_mission.tag'),
+      dataIndex: 'tag',
+      key: 'tag',
+      render: (_, record) => {
+        const tags = record.MissionTitleBridgeCategory?.map((c, idx) => (
+          <Tag key={c.Category.id || idx} color={c.Category.color}>
+            {c.Category.tagName}
+          </Tag>
+        ))
+        return <TagWrapper>{tags || <></>}</TagWrapper>
+      }
+    },
+    {
+      title: '',
+      dataIndex: 'operation',
+      key: 'operation',
+      render: (_, record) => {
+        return (
+          <>
+            <Row gutter={16}>
+              <Col className="gutter-row" span={6}>
+                <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+                  <DeleteTwoTone twoToneColor="#a61d24" />
+                </Popconfirm>
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <EditTwoTone twoToneColor="#33bcb7" onClick={() => showModal(record.id)} />
+              </Col>
+              <Col className="gutter-row" span={6}>
+                <ControlTwoTone
+                  twoToneColor="#5273e0"
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  onClick={() => handleClick(record)}
+                />
+              </Col>
+              <Col className="gutter-row" span={6}>
+                {selectedMissionKey === record.id ? (
+                  <CaretRightOutlined style={{ color: 'red' }} />
+                ) : (
+                  []
+                )}
+              </Col>
+            </Row>
+          </>
+        )
+      }
+    }
+  ]
+
+  return (
+    <>
+      {contextHolders}
+      <Table
+        bordered
+        dataSource={allMissionTitle}
+        columns={columns as []}
+        rowKey={(record) => record.id}
+      />
+    </>
+  )
+}
+
+export default MissionTable

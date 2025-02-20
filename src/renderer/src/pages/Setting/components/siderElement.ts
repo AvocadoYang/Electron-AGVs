@@ -27,12 +27,11 @@ export const formList = [
   // ===================
   // === mission ===
   { key: 'edit_mission' },
-  { key: 'shelf_mission' },
+  { key: 'shelf_mission' }, // deprecated
   { key: 'charge_mission' },
   { key: 'cycle_mission' },
-  { key: 'todo_dependent_on_return_id_task' },
+  { key: 'todo_dependent_on_return_id_task' }, // deprecated 小車用的較多 待考慮
   { key: 'before_left_charge_station_task' },
-  { key: 'idle_mission' },
   { key: 'schedule_mission' },
   { key: 'idle_mission' },
   { key: 'topic_mission' },

@@ -19,6 +19,8 @@
     "submit": "Submit",
     "add": "Add",
     "error": "Error",
+    "active": "Active",
+    "inactive": "Inactive",
 
     "location_property": {
       "none": "Normal",
@@ -79,6 +81,16 @@
         "edit_yaw": "Shelves Yaw",
         "edit_pallet": "Edit Pallet"
       }
+    },
+    "mission": {
+      "mission": "Mission",
+      "edit_mission": "Edit mission",
+      "charge_mission": "Charge mission",
+      "cycle_mission": "Cycle mission",
+      "before_left_charge_station_mission": "Before left charge station mission",
+      "schedule_mission": "Schedule mission",
+      "idle_mission": "Idle mission",
+      "topic_mission": "Topic mission"
     },
     "others": {
       "others": "Others",
@@ -263,5 +275,173 @@
     "edit_default_warning": "Can not edit default pallet",
     "type": "Type",
     "color": "Color"
+  },
+
+  "charge": {
+    "id": "id",
+    "coreFail": "no connect",
+    "active": "Active",
+    "name": "mission name",
+    "amrId": "amrId",
+    "aggressive": "aggressive charge percent",
+    "full_rate": "full percent",
+    "active_idle": "active idle charge",
+    "idle_full": "idle full charge percent",
+    "idle_wait_time": "idle wait time",
+    "available_get_task": "available get task percent",
+    "active_time_zone": "active time zone charge",
+    "time_zone": "time zone charge",
+    "mins": "mins",
+    "charge": "charge",
+
+    "updateTime": "update time",
+
+    "auto_mode": "auto mode",
+    "current": "current",
+    "complete": "complete",
+    "fault": "fault",
+    "process": "process",
+    "standby": "standby",
+
+    "error": "error",
+    "moduleCommunicationFailure": "module communication failure",
+    "reverseBetterConnection": "reverse battery connection",
+    "batteryNotConnected": "battery not connected",
+    "shortCircuit": "short circuit",
+    "overVoltage": "over voltage",
+    "overCurrent": "over current",
+    "totalFault": "total fault",
+
+    "other": "other",
+    "infraredInPlace": "infrared in place",
+    "compress": "compress",
+    "scalingFault": "scaling fault",
+    "reachOutCharge": "reach out charge",
+    "returning": "returning",
+    "isStretching": "is stretching",
+    "reset": "reset"
+  },
+
+  "mission": {
+    "add_mission": {
+      "title": "Edit Mission",
+      "empty_warn": "can not be empty",
+      "empty_car_warn": "can not be empty",
+      "duplicate_warn": "name already exists, please change",
+
+      "name": "mission name",
+      "create_mission": "create mission",
+      "search_mission": "search mission",
+      "name_placeholder": "please insert mission name",
+      "car": "Car type",
+      "car_type_placeholder": "Please select",
+      "tag": " Tag"
+    },
+    "mission_list": {
+      "wait_required_warn": " wait column need default value",
+      "yaw_required_warn": "yaw is required",
+      "edit_mission": "Edit Mission",
+      "create_mission": "Create Mission",
+      "copy_mission": "Copy Mission",
+      "previous": "previous page"
+    },
+    "task_table": {
+      "sort": "Order",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "action": "Action Type",
+      "wait": "Wait Time (seconds)",
+      "is_custom_location": "Custom Location?",
+      "custom": "Custom",
+      "auto": "Automatic",
+      "is_selectable": "Selectable for Quick Assignment",
+      "location": "Location",
+      "is_custom_yaw": "Yaw Option",
+      "yaw": "Yaw",
+      "auto_preparatory_point": "Automatic Preparatory Point",
+      "is_define_heigh": "Fork Height Option",
+      "height": "Height",
+      "by_target_shelf_setting": "by target shelf setting",
+      "calculate_by_agv_and_shelf_angle": "calculate by agv shelf angle",
+      "has_cargo_to_process": "Shelf Status",
+      "has_cargo_true": "Shelf Contains Cargo (Offloading Blocked)",
+      "has_cargo_false": "Shelf is Empty (Offloading Allowed)",
+      "amr_list": "Vehicles",
+      "active_wait_amr": "active wa",
+      "wait_genre": "Wait Category",
+      "execute_first": "Execute First",
+      "wait_other_finish": "Execute After Others",
+      "in_use": "Use This Action",
+      "stop_this_process": "Disable This Action",
+      "import_mission": "import mission"
+    },
+
+    "charge_mission": {
+      "charge_mission": "Charge mission",
+      "executing": "Execution",
+      "stale": "Stale"
+    },
+
+    "cycle_mission": {
+      "cycle_mission": "Cycle Mission",
+      "random": "Random",
+      "mission_is_required": "Mission is required",
+      "mission": "Mission",
+      "car": "Car",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
+    },
+    "before_left_charge_station_mission": {
+      "before_left_charge_station_mission": "Before left charge station mission",
+      "field_required": "field data missed, please double check",
+      "car": "Car",
+      "mission": "Mission",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
+    },
+
+    "schedule_mission": {
+      "schedule_mission": "Schedule mission",
+      "car": "Car",
+      "mission": "Mission",
+      "week": "Week",
+      "what_time": "Time",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
+    },
+    "idle_mission": {
+      "idle_mission": "Idle mission",
+      "car": "Car",
+      "mission": "Mission",
+      "idle_min": "Idle Min",
+      "forbidden": "Forbidden",
+      "amr_warn": "amr is required",
+      "min_warn": "at least 3 mins",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
+    },
+    "topic_mission": {
+      "topic_mission": "Topic mission",
+      "car": "Car",
+      "mission": "Mission",
+      "missed": "missed",
+      "amr_warn": "amr is required",
+      "status": "Status",
+      "executing": "Execution",
+      "stale": "Stale"
+    }
+  },
+
+  "car_control_translate": {
+    "cargo_limit": "Cargo limit",
+    "move": "move",
+    "load": "load",
+    "offload": "offload",
+    "charge": "charge"
   }
 }
