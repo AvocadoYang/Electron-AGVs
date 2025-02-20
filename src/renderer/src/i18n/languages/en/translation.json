@@ -418,6 +418,20 @@
     }
   },
 
+  "other": {
+    "edit_mission_tag": {
+      "title": "Edit mission tag",
+      "tag": "Tag",
+      "color": "Color",
+      "location": "Location",
+      "forbidden_edit_default": "Forbidden edit default"
+    },
+    "edit_charge_station_icon_style": {
+      "title": "edit charge station icon style",
+      "edit_position": "調整位置"
+    }
+  },
+
   "car_control_translate": {
     "cargo_limit": "Cargo limit",
     "move": "move",

@@ -19,9 +19,11 @@ import {
   EditZoneSwitch,
   isShowEditBeforeLeftChargeStationMission,
   isShowEditChargeMission,
+  isShowEditChargeStationPosition,
   isShowEditCycleMission,
   isShowEditIdleMission,
   isShowEditMission,
+  isShowEditMissionTag,
   isShowEditScheduleMission,
   isShowEditTopicMission,
   QuickEditLocationPanelSwitch,
@@ -43,6 +45,8 @@ import { BeforeLeftChargeStationPanel } from '../formComponent/forms/missionComp
 import { SchedulePanel } from '../formComponent/forms/missionComponents/scheduleMission'
 import { IdleMissionPanel } from '../formComponent/forms/missionComponents/idleMission'
 import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topicMission'
+import { EditTagPanel } from '../formComponent/forms/other/editTag'
+import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -256,6 +260,30 @@ const SortableWrap: FC<{
               </Card>
             )
 
+          case 'edit_tag':
+            // 6-1 顯示編輯標籤
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <EditTagPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'edit_charge_station_icon_style':
+            // 6-2 顯示編輯標籤
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <ChargeStationStylePanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
           default:
             return null
         }
@@ -287,6 +315,8 @@ const ToolComponents: FC<{
   const openSchedulePanel = useAtomValue(isShowEditScheduleMission)
   const openIdlePanel = useAtomValue(isShowEditIdleMission)
   const openTopicPanel = useAtomValue(isShowEditTopicMission)
+  const openTagPanel = useAtomValue(isShowEditMissionTag)
+  const openChargeStylePanel = useAtomValue(isShowEditChargeStationPosition)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -385,6 +415,13 @@ const ToolComponents: FC<{
     if (formKey === 'topic_mission' && openTopicPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
+    if (formKey === 'edit_tag' && openTagPanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+    if (formKey === 'edit_charge_station_icon_style' && openChargeStylePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
+
     return []
   })
 }

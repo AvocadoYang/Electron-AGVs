@@ -12,10 +12,10 @@ import useShelf from '@renderer/api/useShelf'
 import { ShelfWithoutList } from '@renderer/api/type/useShelf'
 import SettingCargoStyleForm from './SettingCargoStyleForm'
 
-const Wrapper = styled.div<{ hasSelect: boolean }>`
+const Wrapper = styled.div<{ $hasSelect: boolean }>`
   display: flex;
   align-items: center;
-  display: ${(prop) => (prop.hasSelect ? 'none' : 'flex')};
+  display: ${(prop) => (prop.$hasSelect ? 'none' : 'flex')};
 `
 
 type ShelfCell = {
@@ -39,40 +39,7 @@ const EditableCell: React.FC<EditableCellProps> = ({ record, children, ...restPr
 }
 
 EditableCell.propTypes = {
-  dataIndex: PropTypes.string.isRequired,
-  title: PropTypes.node.isRequired,
-  inputType: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  children: PropTypes.node.isRequired,
-  record: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    Loc: PropTypes.shape({
-      dirId: PropTypes.string,
-      id: PropTypes.string.isRequired,
-      locationId: PropTypes.string.isRequired,
-      areaType: PropTypes.string
-    }).isRequired,
-    ShelfCategory: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      Height: PropTypes.arrayOf(
-        PropTypes.shape({
-          id: PropTypes.string.isRequired,
-          height: PropTypes.number.isRequired,
-          shelfCategoryId: PropTypes.string.isRequired
-        })
-      )
-    }),
-    ShelfConfig: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        level: PropTypes.number.isRequired,
-        hasCargo: PropTypes.bool.isRequired,
-        shelfId: PropTypes.string.isRequired
-      })
-    ),
-    shelfCategoryId: PropTypes.string.isRequired
-  }).isRequired
+  children: PropTypes.node.isRequired
 }
 
 const ShelfTable: FC<{
@@ -184,7 +151,7 @@ const ShelfTable: FC<{
   if (isLoadingShelf) return <Skeleton active />
   return (
     <>
-      <Wrapper hasSelect={selectId !== null}>
+      <Wrapper $hasSelect={selectId !== null}>
         <Table
           components={{
             body: {

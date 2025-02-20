@@ -67,3 +67,9 @@ export const isShowEditIdleMission = atom<boolean>(false)
 
 /** 5-7 顯示topic任務 */
 export const isShowEditTopicMission = atom<boolean>(false)
+
+/** 6-1 顯示編輯標籤 */
+export const isShowEditMissionTag = atom<boolean>(false)
+
+/** 6-2 顯示編輯充電站icon位置 */
+export const isShowEditChargeStationPosition = atom<boolean>(false)

@@ -1,6 +1,7 @@
 import { atom } from 'jotai'
 import { LocationType } from './jotai'
 import { mouseLocation } from '@renderer/pages/Setting/hooks/hook'
+import { SelectStation } from '@renderer/api/type/useLocation'
 
 // record the version of map's points
 export const sameVersion = atom(true)
@@ -41,3 +42,6 @@ export const chargeStationModelProp = atom<{
   open: boolean
   location: string
 } | null>(null)
+
+export const isEditChargeStation = atom(false)
+export const chargeStationEditData = atom<null | SelectStation>(null)

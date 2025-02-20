@@ -22,7 +22,9 @@ import {
   isShowEditBeforeLeftChargeStationMission,
   isShowEditScheduleMission,
   isShowEditIdleMission,
-  isShowEditTopicMission
+  isShowEditTopicMission,
+  isShowEditMissionTag,
+  isShowEditChargeStationPosition
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -91,6 +93,11 @@ const Sider: React.FC<{
   const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission) // 5-6
   const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission) // 5-7
 
+  const [openTagMissionPanel, setOpenTagMissionPanel] = useAtom(isShowEditMissionTag) // 5-7
+  const [openEditChargeStationIconPanel, setOpenEditChargeStationIconPanel] = useAtom(
+    isShowEditChargeStationPosition
+  ) // 5-7
+
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip) //地點tooltip
   const [collapsed, setCollapsed] = useState(true)
   const { t } = useTranslation()
@@ -112,7 +119,9 @@ const Sider: React.FC<{
       openBeforeLeftStationMissionPanel,
       openScheduleMissionPanel,
       openIdleMissionPanel,
-      openTopicMissionPanel
+      openTopicMissionPanel,
+      openTagMissionPanel,
+      openEditChargeStationIconPanel
     ].some((item) => item)
 
     setHasOpenTool(isOpen)
@@ -133,7 +142,9 @@ const Sider: React.FC<{
     openBeforeLeftStationMissionPanel,
     openScheduleMissionPanel,
     openIdleMissionPanel,
-    openTopicMissionPanel
+    openTopicMissionPanel,
+    openTagMissionPanel,
+    openEditChargeStationIconPanel
   ])
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
@@ -231,10 +242,10 @@ const Sider: React.FC<{
       //   console.log('edit_gauge')
       //   break
       case 'edit_tag':
-        console.log('edit_tag')
+        setOpenTagMissionPanel(check)
         break
       case 'edit_charge_station_icon_style':
-        console.log('edit_charge_station_icon_style')
+        setOpenEditChargeStationIconPanel(check)
         break
       // ===================
       // === amr ===
@@ -412,14 +423,17 @@ const Sider: React.FC<{
     getItem(t('toolbar.others.others'), '7', <DeploymentUnitOutlined />, [
       getItem(
         t('toolbar.others.edit_tag'),
-        '7-2',
-        <Switch checked={false} onChange={(checked) => handleShowPanel(checked, 'edit_tag')} />
+        '6-1',
+        <Switch
+          checked={openTagMissionPanel}
+          onChange={(checked) => handleShowPanel(checked, 'edit_tag')}
+        />
       ),
       getItem(
         t('toolbar.others.edit_charge_station_icon_style'),
-        '7-3',
+        '6-2',
         <Switch
-          checked={false}
+          checked={openEditChargeStationIconPanel}
           onChange={(checked) => handleShowPanel(checked, 'edit_charge_station_icon_style')}
         />
       )

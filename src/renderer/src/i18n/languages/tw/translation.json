@@ -416,6 +416,20 @@
     }
   },
 
+  "other": {
+    "edit_mission_tag": {
+      "title": "編輯任務標籤",
+      "tag": " 標籤",
+      "color": "顏色",
+      "location": "地點",
+      "forbidden_edit_default": "禁止編輯預設值"
+    },
+    "edit_charge_station_icon_style": {
+      "title": "調整充電站icon位置",
+      "edit_position": "調整位置"
+    }
+  },
+
   "car_control_translate": {
     "cargo_limit": "貨架高度鎖定",
     "move": "枒杈前後",

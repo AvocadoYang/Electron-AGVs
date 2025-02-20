@@ -27,6 +27,7 @@ import ToolTip from '../components/ToolTip'
 import SudoCargo from './components/AllCargo.tsx/SudoCargo'
 import { AllChargeStation } from './components/AllChargeStation'
 import ChargeStationModel from './components/AllChargeStation/ChargeStationModel'
+import SudoChargeStation from '../formComponent/forms/other/editChargeStationIcon/SudoChargeStation'
 
 const MapView: React.FC<{
   scale: number
@@ -177,6 +178,8 @@ const MapView: React.FC<{
       {showLocationToolTip ? <ToolTip /> : []}
 
       <SudoCargo />
+
+      <SudoChargeStation />
 
       <ChargeStationModel />
     </div>
