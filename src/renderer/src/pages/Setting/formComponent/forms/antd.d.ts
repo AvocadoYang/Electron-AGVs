@@ -12,6 +12,11 @@ export type ZoneTableData = {
   id: string
   name: string
   category: string[]
+  tagSetting: {
+    forbidden_car: string[] | null
+    hight_limit: number | null
+    speed_limit: number | null
+  }
   backgroundColor: string
   startPoint: { startX: number; startY: number }
   endPoint: { endX: number; endY: number }

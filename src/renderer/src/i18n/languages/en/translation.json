@@ -192,6 +192,7 @@
     "all_vehicle_forbidden": "All vehicle forbidden",
     "not_vehicle_forbidden": "Not set",
     "hint": "Tag setting isn't yet completed !",
+    "edit_zone": "Edit Zones",
     "waring": {
       "tag_not_yet_setting": "The tag setting is still not setting ",
       "name_empty_error": "Name field cannot be empty",

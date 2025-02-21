@@ -11,7 +11,7 @@
     "opacity": "淡化",
     "show": "顯示",
     "point_type": "地點類型",
-    "save": "修改",
+    "save": "儲存",
     "delete": "刪除",
     "edit": "編輯",
     "success": "成功",
@@ -182,6 +182,7 @@
     "forbidden_vehicle": "指定限制進入車輛",
     "all_vehicle_forbidden": "禁止所有車輛通行",
     "not_vehicle_forbidden": "不設定限制車輛",
+    "edit_zone": "編輯區域",
     "hint": "參數數設定尚未完成！",
     "waring": {
       "tag_not_yet_setting": "尚未設定完成區域參數設定",

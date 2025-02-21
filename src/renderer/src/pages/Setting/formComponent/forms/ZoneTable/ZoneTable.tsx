@@ -1,24 +1,13 @@
 import { memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import FormHr from '../../utils/FormHr'
-import {
-  Button,
-  ColorPicker,
-  Flex,
-  Form,
-  Input,
-  Popconfirm,
-  Space,
-  Table,
-  TableColumnType,
-  Tag,
-  Typography
-} from 'antd'
-import { SearchOutlined, DeleteTwoTone } from '@ant-design/icons'
+import FormHr from '../../../utils/FormHr'
+import { Button, ColorPicker, Flex, Form, Popconfirm, Space, Table, Tag, Typography } from 'antd'
+import { DeleteTwoTone } from '@ant-design/icons'
 import useMap from '@renderer/api/useMap'
 import { nanoid } from 'nanoid'
-import { tagColor } from '../../utils/utils'
-import { ZoneTableData } from './antd'
+import { tagColor } from '../../../utils/utils'
+import { ZoneTableData } from '../antd'
+import EditZoneTable from './component/EditZoneTable'
 
 const ZoneTable: React.FC<{
   sortableId: string
@@ -27,27 +16,28 @@ const ZoneTable: React.FC<{
 }> = ({ listeners, attributes, sortableId }) => {
   const { data } = useMap()
   const [editingKey, setEditingKey] = useState<string | null>(null)
+  const [oldData, setOldData] = useState<ZoneTableData | null>(null)
   const { t } = useTranslation()
   const [ZonePanelForm] = Form.useForm()
-
-  const isEditing = (record: ZoneTableData) => record.id === editingKey
-
   //選擇要修改的區域列, 並且設定表單
   const edit = (record: Partial<ZoneTableData> & { id: string }) => {
-    ZonePanelForm.setFieldValue('name', record.name)
-    ZonePanelForm.setFieldValue('startX', Number(record.startPoint?.startX))
-    ZonePanelForm.setFieldValue('startY', Number(record.startPoint?.startY))
-    ZonePanelForm.setFieldValue('endX', Number(record.endPoint?.endX))
-    ZonePanelForm.setFieldValue('endY', Number(record.endPoint?.endY))
-    ZonePanelForm.setFieldValue('category', record.category)
-    ZonePanelForm.setFieldValue('backgroundColor', record.backgroundColor)
+    const isValidRecord = (
+      record: Partial<ZoneTableData> & { id: string }
+    ): record is ZoneTableData & { id: string } => {
+      return Object.values(record).every((value) => value !== undefined)
+    }
+    if (!isValidRecord(record)) return
+    const data = {
+      id: record.id,
+      backgroundColor: record.backgroundColor,
+      category: record.category,
+      endPoint: record.endPoint,
+      startPoint: record.startPoint,
+      tagSetting: record.tagSetting,
+      name: record.name
+    }
+    setOldData(data)
     setEditingKey(record.id)
-  }
-
-  //取消所選取的區域列
-  const cancel = () => {
-    ZonePanelForm.resetFields()
-    setEditingKey(null)
   }
 
   const columns = [
@@ -123,22 +113,9 @@ const ZoneTable: React.FC<{
       dataIndex: 'operation',
       key: 'operation',
       render: (_, record: ZoneTableData) => {
-        const editable = isEditing(record)
-        return editable ? (
+        return (
           <Flex vertical align="center" justify="space-between" gap={'middle'}>
             <Typography.Link
-              onClick={() => {
-                edit(record)
-              }}
-            >
-              {t('utils.save')}
-            </Typography.Link>
-            <Typography.Link onClick={cancel}>{t('utils.cancel')}</Typography.Link>
-          </Flex>
-        ) : (
-          <Flex vertical align="center" justify="space-between" gap={'middle'}>
-            <Typography.Link
-              disabled={editingKey !== null}
               onClick={() => {
                 edit(record)
               }}
@@ -166,13 +143,14 @@ const ZoneTable: React.FC<{
   return (
     <>
       <h3 className="drop_button_style" {...listeners} {...attributes}>
-        {t('sider_output_form_name.zoneTable')}
+        {!editingKey ? t('sider_output_form_name.zoneTable') : t('edit_zone_panel.edit_zone')}
       </h3>
       <FormHr sortableId={sortableId}></FormHr>
-      <Flex gap="middle" justify="flex-start" align="start" vertical>
-        <Button danger>{t('utils.delete')}</Button>
-
-        <Form form={ZonePanelForm} component={false}>
+      {!editingKey ? (
+        <Flex gap="middle" justify="flex-start" align="start" vertical>
+          <Button color="danger" variant="filled">
+            {t('utils.delete')}
+          </Button>
           <Table
             rowSelection={{
               type: 'checkbox',
@@ -182,10 +160,17 @@ const ZoneTable: React.FC<{
             }}
             rowKey={(record) => record.id}
             columns={columns}
-            dataSource={data.zones}
+            dataSource={data.zones as unknown as ZoneTableData[]}
           ></Table>
-        </Form>
-      </Flex>
+        </Flex>
+      ) : (
+        <EditZoneTable
+          setEditingKey={setEditingKey}
+          editingKey={editingKey}
+          oldData={oldData}
+          sortableId={sortableId}
+        ></EditZoneTable>
+      )}
     </>
   )
 }
