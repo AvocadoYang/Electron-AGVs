@@ -16,7 +16,7 @@ import {
   Typography,
   message
 } from 'antd'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import styled from 'styled-components'
 import usePallet from '@renderer/api/usePallet'
@@ -231,23 +231,27 @@ const PalletTable: React.FC<{
         const editable = isEditing(record)
 
         return editable ? (
-          <BtnWrapper>
+          <Flex gap="small">
             <Typography.Link onClick={() => save(record.id)} style={{ marginRight: 8 }}>
-              <Button type="link">{t('utils.save')}</Button>
+              <Button color="primary" variant="filled" type="link">
+                {t('utils.save')}
+              </Button>
             </Typography.Link>
             <Typography.Link onClick={() => cancel()} style={{ marginRight: 8 }}>
-              <Button type="link">{t('utils.cancel')}</Button>
+              <Button color="default" variant="filled" type="link">
+                {t('utils.cancel')}
+              </Button>
             </Typography.Link>
-          </BtnWrapper>
+          </Flex>
         ) : (
-          <BtnWrapper>
+          <Flex gap="small">
             <Tooltip placement="right" title={t('utils.cancel')} key={nanoid()}>
-              <Button type="link">
+              <Button color="default" variant="filled" type="link">
                 <EditOutlined onClick={() => edit(record)} />
               </Button>
             </Tooltip>
             <Tooltip placement="right" title={t('utils.delete')} color="red" key={nanoid()}>
-              <Button type="link">
+              <Button color="danger" variant="filled" type="link">
                 <Popconfirm
                   color="#ff1c1c"
                   title="Sure to delete?"
@@ -257,7 +261,7 @@ const PalletTable: React.FC<{
                 </Popconfirm>
               </Button>
             </Tooltip>
-          </BtnWrapper>
+          </Flex>
         )
       }
     }
@@ -283,13 +287,19 @@ const PalletTable: React.FC<{
     <>
       {contextHolder}
 
-      <div style={{ width: '23em' }}>
+      <div>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('edit_pallet.edit_pallet')}
         </h3>
         <FormHr sortableId={sortableId}></FormHr>
         <Flex gap="middle" justify="flex-start" align="start" vertical>
-          <Button type="primary" onClick={() => handleAdd()}>
+          <Button
+            icon={<PlusOutlined />}
+            color="primary"
+            variant="filled"
+            type="primary"
+            onClick={() => handleAdd()}
+          >
             {t('utils.add')}
           </Button>
           <Form form={form} component={false}>

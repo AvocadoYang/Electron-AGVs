@@ -46,7 +46,13 @@ const WarningIdGenreForm: FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={addMutation.isLoading}>
+          <Button
+            color="primary"
+            variant="filled"
+            type="primary"
+            htmlType="submit"
+            loading={addMutation.isLoading}
+          >
             {t('utils.submit')}
           </Button>
         </Form.Item>

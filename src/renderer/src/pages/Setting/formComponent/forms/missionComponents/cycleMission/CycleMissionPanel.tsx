@@ -4,7 +4,7 @@ import { FC } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import { useMutation } from '@tanstack/react-query'
-import { PoweroffOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons'
 import client from '@renderer/api/axiosClient'
 import { errorHandler } from '@renderer/utils/utils'
 import { ErrorResponse } from '@renderer/utils/globalType'
@@ -162,8 +162,9 @@ const CycleMissionPanel: FC<{
         <MinWid>
           <Flex gap="middle">
             <Button
-              type={record ? 'primary' : 'default'}
-              icon={<PoweroffOutlined />}
+              color={record.isActive ? 'default' : 'primary'}
+              variant="filled"
+              icon={record.isActive ? <CloseCircleOutlined /> : <PlayCircleOutlined />}
               loading={activeMutation.isLoading}
               onClick={() => activeSwitch(record.cycle_relate_id, !record.isActive)}
             >
@@ -178,7 +179,14 @@ const CycleMissionPanel: FC<{
                 title="Sure to delete?"
                 onConfirm={() => deleteOne(record.cycle_relate_id)}
               >
-                <Button loading={deleteMutation.isLoading} type="dashed" danger>
+                <Button
+                  icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                  color="danger"
+                  variant="filled"
+                  loading={deleteMutation.isLoading}
+                  type="dashed"
+                  danger
+                >
                   {t('utils.delete')}
                 </Button>
               </Popconfirm>

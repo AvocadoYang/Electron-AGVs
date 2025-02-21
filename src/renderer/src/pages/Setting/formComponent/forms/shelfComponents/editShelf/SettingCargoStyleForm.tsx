@@ -203,8 +203,10 @@ const SettingCargoStyleForm: FC<{
           <Col span={24}>
             {' '}
             <BtnWrapper>
-              <Button onClick={cancelEditStyle}>{t('utils.cancel')}</Button>
-              <Button onClick={() => saveStyle()} type="primary">
+              <Button color="default" variant="filled" onClick={cancelEditStyle}>
+                {t('utils.cancel')}
+              </Button>
+              <Button color="primary" variant="filled" onClick={() => saveStyle()} type="primary">
                 {t('edit_shelf_panel.save')}
               </Button>
               <Button

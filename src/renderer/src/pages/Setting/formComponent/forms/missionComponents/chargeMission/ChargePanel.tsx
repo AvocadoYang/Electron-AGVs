@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { Button, Card, Flex, Form, Modal, Popconfirm, Table, Tooltip } from 'antd'
+import { Button, Flex, Form, Modal, Popconfirm, Table, Tooltip } from 'antd'
 import type { TableProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -8,6 +8,13 @@ import useCharge from '@renderer/api/useCharge'
 import client from '@renderer/api/axiosClient'
 import ChargeForm from './ChargeForm'
 import FormHr from '@renderer/pages/Setting/utils/FormHr'
+import {
+  CloseCircleOutlined,
+  DeleteTwoTone,
+  EditOutlined,
+  PlayCircleOutlined,
+  PlusOutlined
+} from '@ant-design/icons'
 
 type ChargeData = {
   id: string
@@ -218,54 +225,52 @@ const ChargePanel: FC<{
       render(_, record) {
         return (
           <>
-            <Tooltip title={t('utils.edit')} placement="right">
-              <Svg
+            <Flex gap="small">
+              <Button
                 onClick={() => showModal(record.id)}
-                width={18}
-                fill="#0ca2ff"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
+                icon={<EditOutlined />}
+                color="primary"
+                variant="filled"
+                type="link"
               >
-                <path d="M10 20H6V4H13V9H18V12.1L20 10.1V8L14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H10V20M20.2 13C20.3 13 20.5 13.1 20.6 13.2L21.9 14.5C22.1 14.7 22.1 15.1 21.9 15.3L20.9 16.3L18.8 14.2L19.8 13.2C19.9 13.1 20 13 20.2 13M20.2 16.9L14.1 23H12V20.9L18.1 14.8L20.2 16.9Z" />
-              </Svg>
-            </Tooltip>
+                {t('utils.edit')}
+              </Button>
+              {record.active ? (
+                <Button
+                  onClick={() => handleActive(false, record.id, record.amrIds)}
+                  icon={<CloseCircleOutlined />}
+                  color="default"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.inactive')}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleActive(true, record.id, record.amrIds)}
+                  icon={<PlayCircleOutlined />}
+                  color="primary"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.active')}
+                </Button>
+              )}
 
-            {record.active ? (
-              <>
-                <Tooltip placement="right" title={t('utils.inactive')}>
-                  <Svg
-                    onClick={() => handleActive(false, record.id, record.amrIds)}
-                    fill="#ff7b5a"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,9H15V15H9" />
-                  </Svg>
-                </Tooltip>
-              </>
-            ) : (
-              <>
-                <Tooltip placement="right" title={t('utils.active')}>
-                  <Svg
-                    onClick={() => handleActive(true, record.id, record.amrIds)}
-                    fill="#01c138"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                  </Svg>
-                </Tooltip>
-              </>
-            )}
-
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => handleDelete(record.id, record.amrIds)}
-            >
-              <Svg fill="#ff3838" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
-              </Svg>
-            </Popconfirm>
+              <Popconfirm
+                title="Sure to delete?"
+                onConfirm={() => handleDelete(record.id, record.amrIds)}
+              >
+                <Button
+                  icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                  color="danger"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.delete')}
+                </Button>
+              </Popconfirm>
+            </Flex>
           </>
         )
       }
@@ -282,7 +287,9 @@ const ChargePanel: FC<{
 
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <BtnBox onClick={() => handleAdd()}>
-            <Button type="primary">{t('utils.add')}</Button>
+            <Button icon={<PlusOutlined />} color="primary" variant="filled">
+              {t('utils.add')}
+            </Button>
           </BtnBox>
 
           <Table

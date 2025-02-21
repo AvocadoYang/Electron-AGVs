@@ -273,7 +273,9 @@ const TagTable: FC = () => {
   return (
     <>
       {contextHolder}
-      <Button onClick={() => handleAdd()}>{t('utils.add')}</Button>
+      <Button color="primary" variant="filled" onClick={() => handleAdd()}>
+        {t('utils.add')}
+      </Button>
       <Form form={form} component={false}>
         <Table
           rowKey={() => nanoid()}

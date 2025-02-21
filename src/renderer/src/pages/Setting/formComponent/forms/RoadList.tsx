@@ -13,13 +13,18 @@ import {
   Switch,
   Table,
   TableColumnType,
-  Tooltip,
   Typography
 } from 'antd'
 import { memo, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-import { DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons'
+import {
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  SaveOutlined,
+  SearchOutlined
+} from '@ant-design/icons'
 import PropTypes from 'prop-types'
 import { nanoid } from 'nanoid'
 import { FilterDropdownProps } from 'antd/es/table/interface'
@@ -30,7 +35,6 @@ import { hoverRoad } from '@renderer/utils/gloable'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
-import { borderColor } from '../../utils/utils'
 import FormHr from '../../utils/FormHr'
 
 type RoadListType = {
@@ -48,14 +52,6 @@ type RoadListType = {
 }
 
 type DataIndex = keyof RoadListType
-
-const BtnWrapper = styled.div`
-  display: flex;
-`
-
-const Btn = styled.div`
-  width: 66px;
-`
 
 const yawOptions = ['0', '90', '180', '270', '*'].map((v) => ({ value: v }))
 
@@ -284,7 +280,8 @@ const RoadList: React.FC<{
         />
         <Space>
           <Button
-            type="primary"
+            color="primary"
+            variant="filled"
             onClick={() => handleSearch(confirm)}
             icon={<SearchOutlined />}
             size="small"
@@ -293,6 +290,8 @@ const RoadList: React.FC<{
             {t('utils.search')}
           </Button>
           <Button
+            color="default"
+            variant="filled"
             onClick={() => clearFilters && handleReset(clearFilters)}
             size="small"
             style={{ width: 90 }}
@@ -484,21 +483,30 @@ const RoadList: React.FC<{
         const editable = isEditing(record)
 
         return editable ? (
-          <BtnWrapper>
+          <Flex gap="small">
             <Typography.Link onClick={() => save(record.roadId)} style={{ marginRight: 8 }}>
-              <Btn>{t('utils.save')}</Btn>
+              <Button icon={<SaveOutlined />} color="primary" variant="filled" type="link">
+                {t('utils.save')}
+              </Button>
             </Typography.Link>
             <Typography.Link onClick={() => cancel()} style={{ marginRight: 8 }}>
-              <Btn>{t('utils.cancel')}</Btn>
+              <Button icon={<CloseOutlined />} color="default" variant="filled" type="link">
+                {t('utils.cancel')}
+              </Button>
             </Typography.Link>
-          </BtnWrapper>
+          </Flex>
         ) : (
-          <BtnWrapper>
-            <Btn>
-              <Tooltip placement="right" title={t('utils.edit')} key={nanoid()}>
-                <EditOutlined onClick={() => edit(record)} />
-              </Tooltip>
-            </Btn>
+          <Flex gap="small">
+            <Button
+              onClick={() => edit(record)}
+              icon={<EditOutlined />}
+              color="primary"
+              variant="filled"
+              type="link"
+            >
+              {t('utils.edit')}
+            </Button>
+
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this road?"
@@ -507,13 +515,16 @@ const RoadList: React.FC<{
               okText="Yes"
               cancelText="No"
             >
-              <Btn>
-                <Tooltip placement="right" title={t('utils.delete')} color="red" key={nanoid()}>
-                  <DeleteOutlined color="#ff0707" />
-                </Tooltip>
-              </Btn>
+              <Button
+                icon={<DeleteOutlined color="#ff0707" />}
+                color="danger"
+                variant="filled"
+                type="link"
+              >
+                {t('utils.delete')}
+              </Button>
             </Popconfirm>
-          </BtnWrapper>
+          </Flex>
         )
       }
     }
@@ -553,7 +564,8 @@ const RoadList: React.FC<{
           onClick={() => deleteMultiItem()}
           loading={deleteMultiRoadMutation.isLoading}
           disabled={selectedRowKeys.length === 0}
-          danger
+          color="danger"
+          variant="filled"
         >
           {t('utils.delete')}
         </Button>

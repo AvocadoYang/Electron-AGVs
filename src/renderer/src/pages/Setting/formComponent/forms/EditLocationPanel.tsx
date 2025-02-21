@@ -12,6 +12,7 @@ import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import useMap from '@renderer/api/useMap'
 import FormHr from '../../utils/FormHr'
+import { SaveOutlined } from '@ant-design/icons'
 
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>
@@ -155,7 +156,7 @@ const EditLocationPanel: React.FC<{
             </Radio.Group>
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button onClick={savePose} type="primary">
+            <Button icon={<SaveOutlined />} onClick={savePose} color="primary" variant="filled">
               {t('edit_location_panel.save')}
             </Button>
           </Form.Item>

@@ -87,7 +87,9 @@ const TopicForm: FC = () => {
         </Form.Item>
       </Form>
 
-      <Button onClick={() => submit()}>{t('utils.add')}</Button>
+      <Button color="primary" variant="filled" onClick={() => submit()}>
+        {t('utils.add')}
+      </Button>
     </Wrapper>
   )
 }

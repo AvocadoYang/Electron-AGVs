@@ -436,7 +436,7 @@
     },
     "edit_charge_station_icon_style": {
       "title": "edit charge station icon style",
-      "edit_position": "調整位置"
+      "edit_position": "Edit Style"
     }
   },
 
@@ -458,6 +458,14 @@
       "genre_name_ch": "Genre(chinese)",
       "genre_name_en": "Genre(english)",
       "add_new_genre": "Add New Genre"
+    },
+    "backup_file": {
+      "title": "backup file",
+      "backup_now": "Backup Now",
+      "create_at": "Create At",
+      "backup_path": "Backup Path",
+      "restore": "Restore",
+      "restore_warn": "Confirm to restore this record, please turn off all vehicles, delete all tasks before executing, the system will restart"
     }
   },
 

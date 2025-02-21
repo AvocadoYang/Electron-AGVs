@@ -9,7 +9,7 @@ import { errorHandler } from '@renderer/utils/utils'
 import YawTable from './YawTable'
 import YawForm from './YawForm'
 import FormHr from '../../../../utils/FormHr'
-
+import { PlusOutlined } from '@ant-design/icons'
 type FieldType = {
   yaw?: string
 }
@@ -94,7 +94,14 @@ const YawPanel: FC<{
         <Row gutter={16}>
           <Col span={16}>
             {' '}
-            <Button onClick={addHandler} type="primary" style={{ marginBottom: 16 }}>
+            <Button
+              icon={<PlusOutlined />}
+              color="primary"
+              variant="filled"
+              onClick={addHandler}
+              type="primary"
+              style={{ marginBottom: 16 }}
+            >
               {t('edit_yaw.add')}
             </Button>
           </Col>

@@ -115,7 +115,7 @@ const ShelfDrawer: FC<{
             </Form.Item>
 
             <Form.Item label={null}>
-              <Button type="primary" htmlType="submit">
+              <Button color="primary" variant="filled" type="primary" htmlType="submit">
                 {t('utils.submit')}
               </Button>
             </Form.Item>

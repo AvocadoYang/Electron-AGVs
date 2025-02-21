@@ -11,7 +11,7 @@
     "opacity": "淡化",
     "show": "顯示",
     "point_type": "地點類型",
-    "save": "修改",
+    "save": "存檔",
     "delete": "刪除",
     "edit": "編輯",
     "success": "成功",
@@ -456,6 +456,14 @@
       "genre_name_ch": "種類(中)",
       "genre_name_en": "種類(英)",
       "add_new_genre": "新增種類"
+    },
+    "backup_file": {
+      "title": "備份檔案",
+      "backup_now": "立即備份",
+      "create_at": "創建時間",
+      "backup_path": "備份路徑",
+      "restore": "還原資料",
+      "restore_warn": "確定還原此紀錄, 請將所有車輛熄火, 刪除所有任務後在執行, 系統將重起."
     }
   },
 

@@ -1,4 +1,4 @@
-import { Table } from 'antd'
+import { Button, Table } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -82,7 +82,16 @@ const ChargeStationStylePanel: FC<{
       key: 'operation',
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       render: (_v: unknown, record: SingleChargeStation) => {
-        return <FormatPainterOutlined onClick={() => handleEdit(record.locationId)} />
+        return (
+          <Button
+            icon={<FormatPainterOutlined />}
+            onClick={() => handleEdit(record.locationId)}
+            color="primary"
+            variant="filled"
+          >
+            {t('other.edit_charge_station_icon_style.edit_position')}
+          </Button>
+        )
       }
     }
   ]
@@ -90,7 +99,7 @@ const ChargeStationStylePanel: FC<{
   return (
     <div>
       <h3 className="drop_button_style" {...listeners} {...attributes}>
-        {t('mission.charge_mission.charge_mission')}
+        {t('toolbar.others.edit_charge_station_icon_style')}
       </h3>
       <FormHr sortableId={sortableId} />
 

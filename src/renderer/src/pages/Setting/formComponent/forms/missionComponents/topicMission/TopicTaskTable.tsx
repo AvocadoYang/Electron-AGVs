@@ -1,9 +1,9 @@
 /* eslint-disable no-void */
 import { FC } from 'react'
-import { DeleteTwoTone } from '@ant-design/icons'
+import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import styled from 'styled-components'
-import { Col, Popconfirm, Row, Table, Tooltip, message } from 'antd'
+import { Button, Col, Flex, Popconfirm, Row, Table, Tooltip, message } from 'antd'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import { array, boolean, number, object, string } from 'yup'
@@ -167,43 +167,44 @@ const TopicTaskTable: FC = () => {
       render(_v: unknown, record: DataType) {
         return (
           <>
-            {record.active ? (
-              <>
-                <Tooltip placement="right" title={t('mission.topic_mission.stale')}>
-                  <Svg
+            <Flex gap="small">
+              {record.active ? (
+                <>
+                  <Button
                     onClick={() => handleActive(false, record.id)}
-                    fill="#ff7b5a"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
+                    icon={<CloseCircleOutlined />}
+                    color="default"
+                    variant="filled"
+                    type="link"
                   >
-                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,9H15V15H9" />
-                  </Svg>
-                </Tooltip>
-              </>
-            ) : (
-              <>
-                <Tooltip placement="right" title={t('mission.topic_mission.executing')}>
-                  <Svg
+                    {' '}
+                    {t('mission.topic_mission.stale')}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
                     onClick={() => handleActive(true, record.id)}
-                    fill="#01c138"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
+                    icon={<PlayCircleOutlined />}
+                    color="primary"
+                    variant="filled"
+                    type="link"
                   >
-                    <path d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                  </Svg>
-                </Tooltip>
-              </>
-            )}
+                    {t('mission.topic_mission.executing')}
+                  </Button>
+                </>
+              )}
 
-            <Row gutter={16}>
-              <Col className="gutter-row" span={12}>
-                <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                  <Tooltip placement="right" title={t('utils.delete')}>
-                    <DeleteTwoTone twoToneColor="#a61d24" />
-                  </Tooltip>
-                </Popconfirm>
-              </Col>
-            </Row>
+              <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+                <Button
+                  icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                  color="danger"
+                  variant="filled"
+                >
+                  {t('utils.delete')}
+                </Button>
+              </Popconfirm>
+            </Flex>
           </>
         )
       }

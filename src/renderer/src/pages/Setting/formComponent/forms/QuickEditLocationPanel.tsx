@@ -346,7 +346,7 @@ const QuickEditLocationPanel: React.FC<{
             </Form.Item>
           </Flex>
           <Flex align="center" justify="center">
-            <Button color="primary" variant="solid" onClick={() => save()}>
+            <Button color="primary" variant="filled" onClick={() => save()}>
               {t('quick_edit_location_panel.save')}
             </Button>
           </Flex>

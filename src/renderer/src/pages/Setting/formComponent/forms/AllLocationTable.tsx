@@ -19,13 +19,17 @@ import { useRef, useState } from 'react'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import { useTranslation } from 'react-i18next'
 import { tooltipProp } from '@renderer/utils/gloable'
-import { SearchOutlined, DeleteTwoTone } from '@ant-design/icons'
+import {
+  SearchOutlined,
+  DeleteTwoTone,
+  EditOutlined,
+  SaveOutlined,
+  CloseOutlined
+} from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
 
 import React, { memo } from 'react'
 import { Space, Table, Tag, Form } from 'antd'
-import { borderColor } from '../../utils/utils'
-
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
@@ -201,7 +205,8 @@ const AllLocationTable: React.FC<{
         />
         <Space>
           <Button
-            type="primary"
+            color="primary"
+            variant="filled"
             onClick={() => handleSearch(confirm)}
             icon={<SearchOutlined />}
             size="small"
@@ -210,6 +215,8 @@ const AllLocationTable: React.FC<{
             {t('utils.search')}
           </Button>
           <Button
+            color="default"
+            variant="filled"
             onClick={() => clearFilters && handleReset(clearFilters)}
             size="small"
             style={{ width: 90 }}
@@ -377,14 +384,16 @@ const AllLocationTable: React.FC<{
       render: (_: unknown, record: LocationType) => {
         const editable = isEditing(record)
         return editable ? (
-          <span>
+          <Flex gap="small">
             <Typography.Link
               onClick={() => {
                 save()
               }}
               style={{ marginRight: 8 }}
             >
-              {t('utils.save')}
+              <Button icon={<SaveOutlined />} color="primary" variant="filled" type="link">
+                {t('utils.save')}
+              </Button>
             </Typography.Link>
             <Typography.Link
               onClick={() => {
@@ -392,18 +401,22 @@ const AllLocationTable: React.FC<{
               }}
               style={{ marginRight: 8 }}
             >
-              {t('utils.cancel')}
+              <Button icon={<CloseOutlined />} color="danger" variant="filled" type="link">
+                {t('utils.cancel')}
+              </Button>
             </Typography.Link>
-          </span>
+          </Flex>
         ) : (
-          <div style={{ display: 'flex', gap: '4em' }}>
+          <Flex gap="small">
             <Typography.Link
               disabled={editingKey !== null}
               onClick={() => {
                 edit(record)
               }}
             >
-              {t('utils.edit')}
+              <Button icon={<EditOutlined />} color="primary" variant="filled" type="link">
+                {t('utils.edit')}
+              </Button>
             </Typography.Link>
             <Popconfirm
               title={t('utils.delete')}
@@ -413,9 +426,16 @@ const AllLocationTable: React.FC<{
               okText={t('utils.yes')}
               cancelText={t('utils.no')}
             >
-              <DeleteTwoTone twoToneColor="#f30303" />
+              <Button
+                icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                color="danger"
+                variant="filled"
+                type="link"
+              >
+                {t('utils.delete')}
+              </Button>
             </Popconfirm>
-          </div>
+          </Flex>
         )
       }
     }
@@ -456,7 +476,8 @@ const AllLocationTable: React.FC<{
             onClick={() => deleteMultiItem()}
             loading={deleteMultiLocationMutation.isLoading}
             disabled={selectedRowKeys.length === 0}
-            danger
+            color="danger"
+            variant="filled"
           >
             {t('utils.delete')}
           </Button>

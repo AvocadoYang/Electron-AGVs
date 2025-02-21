@@ -1,6 +1,6 @@
 /* eslint-disable no-void */
 import { FC } from 'react'
-import { Popconfirm, Skeleton, Table, Tooltip, message } from 'antd'
+import { Button, Flex, Popconfirm, Skeleton, Table, Tooltip, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { useMutation } from '@tanstack/react-query'
@@ -8,6 +8,13 @@ import useBLCS from '@renderer/api/useBeforeleftChargeStation'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
+import {
+  CloseCircleOutlined,
+  DeleteTwoTone,
+  EditOutlined,
+  PlayCircleOutlined,
+  PlusOutlined
+} from '@ant-design/icons'
 
 interface DataType {
   id: string
@@ -135,39 +142,39 @@ const BeforeLeftChargeStationTable: FC = () => {
       render: (_v: unknown, record: DataType) => {
         return (
           <>
-            {record.active ? (
-              <>
-                <Tooltip placement="right" title="停止">
-                  <Svg
-                    onClick={() => handleActive(false, record.id)}
-                    fill="#ff7b5a"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,9H15V15H9" />
-                  </Svg>
-                </Tooltip>
-              </>
-            ) : (
-              <>
-                <Tooltip placement="right" title="啟動">
-                  <Svg
-                    onClick={() => handleActive(true, record.id)}
-                    fill="#01c138"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                  </Svg>
-                </Tooltip>
-              </>
-            )}
-
-            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-              <Svg fill="#ff3838" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path d="M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z" />
-              </Svg>
-            </Popconfirm>
+            <Flex gap="small">
+              {record.active ? (
+                <Button
+                  onClick={() => handleActive(false, record.id)}
+                  icon={<CloseCircleOutlined />}
+                  color="default"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.inactive')}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleActive(true, record.id)}
+                  icon={<PlayCircleOutlined />}
+                  color="primary"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.active')}
+                </Button>
+              )}
+              <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+                <Button
+                  icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                  color="danger"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.delete')}
+                </Button>
+              </Popconfirm>
+            </Flex>
           </>
         )
       }

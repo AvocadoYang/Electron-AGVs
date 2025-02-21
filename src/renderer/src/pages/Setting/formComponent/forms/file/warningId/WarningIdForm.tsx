@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Form, FormProps, Input, InputNumber, message, Radio, Select } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-
+import { PlusOutlined } from '@ant-design/icons'
 interface FieldType {
   id: number
   is_open_buzzer: boolean
@@ -96,7 +96,14 @@ const WarningIdForm: FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={addMutation.isLoading}>
+          <Button
+            icon={<PlusOutlined />}
+            color="primary"
+            variant="filled"
+            type="primary"
+            htmlType="submit"
+            loading={addMutation.isLoading}
+          >
             {t('utils.submit')}
           </Button>
         </Form.Item>

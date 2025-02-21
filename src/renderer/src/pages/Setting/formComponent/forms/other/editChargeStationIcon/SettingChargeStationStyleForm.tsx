@@ -188,8 +188,10 @@ const SettingChargeStationStyleForm: FC = () => {
           <Col span={24}>
             {' '}
             <BtnWrapper>
-              <Button onClick={() => setIsEditStation(false)}>{t('utils.cancel')}</Button>
-              <Button onClick={() => saveStyle()} type="primary">
+              <Button color="default" variant="filled" onClick={() => setIsEditStation(false)}>
+                {t('utils.cancel')}
+              </Button>
+              <Button color="primary" variant="filled" onClick={() => saveStyle()} type="primary">
                 {t('utils.save')}
               </Button>
               <Button

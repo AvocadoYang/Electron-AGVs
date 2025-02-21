@@ -17,6 +17,7 @@ import {
   EditShelfPanelSwitch,
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
+  isShowEditBackup,
   isShowEditBeforeLeftChargeStationMission,
   isShowEditChargeMission,
   isShowEditChargeStationPosition,
@@ -49,6 +50,7 @@ import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topi
 import { EditTagPanel } from '../formComponent/forms/other/editTag'
 import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon'
 import { EditWarningListPanel } from '../formComponent/forms/file/warningId'
+import { BackupPanel } from '../formComponent/forms/file/backup'
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -286,10 +288,22 @@ const SortableWrap: FC<{
               </Card>
             )
           case 'warning_id':
-            // 6-2 顯示編輯標籤
+            // 7-1 顯示編輯warning id
             return (
               <Card style={styles} ref={setNodeRef}>
                 <EditWarningListPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            )
+
+          case 'backup_file':
+            // 7-2 顯示編輯back up
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <BackupPanel
                   sortableId={sortableId}
                   attributes={attributes}
                   listeners={listeners}
@@ -331,6 +345,7 @@ const ToolComponents: FC<{
   const openTagPanel = useAtomValue(isShowEditMissionTag)
   const openChargeStylePanel = useAtomValue(isShowEditChargeStationPosition)
   const openWarningPanel = useAtomValue(isShowEditWarningId)
+  const openBackupPanel = useAtomValue(isShowEditBackup)
 
   return dataList.map((form) => {
     const { key: formKey } = form
@@ -438,7 +453,9 @@ const ToolComponents: FC<{
     if (formKey === 'warning_id' && openWarningPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
-
+    if (formKey === 'backup_file' && openBackupPanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+    }
     return []
   })
 }

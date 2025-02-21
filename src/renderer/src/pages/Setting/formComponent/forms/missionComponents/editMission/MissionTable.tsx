@@ -1,9 +1,15 @@
-import { CaretRightOutlined, ControlTwoTone, DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
+import {
+  CaretRightOutlined,
+  ControlTwoTone,
+  DeleteTwoTone,
+  EditOutlined,
+  EditTwoTone
+} from '@ant-design/icons'
 import client from '@renderer/api/axiosClient'
 import { MTType } from '@renderer/api/useMissionTitle'
 import { Err } from '@renderer/utils/responseErr'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Col, message, Popconfirm, Row, Table, Tag } from 'antd'
+import { Button, Col, Flex, message, Popconfirm, Row, Table, Tag } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -120,30 +126,36 @@ const MissionTable: FC<{
       render: (_, record) => {
         return (
           <>
-            <Row gutter={16}>
-              <Col className="gutter-row" span={6}>
-                <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                  <DeleteTwoTone twoToneColor="#a61d24" />
-                </Popconfirm>
-              </Col>
-              <Col className="gutter-row" span={6}>
-                <EditTwoTone twoToneColor="#33bcb7" onClick={() => showModal(record.id)} />
-              </Col>
-              <Col className="gutter-row" span={6}>
-                <ControlTwoTone
-                  twoToneColor="#5273e0"
-                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
-                  onClick={() => handleClick(record)}
-                />
-              </Col>
-              <Col className="gutter-row" span={6}>
-                {selectedMissionKey === record.id ? (
-                  <CaretRightOutlined style={{ color: 'red' }} />
-                ) : (
-                  []
-                )}
-              </Col>
-            </Row>
+            <Flex gap="small">
+              <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+                <Button
+                  icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                  color="danger"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.delete')}
+                </Button>
+              </Popconfirm>
+
+              <Button
+                onClick={() => showModal(record.id)}
+                color="primary"
+                variant="filled"
+                icon={<EditOutlined />}
+              >
+                {t('utils.edit')}
+              </Button>
+
+              <Button
+                onClick={() => handleClick(record)}
+                color="purple"
+                variant="filled"
+                icon={<ControlTwoTone twoToneColor="#5273e0" />}
+              >
+                {t('utils.edit')}
+              </Button>
+            </Flex>
           </>
         )
       }

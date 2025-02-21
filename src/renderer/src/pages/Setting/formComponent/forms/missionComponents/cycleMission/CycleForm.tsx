@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Button, Form, message, Select } from 'antd'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PlusOutlined } from '@ant-design/icons'
 
 const CycleForm: FC = () => {
   const [messageApi, contextHolder] = message.useMessage()
@@ -67,7 +68,7 @@ const CycleForm: FC = () => {
         <Select showSearch placeholder="Select a mission ok" options={AmrOption} />
       </Form.Item>
       <Form.Item>
-        <Button onClick={() => submit()} type="primary">
+        <Button icon={<PlusOutlined />} onClick={() => submit()} color="primary" variant="filled">
           {t('utils.submit')}
         </Button>
       </Form.Item>

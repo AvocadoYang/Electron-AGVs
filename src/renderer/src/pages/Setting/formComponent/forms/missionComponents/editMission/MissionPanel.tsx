@@ -4,7 +4,7 @@ import { FC, useState, useMemo } from 'react'
 import { nanoid } from 'nanoid'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { ReloadOutlined } from '@ant-design/icons'
+import { PlusOutlined, ReloadOutlined } from '@ant-design/icons'
 import useAMRsample from '@renderer/api/useAMRsample'
 import useCategory from '@renderer/api/useCategory'
 import useAllMissionTitles, { MTType } from '@renderer/api/useMissionTitle'
@@ -108,7 +108,13 @@ const EditMissionPanel: FC<{
           >
             <Row gutter={12}>
               <Col span={8}>
-                <Button onClick={createMissionBtn} type="primary" style={{ marginBottom: 12 }}>
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={createMissionBtn}
+                  color="primary"
+                  variant="filled"
+                  style={{ marginBottom: 12 }}
+                >
                   {t('mission.add_mission.create_mission')}
                 </Button>
               </Col>

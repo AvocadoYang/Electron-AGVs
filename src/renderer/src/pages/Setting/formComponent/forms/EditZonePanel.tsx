@@ -14,10 +14,11 @@ import {
   Space,
   Tag
 } from 'antd'
+import { SaveOutlined } from '@ant-design/icons'
 import FormHr from '../../utils/FormHr'
 import { initialZoneValue } from './formInitValue'
 import { openNotificationWithIcon } from '../../utils/notification'
-import { LocationType, ZoneType } from '@renderer/utils/jotai'
+import { ZoneType } from '@renderer/utils/jotai'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
@@ -48,7 +49,7 @@ type Save_Zone = {
 }
 
 const tagRender: TagRender = (props) => {
-  const { label, value, closable, onClose } = props
+  const { label, closable, onClose } = props
   const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
     event.preventDefault()
     event.stopPropagation()
@@ -221,7 +222,7 @@ const EditZonePanel: React.FC<{
             <ColorPicker showText />
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button onClick={save} type="primary">
+            <Button icon={<SaveOutlined />} onClick={save} color="primary" variant="filled">
               {t('edit_location_panel.save')}
             </Button>
           </Form.Item>

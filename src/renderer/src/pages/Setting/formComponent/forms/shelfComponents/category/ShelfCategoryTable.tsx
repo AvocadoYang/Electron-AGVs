@@ -1,8 +1,8 @@
-import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
+import { DeleteOutlined, DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons'
 import client from '@renderer/api/axiosClient'
 import useShelfCategory, { ShelfCategoryWithoutList } from '@renderer/api/useShelfCategory'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Row, Col, Table, Popconfirm, Card, Button } from 'antd'
+import { Row, Col, Table, Popconfirm, Button, Flex } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -90,24 +90,32 @@ const ShelfCategoryTable: FC<{
     {
       title: '',
       dataIndex: '',
-      width: 150,
       render: (_v, record) => {
         return (
-          <>
-            <Row gutter={16}>
-              <Col className="gutter-row" span={12}>
-                <Popconfirm
-                  title={t('edit_shelf_category.delete_warning')}
-                  onConfirm={() => handleDelete(record.id)}
-                >
-                  <DeleteTwoTone twoToneColor="#a61d24" />
-                </Popconfirm>
-              </Col>
-              <Col className="gutter-row" span={12}>
-                <EditTwoTone twoToneColor="#33bcb7" onClick={() => handleEdit(record.id)} />
-              </Col>
-            </Row>
-          </>
+          <Flex gap="small">
+            <Popconfirm
+              title={t('edit_shelf_category.delete_warning')}
+              onConfirm={() => handleDelete(record.id)}
+            >
+              <Button
+                icon={<DeleteOutlined color="#ff0707" />}
+                color="danger"
+                variant="filled"
+                type="link"
+              >
+                {t('utils.delete')}
+              </Button>
+            </Popconfirm>
+
+            <Button
+              color="primary"
+              variant="filled"
+              onClick={() => handleEdit(record.id)}
+              icon={<EditTwoTone twoToneColor="#33bcb7" />}
+            >
+              {t('utils.edit')}
+            </Button>
+          </Flex>
         )
       }
     }
@@ -116,7 +124,14 @@ const ShelfCategoryTable: FC<{
   if (isLoading) return []
   return (
     <>
-      <Button onClick={addHandler} type="primary" style={{ marginBottom: 16 }}>
+      <Button
+        icon={<PlusOutlined />}
+        color="primary"
+        variant="filled"
+        onClick={addHandler}
+        type="primary"
+        style={{ marginBottom: 16 }}
+      >
         {t('edit_shelf_category.add_shelf')}
       </Button>
       <Table

@@ -2,13 +2,14 @@
 import React, { FC, useState } from 'react'
 import {
   DeleteTwoTone,
+  EditOutlined,
   EditTwoTone,
   EyeInvisibleOutlined,
   EyeOutlined,
   ImportOutlined,
   MenuOutlined
 } from '@ant-design/icons'
-import { Form, Popconfirm, Table, Tooltip, message } from 'antd'
+import { Button, Flex, Form, Popconfirm, Table, Tooltip, message } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import type { DragEndEvent } from '@dnd-kit/core'
 import { DndContext } from '@dnd-kit/core'
@@ -398,37 +399,65 @@ const TaskTable: FC<{
       width: 150,
       render: (_v, record) => {
         return (
-          <>
-            <ToolBox>
-              <Popconfirm title="Sure to delete?" onConfirm={() => deleteTask(record.id)}>
-                <Tooltip placement="left" title={t('utils.delete')}>
-                  <DeleteTwoTone twoToneColor="#a61d24" />
-                </Tooltip>
-              </Popconfirm>
-              <Tooltip placement="right" title={t('utils.edit')}>
-                <EditTwoTone twoToneColor="#33bcb7" onClick={() => showModal(record.id)} />
-              </Tooltip>
-
-              <Tooltip placement="left" title={t('mission.task_table.import_mission')}>
-                <ImportOutlined onClick={() => showImportMissionModal(record.order)} />
-              </Tooltip>
-
-              <Tooltip
-                placement="right"
-                title={
-                  record.disable
-                    ? t('mission.task_table.in_use')
-                    : t('mission.task_table.stop_this_process')
-                }
+          <Flex gap="small">
+            <Popconfirm title="Sure to delete?" onConfirm={() => deleteTask(record.id)}>
+              <Button
+                icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                color="danger"
+                variant="filled"
+                type="link"
               >
-                {record.disable ? (
-                  <EyeOutlined onClick={() => disableTask(record.id, false)} />
-                ) : (
-                  <EyeInvisibleOutlined onClick={() => disableTask(record.id, true)} />
-                )}
-              </Tooltip>
-            </ToolBox>
-          </>
+                {t('utils.delete')}
+              </Button>
+            </Popconfirm>
+
+            <Button
+              onClick={() => showModal(record.id)}
+              icon={<EditOutlined />}
+              color="primary"
+              variant="filled"
+              type="link"
+            >
+              {t('utils.edit')}
+            </Button>
+
+            <Button
+              onClick={() => showImportMissionModal(record.order)}
+              icon={<ImportOutlined />}
+              color="primary"
+              variant="filled"
+              type="link"
+            >
+              {t('mission.task_table.import_mission')}
+            </Button>
+
+            <Tooltip
+              placement="right"
+              title={
+                record.disable
+                  ? t('mission.task_table.in_use')
+                  : t('mission.task_table.stop_this_process')
+              }
+            >
+              {record.disable ? (
+                <Button
+                  onClick={() => disableTask(record.id, false)}
+                  icon={<ImportOutlined />}
+                  color="primary"
+                  variant="filled"
+                  type="link"
+                ></Button>
+              ) : (
+                <Button
+                  onClick={() => disableTask(record.id, true)}
+                  icon={<EyeInvisibleOutlined />}
+                  color="primary"
+                  variant="filled"
+                  type="link"
+                ></Button>
+              )}
+            </Tooltip>
+          </Flex>
         )
       }
     }

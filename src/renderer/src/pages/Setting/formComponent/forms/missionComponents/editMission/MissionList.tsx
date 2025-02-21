@@ -10,7 +10,7 @@ import TaskTable from './TaskTable'
 import TaskForm from './TaskForm'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
-import { LeftOutlined } from '@ant-design/icons'
+import { CopyOutlined, LeftOutlined, PlusOutlined } from '@ant-design/icons'
 
 const copy = (originKey: string) => {
   const randomId = nanoid()
@@ -120,16 +120,29 @@ const MissionList: FC<{
         <Tooltip title={t('mission.mission_list.previous')}>
           <Button
             onClick={() => setSelectedMissionKey('')}
-            type="primary"
+            color="default"
+            variant="filled"
             icon={<LeftOutlined></LeftOutlined>}
           />
         </Tooltip>
 
-        <Button style={{ marginBottom: 16 }} onClick={() => addNewTask()}>
+        <Button
+          icon={<PlusOutlined />}
+          color="primary"
+          variant="filled"
+          style={{ marginBottom: 16 }}
+          onClick={() => addNewTask()}
+        >
           {t('mission.mission_list.create_mission')}
         </Button>
 
-        <Button onClick={() => copyMission()} style={{ marginBottom: 16 }}>
+        <Button
+          icon={<CopyOutlined />}
+          color="primary"
+          variant="filled"
+          onClick={() => copyMission()}
+          style={{ marginBottom: 16 }}
+        >
           {t('mission.mission_list.copy_mission')}
         </Button>
       </Flex>

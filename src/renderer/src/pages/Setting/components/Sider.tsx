@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { useState, memo, useEffect } from 'react'
-import { Layout, Menu, Switch } from 'antd'
+import { Layout, Menu, message, Switch } from 'antd'
 import useMap from '@renderer/api/useMap'
 import { useAtom, useSetAtom } from 'jotai'
 import {
@@ -41,7 +41,10 @@ import { useTranslation } from 'react-i18next'
 import type { MenuProps } from 'antd'
 import '../setting.css'
 import { ToolBarItemType } from './siderElement'
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import client from '@renderer/api/axiosClient'
+import { ErrorResponse } from '@renderer/utils/globalType'
+import { errorHandler } from '@renderer/utils/utils'
 
 export type MenuItem = Required<MenuProps>['items'][number]
 
@@ -469,9 +472,29 @@ const Sider: React.FC<{
       getItem(t('toolbar.restart.restart'), '8-3')
     ])
   ]
+  const [messageApi, contextHolders] = message.useMessage()
+  const restartMutate = useMutation({
+    mutationFn: () => {
+      return client.post(`api/setting/restart`)
+    },
+    onSuccess: () => {
+      void messageApi.success('success')
+      queryClient.refetchQueries({ queryKey: ['map'] })
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  })
 
+  const handleRestart = (keyPath: Array<string>) => {
+    if (JSON.stringify(keyPath) !== '["8-3","8"]') return
+    restartMutate.mutate()
+
+    setTimeout(() => {
+      window.location.reload()
+    }, 6000)
+  }
   return (
     <>
+      {contextHolders}
       <AntdSider
         collapsible
         width={230}
@@ -480,6 +503,7 @@ const Sider: React.FC<{
         className="setting-sider"
       >
         <Menu
+          onClick={(e) => handleRestart(e.keyPath)}
           mode="inline"
           style={{ height: '100%', borderRight: 0 }}
           items={toolItem}

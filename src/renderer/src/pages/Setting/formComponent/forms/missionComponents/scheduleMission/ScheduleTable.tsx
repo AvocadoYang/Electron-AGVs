@@ -1,10 +1,16 @@
 /* eslint-disable no-void */
 import dayjs from 'dayjs'
 import { Dispatch, FC, SetStateAction } from 'react'
-import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons'
+import {
+  CloseCircleOutlined,
+  DeleteTwoTone,
+  EditTwoTone,
+  PlayCircleOutlined,
+  PlusOutlined
+} from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import styled from 'styled-components'
-import { Button, Col, FormInstance, Popconfirm, Row, Table, Tooltip, message } from 'antd'
+import { Button, Col, Flex, FormInstance, Popconfirm, Row, Table, Tooltip, message } from 'antd'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 import client from '@renderer/api/axiosClient'
@@ -203,50 +209,46 @@ const ScheduleTable: FC<{
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       render(_v: unknown, record: DataType) {
         return (
-          <>
+          <Flex gap="small">
             {record.active ? (
-              <>
-                <Tooltip placement="right" title={t('mission.schedule_mission.stale')}>
-                  <Svg
-                    onClick={() => handleActive(false, record.id)}
-                    fill="#ff7b5a"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,9H15V15H9" />
-                  </Svg>
-                </Tooltip>
-              </>
+              <Button
+                onClick={() => handleActive(false, record.id)}
+                icon={<CloseCircleOutlined />}
+                color="default"
+                variant="filled"
+                type="link"
+              >
+                {' '}
+                {t('utils.inactive')}
+              </Button>
             ) : (
               <>
-                <Tooltip placement="right" title={t('mission.schedule_mission.executing')}>
-                  <Svg
-                    onClick={() => handleActive(true, record.id)}
-                    fill="#01c138"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M10,16.5V7.5L16,12M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                  </Svg>
-                </Tooltip>
+                <Button
+                  onClick={() => handleActive(true, record.id)}
+                  icon={<PlayCircleOutlined />}
+                  color="primary"
+                  variant="filled"
+                  type="link"
+                >
+                  {t('utils.active')}
+                </Button>
               </>
             )}
 
+            <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+              <Button color="danger" variant="filled">
+                {t('utils.delete')}
+              </Button>
+            </Popconfirm>
+
             <Row gutter={16}>
-              <Col className="gutter-row" span={12}>
-                <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-                  <Tooltip placement="right" title={t('utils.delete')}>
-                    <DeleteTwoTone twoToneColor="#a61d24" />
-                  </Tooltip>
-                </Popconfirm>
-              </Col>
               <Col className="gutter-row" span={12}>
                 <Tooltip placement="right" title={t('utils.edit')}>
                   <EditTwoTone twoToneColor="#33bcb7" onClick={() => handleEdit(record.id)} />
                 </Tooltip>
               </Col>
             </Row>
-          </>
+          </Flex>
         )
       }
     }
@@ -255,7 +257,9 @@ const ScheduleTable: FC<{
   return (
     <Wrapper>
       {contextHolder}
-      <Button onClick={() => handleAdd()}>{t('utils.add')}</Button>
+      <Button icon={<PlusOutlined />} color="primary" variant="filled" onClick={() => handleAdd()}>
+        {t('utils.add')}
+      </Button>
       <Table rowKey={() => nanoid()} columns={columns} dataSource={schedule as DataType[]} />
     </Wrapper>
   )

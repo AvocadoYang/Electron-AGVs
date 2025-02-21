@@ -31,7 +31,7 @@
     "@react-three/drei": "^9.114.3",
     "@react-three/fiber": "^8.17.10",
     "@tanstack/react-query": "4",
-    "antd": "^5.22.6",
+    "antd": "^5.24.1",
     "axios": "^1.7.7",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",

@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Form, Select, message } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PlusOutlined } from '@ant-design/icons'
 
 type DataType = { amrId: string[]; missionId: string }
 
@@ -63,7 +64,7 @@ const BeforeLeftChargeStationForm: FC = () => {
         </Form.Item>
 
         <Form.Item label={null}>
-          <Button type="primary" htmlType="submit">
+          <Button icon={<PlusOutlined />} color="primary" variant="filled" htmlType="submit">
             {t('utils.add')}
           </Button>
         </Form.Item>

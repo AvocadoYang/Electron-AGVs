@@ -15,7 +15,7 @@ import {
   Switch
 } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { borderColor } from '../../utils/utils'
+import { SaveOutlined } from '@ant-design/icons'
 import { memo, useState } from 'react'
 import { initialRoadValue } from './formInitValue'
 import { ErrorResponse } from '@renderer/utils/globalType'
@@ -203,7 +203,12 @@ const EditRoadPanel: React.FC<{
           </Space>
 
           <Form.Item style={{ textAlign: 'center' }}>
-            <Button onClick={() => saveRoad()} type="primary">
+            <Button
+              icon={<SaveOutlined />}
+              onClick={() => saveRoad()}
+              color="primary"
+              variant="filled"
+            >
               {t('edit_road_panel.add')}
             </Button>
           </Form.Item>

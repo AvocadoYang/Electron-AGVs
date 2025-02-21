@@ -25,7 +25,12 @@ const ShelfPanel: React.FC<{
       <FormHr sortableId={sortableId}></FormHr>
 
       <Flex vertical align="start" gap="middle">
-        <Button onClick={() => setOpenDrawer(true)} disabled={selectedRowKeys.length === 0}>
+        <Button
+          color="primary"
+          variant="filled"
+          onClick={() => setOpenDrawer(true)}
+          disabled={selectedRowKeys.length === 0}
+        >
           {t('utils.edit')}
         </Button>
 

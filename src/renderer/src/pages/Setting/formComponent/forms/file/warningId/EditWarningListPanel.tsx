@@ -7,7 +7,7 @@ import WarningIdGenreTable from './WarningIdGenreTable'
 import FormHr from '@renderer/pages/Setting/utils/FormHr'
 import WarningIdGenreForm from './WarningIdGenreForm'
 import WarningListTable from './WarningListTable'
-
+import { DiffOutlined } from '@ant-design/icons'
 const AlignBtn = styled.div`
   position: relative;
   bottom: 130px;
@@ -45,7 +45,9 @@ const EditWarningListPanel: FC<{
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <WarningIdForm />
           <AlignBtn>
-            <Button onClick={showModal}>{t('file.warning_list.add_new_genre')}</Button>
+            <Button icon={<DiffOutlined />} color="primary" variant="filled" onClick={showModal}>
+              {t('file.warning_list.add_new_genre')}
+            </Button>
           </AlignBtn>
 
           <WarningListTable />

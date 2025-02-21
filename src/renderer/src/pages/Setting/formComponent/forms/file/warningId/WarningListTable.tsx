@@ -4,6 +4,8 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 import {
+  Button,
+  Flex,
   Form,
   Input,
   InputNumber,
@@ -11,27 +13,17 @@ import {
   Radio,
   Select,
   Table,
-  Tooltip,
   Typography,
   message
 } from 'antd'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { CloseOutlined, DeleteTwoTone, EditOutlined, SaveOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
-import styled from 'styled-components'
 import useWarningGenre from '@renderer/api/useWarningGenre'
 import TextArea from 'antd/es/input/TextArea'
 import useWarningTable from '@renderer/api/useWarningTable'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
-
-const BtnWrapper = styled.div`
-  display: flex;
-`
-
-const Btn = styled.div`
-  width: 66px;
-`
 
 interface WarningRecord {
   id: number
@@ -278,34 +270,57 @@ const WarningListTable: FC = () => {
         const editable = isEditing(record)
 
         return editable ? (
-          <BtnWrapper>
-            <Typography.Link onClick={() => save(record.id)} style={{ marginRight: 8 }}>
-              <Btn>{t('utils.save')}</Btn>
+          <Flex gap="small">
+            <Typography.Link
+              onClick={() => {
+                save(record.id)
+              }}
+              style={{ marginRight: 8 }}
+            >
+              <Button icon={<SaveOutlined />} color="primary" variant="filled" type="link">
+                {t('utils.save')}
+              </Button>
             </Typography.Link>
-            <Typography.Link onClick={() => cancel()} style={{ marginRight: 8 }}>
-              <Btn>{t('utils.cancel')}</Btn>
+            <Typography.Link
+              onClick={() => {
+                cancel()
+              }}
+              style={{ marginRight: 8 }}
+            >
+              <Button icon={<CloseOutlined />} color="danger" variant="filled" type="link">
+                {t('utils.cancel')}
+              </Button>
             </Typography.Link>
-          </BtnWrapper>
+          </Flex>
         ) : (
-          <BtnWrapper>
-            <Btn>
-              <Tooltip placement="right" title={t('utils.edit')} key={nanoid()}>
-                <EditOutlined onClick={() => edit(record)} />
-              </Tooltip>
-            </Btn>
-
-            <Btn>
-              <Popconfirm
-                color="#ff1c1c"
-                title="Sure to delete?"
-                onConfirm={() => handleDelete(record)}
+          <Flex gap="small">
+            <Typography.Link
+              disabled={editingKey !== null}
+              onClick={() => {
+                edit(record)
+              }}
+            >
+              <Button icon={<EditOutlined />} color="primary" variant="filled" type="link">
+                {t('utils.edit')}
+              </Button>
+            </Typography.Link>
+            <Popconfirm
+              title={t('utils.delete')}
+              onConfirm={() => handleDelete(record)}
+              onCancel={cancel}
+              okText={t('utils.yes')}
+              cancelText={t('utils.no')}
+            >
+              <Button
+                icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                color="danger"
+                variant="filled"
+                type="link"
               >
-                <Tooltip placement="right" title={t('utils.delete')} color="red" key={nanoid()}>
-                  <DeleteOutlined twoToneColor="#eb2f2f" />
-                </Tooltip>
-              </Popconfirm>
-            </Btn>
-          </BtnWrapper>
+                {t('utils.delete')}
+              </Button>
+            </Popconfirm>
+          </Flex>
         )
       }
     }

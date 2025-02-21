@@ -9,6 +9,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { array, object, string } from 'yup'
+import { PlusOutlined } from '@ant-design/icons'
 
 const Wrapper = styled.div`
   background: white;
@@ -107,7 +108,9 @@ const IdleMissionForm: FC = () => {
         </Form.Item>
       </Form>
 
-      <Button onClick={() => submit()}>{t('utils.add')}</Button>
+      <Button icon={<PlusOutlined />} color="primary" variant="filled" onClick={() => submit()}>
+        {t('utils.add')}
+      </Button>
     </Wrapper>
   )
 }
