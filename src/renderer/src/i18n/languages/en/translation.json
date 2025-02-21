@@ -69,7 +69,8 @@
       "zones": {
         "zones": "Zones",
         "edit_zone": "Edit Zones",
-        "show_zone_list": "Show Zone List"
+        "show_zone_list": "Show Zone List",
+        "show_zone_table": "Show Zone Table"
       }
     },
     "shelve": {
@@ -111,6 +112,7 @@
     "locationPanel": "Edit Location",
     "roadPanel": "Edit Road",
     "zonePanel": "Edit Zone",
+    "zoneTable": "Zone Table",
     "locationList": "Location List"
   },
 
@@ -190,12 +192,30 @@
     "category": "Category",
     "color": "Display color",
     "name": "Zone Name",
+    "tag_setting": "Zone setting",
+    "necessary": "Necessary",
+    "highest_speed": "Highest speed",
+    "hight_limit": "Hight limit",
+    "forbidden_vehicle": "Forbidden vehicle",
+    "all_vehicle_forbidden": "All vehicle forbidden",
+    "not_vehicle_forbidden": "Not set",
+    "hint": "Tag setting isn't yet completed !",
+    "edit_zone": "Edit Zones",
     "waring": {
+      "tag_not_yet_setting": "The tag setting is still not setting ",
       "name_empty_error": "Name field cannot be empty",
       "name_duplicated_error": "Zone name already exists",
       "color_error": "Please choose a color for zone",
       "invalid_frame": "Invalid selection"
     }
+  },
+
+  "zone_table_form": {
+    "zone_name": "Zone name",
+    "start_point": "Start point",
+    "end_point": "End point",
+    "zone_attr": "Zone label",
+    "zone_color": "Zone color"
   },
 
   "shelf": {

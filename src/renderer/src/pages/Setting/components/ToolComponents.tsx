@@ -5,7 +5,8 @@ import {
   EditRoadPanel,
   EditZonePanel,
   QuickEditLocationPanel,
-  RoadList
+  RoadList,
+  ZoneTable
 } from '../formComponent/forms'
 import { Card, FormInstance } from 'antd'
 import {
@@ -29,7 +30,8 @@ import {
   isShowEditTopicMission,
   isShowEditWarningId,
   QuickEditLocationPanelSwitch,
-  RoadListTableSwitch
+  RoadListTableSwitch,
+  showZonesTableSwitch
 } from '@renderer/utils/siderGloble'
 import { useAtomValue } from 'jotai'
 import { ToolBarItemType, ToolBarType } from './siderElement'
@@ -57,7 +59,8 @@ const SortableWrap: FC<{
   locationPanelForm?: FormInstance<unknown>
   roadPanelForm?: FormInstance<unknown>
   zonePanelForm?: FormInstance<unknown>
-}> = ({ sortableId, locationPanelForm, roadPanelForm, zonePanelForm }) => {
+  tagSettingForm?: FormInstance<unknown>
+}> = ({ sortableId, locationPanelForm, roadPanelForm, zonePanelForm, tagSettingForm }) => {
   const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
     transition: {
@@ -73,7 +76,7 @@ const SortableWrap: FC<{
           // 1-1 編輯點位的彈跳視窗
           case 'location_panel':
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <FormCloseBtn sortableId={sortableId} />
                 <EditLocationPanel
                   sortableId={sortableId}
@@ -86,7 +89,7 @@ const SortableWrap: FC<{
           // 1-2 快速編輯點位的彈跳視窗
           case 'location_list':
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <FormCloseBtn sortableId={sortableId} />
                 <QuickEditLocationPanel
                   sortableId={sortableId}
@@ -99,7 +102,7 @@ const SortableWrap: FC<{
           case 'quick_location_panel':
             // 1-3 顯示地點列表
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <FormCloseBtn sortableId={sortableId} />
                 <AllLocationTable
                   sortableId={sortableId}
@@ -111,7 +114,7 @@ const SortableWrap: FC<{
           case 'road_panel':
             // 2-1 編輯路徑
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <FormCloseBtn sortableId={sortableId} />
                 <EditRoadPanel
                   roadPanelForm={roadPanelForm as FormInstance<unknown>}
@@ -124,7 +127,7 @@ const SortableWrap: FC<{
           case 'show_roads_table':
             // 2-2 顯示路徑列表
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <FormCloseBtn sortableId={sortableId} />
                 <RoadList sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
@@ -132,28 +135,41 @@ const SortableWrap: FC<{
           case 'edit_zone':
             // 3-1 編輯區域
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <FormCloseBtn sortableId={sortableId} />
                 <EditZonePanel
                   zonePanelForm={zonePanelForm as FormInstance<unknown>}
+                  tagSettingForm={tagSettingForm as FormInstance<unknown>}
                   sortableId={sortableId}
                   attributes={attributes}
                   listeners={listeners}
                 />
               </Card>
             )
-          case 'edit_shelve':
-            // 3-1 顯示編輯貨架
+          case 'show_zone_table':
+            // 3-3 顯示區域表
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <FormCloseBtn sortableId={sortableId} />
+                <ZoneTable
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                ></ZoneTable>
+              </Card>
+            )
+          case 'edit_shelve':
+            // 4-1 顯示編輯貨架
+            return (
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <FormCloseBtn sortableId={sortableId} />
                 <ShelfPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             )
           case 'edit_shelve_type':
-            // 3-2 顯示編輯類型
+            // 4-2 顯示編輯類型
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <ShelfCategoryPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -162,16 +178,16 @@ const SortableWrap: FC<{
               </Card>
             )
           case 'edit_yaw':
-            // 3-3 顯示編輯類型
+            // 4-3 顯示編輯類型
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <YawPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             )
           case 'edit_pallet':
-            // 3-4 顯示編輯類型
+            // 4-4 顯示編輯類型
             return (
-              <Card style={styles} ref={setNodeRef}>
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <PalletTable
                   sortableId={sortableId}
                   attributes={attributes}
@@ -323,14 +339,16 @@ const ToolComponents: FC<{
   locationPanelForm: FormInstance<unknown>
   roadPanelForm: FormInstance<unknown>
   zonePanelForm: FormInstance<unknown>
+  tagSettingForm: FormInstance<unknown>
   dataList: ToolBarType
-}> = ({ locationPanelForm, dataList, roadPanelForm, zonePanelForm }) => {
+}> = ({ locationPanelForm, dataList, roadPanelForm, zonePanelForm, tagSettingForm }) => {
   const showEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
   const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch)
   const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch)
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
   const showRoadList = useAtomValue(RoadListTableSwitch)
   const openZonePanel = useAtomValue(EditZoneSwitch)
+  const openZoneTable = useAtomValue(showZonesTableSwitch)
   const openEditShelf = useAtomValue(EditShelfPanelSwitch)
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
@@ -403,8 +421,12 @@ const ToolComponents: FC<{
           sortableId={formKey}
           key={formKey}
           zonePanelForm={zonePanelForm}
+          tagSettingForm={tagSettingForm}
         ></SortableWrap>
       )
+    }
+    if (formKey === 'show_zone_table' && openZoneTable) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
     }
     if (formKey === 'edit_shelve' && openEditShelf) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>

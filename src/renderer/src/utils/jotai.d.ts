@@ -17,6 +17,13 @@ export type ZoneType = {
   endY: number
 }
 
+export type TagSettingType = {
+  speed_limit?: number
+  forbidden?: string[]
+  all_forbidden?: boolean
+  hight_limit?: number
+}
+
 export type RoadListType = {
   roadId: string
   validYawList: string | number[]

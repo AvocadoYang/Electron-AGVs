@@ -12,6 +12,7 @@ export const formList = [
   // === zone ===
   { key: 'edit_zone' },
   { key: 'show_zone_list' },
+  { key: 'show_zone_table' },
 
   // ===================
   // === shelf ===

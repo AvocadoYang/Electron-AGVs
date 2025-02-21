@@ -36,3 +36,12 @@ export const borderColor = (id: string) => {
   const color = `#${hsl.hex([h, s, l])}`
   return color
 }
+
+export const tagColor = (id: string) => {
+  const seed = parseInt(`0x${MD5(id).toString()}`, 16)
+  const h = seed % 380
+  const s = (seed % 60) + 70
+  const l = (seed % 60) + 30
+  const color = `#${hsl.hex([h, s, l])}`
+  return color
+}

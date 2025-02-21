@@ -11,7 +11,7 @@
     "opacity": "淡化",
     "show": "顯示",
     "point_type": "地點類型",
-    "save": "存檔",
+    "save": "儲存",
     "delete": "刪除",
     "edit": "編輯",
     "success": "成功",
@@ -68,7 +68,8 @@
       "zones": {
         "zones": "區域",
         "edit_zone": "編輯區域",
-        "show_zone_list": "顯示區域"
+        "show_zone_list": "顯示區域",
+        "show_zone_table": "顯示區域表"
       }
     },
     "shelve": {
@@ -110,6 +111,7 @@
     "locationPanel": "編輯點位",
     "roadPanel": "編輯路徑",
     "zonePanel": "編輯區域",
+    "zoneTable": "區域表",
     "locationList": "點位表"
   },
 
@@ -137,7 +139,6 @@
     "wait_side": "待命區",
     "shelve": "貨區",
     "save": "儲存",
-
     "save_pose_notify": {
       "empty_value": "X/Y 為必填值",
       "fill_in_value": "請填入 X/Y 值",
@@ -182,12 +183,30 @@
     "category": "區域類型",
     "color": "顯示顏色",
     "name": "區域名稱",
+    "necessary": "必填",
+    "tag_setting": "參數設定",
+    "highest_speed": "最高速限",
+    "hight_limit": "限制高度",
+    "forbidden_vehicle": "指定限制進入車輛",
+    "all_vehicle_forbidden": "禁止所有車輛通行",
+    "not_vehicle_forbidden": "不設定限制車輛",
+    "edit_zone": "編輯區域",
+    "hint": "參數數設定尚未完成！",
     "waring": {
+      "tag_not_yet_setting": "尚未設定完成區域參數設定",
       "name_empty_error": "區域名稱不可為空",
       "name_duplicated_error": "已存在相同名稱區域",
       "color_error": "請為區域選擇顯示色",
       "invalid_frame": "無效的點位框選"
     }
+  },
+
+  "zone_table_form": {
+    "zone_name": "區域名稱",
+    "start_point": "起點",
+    "end_point": "終點",
+    "zone_attr": "區域標籤",
+    "zone_color": "區域顏色"
   },
 
   "all_location_list_form": {
@@ -366,8 +385,8 @@
 
     "charge_mission": {
       "charge_mission": "充電任務",
-      "executing": "運行中",
-      "stale": "閒置中"
+      "executing": "開始",
+      "stale": "停止"
     },
 
     "cycle_mission": {
@@ -377,8 +396,8 @@
       "mission": "任務",
       "car": "車輛",
       "status": "狀態",
-      "executing": "運行中",
-      "stale": "閒置中"
+      "executing": "開始",
+      "stale": "停止"
     },
     "before_left_charge_station_mission": {
       "before_left_charge_station_mission": "離開充電站強制任務",
@@ -386,8 +405,8 @@
       "car": "車輛",
       "mission": "任務",
       "status": "狀態",
-      "executing": "運行中",
-      "stale": "閒置中"
+      "executing": "開始",
+      "stale": "停止"
     },
 
     "schedule_mission": {
@@ -397,8 +416,8 @@
       "week": "星期",
       "what_time": "幾點",
       "status": "狀態",
-      "executing": "運行中",
-      "stale": "閒置中"
+      "executing": "開始",
+      "stale": "停止"
     },
     "idle_mission": {
       "idle_mission": "閒置任務",
@@ -409,8 +428,8 @@
       "amr_warn": "amrId少填資",
       "min_warn": "不可少於3分鐘",
       "status": "狀態",
-      "executing": "運行中",
-      "stale": "閒置中"
+      "executing": "開始",
+      "stale": "停止"
     },
     "topic_mission": {
       "topic_mission": "Topic任務",
@@ -419,8 +438,8 @@
       "missed": "少填資料",
       "amr_warn": "少填資料",
       "status": "狀態",
-      "executing": "運行中",
-      "stale": "閒置中"
+      "executing": "開始",
+      "stale": "停止"
     }
   },
 

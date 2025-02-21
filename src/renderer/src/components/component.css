@@ -10,7 +10,7 @@
 .custom-header {
   /* background-color: rgba(240, 202, 167, 0.925); */
   background-color: white;
-  /* background-color: #ffa153; */
+  /* background-color: #fff7eb; */
   border-radius: 0 0 2px 2px;
   border-bottom: 1.5px solid gainsboro;
 }
@@ -18,7 +18,7 @@
 .custom-header > ul {
   /* background-color: rgba(241, 204, 170, 0.925); */
   background-color: white;
-  /* background-color: #ffa153; */
+  /* background-color: #fff7eb; */
 }
 
 .custom-header span {

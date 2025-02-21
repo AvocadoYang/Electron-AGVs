@@ -3,7 +3,7 @@ import { EditZoneSwitch } from '@renderer/utils/siderGloble'
 import { useAtomValue } from 'jotai'
 import { RefObject, useEffect } from 'react'
 import { fromEvent, switchMap, takeUntil, tap, EMPTY, take, merge } from 'rxjs'
-import { rvizCoord } from '@renderer/utils/utils'
+import { rvizCoord, rvizCoord2 } from '@renderer/utils/utils'
 import { MouseLocationForFrame, RectInfo } from './hook'
 import { FormInstance } from 'antd'
 
@@ -79,7 +79,7 @@ const useZoneFrame = (
                 tap((e) => {
                   const endXForDisplay = e.clientX - mapPanel.offsetLeft + mapWrap.scrollLeft
                   const endYForDisplay = e.clientY - mapPanel.offsetTop + mapWrap.scrollTop
-                  console.log('mouseup 事件，停止拖曳')
+                  // console.log('mouseup 事件，停止拖曳')
                   const [rx, ry] = rvizCoord({
                     displayX: endXForDisplay,
                     displayY: endYForDisplay,
@@ -101,7 +101,7 @@ const useZoneFrame = (
               ),
               fromEvent<MouseEvent>(mapPanel, 'mouseleave').pipe(
                 tap(() => {
-                  console.log('mouseleave 事件，停止拖曳')
+                  // console.log('mouseleave 事件，停止拖曳')
                   setIsDragging(false)
                   setRectInfo({
                     axisX: -5000,

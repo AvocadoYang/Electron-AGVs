@@ -46,6 +46,11 @@ const getMap = async () => {
         name: string().required(),
         backgroundColor: string().required(),
         category: array(string().required()).required(),
+        tagSetting: object({
+          speed_limit: number().nullable(),
+          hight_limit: number().nullable(),
+          forbidden_car: array(string()).nullable()
+        }),
         startPoint: object({
           startX: number().required(),
           startY: number().required()

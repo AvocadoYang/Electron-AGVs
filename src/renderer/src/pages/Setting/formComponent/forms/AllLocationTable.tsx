@@ -474,6 +474,7 @@ const AllLocationTable: React.FC<{
         >
           <Button
             onClick={() => deleteMultiItem()}
+            icon={<DeleteTwoTone twoToneColor="#f30303" />}
             loading={deleteMultiLocationMutation.isLoading}
             disabled={selectedRowKeys.length === 0}
             color="danger"
