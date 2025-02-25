@@ -18,6 +18,7 @@ const Setting: React.FC = () => {
   const [hasOpenTool, setHasOpenTool] = useState(false)
   const mapWrapRef = useRef(null)
   const [locationPanelForm] = Form.useForm()
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 767)
   const [roadPanelForm] = Form.useForm()
   const [zonePanelForm] = Form.useForm()
   const [tagSettingForm] = Form.useForm()
@@ -32,6 +33,14 @@ const Setting: React.FC = () => {
       return newDataList
     })
   }
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 767)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const dndContextMemo = useMemo(() => {
     return (
@@ -70,7 +79,7 @@ const Setting: React.FC = () => {
   return (
     <>
       <Layout style={{ height: '100vh', width: '100vw', overflow: 'hidden', position: 'relative' }}>
-        <Header></Header>
+        <Header isMobile={isMobile}></Header>
         <Content>
           <Layout style={{ height: '100%', width: '100%' }}>
             <Sider setHasOpenTool={setHasOpenTool} />

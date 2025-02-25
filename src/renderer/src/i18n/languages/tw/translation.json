@@ -2,14 +2,17 @@
   "utils": {
     "yes": "是",
     "no": "否",
+    "open": "開啟",
     "search": "搜尋",
     "reset": "重設",
+    "random": "不指定",
     "filter": "過濾",
     "cancel": "取消",
     "location": "地點",
     "yaw": "轉角",
     "opacity": "淡化",
     "show": "顯示",
+    "mission_is_required": "任務為必填選項",
     "point_type": "地點類型",
     "save": "儲存",
     "delete": "刪除",
@@ -326,6 +329,39 @@
     "returning": "正在退回",
     "isStretching": "正在伸出",
     "reset": "歸位"
+  },
+
+  "main": {
+    "pad_view": {
+      "sider": {
+        "alert_view": "告警提示",
+        "map_view": "觀看地圖",
+        "mission_view": "任務派發",
+        "info_view": "查看資訊"
+      }
+    },
+    "card_name": {
+      "map_2D_view": "2D 地圖",
+      "map_3D_view": "3D 地圖",
+      "quick_mission": "快速任務",
+      "auto_mission": "自動任務",
+      "new_mission": "新增任務",
+      "input_mission": "輸入任務",
+      "mission_info": "任務資訊",
+      "car_info": "車輛資訊"
+    },
+    "mission_modal": {
+      "dialog_mission": {
+        "task_priority": "任務級別",
+        "mission_type": "任務類型",
+        "priority": {
+          "TRIVIAL": "不重要",
+          "NORMAL": "普通",
+          "PIVOTAL": "優先",
+          "CRITICAL": "緊急"
+        }
+      }
+    }
   },
 
   "mission": {

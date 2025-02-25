@@ -13,7 +13,6 @@ export type CargoAreaInfo = {
 
 const getLocations = async () => {
   const { data } = await api.get<unknown>('api/test/locations')
-
   const schema = () =>
     object({
       chargingStations: array(
