@@ -55,6 +55,7 @@
   "page_view": "View",
   "page_setting": "Setting",
   "page_dashboard": "Dashboard",
+  "page_simulate": "Simulate",
   "toolbar": {
     "location": {
       "locations": "Locations",
@@ -528,5 +529,12 @@
     "load": "load",
     "offload": "offload",
     "charge": "charge"
+  },
+
+  "sim": {
+    "add_car": "Add car",
+    "start_sim": "Start simulate",
+    "stop_sim": "Stop simulate",
+    "reset_sim": "Reset simulate"
   }
 }
