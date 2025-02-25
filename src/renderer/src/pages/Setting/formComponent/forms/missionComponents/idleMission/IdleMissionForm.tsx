@@ -4,20 +4,11 @@ import useAllMissionTitles from '@renderer/api/useMissionTitle'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, Form, InputNumber, message, Select } from 'antd'
+import { Flex, Form, InputNumber, message, Select } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 import { array, object, string } from 'yup'
-import { PlusOutlined } from '@ant-design/icons'
-
-const Wrapper = styled.div`
-  background: white;
-  width: 100%;
-  max-height: 70vh;
-  overflow-y: scroll;
-  padding: 1em;
-`
+import SubmitButton from '@renderer/utils/SubmitButton'
 
 type SubmitPayload = {
   amrId: string[]
@@ -88,30 +79,70 @@ const IdleMissionForm: FC = () => {
   }
 
   return (
-    <Wrapper>
+    <Flex>
       {contextHolder}
-      <Form form={form} title="設定依照車輛回傳的id來做任務">
-        <Form.Item label={t('mission.idle_mission.car')} name="amrId">
+      <Form form={form} title="設定依照車輛回傳的id來做任務" onFinish={submit}>
+        <Form.Item
+          label={t('mission.idle_mission.car')}
+          name="amrId"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('mission.idle_mission.amr_warn')
+            }
+          ]}
+        >
           <Select mode="multiple" options={AmrOption} />
         </Form.Item>
 
-        <Form.Item label={t('mission.idle_mission.idle_min')} name="idle_min">
+        <Form.Item
+          label={t('mission.idle_mission.idle_min')}
+          name="idle_min"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
           <InputNumber min={3} />
         </Form.Item>
 
-        <Form.Item label={t('mission.idle_mission.forbidden')} name="preventLocation">
+        <Form.Item
+          label={t('mission.idle_mission.forbidden')}
+          name="preventLocation"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
           <Select mode="multiple" options={idleLocSelect} loading={isLoading} />
         </Form.Item>
 
-        <Form.Item label={t('mission.idle_mission.mission')} name="missionId">
+        <Form.Item
+          label={t('mission.idle_mission.mission')}
+          hasFeedback
+          name="missionId"
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
           <Select options={missionOptions} />
         </Form.Item>
-      </Form>
 
-      <Button icon={<PlusOutlined />} color="primary" variant="filled" onClick={() => submit()}>
-        {t('utils.add')}
-      </Button>
-    </Wrapper>
+        <Form.Item>
+          <SubmitButton form={form} isModel={false} />
+        </Form.Item>
+      </Form>
+    </Flex>
   )
 }
 

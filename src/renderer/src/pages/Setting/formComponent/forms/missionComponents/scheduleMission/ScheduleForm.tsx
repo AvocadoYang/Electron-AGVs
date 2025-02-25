@@ -10,6 +10,7 @@ import useName from '@renderer/api/useAmrName'
 import client from '@renderer/api/axiosClient'
 import { errorHandler } from '@renderer/utils/utils'
 import { ErrorResponse } from '@renderer/utils/globalType'
+import SubmitButton from '@renderer/utils/SubmitButton'
 
 interface DataType {
   id: string
@@ -110,27 +111,73 @@ const ScheduleForm: FC<{
   return (
     <>
       {contextHolder}
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleUpdate} onCancel={handleCancel}>
+      <Modal
+        title={t('mission.schedule_mission.schedule_mission')}
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={() => (
+          <>
+            <SubmitButton form={form} onOk={handleUpdate} isModel />
+          </>
+        )}
+      >
         <Form
           form={form}
           labelCol={{ span: 6 }}
           autoComplete="off"
+          name="validateOnly"
           initialValues={{
             time: dayjs('12:08', format)
           }}
         >
-          <Form.Item label={t('mission.schedule_mission.car')} name="amrId">
+          <Form.Item
+            label={t('mission.schedule_mission.car')}
+            name="amrId"
+            rules={[
+              {
+                required: true,
+                message: t('mission.schedule_mission.car_required')
+              }
+            ]}
+          >
             <Select options={AmrOption} mode="multiple" />
           </Form.Item>
-          <Form.Item label={t('mission.schedule_mission.mission')} name="missionId">
+          <Form.Item
+            label={t('mission.schedule_mission.mission')}
+            name="missionId"
+            rules={[
+              {
+                required: true,
+                message: t('mission.schedule_mission.mission_required')
+              }
+            ]}
+          >
             <Select options={missionOptions} />
           </Form.Item>
 
-          <Form.Item label={t('mission.schedule_mission.week')} name="day">
+          <Form.Item
+            label={t('mission.schedule_mission.week')}
+            name="day"
+            rules={[
+              {
+                required: true,
+                message: t('mission.schedule_mission.week_required')
+              }
+            ]}
+          >
             <Checkbox.Group options={weekOptions} />
           </Form.Item>
 
-          <Form.Item label={t('mission.schedule_mission.what_time')} name="time">
+          <Form.Item
+            label={t('mission.schedule_mission.what_time')}
+            name="time"
+            rules={[
+              {
+                required: true,
+                message: t('mission.schedule_mission.week_required')
+              }
+            ]}
+          >
             <TimePicker needConfirm={false} format={format} />
           </Form.Item>
         </Form>

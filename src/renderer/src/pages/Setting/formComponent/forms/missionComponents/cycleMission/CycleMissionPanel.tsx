@@ -21,53 +21,56 @@ const NotActive = styled.div`
 
 const ActiveLogo = styled.div`
   /* HTML: <div class="loader"></div> */
-  min-width: 65px;
-  width: 65px;
-  aspect-ratio: 1;
-  --g: radial-gradient(
-      farthest-side,
-      #0000 calc(95% - 3px),
-      #755757 calc(100% - 3px) 98%,
-      #0000 101%
-    )
-    no-repeat;
-  background: var(--g), var(--g), var(--g);
-  background-size: 30px 30px;
-  animation: l10 1.5s infinite;
+  width: 45px;
+  aspect-ratio: 0.75;
+  --c: no-repeat linear-gradient(#c30000 0 0);
+  background:
+    var(--c) 0% 50%,
+    var(--c) 50% 50%,
+    var(--c) 100% 50%;
+  animation: l7 1s infinite linear alternate;
 
-  @keyframes l10 {
+  @keyframes l7 {
     0% {
-      background-position:
-        0 0,
-        0 100%,
-        100% 100%;
+      background-size:
+        20% 50%,
+        20% 50%,
+        20% 50%;
     }
-    25% {
-      background-position:
-        100% 0,
-        0 100%,
-        100% 100%;
+    20% {
+      background-size:
+        20% 20%,
+        20% 50%,
+        20% 50%;
     }
-    50% {
-      background-position:
-        100% 0,
-        0 0,
-        100% 100%;
+    40% {
+      background-size:
+        20% 100%,
+        20% 20%,
+        20% 50%;
     }
-    75% {
-      background-position:
-        100% 0,
-        0 0,
-        0 100%;
+    60% {
+      background-size:
+        20% 50%,
+        20% 100%,
+        20% 20%;
+    }
+    80% {
+      background-size:
+        20% 50%,
+        20% 50%,
+        20% 100%;
     }
     100% {
-      background-position:
-        100% 100%,
-        0 0,
-        0 100%;
+      background-size:
+        20% 50%,
+        20% 50%,
+        20% 50%;
     }
   }
 `
+
+/* HTML: <div class="loader"></div> */
 
 const MinWid = styled.div`
   min-width: 12em;

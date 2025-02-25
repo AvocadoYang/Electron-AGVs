@@ -20,7 +20,6 @@ const EditLocationPanel: React.FC<{
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ locationPanelForm, sortableId, attributes, listeners }) => {
-  const { data: mapData } = useMap()
   const queryClient = useQueryClient()
   const [messageApi, contextHolders] = message.useMessage()
   const { t } = useTranslation()
@@ -40,11 +39,6 @@ const EditLocationPanel: React.FC<{
     const payload = locationPanelForm.getFieldsValue() as LocationType
     const isNegative = Number(payload.locationId) <= 0
 
-    const isDuplicateId =
-      mapData?.locations.some((v) => {
-        return v.locationId === payload.locationId
-      }) || false
-
     if (payload.x === undefined || payload.y === undefined) {
       openNotificationWithIcon(
         'warning',
@@ -60,15 +54,6 @@ const EditLocationPanel: React.FC<{
         'warning',
         t('edit_location_panel.save_pose_notify.format_warn'),
         t('edit_location_panel.save_pose_notify.is_a_navigate'),
-        'bottomLeft'
-      )
-      return
-    }
-    if (isDuplicateId) {
-      openNotificationWithIcon(
-        'warning',
-        t('edit_location_panel.save_pose_notify.duplicate_id'),
-        t('edit_location_panel.save_pose_notify.change_duplicate_id'),
         'bottomLeft'
       )
       return

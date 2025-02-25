@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import {
   Button,
   ColorPicker,
+  Flex,
   Form,
   Input,
   Popconfirm,
@@ -14,11 +15,18 @@ import {
   Typography,
   message
 } from 'antd'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import {
+  CloseOutlined,
+  DeleteOutlined,
+  DeleteTwoTone,
+  EditOutlined,
+  SaveOutlined
+} from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
 import styled from 'styled-components'
 import useCategory from '@renderer/api/useCategory'
 import client from '@renderer/api/axiosClient'
+import SubmitButton from '@renderer/utils/SubmitButton'
 
 const BtnWrapper = styled.div`
   display: flex;
@@ -61,6 +69,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   let inputNode
+  const { t } = useTranslation()
   switch (dataIndex) {
     case 'tagName':
       inputNode = <Input style={{ width: '150px' }} />
@@ -81,9 +90,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
           rules={[
             {
               required: true,
-              message: `Please Input !`
+              message: t('utils.required')
             }
           ]}
+          hasFeedback
         >
           {inputNode}
         </Form.Item>
@@ -221,34 +231,56 @@ const TagTable: FC = () => {
         const editable = isEditing(record)
 
         return editable ? (
-          <BtnWrapper>
-            <Typography.Link onClick={() => save(record.id)} style={{ marginRight: 8 }}>
-              <Btn>{t('utils.save')}</Btn>
+          <Flex gap="small">
+            <Typography.Link
+              onClick={() => {
+                save(record.id)
+              }}
+              style={{ marginRight: 8 }}
+            >
+              <SubmitButton isModel={false} form={form} text="save" />
             </Typography.Link>
-            <Typography.Link onClick={() => cancel()} style={{ marginRight: 8 }}>
-              <Btn>{t('utils.cancel')}</Btn>
+            <Typography.Link
+              onClick={() => {
+                cancel()
+              }}
+              style={{ marginRight: 8 }}
+            >
+              <Button icon={<CloseOutlined />} color="danger" variant="filled" type="link">
+                {t('utils.cancel')}
+              </Button>
             </Typography.Link>
-          </BtnWrapper>
+          </Flex>
         ) : (
-          <BtnWrapper>
-            <Btn>
-              <Tooltip placement="right" title={t('utils.edit')} key={nanoid()}>
-                <EditOutlined onClick={() => edit(record)} />
-              </Tooltip>
-            </Btn>
-
-            <Btn>
-              <Popconfirm
-                color="#ff1c1c"
-                title="Sure to delete?"
-                onConfirm={() => handleDelete(record)}
+          <Flex gap="small">
+            <Typography.Link
+              disabled={editingKey !== null}
+              onClick={() => {
+                edit(record)
+              }}
+            >
+              <Button icon={<EditOutlined />} color="primary" variant="filled" type="link">
+                {t('utils.edit')}
+              </Button>
+            </Typography.Link>
+            <Popconfirm
+              title={t('utils.delete')}
+              description={t('utils.delete_warn')}
+              onConfirm={() => handleDelete({ id: record.id })}
+              onCancel={cancel}
+              okText={t('utils.yes')}
+              cancelText={t('utils.no')}
+            >
+              <Button
+                icon={<DeleteTwoTone twoToneColor="#f30303" />}
+                color="danger"
+                variant="filled"
+                type="link"
               >
-                <Tooltip placement="right" title={t('utils.delete')} color="red" key={nanoid()}>
-                  <DeleteOutlined />
-                </Tooltip>
-              </Popconfirm>
-            </Btn>
-          </BtnWrapper>
+                {t('utils.delete')}
+              </Button>
+            </Popconfirm>
+          </Flex>
         )
       }
     }

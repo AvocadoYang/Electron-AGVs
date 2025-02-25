@@ -1,8 +1,8 @@
-import { DeleteTwoTone } from '@ant-design/icons'
+import { DeleteOutlined, DeleteTwoTone } from '@ant-design/icons'
 import client from '@renderer/api/axiosClient'
 import useWarningGenre from '@renderer/api/useWarningGenre'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Popconfirm, Table, TableProps, Tooltip } from 'antd'
+import { Button, Popconfirm, Table, TableProps, Tooltip } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -55,9 +55,14 @@ const WarningIdGenreTable: FC = () => {
         return (
           <>
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
-              <Tooltip placement="right" title={t('utils.delete')}>
-                <DeleteTwoTone twoToneColor="#a61d24" />
-              </Tooltip>
+              <Button
+                icon={<DeleteOutlined color="#ff0707" />}
+                color="danger"
+                variant="filled"
+                type="link"
+              >
+                {t('utils.delete')}
+              </Button>
             </Popconfirm>
           </>
         )

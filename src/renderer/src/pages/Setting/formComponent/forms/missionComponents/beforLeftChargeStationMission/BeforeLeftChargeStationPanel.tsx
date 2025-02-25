@@ -14,7 +14,7 @@ const BeforeLeftChargeStationPanel: FC<{
     <>
       <div>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
-          {t('mission.cycle_mission.cycle_mission')}
+          {t('mission.before_left_charge_station_mission.before_left_charge_station_mission')}
         </h3>
         <FormHr sortableId={sortableId} />
         <BeforeLeftChargeStationForm />

@@ -44,7 +44,12 @@ const BeforeLeftChargeStationForm: FC = () => {
   const handleAdd = () => {
     const payload = form.getFieldsValue() as DataType
 
-    if (payload.amrId.length === 0 || !payload.missionId) {
+    if (
+      !Array.isArray(payload.amrId) ||
+      payload.amrId.length === 0 ||
+      !payload.missionId ||
+      typeof payload.missionId !== 'string'
+    ) {
       void messageApi.warning(t('mission.before_left_charge_station_mission.field_required'))
       return
     }

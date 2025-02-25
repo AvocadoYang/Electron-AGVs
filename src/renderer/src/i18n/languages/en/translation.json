@@ -21,7 +21,8 @@
     "error": "Error",
     "active": "Active",
     "inactive": "Inactive",
-
+    "required": "Required",
+    "delete_warn": "Are you sure?",
     "location_property": {
       "none": "Normal",
       "charge_station": "Charge Station",
@@ -29,6 +30,14 @@
       "shelve": "Shelf",
       "wait_side": "Waiting Side"
     }
+  },
+
+  "locations": {
+    "none": "none",
+    "charge_station": "charge station",
+    "prepare_spot": "prepare location",
+    "standby": "standby",
+    "cargo": "cargo"
   },
   "test_translation": "test translation",
   "open": "Open Drawer",
@@ -258,7 +267,8 @@
     "setting": "Setting Style",
     "disabled": "Disable",
     "height": "Height",
-    "save": "save"
+    "save": "save",
+    "edit_position": "Edit Style"
   },
   "edit_shelf_category": {
     "edit_shelf_category": "Edit Shelf Category",
@@ -283,7 +293,8 @@
     "edit_pallet": "Edit Pallet",
     "edit_default_warning": "Can not edit default pallet",
     "type": "Type",
-    "color": "Color"
+    "color": "Color",
+    "name_warn": "name is required"
   },
 
   "charge": {
@@ -337,6 +348,10 @@
       "empty_warn": "can not be empty",
       "empty_car_warn": "can not be empty",
       "duplicate_warn": "name already exists, please change",
+      "edit_info": "Edit Mission Info",
+      "edit_detail": "Edit Mission Detail",
+      "name_warn": "name is required",
+      "car_warn": "car type is required",
 
       "name": "mission name",
       "create_mission": "create mission",
@@ -349,10 +364,13 @@
     "mission_list": {
       "wait_required_warn": " wait column need default value",
       "yaw_required_warn": "yaw is required",
+      "height_required_warn": "height is required",
       "edit_mission": "Edit Mission",
       "create_mission": "Create Mission",
       "copy_mission": "Copy Mission",
-      "previous": "previous page"
+      "previous": "previous page",
+      "wait_amr_warn": "if you has wait other car, please insert both wait amr and wait type",
+      "location_required_warn": "location is required"
     },
     "task_table": {
       "sort": "Order",
@@ -389,7 +407,14 @@
     "charge_mission": {
       "charge_mission": "Charge mission",
       "executing": "Execution",
-      "stale": "Stale"
+      "stale": "Stale",
+      "amr_warn": "amr is required",
+      "mission_warn": "mission is required",
+      "aggressive_warn": "aggressive charge is required",
+      "full_warn": "full battery rate is required",
+      "full_less_than_aggressive": "full rate can not less than aggressive",
+      "available_warn": "some field is not insert yet, please check again",
+      "available_less_than_aggressive": "available get mission can not less than aggressive"
     },
 
     "cycle_mission": {
@@ -420,7 +445,11 @@
       "what_time": "Time",
       "status": "Status",
       "executing": "Execution",
-      "stale": "Stale"
+      "stale": "Stale",
+      "car_required": "Please select at least one AMR",
+      "mission_required": "Please select a mission",
+      "week_required": "Please select at least one day",
+      "time_required": "Please select a time"
     },
     "idle_mission": {
       "idle_mission": "Idle mission",
@@ -432,7 +461,8 @@
       "min_warn": "at least 3 mins",
       "status": "Status",
       "executing": "Execution",
-      "stale": "Stale"
+      "stale": "Stale",
+      "mission_name_warn": "mission is required"
     },
     "topic_mission": {
       "topic_mission": "Topic mission",
@@ -441,6 +471,7 @@
       "missed": "missed",
       "amr_warn": "amr is required",
       "status": "Status",
+      "topic_duplicate": "topic id duplicate",
       "executing": "Execution",
       "stale": "Stale"
     }
@@ -477,7 +508,9 @@
       "sensor_location_ch": "Sensor(chinese)",
       "genre_name_ch": "Genre(chinese)",
       "genre_name_en": "Genre(english)",
-      "add_new_genre": "Add New Genre"
+      "add_new_genre": "Add New Genre",
+
+      "id_duplicate_warn": "this warning ID is duplicate, please change"
     },
     "backup_file": {
       "title": "backup file",

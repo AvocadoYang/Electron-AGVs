@@ -1,21 +1,14 @@
 import client from '@renderer/api/axiosClient'
 import useName from '@renderer/api/useAmrName'
 import useAllMissionTitles from '@renderer/api/useMissionTitle'
+import { useTopicMission } from '@renderer/api/useTopicMission'
 import { ErrorResponse } from '@renderer/utils/globalType'
+import SubmitButton from '@renderer/utils/SubmitButton'
 import { errorHandler } from '@renderer/utils/utils'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Form, InputNumber, message, Select } from 'antd'
+import { useMutation } from '@tanstack/react-query'
+import { Flex, Form, InputNumber, message, Select } from 'antd'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-const Wrapper = styled.div`
-  background: white;
-  width: 100%;
-  max-height: 70vh;
-  overflow-y: scroll;
-  padding: 1em;
-`
 
 type SubmitPayload = {
   amrId: string[]
@@ -29,7 +22,7 @@ const TopicForm: FC = () => {
   const { data: name } = useName()
   const { data: missionTitle } = useAllMissionTitles()
   const [messageApi, contextHolder] = message.useMessage()
-  const queryClient = useQueryClient()
+  const { data: topicData, refetch } = useTopicMission()
 
   const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }))
 
@@ -46,15 +39,18 @@ const TopicForm: FC = () => {
     },
     onSuccess: async () => {
       void messageApi.success(t('utils.success'))
-      await queryClient.refetchQueries({
-        queryKey: ['topic-task']
-      })
+      refetch()
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   })
 
   const submit = () => {
     const payload = form.getFieldsValue() as SubmitPayload
+
+    if (topicData?.findIndex((v) => v.topicId === payload.topicId) !== -1) {
+      messageApi.warning(t('mission.topic_mission.topic_duplicate'))
+      return
+    }
 
     if (!payload.amrId || payload.amrId.length === 0) {
       messageApi.warning(`amrId${t('mission.topic_mission.amr_warn')}`)
@@ -71,26 +67,57 @@ const TopicForm: FC = () => {
   }
 
   return (
-    <Wrapper>
+    <>
       {contextHolder}
-      <Form form={form} title={t('mission.topic_mission.topic_mission')}>
-        <Form.Item label={t('mission.topic_mission.car')} name="amrId">
-          <Select mode="multiple" options={AmrOption} />
-        </Form.Item>
+      <Flex>
+        <Form form={form} title={t('mission.topic_mission.topic_mission')}>
+          <Form.Item
+            label={t('mission.topic_mission.car')}
+            name="amrId"
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: t('utils.required')
+              }
+            ]}
+          >
+            <Select mode="multiple" options={AmrOption} />
+          </Form.Item>
 
-        <Form.Item label="topic ID" name="topicId">
-          <InputNumber min={0} />
-        </Form.Item>
+          <Form.Item
+            label="topic ID"
+            name="topicId"
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: t('utils.required')
+              }
+            ]}
+          >
+            <InputNumber min={1} />
+          </Form.Item>
 
-        <Form.Item label={t('mission.topic_mission.mission')} name="missionId">
-          <Select options={missionOptions} />
-        </Form.Item>
-      </Form>
-
-      <Button color="primary" variant="filled" onClick={() => submit()}>
-        {t('utils.add')}
-      </Button>
-    </Wrapper>
+          <Form.Item
+            label={t('mission.topic_mission.mission')}
+            name="missionId"
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: t('utils.required')
+              }
+            ]}
+          >
+            <Select options={missionOptions} />
+          </Form.Item>
+          <Form.Item>
+            <SubmitButton form={form} isModel={false} onOk={submit} />
+          </Form.Item>
+        </Form>
+      </Flex>
+    </>
   )
 }
 

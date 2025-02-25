@@ -76,20 +76,16 @@ const ShelfCategoryPanel: FC<{
       ></hr>
       <ShelfCategoryTable setOpen={setOpen} setSelectId={setSelectId} />
 
-      <Modal
-        title={t('edit_shelf_category.edit_shelf_category')}
-        open={open}
-        onCancel={() => setOpen(false)}
-        onOk={() => editHandler()}
-      >
-        <ShelfCategoryForm
-          setHasDelete={setHasDelete}
-          selectId={selectId}
-          form={form}
-          cateHeight={cateHeight}
-          setCateHeight={setCateHeight}
-        />
-      </Modal>
+      <ShelfCategoryForm
+        setHasDelete={setHasDelete}
+        selectId={selectId}
+        form={form}
+        cateHeight={cateHeight}
+        setCateHeight={setCateHeight}
+        editHandler={editHandler}
+        openModel={open}
+        setOpenModel={setOpen}
+      />
     </>
   )
 }

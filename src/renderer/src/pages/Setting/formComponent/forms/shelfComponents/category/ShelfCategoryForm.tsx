@@ -1,4 +1,15 @@
-import { Col, Form, FormInstance, Input, InputNumber, message, Popconfirm, Row, Select } from 'antd'
+import {
+  Col,
+  Form,
+  FormInstance,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Popconfirm,
+  Row,
+  Select
+} from 'antd'
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { CheckCircleOutlined, DeleteTwoTone, FormOutlined } from '@ant-design/icons'
@@ -8,6 +19,7 @@ import useShelfCategory from '@renderer/api/useShelfCategory'
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
+import SubmitButton from '@renderer/utils/SubmitButton'
 
 const { Search } = Input
 
@@ -54,7 +66,19 @@ const ShelfCategoryForm: FC<{
   cateHeight: number[] | undefined
   setCateHeight: Dispatch<SetStateAction<number[] | undefined>>
   setHasDelete: Dispatch<SetStateAction<boolean>>
-}> = ({ selectId, form, cateHeight, setCateHeight, setHasDelete }) => {
+  editHandler: () => void
+  openModel: boolean
+  setOpenModel: Dispatch<SetStateAction<boolean>>
+}> = ({
+  selectId,
+  form,
+  cateHeight,
+  setCateHeight,
+  setHasDelete,
+  editHandler,
+  openModel,
+  setOpenModel
+}) => {
   const { data, refetch } = useShelfCategory()
   const [messageApi, contextHolders] = message.useMessage()
   const targetCategory = data?.find((v) => v.id === selectId)
@@ -139,39 +163,70 @@ const ShelfCategoryForm: FC<{
   return (
     <>
       {contextHolders}
-      <Row gutter={[24, 12]}>
-        <Col span={24}>
-          <Form form={form} labelCol={{ span: 6 }} autoComplete="off">
-            <Form.Item label={t('edit_shelf_category.name')} name="name">
-              <Input />
-            </Form.Item>
+      <Modal
+        title={t('edit_shelf_category.edit_shelf_category')}
+        open={openModel}
+        onCancel={() => setOpenModel(false)}
+        footer={() => (
+          <>
+            <SubmitButton form={form} onOk={editHandler} isModel />
+          </>
+        )}
+      >
+        <Row gutter={[24, 12]}>
+          <Col span={24}>
+            <Form form={form} labelCol={{ span: 6 }} autoComplete="off">
+              <Form.Item
+                label={t('edit_shelf_category.name')}
+                name="name"
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: t('utils.required')
+                  }
+                ]}
+              >
+                <Input />
+              </Form.Item>
 
-            <Form.Item label={t('edit_shelf_category.style')} name="shelfStyle">
-              <Select onChange={onGenderChange} allowClear options={options} />
-            </Form.Item>
+              <Form.Item
+                label={t('edit_shelf_category.style')}
+                name="shelfStyle"
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: t('utils.required')
+                  }
+                ]}
+              >
+                <Select onChange={onGenderChange} allowClear options={options} />
+              </Form.Item>
 
-            <Form.Item label={t('edit_shelf_category.every_level')}>
-              <Search
-                placeholder="0"
-                allowClear
-                enterButton={t('utils.add')}
-                size="large"
-                onSearch={onAdd}
-              />
-            </Form.Item>
-          </Form>
-        </Col>
+              <Form.Item label={t('edit_shelf_category.every_level')}>
+                <Search
+                  placeholder="0"
+                  allowClear
+                  enterButton={t('utils.add')}
+                  size="large"
+                  onSearch={onAdd}
+                />
+              </Form.Item>
+            </Form>
+          </Col>
 
-        <Col span={24}>
-          <ListWrapper>
-            {cateHeight?.map((v, i) => {
-              return (
-                <LevelStrip key={`level-${i}`} v={v} i={i} onDelete={onDelete} onEdit={onEdit} />
-              )
-            })}
-          </ListWrapper>
-        </Col>
-      </Row>
+          <Col span={24}>
+            <ListWrapper>
+              {cateHeight?.map((v, i) => {
+                return (
+                  <LevelStrip key={`level-${i}`} v={v} i={i} onDelete={onDelete} onEdit={onEdit} />
+                )
+              })}
+            </ListWrapper>
+          </Col>
+        </Row>
+      </Modal>
     </>
   )
 }

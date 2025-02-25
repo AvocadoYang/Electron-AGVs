@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { Button, Flex, Form, Modal, Popconfirm, Table, Tooltip } from 'antd'
+import { Button, Flex, Form, message, Modal, Popconfirm, Table, Tooltip } from 'antd'
 import type { TableProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -32,7 +32,7 @@ type ChargeData = {
 
 type FormData = {
   id: string
-  amrIds: string[]
+  amrId: string[]
   taskId: string
   aggressiveThreshold: number
   fullThreshold: number
@@ -46,13 +46,6 @@ type FormData = {
 
 const BtnBox = styled.div`
   width: 3em;
-`
-
-const Svg = styled.svg`
-  //why this is not work?
-  & :hover {
-    background-color: #ff2929;
-  }
 `
 
 const ActiveBox = styled.div`
@@ -83,6 +76,7 @@ const ChargePanel: FC<{
   const [form] = Form.useForm()
   const [open, setOpen] = useState(false)
   const [selectKey, setSelectKey] = useState('')
+  const [messageApi, contextHolders] = message.useMessage()
 
   const showModal = (id: string) => {
     setSelectKey(id)
@@ -105,6 +99,55 @@ const ChargePanel: FC<{
     const newPayload = {
       ...payload,
       id: selectKey
+    }
+
+    if (!Array.isArray(newPayload.amrId) || newPayload.amrId.length === 0) {
+      messageApi.warning(t('mission.charge_mission.amr_warn'))
+      return
+    }
+
+    if (
+      !newPayload.taskId ||
+      typeof newPayload.taskId !== 'string' ||
+      newPayload.taskId.trim() === ''
+    ) {
+      messageApi.warning(t('mission.charge_mission.mission_warn'))
+      return
+    }
+
+    if (
+      typeof newPayload.aggressiveThreshold !== 'number' ||
+      isNaN(newPayload.aggressiveThreshold) ||
+      newPayload.aggressiveThreshold <= 0
+    ) {
+      messageApi.warning(t('mission.charge_mission.aggressive_warn'))
+      return
+    }
+
+    if (
+      typeof newPayload.fullThreshold !== 'number' ||
+      isNaN(newPayload.fullThreshold) ||
+      newPayload.fullThreshold <= newPayload.aggressiveThreshold
+    ) {
+      messageApi.warning(t('mission.charge_mission.full_less_than_aggressive'))
+      return
+    }
+
+    if (
+      typeof newPayload.availableGetTaskThreshold !== 'number' ||
+      isNaN(newPayload.availableGetTaskThreshold) ||
+      newPayload.availableGetTaskThreshold <= newPayload.aggressiveThreshold
+    ) {
+      messageApi.warning(t('mission.charge_mission.available_less_than_aggressive'))
+      return
+    }
+
+    if (
+      newPayload.availableGetTaskThreshold === 0 ||
+      newPayload.availableGetTaskThreshold === null
+    ) {
+      messageApi.warning(t('mission.charge_mission.aggressive_warn'))
+      return
     }
 
     saveMutation.mutate(newPayload)
@@ -279,6 +322,7 @@ const ChargePanel: FC<{
 
   return (
     <>
+      {contextHolders}
       <div>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.charge_mission.charge_mission')}

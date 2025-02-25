@@ -13,7 +13,6 @@ const getMap = async () => {
         x: number().required(),
         y: number().required(),
         canRotate: boolean().required(),
-        rotation: number().optional(),
         areaType: string().required()
       }).required()
     ).required(),

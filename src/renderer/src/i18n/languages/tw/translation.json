@@ -21,7 +21,8 @@
     "error": "錯誤",
     "active": "啟動",
     "inactive": "停止",
-
+    "required": "必填",
+    "delete_warn": "確定刪除？",
     "location_property": {
       "none": "點位",
       "charge_station": "充電站",
@@ -29,6 +30,13 @@
       "shelve": "貨區",
       "wait_side": "待命區"
     }
+  },
+  "locations": {
+    "none": "無",
+    "charge_station": "充電區",
+    "prepare_spot": "預派點",
+    "standby": "待命區",
+    "cargo": "存貨區"
   },
   "test_translation": "測試翻譯",
   "open": "開啟表單列",
@@ -255,7 +263,8 @@
     "setting": "調整貨架",
     "disabled": "停用",
     "height": "高度",
-    "save": "儲存"
+    "save": "儲存",
+    "edit_position": "調整位置"
   },
   "edit_shelf_category": {
     "edit_shelf_category": "編輯貨架種類",
@@ -280,7 +289,8 @@
     "edit_pallet": "編輯棧板",
     "edit_default_warning": "不可編輯預設棧板",
     "type": "棧版類型",
-    "color": "顏色"
+    "color": "顏色",
+    "name_warn": "名稱不可為空"
   },
 
   "charge": {
@@ -334,6 +344,11 @@
       "empty_warn": "任務名稱不可為空",
       "empty_car_warn": "車輛類別不可為空",
       "duplicate_warn": "已有相同任務名稱存在",
+      "edit_info": "編輯任務資料",
+      "edit_detail": "編輯任務參數",
+
+      "name_warn": "任務名稱不可為空",
+      "car_warn": "車輛類型必填",
 
       "name": "任務名稱",
       "create_mission": "新增任務",
@@ -346,10 +361,13 @@
     "mission_list": {
       "wait_required_warn": "不須等待請填 0",
       "yaw_required_warn": "yaw 為必填",
+      "height_required_warn": "高度 為必填",
       "edit_mission": "編輯任務",
       "create_mission": "新增任務",
       "copy_mission": "複製任務",
-      "previous": "上一頁"
+      "previous": "上一頁",
+      "wait_amr_warn": "如果有等待車輛, 等待車輛與等待類別為必填",
+      "location_required_warn": "地點為必填"
     },
     "task_table": {
       "sort": "順序",
@@ -385,8 +403,15 @@
 
     "charge_mission": {
       "charge_mission": "充電任務",
-      "executing": "開始",
-      "stale": "停止"
+      "executing": "運行中",
+      "stale": "停止",
+      "amr_warn": "車輛為必填",
+      "mission_warn": "任務為必填",
+      "aggressive_warn": "強制充電為必填",
+      "full_warn": "滿電為必填",
+      "full_less_than_aggressive": "滿電不可小於強制充電",
+      "available_warn": "可接任務為必填",
+      "available_less_than_aggressive": "可接任務不可小於強制充電"
     },
 
     "cycle_mission": {
@@ -396,7 +421,7 @@
       "mission": "任務",
       "car": "車輛",
       "status": "狀態",
-      "executing": "開始",
+      "executing": "運行中",
       "stale": "停止"
     },
     "before_left_charge_station_mission": {
@@ -405,7 +430,7 @@
       "car": "車輛",
       "mission": "任務",
       "status": "狀態",
-      "executing": "開始",
+      "executing": "運行中",
       "stale": "停止"
     },
 
@@ -416,8 +441,12 @@
       "week": "星期",
       "what_time": "幾點",
       "status": "狀態",
-      "executing": "開始",
-      "stale": "停止"
+      "executing": "運行中",
+      "stale": "停止",
+      "car_required": "至少1台車輛",
+      "mission_required": "任務為必填",
+      "week_required": "日期時間為必填",
+      "time_required": "時間為必填"
     },
     "idle_mission": {
       "idle_mission": "閒置任務",
@@ -428,8 +457,9 @@
       "amr_warn": "amrId少填資",
       "min_warn": "不可少於3分鐘",
       "status": "狀態",
-      "executing": "開始",
-      "stale": "停止"
+      "executing": "運行中",
+      "stale": "停止",
+      "mission_name_warn": "任務為必填"
     },
     "topic_mission": {
       "topic_mission": "Topic任務",
@@ -437,8 +467,9 @@
       "mission": "任務",
       "missed": "少填資料",
       "amr_warn": "少填資料",
+      "topic_duplicate": "topic id 重複",
       "status": "狀態",
-      "executing": "開始",
+      "executing": "運行中",
       "stale": "停止"
     }
   },
@@ -474,7 +505,9 @@
       "sensor_location_ch": "感測器位置(中)",
       "genre_name_ch": "種類(中)",
       "genre_name_en": "種類(英)",
-      "add_new_genre": "新增種類"
+      "add_new_genre": "新增種類",
+
+      "id_duplicate_warn": "錯誤編號ID重複, 請換號碼"
     },
     "backup_file": {
       "title": "備份檔案",

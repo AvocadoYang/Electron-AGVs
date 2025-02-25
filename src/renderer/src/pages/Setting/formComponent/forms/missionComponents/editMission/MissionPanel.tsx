@@ -77,6 +77,17 @@ const EditMissionPanel: FC<{
   const handleOk = () => {
     if (!allMissionTitle) return
     const editData = formMission.getFieldsValue() as MissionListType
+
+    if (!editData.name || editData.name.trim() === '') {
+      messageApi.warning(t('mission.add_mission.name_warn'))
+      return
+    }
+
+    if (!editData.car_type || editData.car_type.trim() === '') {
+      messageApi.warning(t('mission.add_mission.car_warn'))
+      return
+    }
+
     editMutation.mutate({ ...editData, key: editMissionKey })
     setOpenMissionModel(false)
   }
@@ -146,14 +157,14 @@ const EditMissionPanel: FC<{
       >
         <Form form={createMissionForm} labelCol={{ span: 6 }} autoComplete="off">
           <Form.Item
+            hasFeedback
             label={t('mission.add_mission.name')}
             name="name"
-            rules={[{ required: true }]}
-            initialValue=""
+            rules={[{ required: true, message: t('mission.add_mission.car_warn') }]}
           >
             <Input placeholder="請輸入任務名稱" />
           </Form.Item>
-          <Form.Item label={t('mission.add_mission.car')} name="car_type">
+          <Form.Item hasFeedback label={t('mission.add_mission.car')} name="car_type">
             <Select placeholder="請選擇" options={newCarList} />
           </Form.Item>
           <Form.Item label={t('mission.add_mission.tag')} name="category">
