@@ -1,40 +1,15 @@
 /* eslint-disable no-void */
 import { FC } from 'react'
 import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import styled from 'styled-components'
 import { Button, Col, Flex, Popconfirm, Row, Table, Tooltip, message } from 'antd'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
-import { array, boolean, number, object, string } from 'yup'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import client from '@renderer/api/axiosClient'
-
-const getTopic = async () => {
-  const { data } = await client.get<unknown>('api/setting/topic-task')
-
-  const schema = () =>
-    array(
-      object({
-        id: string().required(),
-        amrId: array(string().required()).required(),
-        topicId: number().required(),
-        active: boolean().required(),
-        taskName: string().required(),
-        taskId: string().required()
-      }).required()
-    ).required()
-
-  return schema().validate(data, { stripUnknown: true })
-}
-
-const Svg = styled.svg`
-  //why this is not work?
-  & :hover {
-    background-color: #ff2929;
-  }
-`
+import { useTopicMission } from '@renderer/api/useTopicMission'
 
 const Wrapper = styled.div`
   display: flex;
@@ -73,7 +48,7 @@ interface DataType {
 
 const TopicTaskTable: FC = () => {
   const { t } = useTranslation()
-  const { data: topicData, refetch } = useQuery(['topic-task'], getTopic)
+  const { data: topicData, refetch } = useTopicMission()
 
   const [messageApi, contextHolder] = message.useMessage()
 

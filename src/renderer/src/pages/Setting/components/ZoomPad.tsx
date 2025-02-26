@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import styled from 'styled-components'
-import { Button } from 'antd'
+import { Button, Space } from 'antd'
 import { useTranslation } from 'react-i18next'
 import useMap from '@renderer/api/useMap'
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
@@ -34,7 +34,7 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
   if (isError || !data) return
   return (
     <ZoomPadWrap>
-      <Button.Group>
+      <Space.Compact>
         <Button onClick={() => setScale((pre) => pre + 0.035)} icon={<PlusOutlined />}>
           {t('map_tool.zoom_in')}
         </Button>
@@ -108,7 +108,7 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
         >
           {t('map_tool.location_tooltip')}
         </Button>
-      </Button.Group>
+      </Space.Compact>
     </ZoomPadWrap>
   )
 }

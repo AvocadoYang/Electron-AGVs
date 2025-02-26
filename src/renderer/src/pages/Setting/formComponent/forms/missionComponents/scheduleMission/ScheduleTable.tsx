@@ -4,6 +4,7 @@ import { Dispatch, FC, SetStateAction } from 'react'
 import {
   CloseCircleOutlined,
   DeleteTwoTone,
+  EditOutlined,
   EditTwoTone,
   PlayCircleOutlined,
   PlusOutlined
@@ -235,19 +236,20 @@ const ScheduleTable: FC<{
               </>
             )}
 
+            <Button
+              onClick={() => handleEdit(record.id)}
+              color="purple"
+              variant="filled"
+              icon={<EditOutlined />}
+            >
+              {t('mission.add_mission.edit_info')}
+            </Button>
+
             <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
               <Button color="danger" variant="filled">
                 {t('utils.delete')}
               </Button>
             </Popconfirm>
-
-            <Row gutter={16}>
-              <Col className="gutter-row" span={12}>
-                <Tooltip placement="right" title={t('utils.edit')}>
-                  <EditTwoTone twoToneColor="#33bcb7" onClick={() => handleEdit(record.id)} />
-                </Tooltip>
-              </Col>
-            </Row>
           </Flex>
         )
       }

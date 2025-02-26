@@ -1,11 +1,10 @@
 /* eslint-disable no-void */
 import { nanoid } from 'nanoid'
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 import {
   Button,
-  Card,
   ColorPicker,
   Flex,
   Form,
@@ -18,14 +17,9 @@ import {
 } from 'antd'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { useMutation } from '@tanstack/react-query'
-import styled from 'styled-components'
 import usePallet from '@renderer/api/usePallet'
 import client from '@renderer/api/axiosClient'
 import FormHr from '../../../../utils/FormHr'
-
-const BtnWrapper = styled.div`
-  display: flex;
-`
 
 // bitch ant design not support the type
 interface Color {
@@ -191,6 +185,11 @@ const PalletTable: React.FC<{
       id: key,
       name: form.getFieldValue('name') as string,
       color: hexColor
+    }
+
+    if (payload.name === null || payload.name.trim() === '') {
+      messageApi.warning(t('edit_pallet.name_warn'))
+      return
     }
 
     editMutation.mutate(payload)

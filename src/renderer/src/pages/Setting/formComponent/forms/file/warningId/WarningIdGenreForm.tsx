@@ -1,5 +1,6 @@
 import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
+import SubmitButton from '@renderer/utils/SubmitButton'
 import { errorHandler } from '@renderer/utils/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Form, FormProps, Input, message } from 'antd'
@@ -37,24 +38,36 @@ const WarningIdGenreForm: FC = () => {
     <>
       {contextHolder}
       <Form form={form} autoComplete="off" onFinish={onFinish}>
-        <Form.Item label={t('file.warning_list.genre_name_ch')} name="name_ch">
+        <Form.Item
+          label={t('file.warning_list.genre_name_ch')}
+          name="name_ch"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
           <Input />
         </Form.Item>
 
-        <Form.Item label={t('file.warning_list.genre_name_en')} name="name_en">
+        <Form.Item
+          label={t('file.warning_list.genre_name_en')}
+          name="name_en"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
           <Input />
         </Form.Item>
 
         <Form.Item>
-          <Button
-            color="primary"
-            variant="filled"
-            type="primary"
-            htmlType="submit"
-            loading={addMutation.isLoading}
-          >
-            {t('utils.submit')}
-          </Button>
+          <SubmitButton isModel={false} form={form} />
         </Form.Item>
       </Form>
     </>

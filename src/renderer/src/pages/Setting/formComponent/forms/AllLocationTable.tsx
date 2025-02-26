@@ -19,13 +19,7 @@ import { useRef, useState } from 'react'
 import { FilterDropdownProps } from 'antd/es/table/interface'
 import { useTranslation } from 'react-i18next'
 import { tooltipProp } from '@renderer/utils/gloable'
-import {
-  SearchOutlined,
-  DeleteTwoTone,
-  EditOutlined,
-  SaveOutlined,
-  CloseOutlined
-} from '@ant-design/icons'
+import { SearchOutlined, DeleteTwoTone, EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { EditableCellProps, DataIndex } from './antd'
 
 import React, { memo } from 'react'
@@ -36,6 +30,7 @@ import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import useMap from '@renderer/api/useMap'
 import FormHr from '../../utils/FormHr'
+import SubmitButton from '@renderer/utils/SubmitButton'
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -69,7 +64,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   switch (dataIndex) {
     case 'locationId':
-      inputNode = <InputNumber disabled />
+      inputNode = <InputNumber />
       break
     case 'x':
       inputNode = <InputNumber style={{ width: '150px' }} />
@@ -80,9 +75,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
     case 'areaType':
       inputNode = <Select options={pointTypeOption} style={{ width: '150px' }} />
       break
-    case 'rotation':
-      inputNode = <InputNumber style={{ width: '50px' }} />
-      break
+
     case 'canRotate':
       inputNode = <Select options={canRotateOption} />
       break
@@ -96,6 +89,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
         <Form.Item
           name={dataIndex}
           style={{ margin: 0 }}
+          hasFeedback
           rules={[
             {
               required: true,
@@ -110,6 +104,16 @@ const EditableCell: React.FC<EditableCellProps> = ({
       )}
     </td>
   )
+}
+
+export type LocationSubmit = {
+  oldLocationId: string
+  newLocationId: string
+  x: number
+  y: number
+  areaType: string
+  rotation: number
+  canRotate: boolean
 }
 
 const AllLocationTable: React.FC<{
@@ -178,7 +182,6 @@ const AllLocationTable: React.FC<{
     locationPanelForm.setFieldValue('y', Number(record.y))
     locationPanelForm.setFieldValue('canRotate', record.canRotate)
     locationPanelForm.setFieldValue('areaType', record.areaType)
-    locationPanelForm.setFieldValue('rotation', record.rotation)
     locationPanelForm.setFieldValue('locationId', record.locationId)
     setEditingKey(record.locationId)
   }
@@ -252,36 +255,32 @@ const AllLocationTable: React.FC<{
         .toString()
         .toLowerCase()
         .includes((value as string).toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100)
+    filterDropdownProps: {
+      onOpenChange: (visible) => {
+        if (visible) {
+          setTimeout(() => searchInput.current?.select(), 100)
+        }
       }
     },
+
     render: (text: string) => text
   })
 
   // --------------------------
 
-  const savePos = () => {
+  const savePos = (oldLocationId: string) => {
     const payload = locationPanelForm.getFieldsValue() as LocationType
     const isNegative = Number(payload.locationId) <= 0
-
-    const isDuplicateId = mapData?.locations.some((v) => {
-      return v.locationId === payload.locationId.toString()
-    })
 
     if (isNegative) {
       messageApi.warning(t('edit_location_panel.save_pose_notify.is_a_navigate'))
       return
     }
 
-    if (isDuplicateId) {
-      void messageApi.warning('duplicate id')
-    }
-
     const sanitizedPayload = {
       ...payload,
-      locationId: payload.locationId.toString()
+      newLocationId: payload.locationId.toString(),
+      oldLocationId
     }
 
     saveLocationMutation.mutate(sanitizedPayload)
@@ -291,8 +290,8 @@ const AllLocationTable: React.FC<{
     setEditingKey(null)
   }
 
-  const save = () => {
-    savePos()
+  const save = (id: string) => {
+    savePos(id)
     setEditingKey(null)
   }
 
@@ -335,13 +334,6 @@ const AllLocationTable: React.FC<{
       width: '8%',
       editable: true,
       key: 'y'
-    },
-    {
-      title: t('utils.yaw'),
-      dataIndex: 'rotation',
-      editable: true,
-      width: '16%',
-      key: 'rotation'
     },
     {
       title: '是否可旋轉',
@@ -387,13 +379,11 @@ const AllLocationTable: React.FC<{
           <Flex gap="small">
             <Typography.Link
               onClick={() => {
-                save()
+                save(record.locationId)
               }}
               style={{ marginRight: 8 }}
             >
-              <Button icon={<SaveOutlined />} color="primary" variant="filled" type="link">
-                {t('utils.save')}
-              </Button>
+              <SubmitButton isModel={false} text="save" form={locationPanelForm} />
             </Typography.Link>
             <Typography.Link
               onClick={() => {

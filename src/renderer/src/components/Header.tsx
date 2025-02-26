@@ -14,12 +14,15 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const navigate = useNavigate()
   const [drawerOpen, setDrawerOpen] = useState(false)
 
-  const items = [`${t('page_dashboard')}`, `${t('page_view')}`, `${t('page_setting')}`].map(
-    (name, index) => ({
-      key: index + 1,
-      label: name
-    })
-  )
+  const items = [
+    `${t('page_dashboard')}`,
+    `${t('page_view')}`,
+    `${t('page_setting')}`,
+    `${t('page_simulate')}`
+  ].map((name, index) => ({
+    key: index + 1,
+    label: name
+  }))
 
   const handleMenuClick = (e: { key: string }) => {
     switch (e.key) {
@@ -31,6 +34,9 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         break
       case '3':
         navigate('/setting')
+        break
+      case '4':
+        navigate('/simulate')
         break
       default:
         break

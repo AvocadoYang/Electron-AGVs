@@ -38,16 +38,26 @@ const MissionForm: FC<{
 
   return (
     <Form form={formMission} autoComplete="off">
-      <Form.Item label={t('mission.add_mission.name')} name="name">
+      <Form.Item
+        rules={[{ required: true, message: t('mission.add_mission.name_warn') }]}
+        label={t('mission.add_mission.name')}
+        name="name"
+        hasFeedback
+      >
         <Input />
       </Form.Item>
 
-      <Form.Item label={t('mission.add_mission.car')} name="car_type">
-        <Select placeholder="請選擇" options={newCarList} />
+      <Form.Item
+        hasFeedback
+        rules={[{ required: true, message: t('mission.add_mission.car_warn') }]}
+        label={t('mission.add_mission.car')}
+        name="car_type"
+      >
+        <Select options={newCarList} />
       </Form.Item>
 
       <Form.Item label={t('mission.add_mission.tag')} name="category">
-        <Select placeholder="請選擇" mode="multiple" options={catOption} />
+        <Select mode="multiple" options={catOption} />
       </Form.Item>
     </Form>
   )

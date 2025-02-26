@@ -48,6 +48,11 @@ const ImportMissionForm: FC<{
 
     const payload = formImportMission.getFieldsValue() as ImportTask
 
+    if (!payload.importTaskId || payload.importTaskId.trim() === '') {
+      messageApi.warning(t('mission.add_mission.name_warn'))
+      return
+    }
+
     const newPayload = {
       ...payload,
       currentTaskId: importConfig?.key,
@@ -85,12 +90,14 @@ const ImportMissionForm: FC<{
           layout="horizontal"
           size="large"
         >
-          <Form.Item name="currentTaskId" hidden />
-          <Form.Item label="任務" name="importTaskId">
+          <Form.Item
+            hasFeedback
+            rules={[{ required: true, message: t('mission.add_mission.name_warn') }]}
+            label="任務"
+            name="importTaskId"
+          >
             <Select options={options} />
           </Form.Item>
-
-          <Form.Item name="order" hidden />
         </Form>
       </Modal>
     </>

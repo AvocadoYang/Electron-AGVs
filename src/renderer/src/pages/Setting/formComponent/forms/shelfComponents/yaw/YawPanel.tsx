@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Form, Row, Col, Button, Modal, Input, message } from 'antd'
+import { Form, Row, Col, Button, Modal, message, InputNumber } from 'antd'
 import { useTranslation } from 'react-i18next'
 import useYaw, { YawTypeWithoutList } from '@renderer/api/useYaw'
 import client from '@renderer/api/axiosClient'
@@ -10,6 +10,7 @@ import YawTable from './YawTable'
 import YawForm from './YawForm'
 import FormHr from '../../../../utils/FormHr'
 import { PlusOutlined } from '@ant-design/icons'
+import SubmitButton from '@renderer/utils/SubmitButton'
 type FieldType = {
   yaw?: string
 }
@@ -112,37 +113,39 @@ const YawPanel: FC<{
           yawDataSource={yawDataSource}
         />
 
-        <Modal
-          title={t('edit_yaw.edit_yaw')}
-          open={openYawModel}
-          onCancel={() => setOpenYawModel(false)}
-          onOk={() => editHandler()}
-        >
-          <YawForm formYaw={formYaw} yawDataSource={yawDataSource} selectYawId={selectYawId} />
-        </Modal>
+        <YawForm
+          formYaw={formYaw}
+          yawDataSource={yawDataSource}
+          selectYawId={selectYawId}
+          openYawModel={openYawModel}
+          setOpenYawModel={setOpenYawModel}
+          editHandler={editHandler}
+        />
 
         <Modal
           title={t('edit_yaw.add')}
           open={openNewYawModal}
           onCancel={handleCancel}
-          onOk={() => {
-            submitNewYaw()
-          }}
+          footer={() => (
+            <>
+              <SubmitButton form={NewYawForm} onOk={submitNewYaw} isModel />
+            </>
+          )}
         >
           <Form
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             style={{ maxWidth: 600 }}
-            initialValues={{ remember: true }}
             form={NewYawForm}
             autoComplete="off"
           >
             <Form.Item<FieldType>
               label="yaw"
               name="yaw"
+              hasFeedback
               rules={[{ required: true, message: t('edit_yaw.input_warning') }]}
             >
-              <Input />
+              <InputNumber />
             </Form.Item>
           </Form>
         </Modal>

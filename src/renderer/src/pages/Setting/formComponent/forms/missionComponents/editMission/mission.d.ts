@@ -78,6 +78,7 @@ export interface ActionTypes {
   auto_preparatory_point: boolean
   is_define_height: string
   f_height: number
+  hasWaitOther?: boolean
   titleId?: string | null
   genreId: string | null
   CarControl: {

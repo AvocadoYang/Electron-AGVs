@@ -250,7 +250,7 @@ const TaskTable: FC<{
           <ActiveBox>
             <Dot $active={record.disable as boolean} />{' '}
             <>
-              {record.disable ? t('mission.task_table.inactive') : t('mission.task_table.action')}
+              {record.disable ? t('mission.task_table.inactive') : t('mission.task_table.active')}
             </>
           </ActiveBox>
         )
@@ -442,7 +442,7 @@ const TaskTable: FC<{
               {record.disable ? (
                 <Button
                   onClick={() => disableTask(record.id, false)}
-                  icon={<ImportOutlined />}
+                  icon={<EyeInvisibleOutlined />}
                   color="primary"
                   variant="filled"
                   type="link"
@@ -450,7 +450,7 @@ const TaskTable: FC<{
               ) : (
                 <Button
                   onClick={() => disableTask(record.id, true)}
-                  icon={<EyeInvisibleOutlined />}
+                  icon={<EyeOutlined />}
                   color="primary"
                   variant="filled"
                   type="link"

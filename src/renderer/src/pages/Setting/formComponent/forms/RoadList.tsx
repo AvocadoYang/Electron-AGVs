@@ -36,6 +36,7 @@ import client from '@renderer/api/axiosClient'
 import { ErrorResponse } from '@renderer/utils/globalType'
 import { errorHandler } from '@renderer/utils/utils'
 import FormHr from '../../utils/FormHr'
+import SubmitButton from '@renderer/utils/SubmitButton'
 
 type RoadListType = {
   roadId: string
@@ -216,7 +217,7 @@ const ActiveBox = styled.div`
 `
 
 type DotStyle = {
-  active: boolean
+  $active: boolean
 }
 
 type SubmitRoad = {
@@ -229,7 +230,7 @@ const Dot = styled.div<DotStyle>`
   border-radius: 99%;
   width: 7px;
   height: 7px;
-  background-color: ${(prop) => (prop.active ? '#979797' : '#2bea00')};
+  background-color: ${(prop) => (prop.$active ? '#979797' : '#2bea00')};
 `
 
 const RoadList: React.FC<{
@@ -327,9 +328,11 @@ const RoadList: React.FC<{
         ?.toString()
         .toLowerCase()
         .includes((value as string).toLowerCase()) as boolean,
-    onFilterDropdownOpenChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current?.select(), 100)
+    filterDropdownProps: {
+      onOpenChange: (visible) => {
+        if (visible) {
+          setTimeout(() => searchInput.current?.select(), 100)
+        }
       }
     },
     render: (text: string) => text
@@ -466,7 +469,7 @@ const RoadList: React.FC<{
       render: (_v: unknown, record: RoadListType) => {
         return (
           <ActiveBox>
-            <Dot active={record.disabled as boolean} />{' '}
+            <Dot $active={record.disabled as boolean} />{' '}
             <>{record.disabled ? t('utils.no') : t('utils.yes')}</>
           </ActiveBox>
         )
@@ -485,9 +488,7 @@ const RoadList: React.FC<{
         return editable ? (
           <Flex gap="small">
             <Typography.Link onClick={() => save(record.roadId)} style={{ marginRight: 8 }}>
-              <Button icon={<SaveOutlined />} color="primary" variant="filled" type="link">
-                {t('utils.save')}
-              </Button>
+              <SubmitButton isModel={false} form={formRoad} text="save" />
             </Typography.Link>
             <Typography.Link onClick={() => cancel()} style={{ marginRight: 8 }}>
               <Button icon={<CloseOutlined />} color="default" variant="filled" type="link">

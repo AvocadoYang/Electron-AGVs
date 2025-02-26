@@ -144,7 +144,7 @@ const MissionTable: FC<{
                 variant="filled"
                 icon={<EditOutlined />}
               >
-                {t('utils.edit')}
+                {t('mission.add_mission.edit_info')}
               </Button>
 
               <Button
@@ -153,7 +153,7 @@ const MissionTable: FC<{
                 variant="filled"
                 icon={<ControlTwoTone twoToneColor="#5273e0" />}
               >
-                {t('utils.edit')}
+                {t('mission.add_mission.edit_detail')}
               </Button>
             </Flex>
           </>

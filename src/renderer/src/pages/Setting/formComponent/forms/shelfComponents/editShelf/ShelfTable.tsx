@@ -1,5 +1,5 @@
 import { FormatPainterOutlined } from '@ant-design/icons'
-import { Flex, Skeleton, Table } from 'antd'
+import { Button, Flex, Skeleton, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { FC, useState } from 'react'
 import styled from 'styled-components'
@@ -119,7 +119,16 @@ const ShelfTable: FC<{
       key: 'operation',
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       render: (_v, recorder) => {
-        return <FormatPainterOutlined onClick={() => handleEdit(recorder.Loc.id)} />
+        return (
+          <Button
+            icon={<FormatPainterOutlined />}
+            onClick={() => handleEdit(recorder.Loc.id)}
+            color="primary"
+            variant="filled"
+          >
+            {t('edit_shelf_panel.edit_position')}
+          </Button>
+        )
       }
     }
   ]

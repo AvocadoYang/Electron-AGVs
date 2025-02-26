@@ -85,6 +85,15 @@ const MissionList: FC<{
   const handleOk = () => {
     const newData = form.getFieldsValue() as ActionTypes
 
+    if (
+      newData.locationId === null ||
+      newData.locationId === undefined ||
+      newData.locationId === 0
+    ) {
+      messageApi.warning(t('mission.mission_list.location_required_warn'))
+      return
+    }
+
     if (newData.wait === null) {
       messageApi.warning(t('mission.mission_list.wait_required_warn'))
       return
@@ -92,6 +101,19 @@ const MissionList: FC<{
 
     if (newData.yaw === null) {
       messageApi.warning(t('mission.mission_list.yaw_required_warn'))
+      return
+    }
+
+    if (newData.f_height === null) {
+      messageApi.warning(t('mission.mission_list.yaw_required_warn'))
+      return
+    }
+
+    if (
+      newData.hasWaitOther === true &&
+      (newData.waitGenre === null || newData.waitOtherAmr === null)
+    ) {
+      messageApi.warning(t('mission.mission_list.wait_amr_warn'))
       return
     }
 

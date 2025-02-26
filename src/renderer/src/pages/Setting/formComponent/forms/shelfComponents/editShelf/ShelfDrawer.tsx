@@ -4,6 +4,7 @@ import useAllMissionTitles from '@renderer/api/useMissionTitle'
 import useShelfCategory from '@renderer/api/useShelfCategory'
 import useYaw from '@renderer/api/useYaw'
 import { ErrorResponse } from '@renderer/utils/globalType'
+import SubmitButton from '@renderer/utils/SubmitButton'
 import { errorHandler } from '@renderer/utils/utils'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button, Card, Drawer, Form, FormProps, InputNumber, message, Select } from 'antd'
@@ -115,9 +116,7 @@ const ShelfDrawer: FC<{
             </Form.Item>
 
             <Form.Item label={null}>
-              <Button color="primary" variant="filled" type="primary" htmlType="submit">
-                {t('utils.submit')}
-              </Button>
+              <SubmitButton isModel={false} form={form} />
             </Form.Item>
           </Form>
         </Card>

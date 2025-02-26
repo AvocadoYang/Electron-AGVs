@@ -16,7 +16,7 @@ const TaskForm: FC<{
   form: FormInstance<unknown>
   selectedMissionCar: string
 }> = ({ editTaskKey, form, selectedMissionCar }) => {
-  const { data: taskDataSource } = useOneTaskDetail(editTaskKey)
+  const { data: taskDataSource, isLoading } = useOneTaskDetail(editTaskKey)
 
   // Map CarControl options for the operation select.
   const defaultOperation =
@@ -77,7 +77,7 @@ const TaskForm: FC<{
     }
   }, [form, taskDataSource])
 
-  if (!defaultOperation.length) return <Skeleton active />
+  if (!defaultOperation.length || isLoading) return <Skeleton active />
 
   return (
     <Form form={form} labelCol={{ span: 6 }} autoComplete="off" size="small">

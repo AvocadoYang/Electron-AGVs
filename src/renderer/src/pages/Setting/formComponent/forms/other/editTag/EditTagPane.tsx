@@ -14,7 +14,7 @@ const EditTagPanel: FC<{
   return (
     <div>
       <h3 className="drop_button_style" {...listeners} {...attributes}>
-        {t('mission.charge_mission.charge_mission')}
+        {t('other.edit_mission_tag.title')}
       </h3>
       <FormHr sortableId={sortableId} />
       <Flex gap="middle" justify="flex-start" align="start" vertical>
