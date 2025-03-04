@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const InfoWrap = styled.div`
   margin-bottom: 3%;
@@ -10,7 +10,7 @@ export const InfoWrap = styled.div`
   box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   position: relative;
-`
+`;
 
 // ======= First row in info card =======
 
@@ -22,7 +22,7 @@ export const CardRow1 = styled.div`
   justify-content: space-around;
   align-items: center;
   overflow: hidden;
-`
+`;
 
 // ==============================
 
@@ -34,13 +34,13 @@ export const CardRow2 = styled.div`
   overflow: hidden;
   align-items: center;
   justify-content: space-around;
-`
+`;
 // ==============================
 
 // ======= Third row in info card =======
-export const CardRow3 = styled.div``
+export const CardRow3 = styled.div``;
 // ==============================
 
 // ======= 4sd row in info card =======
-export const CardRow4 = styled.div``
+export const CardRow4 = styled.div``;
 // ==============================

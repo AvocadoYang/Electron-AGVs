@@ -1,18 +1,18 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, object, string, boolean, date } from 'yup'
-import api from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, object, string, boolean, date } from 'yup';
+import api from './axiosClient';
 
 export type CargoAreaInfo = {
-  cargoName: string
+  cargoName: string;
   hasCargo: {
-    [level: number]: boolean
-  }
-  areaId: string
-  isDropping: boolean
-}
+    [level: number]: boolean;
+  };
+  areaId: string;
+  isDropping: boolean;
+};
 
 const getLocations = async () => {
-  const { data } = await api.get<unknown>('api/test/locations')
+  const { data } = await api.get<unknown>('api/test/locations');
   const schema = () =>
     object({
       chargingStations: array(
@@ -66,21 +66,21 @@ const getLocations = async () => {
           }).optional()
         }).required()
       ).required()
-    }).required()
+    }).required();
   try {
-    await schema().validate(data)
+    await schema().validate(data);
   } catch (error) {
-    console.log('use loaction has error')
-    console.log(error)
+    console.log('use loaction has error');
+    console.log(error);
     // 這邊如果有報錯 可以把require 改optional
   }
-  const result = await schema().validate(data)
-  return result
-}
+  const result = await schema().validate(data);
+  return result;
+};
 const useLocation = () => {
   return useQuery(['locations'], getLocations, {
     refetchInterval: 3000
-  })
-}
+  });
+};
 
-export default useLocation
+export default useLocation;

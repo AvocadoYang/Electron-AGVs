@@ -12,37 +12,36 @@ import {
   SelectProps,
   Space,
   Tag,
-  Card,
   message,
   InputNumber
-} from 'antd'
-import { FC, memo, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { ZoneTableData } from '../../antd'
-import useAmrName from '@renderer/api/useAmrName'
-import { borderColor } from '@renderer/pages/Setting/utils/utils'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import useMap from '@renderer/api/useMap'
+} from 'antd';
+import { FC, memo, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ZoneTableData } from '../../antd';
+import useAmrName from '@renderer/api/useAmrName';
+import { borderColor } from '@renderer/pages/Setting/utils/utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import useMap from '@renderer/api/useMap';
 
 type FormType = {
-  all_forbidden: boolean | undefined
-  not_forbidden: boolean | undefined
+  all_forbidden: boolean | undefined;
+  not_forbidden: boolean | undefined;
 
-  category: string[] | undefined
-  color: string
-  endX: number
-  endY: number
-  forbidden: string[] | undefined
-  hight_limit: number
-  name: string
-  speed_limit: number
-  startX: number
-  startY: number
-  id?: string
-}
+  category: string[] | undefined;
+  color: string;
+  endX: number;
+  endY: number;
+  forbidden: string[] | undefined;
+  hight_limit: number;
+  name: string;
+  speed_limit: number;
+  startX: number;
+  startY: number;
+  id?: string;
+};
 
 type FormKey =
   | 'name'
@@ -56,91 +55,91 @@ type FormKey =
   | 'hight_limit'
   | 'speed_limit'
   | 'startX'
-  | 'startY'
+  | 'startY';
 
 const zoneType: SelectProps['options'] = [
   { value: '減速區' },
   { value: '限高區' },
   { value: '禁止區' }
-]
-type TagRender = SelectProps['tagRender']
+];
+type TagRender = SelectProps['tagRender'];
 
 const EditZoneTable: FC<{
-  setEditingKey: React.Dispatch<React.SetStateAction<string | null>>
-  editingKey: string
-  oldData: ZoneTableData | null
-  sortableId: string
+  setEditingKey: React.Dispatch<React.SetStateAction<string | null>>;
+  editingKey: string;
+  oldData: ZoneTableData | null;
+  sortableId: string;
 }> = ({ setEditingKey, editingKey, oldData, sortableId }) => {
-  const [editZoneForm] = Form.useForm()
-  const [allVehicleForbidden, setAllVehicleForbidden] = useState(false)
-  const [notVehicleForbidden, setNotVehicleForbidden] = useState(false)
-  const [isHint, setIsHint] = useState(false)
-  const [syncForm, setSyncForm] = useState<FormType | null>(null)
-  const [zoneTags, setZoneTags] = useState<string[] | undefined>([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [messageApi, contextHolders] = message.useMessage()
-  const { data: allAmr = [] } = useAmrName()
-  const { data: mapData } = useMap()
-  const { t } = useTranslation()
-  const queryClient = useQueryClient()
+  const [editZoneForm] = Form.useForm();
+  const [allVehicleForbidden, setAllVehicleForbidden] = useState(false);
+  const [notVehicleForbidden, setNotVehicleForbidden] = useState(false);
+  const [isHint, setIsHint] = useState(false);
+  const [syncForm, setSyncForm] = useState<FormType | null>(null);
+  const [zoneTags, setZoneTags] = useState<string[] | undefined>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messageApi, contextHolders] = message.useMessage();
+  const { data: allAmr = [] } = useAmrName();
+  const { data: mapData } = useMap();
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const AmrsID: SelectProps['options'] = allAmr.map((amr) => {
-    return { value: amr.id }
-  })
+    return { value: amr.id };
+  });
 
   const saveMutation = useMutation({
     mutationFn: (payload: FormType) => {
-      return client.post(`api/setting/edit-edit-zone`, payload)
+      return client.post('api/setting/edit-edit-zone', payload);
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const save = () => {
     if (isHint) {
-      messageApi.warning(t('edit_zone_panel.waring.tag_not_yet_setting'))
-      return
+      messageApi.warning(t('edit_zone_panel.waring.tag_not_yet_setting'));
+      return;
     }
-    const data = editZoneForm.getFieldsValue() as FormType
-    console.log(data)
+    const data = editZoneForm.getFieldsValue() as FormType;
+    console.log(data);
 
-    const { name, startX, startY, endX, endY, color } = data
-    console.log(data)
+    const { name, startX, startY, endX, endY, color } = data;
+    console.log(data);
     if (!name || name.trim() === '') {
-      messageApi.warning(t('edit_zone_panel.waring.name_empty_error'))
-      return
+      messageApi.warning(t('edit_zone_panel.waring.name_empty_error'));
+      return;
     }
     if (!startX || !startY || !endX || !endY) {
-      messageApi.warning(t('edit_zone_panel.waring.invalid_frame'))
-      return
+      messageApi.warning(t('edit_zone_panel.waring.invalid_frame'));
+      return;
     }
     if (!color) {
-      messageApi.warning(t('edit_zone_panel.waring.color_error'))
-      return
+      messageApi.warning(t('edit_zone_panel.waring.color_error'));
+      return;
     }
     const exists = mapData!.zones.some((zone) => {
-      return zone.name.trim() === name.trim() && oldData?.id !== zone.id
-    })
+      return zone.name.trim() === name.trim() && oldData?.id !== zone.id;
+    });
     if (exists) {
-      messageApi.warning(t('edit_zone_panel.waring.name_duplicated_error'))
-      return
+      messageApi.warning(t('edit_zone_panel.waring.name_duplicated_error'));
+      return;
     }
 
-    let forbiddenCars: string[] = []
+    let forbiddenCars: string[] = [];
 
     if (data.all_forbidden === undefined) {
-      forbiddenCars = oldData?.tagSetting.forbidden_car as string[]
+      forbiddenCars = oldData?.tagSetting.forbidden_car as string[];
     }
 
     if (data.all_forbidden) {
-      forbiddenCars = ['*']
+      forbiddenCars = ['*'];
     }
 
     if (data.not_forbidden) {
-      forbiddenCars = []
+      forbiddenCars = [];
     }
 
     if (
@@ -149,7 +148,7 @@ const EditZoneTable: FC<{
       data.forbidden &&
       data.forbidden.length > 0
     ) {
-      forbiddenCars = data.forbidden
+      forbiddenCars = data.forbidden;
     }
 
     const payload: FormType = {
@@ -163,21 +162,21 @@ const EditZoneTable: FC<{
       forbidden: forbiddenCars,
       id: editingKey,
       color: data.color
-    }
+    };
     // console.log(payload)
-    saveMutation.mutate(payload)
-  }
+    saveMutation.mutate(payload);
+  };
 
   const handleCancel = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const tagRender: TagRender = (props) => {
-    const { label, closable, onClose } = props
+    const { label, closable, onClose } = props;
     const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
-      event.preventDefault()
-      event.stopPropagation()
-    }
+      event.preventDefault();
+      event.stopPropagation();
+    };
     return (
       <Tag
         color={'cyan'}
@@ -188,13 +187,13 @@ const EditZoneTable: FC<{
       >
         {label}
       </Tag>
-    )
-  }
+    );
+  };
 
   const handleSyneForm = (key: FormKey, value: unknown) => {
-    if (!syncForm) return
+    if (!syncForm) return;
     setSyncForm((prev) => {
-      if (!prev) return null
+      if (!prev) return null;
       return {
         all_forbidden: key === 'all_forbidden' ? (value as boolean) : prev?.all_forbidden,
         not_forbidden: key === 'not_forbidden' ? (value as boolean) : prev?.not_forbidden,
@@ -208,15 +207,16 @@ const EditZoneTable: FC<{
         speed_limit: key === 'speed_limit' ? (value as number) : prev?.speed_limit,
         startX: key === 'startX' ? (value as number) : prev?.startX,
         startY: key === 'startY' ? (value as number) : prev?.startY
-      }
-    })
-  }
+      };
+    });
+  };
 
   useEffect(() => {
-    if (!syncForm) return
-    const { category, forbidden, speed_limit, hight_limit, all_forbidden, not_forbidden } = syncForm
+    if (!syncForm) return;
+    const { category, forbidden, speed_limit, hight_limit, all_forbidden, not_forbidden } =
+      syncForm;
 
-    if (category?.length === 0) return setIsHint(false)
+    if (category?.length === 0) return setIsHint(false);
 
     if (
       category?.includes('禁止區') &&
@@ -224,47 +224,47 @@ const EditZoneTable: FC<{
       !all_forbidden &&
       !not_forbidden
     ) {
-      setIsHint(true)
-      return
+      setIsHint(true);
+      return;
     }
 
     if (category?.includes('減速區') && (speed_limit === 0 || speed_limit === null)) {
-      setIsHint(true)
-      return
+      setIsHint(true);
+      return;
     }
 
     if (category?.includes('限高區') && (hight_limit === 0 || hight_limit === null)) {
-      setIsHint(true)
-      return
+      setIsHint(true);
+      return;
     }
-    setIsHint(false)
-  }, [syncForm])
+    setIsHint(false);
+  }, [syncForm]);
 
   useEffect(() => {
-    if (!oldData) return
-    setZoneTags(oldData.category)
+    if (!oldData) return;
+    setZoneTags(oldData.category);
 
-    const forbiddenCar = oldData.tagSetting.forbidden_car as string[]
+    const forbiddenCar = oldData.tagSetting.forbidden_car as string[];
 
     if (!forbiddenCar || forbiddenCar.length === 0) {
-      setNotVehicleForbidden(true)
-      editZoneForm.setFieldValue('not_forbidden', true)
+      setNotVehicleForbidden(true);
+      editZoneForm.setFieldValue('not_forbidden', true);
     }
 
     if (forbiddenCar && forbiddenCar?.includes('*')) {
-      setAllVehicleForbidden(true)
-      editZoneForm.setFieldValue('all_forbidden', true)
+      setAllVehicleForbidden(true);
+      editZoneForm.setFieldValue('all_forbidden', true);
     }
-    editZoneForm.setFieldValue('name', oldData.name)
-    editZoneForm.setFieldValue('color', oldData.backgroundColor)
-    editZoneForm.setFieldValue('startX', oldData.startPoint.startX)
-    editZoneForm.setFieldValue('startY', oldData.startPoint.startY)
-    editZoneForm.setFieldValue('endX', oldData.endPoint.endX)
-    editZoneForm.setFieldValue('endY', oldData.endPoint.endY)
-    editZoneForm.setFieldValue('category', oldData.category)
-    editZoneForm.setFieldValue('hight_limit', oldData.tagSetting.hight_limit)
-    editZoneForm.setFieldValue('speed_limit', oldData.tagSetting.speed_limit)
-    editZoneForm.setFieldValue('forbidden', oldData.tagSetting.forbidden_car)
+    editZoneForm.setFieldValue('name', oldData.name);
+    editZoneForm.setFieldValue('color', oldData.backgroundColor);
+    editZoneForm.setFieldValue('startX', oldData.startPoint.startX);
+    editZoneForm.setFieldValue('startY', oldData.startPoint.startY);
+    editZoneForm.setFieldValue('endX', oldData.endPoint.endX);
+    editZoneForm.setFieldValue('endY', oldData.endPoint.endY);
+    editZoneForm.setFieldValue('category', oldData.category);
+    editZoneForm.setFieldValue('hight_limit', oldData.tagSetting.hight_limit);
+    editZoneForm.setFieldValue('speed_limit', oldData.tagSetting.speed_limit);
+    editZoneForm.setFieldValue('forbidden', oldData.tagSetting.forbidden_car);
 
     setSyncForm({
       all_forbidden: forbiddenCar?.includes('*'),
@@ -279,10 +279,10 @@ const EditZoneTable: FC<{
       speed_limit: oldData.tagSetting.speed_limit as number,
       startX: oldData.startPoint.startX,
       startY: oldData.startPoint.startY
-    })
-  }, [oldData])
+    });
+  }, [oldData]);
 
-  if (!oldData) return
+  if (!oldData) return;
   return (
     <>
       {contextHolders}
@@ -369,13 +369,13 @@ const EditZoneTable: FC<{
               style={{ width: '100%' }}
               options={zoneType}
               onChange={(tags) => {
-                handleSyneForm('category', tags)
-                setZoneTags(tags)
+                handleSyneForm('category', tags);
+                setZoneTags(tags);
               }}
             />
           </Form.Item>
           {zoneTags?.length ? (
-            <Form.Item style={{ textAlign: 'left', marginBottom: `8px` }}>
+            <Form.Item style={{ textAlign: 'left', marginBottom: '8px' }}>
               <Space>
                 {isHint ? <p style={{ color: 'red' }}>{t('edit_zone_panel.hint')}</p> : <p>✅</p>}
                 <ConfigProvider
@@ -399,10 +399,10 @@ const EditZoneTable: FC<{
           <Form.Item
             getValueFromEvent={(color) => {
               if (color && color.toRgb) {
-                const { r, g, b } = color.toRgb()
-                return `rgba(${r}, ${g}, ${b}, 0.05)`
+                const { r, g, b } = color.toRgb();
+                return `rgba(${r}, ${g}, ${b}, 0.05)`;
               }
-              return color
+              return color;
             }}
             label={t('edit_zone_panel.color')}
             name="color"
@@ -410,8 +410,8 @@ const EditZoneTable: FC<{
             <ColorPicker
               showText
               onChange={(e) => {
-                const { r, g, b } = e.toRgb()
-                handleSyneForm('color', `rgba(${r}, ${g}, ${b} , 0.05)`)
+                const { r, g, b } = e.toRgb();
+                handleSyneForm('color', `rgba(${r}, ${g}, ${b} , 0.05)`);
               }}
             />
           </Form.Item>
@@ -474,8 +474,8 @@ const EditZoneTable: FC<{
                       checked={notVehicleForbidden}
                       disabled={allVehicleForbidden}
                       onChange={(e) => {
-                        setNotVehicleForbidden(e.target.checked)
-                        handleSyneForm('not_forbidden', e.target.checked)
+                        setNotVehicleForbidden(e.target.checked);
+                        handleSyneForm('not_forbidden', e.target.checked);
                       }}
                     >{`${t('edit_zone_panel.not_vehicle_forbidden')}`}</Checkbox>
                   </Form.Item>
@@ -484,8 +484,8 @@ const EditZoneTable: FC<{
                       checked={allVehicleForbidden}
                       disabled={notVehicleForbidden}
                       onChange={(e) => {
-                        handleSyneForm('all_forbidden', e.target.checked)
-                        setAllVehicleForbidden(e.target.checked)
+                        handleSyneForm('all_forbidden', e.target.checked);
+                        setAllVehicleForbidden(e.target.checked);
                       }}
                     >{`${t('edit_zone_panel.all_vehicle_forbidden')}`}</Checkbox>
                   </Form.Item>
@@ -509,7 +509,7 @@ const EditZoneTable: FC<{
         </Form>
       </Flex>
     </>
-  )
-}
+  );
+};
 
-export default memo(EditZoneTable)
+export default memo(EditZoneTable);

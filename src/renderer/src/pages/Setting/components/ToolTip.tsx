@@ -1,9 +1,9 @@
-import useMap from '@renderer/api/useMap'
-import { tooltipProp } from '@renderer/utils/gloable'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { useAtomValue } from 'jotai'
-import { FC } from 'react'
-import styled from 'styled-components'
+import useMap from '@renderer/api/useMap';
+import { tooltipProp } from '@renderer/utils/gloable';
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
+import { useAtomValue } from 'jotai';
+import { FC } from 'react';
+import styled from 'styled-components';
 
 const TooltipWrapper = styled.div.attrs<{
   left: number
@@ -29,12 +29,12 @@ const TooltipWrapper = styled.div.attrs<{
   &.show {
     opacity: 1;
   }
-`
+`;
 const ToolTip: FC = () => {
-  const toolTipProps = useAtomValue(tooltipProp)
-  const { data } = useMap()
+  const toolTipProps = useAtomValue(tooltipProp);
+  const { data } = useMap();
 
-  if (!toolTipProps || !data) return []
+  if (!toolTipProps || !data) return [];
 
   const [displayX, displayY] = rosCoord2DisplayCoord({
     x: toolTipProps.x,
@@ -43,7 +43,7 @@ const ToolTip: FC = () => {
     mapOriginX: data?.mapOriginX,
     mapOriginY: data.mapOriginY,
     mapResolution: data.mapResolution
-  })
+  });
   return (
     <TooltipWrapper
       left={displayX}
@@ -54,7 +54,7 @@ const ToolTip: FC = () => {
       {' '}
       {toolTipProps.locationId}
     </TooltipWrapper>
-  )
-}
+  );
+};
 
-export default ToolTip
+export default ToolTip;

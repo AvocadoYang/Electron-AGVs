@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, boolean, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, boolean, object, string } from 'yup';
+import client from './axiosClient';
 
 const getSchedule = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-schedule')
+  const { data } = await client.get<unknown>('api/setting/all-schedule');
 
   const schema = () =>
     array(
@@ -15,17 +15,17 @@ const getSchedule = async () => {
         missionId: string().required(),
         missionName: string().required()
       }).required()
-    ).optional()
+    ).optional();
 
-  return schema().validate(data, { stripUnknown: true })
-}
+  return schema().validate(data, { stripUnknown: true });
+};
 
 const useSchedule = () => {
   return useQuery(['all-schedule'], {
     queryFn: () => {
-      return getSchedule()
+      return getSchedule();
     }
-  })
-}
+  });
+};
 
-export default useSchedule
+export default useSchedule;

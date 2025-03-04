@@ -1,22 +1,22 @@
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
 
 const CarControlTranslate = ({ word }: { word: string | undefined }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   switch (word) {
     case '移動':
-      return <>{t('car_control_translate.move')}</>
+      return <>{t('car_control_translate.move')}</>;
     case '取貨':
-      return <>{t('car_control_translate.load')}</>
+      return <>{t('car_control_translate.load')}</>;
     case '放貨':
-      return <>{t('car_control_translate.offload')}</>
+      return <>{t('car_control_translate.offload')}</>;
     case '充電':
-      return <>{t('car_control_translate.charge')}</>
+      return <>{t('car_control_translate.charge')}</>;
     case '貨高限制':
-      return <>{t('car_control_translate.cargo_limit')}</>
+      return <>{t('car_control_translate.cargo_limit')}</>;
     default:
-      return <>{word}</>
+      return <>{word}</>;
   }
-}
+};
 
-export default CarControlTranslate
+export default CarControlTranslate;

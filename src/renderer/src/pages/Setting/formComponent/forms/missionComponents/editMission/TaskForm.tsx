@@ -1,56 +1,56 @@
-import useName from '@renderer/api/useAmrName'
-import useMap from '@renderer/api/useMap'
-import useOneTaskDetail from '@renderer/api/useOneTaskDetail'
-import { Form, FormInstance, Input, InputNumber, Radio, Select, Skeleton, Spin } from 'antd'
-import { FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import useName from '@renderer/api/useAmrName';
+import useMap from '@renderer/api/useMap';
+import useOneTaskDetail from '@renderer/api/useOneTaskDetail';
+import { Form, FormInstance, Input, InputNumber, Radio, Select, Skeleton } from 'antd';
+import { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-export enum YawGenre {
+enum YawGenre {
   CUSTOM,
   SELECT,
   CALCULATE_BY_AGV_AND_SHELF_ANGLE
 }
 
 const TaskForm: FC<{
-  editTaskKey: string
-  form: FormInstance<unknown>
-  selectedMissionCar: string
+  editTaskKey: string;
+  form: FormInstance<unknown>;
+  selectedMissionCar: string;
 }> = ({ editTaskKey, form, selectedMissionCar }) => {
-  const { data: taskDataSource, isLoading } = useOneTaskDetail(editTaskKey)
+  const { data: taskDataSource, isLoading } = useOneTaskDetail(editTaskKey);
 
   // Map CarControl options for the operation select.
   const defaultOperation =
     taskDataSource?.missionTitle.Car.CarControl.map((v) => ({
       value: v.id,
       label: v.name
-    })) || []
+    })) || [];
 
-  const [selectFork, setSelectFork] = useState('')
-  const [isSelectWaitAmrList, setIsSelectWaitAmrList] = useState(false)
-  const { t } = useTranslation()
-  const { data: name } = useName()
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }))
+  const [selectFork, setSelectFork] = useState('');
+  const [isSelectWaitAmrList, setIsSelectWaitAmrList] = useState(false);
+  const { t } = useTranslation();
+  const { data: name } = useName();
+  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
 
-  const mapData = useMap()
+  const mapData = useMap();
   const loc = mapData.data?.locations
     .map((v) => ({
       label: v.locationId,
       value: v.locationId
     }))
-    .sort((a, b) => Number(a.value) - Number(b.value))
+    .sort((a, b) => Number(a.value) - Number(b.value));
 
   const clearWaitAmrField = (needWait: boolean) => {
     if (needWait) {
-      setIsSelectWaitAmrList(true)
-      return
+      setIsSelectWaitAmrList(true);
+      return;
     }
-    setIsSelectWaitAmrList(false)
-    form.setFieldValue('waitOtherAmr', null)
-    form.setFieldValue('waitGenre', null)
-  }
+    setIsSelectWaitAmrList(false);
+    form.setFieldValue('waitOtherAmr', null);
+    form.setFieldValue('waitGenre', null);
+  };
 
   useEffect(() => {
-    if (!taskDataSource) return
+    if (!taskDataSource) return;
 
     // Set form fields based on taskDataSource values
     form.setFieldsValue({
@@ -68,16 +68,16 @@ const TaskForm: FC<{
       waitGenre: taskDataSource.waitGenre,
       auto_preparatory_point: taskDataSource.auto_preparatory_point,
       hasWaitOther: !!taskDataSource.waitOtherAmr
-    })
+    });
 
     if (taskDataSource.waitOtherAmr) {
-      setIsSelectWaitAmrList(true)
+      setIsSelectWaitAmrList(true);
     } else {
-      setIsSelectWaitAmrList(false)
+      setIsSelectWaitAmrList(false);
     }
-  }, [form, taskDataSource])
+  }, [form, taskDataSource]);
 
-  if (!defaultOperation.length || isLoading) return <Skeleton active />
+  if (!defaultOperation.length || isLoading) return <Skeleton active />;
 
   return (
     <Form form={form} labelCol={{ span: 6 }} autoComplete="off" size="small">
@@ -187,7 +187,7 @@ const TaskForm: FC<{
         />
       </Form.Item>
     </Form>
-  )
-}
+  );
+};
 
-export default TaskForm
+export default TaskForm;

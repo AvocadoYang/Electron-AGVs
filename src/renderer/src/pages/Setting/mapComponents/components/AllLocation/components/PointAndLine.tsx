@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import styled from 'styled-components'
-import { FC, memo } from 'react'
-import { useAtomValue } from 'jotai'
-import { DragLineInfo, showBlockId as ShowBlockId } from '@renderer/utils/gloable'
-import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble'
+ 
+import styled from 'styled-components';
+import { FC, memo } from 'react';
+import { useAtomValue } from 'jotai';
+import { DragLineInfo, showBlockId as ShowBlockId } from '@renderer/utils/gloable';
+import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble';
 
 const PointDiv = styled.div.attrs<{
   left: number
@@ -31,9 +31,9 @@ const PointDiv = styled.div.attrs<{
     background: red;
     scale: 1.8;
   }
-`
+`;
 
-export const Point = memo(PointDiv)
+export const Point = memo(PointDiv);
 
 const DraggableLineDiv = styled.div.attrs<{
   left: number
@@ -68,15 +68,15 @@ const DraggableLineDiv = styled.div.attrs<{
     transform: rotate(-45deg);
     pointer-events: none;
   }
-`
+`;
 
 const DragLineWrap: FC<{ locId: string; left: number; top: number }> = ({ locId, left, top }) => {
-  const showBlockId = useAtomValue(ShowBlockId)
-  const setDragLineInfo = useAtomValue(DragLineInfo)
-  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
+  const showBlockId = useAtomValue(ShowBlockId);
+  const setDragLineInfo = useAtomValue(DragLineInfo);
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch);
 
-  const { deg, width } = setDragLineInfo
-  if (locId !== showBlockId) return []
+  const { deg, width } = setDragLineInfo;
+  if (locId !== showBlockId) return [];
   return (
     <>
       <DraggableLineDiv
@@ -87,7 +87,7 @@ const DragLineWrap: FC<{ locId: string; left: number; top: number }> = ({ locId,
         openeditroadpanel={openEditRoadPanel}
       ></DraggableLineDiv>
     </>
-  )
-}
+  );
+};
 
-export const DraggableLine = memo(DragLineWrap)
+export const DraggableLine = memo(DragLineWrap);

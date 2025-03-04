@@ -1,15 +1,15 @@
-import { FC } from 'react'
+import { FC } from 'react';
 import {
   CaretRightOutlined,
   PauseOutlined,
   PlusOutlined,
   UndoOutlined,
   UpOutlined
-} from '@ant-design/icons'
-import { FloatButton } from 'antd'
-import { useTranslation } from 'react-i18next'
+} from '@ant-design/icons';
+import { FloatButton } from 'antd';
+import { useTranslation } from 'react-i18next';
 const Toolbar: FC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <>
       <FloatButton.Group trigger="click" icon={<UpOutlined key="left" />}>
@@ -19,7 +19,7 @@ const Toolbar: FC = () => {
         <FloatButton tooltip={<div>{t('sim.reset_sim')}</div>} icon={<UndoOutlined />} />
       </FloatButton.Group>
     </>
-  )
-}
+  );
+};
 
-export default Toolbar
+export default Toolbar;

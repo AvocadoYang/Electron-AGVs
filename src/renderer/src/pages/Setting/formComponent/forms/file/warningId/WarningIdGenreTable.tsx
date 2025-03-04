@@ -1,38 +1,38 @@
-import { DeleteOutlined, DeleteTwoTone } from '@ant-design/icons'
-import client from '@renderer/api/axiosClient'
-import useWarningGenre from '@renderer/api/useWarningGenre'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Popconfirm, Table, TableProps, Tooltip } from 'antd'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { DeleteOutlined } from '@ant-design/icons';
+import client from '@renderer/api/axiosClient';
+import useWarningGenre from '@renderer/api/useWarningGenre';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Popconfirm, Table, TableProps } from 'antd';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface DataType {
-  id: string
-  name_ch: string
-  name_en: string
+  id: string;
+  name_ch: string;
+  name_en: string;
 }
 
 const WarningIdGenreTable: FC = () => {
-  const { data, refetch } = useWarningGenre()
-  const { t } = useTranslation()
-  const queryClient = useQueryClient()
+  const { data, refetch } = useWarningGenre();
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
-      return client.post('api/setting/delete-warning-genre', payload)
+      return client.post('api/setting/delete-warning-genre', payload);
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['warning-table']
-      })
-      // eslint-disable-next-line no-void
-      void refetch()
+      });
+
+      void refetch();
     }
-  })
+  });
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate({ id })
-  }
+    deleteMutation.mutate({ id });
+  };
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -50,7 +50,7 @@ const WarningIdGenreTable: FC = () => {
       width: 30,
       dataIndex: 'operation',
       key: 'operation',
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render(_v: unknown, record: DataType) {
         return (
           <>
@@ -65,12 +65,12 @@ const WarningIdGenreTable: FC = () => {
               </Button>
             </Popconfirm>
           </>
-        )
+        );
       }
     }
-  ]
+  ];
 
-  return <Table<DataType> rowKey={(record) => record.id} columns={columns} dataSource={data} />
-}
+  return <Table<DataType> rowKey={(record) => record.id} columns={columns} dataSource={data} />;
+};
 
-export default WarningIdGenreTable
+export default WarningIdGenreTable;

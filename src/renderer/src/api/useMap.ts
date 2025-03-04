@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { useQuery } from '@tanstack/react-query'
-import { array, boolean, lazy, mixed, number, object, string } from 'yup'
-import { MISSION_CONTROL_URL } from '../configs/config'
-import api from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, boolean, lazy, mixed, number, object, string } from 'yup';
+import { MISSION_CONTROL_URL } from '../configs/config';
+import api from './axiosClient';
 
 const getMap = async () => {
-  const { data } = await api.get<unknown>('map')
+  const { data } = await api.get<unknown>('map');
   const schema = object({
     locations: array(
       object({
@@ -31,8 +30,8 @@ const getMap = async () => {
         x2: number().required(),
         y2: number().required(),
         validYawList: lazy((value) => {
-          if (typeof value === 'string') return mixed<'*'>().oneOf(['*']).required()
-          return array(number().min(0).max(360).required()).required()
+          if (typeof value === 'string') return mixed<'*'>().oneOf(['*']).required();
+          return array(number().min(0).max(360).required()).required();
         }),
         tolerance: number().optional(),
         cost: number().optional(),
@@ -66,20 +65,20 @@ const getMap = async () => {
     mapOriginY: number().required(),
     mapResolution: number().positive().required(),
     imageUrl: string().optional()
-  }).required()
+  }).required();
 
-  const parsed = await schema.validate(data, { stripUnknown: true })
+  const parsed = await schema.validate(data, { stripUnknown: true });
   if (parsed.imageUrl) {
     parsed.imageUrl = `${MISSION_CONTROL_URL.replace('localhost', location.host).replace(
       '3001',
       '4000'
-    )}${parsed.imageUrl}`
+    )}${parsed.imageUrl}`;
   }
-  return parsed
-}
+  return parsed;
+};
 
 const useMap = () => {
-  return useQuery(['map'], getMap)
-}
+  return useQuery(['map'], getMap);
+};
 
-export default useMap
+export default useMap;

@@ -1,38 +1,38 @@
-import { FC, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Button, Flex, Modal } from 'antd'
-import styled from 'styled-components'
-import WarningIdForm from './WarningIdForm'
-import WarningIdGenreTable from './WarningIdGenreTable'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
-import WarningIdGenreForm from './WarningIdGenreForm'
-import WarningListTable from './WarningListTable'
-import { DiffOutlined } from '@ant-design/icons'
+import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button, Flex, Modal } from 'antd';
+import styled from 'styled-components';
+import WarningIdForm from './WarningIdForm';
+import WarningIdGenreTable from './WarningIdGenreTable';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
+import WarningIdGenreForm from './WarningIdGenreForm';
+import WarningListTable from './WarningListTable';
+import { DiffOutlined } from '@ant-design/icons';
 const AlignBtn = styled.div`
   position: relative;
   bottom: 130px;
   right: -340px;
-`
+`;
 
 const EditWarningListPanel: FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const { t } = useTranslation()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const handleOk = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const handleCancel = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -63,7 +63,7 @@ const EditWarningListPanel: FC<{
         <WarningIdGenreTable />
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default EditWarningListPanel
+export default EditWarningListPanel;

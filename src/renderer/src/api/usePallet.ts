@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, object, string } from 'yup';
+import client from './axiosClient';
 
 const getPallet = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-pallet')
+  const { data } = await client.get<unknown>('api/setting/all-pallet');
 
   const schema = () =>
     array(
@@ -12,17 +12,17 @@ const getPallet = async () => {
         name: string().required(),
         color: string().required()
       }).required()
-    ).optional()
+    ).optional();
 
-  return schema().validate(data, { stripUnknown: true })
-}
+  return schema().validate(data, { stripUnknown: true });
+};
 
 const usePallet = () => {
   return useQuery(['all-pallet'], {
     queryFn: () => {
-      return getPallet()
+      return getPallet();
     }
-  })
-}
+  });
+};
 
-export default usePallet
+export default usePallet;

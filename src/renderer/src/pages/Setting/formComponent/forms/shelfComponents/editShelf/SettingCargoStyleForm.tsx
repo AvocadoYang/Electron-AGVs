@@ -7,18 +7,18 @@ import {
   UndoOutlined,
   FullscreenOutlined,
   FullscreenExitOutlined
-} from '@ant-design/icons'
-import { Button, Card, Col, Form, Input, message, Row } from 'antd'
-import { useAtom, useSetAtom } from 'jotai'
-import { FC, useEffect, useRef } from 'react'
-import styled from 'styled-components'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
-import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable'
-import client from '@renderer/api/axiosClient'
-import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
+} from '@ant-design/icons';
+import { Button, Card, Col, Form, Input, message, Row } from 'antd';
+import { useAtom, useSetAtom } from 'jotai';
+import { FC, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable';
+import client from '@renderer/api/axiosClient';
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
 type Options = 'areaType' | 'translateX' | 'translateY' | 'rotate' | 'scale'
 
@@ -49,40 +49,40 @@ type Event =
 const BtnWrapper = styled.div`
   display: flex;
   gap: 1em;
-`
+`;
 
 const SettingCargoStyleForm: FC<{
   selectId: string
   cancelEditStyle: () => void
 }> = ({ selectId, cancelEditStyle }) => {
-  const [cStyle, setCStyle] = useAtom(cargoStyle)
-  const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId)
-  const [form] = Form.useForm()
-  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null)
-  const queryClient = useQueryClient()
-  const { t } = useTranslation()
-  const { data } = useLoc(undefined)
-  const [messageApi, contextHolder] = message.useMessage()
+  const [cStyle, setCStyle] = useAtom(cargoStyle);
+  const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId);
+  const [form] = Form.useForm();
+  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const { data } = useLoc(undefined);
+  const [messageApi, contextHolder] = message.useMessage();
   const submitMutation = useMutation({
     mutationFn: (editValue: SubmitValue) => {
-      return client.post('api/setting/edit-loc-style', editValue)
+      return client.post('api/setting/edit-loc-style', editValue);
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['cargoLoc-mission']
-      })
+      });
       await queryClient.refetchQueries({
         queryKey: ['loc-only']
-      })
-      messageApi.success(t('utils.success'))
+      });
+      messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
   const saveStyle = () => {
-    const x = form.getFieldValue('translateX') as number
-    const y = form.getFieldValue('translateY') as number
-    const r = form.getFieldValue('rotate') as number
-    const s = form.getFieldValue('scale') as number
+    const x = form.getFieldValue('translateX') as number;
+    const y = form.getFieldValue('translateY') as number;
+    const r = form.getFieldValue('rotate') as number;
+    const s = form.getFieldValue('scale') as number;
 
     submitMutation.mutate({
       id: selectId,
@@ -90,110 +90,110 @@ const SettingCargoStyleForm: FC<{
       translateY: y,
       rotate: r,
       scale: s
-    })
-    cancelEditStyle()
-  }
+    });
+    cancelEditStyle();
+  };
 
   const handChange = (val: Val) => {
     setCStyle((prev) => {
-      if (!prev) return null
+      if (!prev) return null;
       return {
         translateX: val.input === 'translateX' ? val.value : prev.translateX,
         translateY: val.input === 'translateY' ? val.value : prev.translateY,
         rotate: val.input === 'rotate' ? val.value : prev.rotate,
         scale: val.input === 'scale' ? val.value : prev.scale
-      }
-    })
-  }
+      };
+    });
+  };
 
   const handleBtnChange = (val: Val) => {
     setCStyle((prev) => {
-      if (!prev) return null
+      if (!prev) return null;
       return {
         translateX: val.input === 'translateX' ? val.value + prev.translateX : prev.translateX,
         translateY: val.input === 'translateY' ? val.value + prev.translateY : prev.translateY,
         rotate: val.input === 'rotate' ? val.value + prev.rotate : prev.rotate,
         scale: val.input === 'scale' ? val.value + prev.scale : prev.scale
-      }
-    })
-  }
+      };
+    });
+  };
 
   const transformStyle = (event: Event) => {
     switch (event) {
       case 'up':
-        handleBtnChange({ input: 'translateY', value: -0.1 })
-        break
+        handleBtnChange({ input: 'translateY', value: -0.1 });
+        break;
       case 'down':
-        handleBtnChange({ input: 'translateY', value: +0.1 })
-        break
+        handleBtnChange({ input: 'translateY', value: +0.1 });
+        break;
       case 'left':
-        handleBtnChange({ input: 'translateX', value: -0.1 })
-        break
+        handleBtnChange({ input: 'translateX', value: -0.1 });
+        break;
       case 'right':
-        handleBtnChange({ input: 'translateX', value: 0.1 })
-        break
+        handleBtnChange({ input: 'translateX', value: 0.1 });
+        break;
       case 'r-rotate':
-        handleBtnChange({ input: 'rotate', value: -1 })
-        break
+        handleBtnChange({ input: 'rotate', value: -1 });
+        break;
       case 'l-rotate':
-        handleBtnChange({ input: 'rotate', value: 1 })
-        break
+        handleBtnChange({ input: 'rotate', value: 1 });
+        break;
       case 'scale-up':
-        handleBtnChange({ input: 'scale', value: 0.1 })
-        break
+        handleBtnChange({ input: 'scale', value: 0.1 });
+        break;
       case 'scale-down':
-        handleBtnChange({ input: 'scale', value: -0.1 })
-        break
+        handleBtnChange({ input: 'scale', value: -0.1 });
+        break;
       default:
-        console.log('error')
+        console.log('error');
     }
-  }
+  };
 
   useEffect(() => {
-    if (!data) return
-    const thisLocData = (data as LocWithoutArr[]).find((v) => v.id === selectId)
+    if (!data) return;
+    const thisLocData = (data as LocWithoutArr[]).find((v) => v.id === selectId);
 
-    if (!thisLocData) return
-    setShelfSelectedStyle(thisLocData.locationId)
+    if (!thisLocData) return;
+    setShelfSelectedStyle(thisLocData.locationId);
     setCStyle({
       translateX: thisLocData.translateX,
       translateY: thisLocData.translateY,
       rotate: thisLocData.rotate,
       scale: thisLocData.scale
-    })
-    form.setFieldValue('translateX', thisLocData.translateX)
-    form.setFieldValue('translateY', thisLocData.translateY)
-    form.setFieldValue('scale', thisLocData.scale)
-    form.setFieldValue('rotate', thisLocData.rotate)
-  }, [selectId, data])
+    });
+    form.setFieldValue('translateX', thisLocData.translateX);
+    form.setFieldValue('translateY', thisLocData.translateY);
+    form.setFieldValue('scale', thisLocData.scale);
+    form.setFieldValue('rotate', thisLocData.rotate);
+  }, [selectId, data]);
 
   useEffect(() => {
-    if (!cStyle) return
-    form.setFieldValue('translateX', cStyle.translateX)
-    form.setFieldValue('translateY', cStyle.translateY)
-    form.setFieldValue('scale', cStyle.scale)
-    form.setFieldValue('rotate', cStyle.rotate)
-  }, [cStyle])
+    if (!cStyle) return;
+    form.setFieldValue('translateX', cStyle.translateX);
+    form.setFieldValue('translateY', cStyle.translateY);
+    form.setFieldValue('scale', cStyle.scale);
+    form.setFieldValue('rotate', cStyle.rotate);
+  }, [cStyle]);
 
   // Function to handle the button press and start the transformations
   const handleButtonPress = (event: Event) => {
-    if (intervalId.current) return
-    transformStyle(event)
+    if (intervalId.current) return;
+    transformStyle(event);
     intervalId.current = setInterval(() => {
-      transformStyle(event)
-    }, 50)
-  }
+      transformStyle(event);
+    }, 50);
+  };
 
   const stopCounter = () => {
     if (intervalId.current) {
-      clearInterval(intervalId.current)
-      intervalId.current = null
+      clearInterval(intervalId.current);
+      intervalId.current = null;
     }
-  }
+  };
 
   useEffect(() => {
-    return () => stopCounter()
-  }, [])
+    return () => stopCounter();
+  }, []);
 
   return (
     <>
@@ -313,7 +313,7 @@ const SettingCargoStyleForm: FC<{
         </Row>
       </Card>
     </>
-  )
-}
+  );
+};
 
-export default SettingCargoStyleForm
+export default SettingCargoStyleForm;

@@ -1,15 +1,15 @@
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
-import BeforeLeftChargeStationTable from './BeforeLeftChargeStationTable'
-import BeforeLeftChargeStationForm from './BeforeLeftChargeStationForm'
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
+import BeforeLeftChargeStationTable from './BeforeLeftChargeStationTable';
+import BeforeLeftChargeStationForm from './BeforeLeftChargeStationForm';
 
 const BeforeLeftChargeStationPanel: FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <>
       <div>
@@ -21,7 +21,7 @@ const BeforeLeftChargeStationPanel: FC<{
         <BeforeLeftChargeStationTable />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default BeforeLeftChargeStationPanel
+export default BeforeLeftChargeStationPanel;

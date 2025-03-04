@@ -1,5 +1,5 @@
-import { FC, memo } from 'react'
-import { borderColor } from './utils'
+import { FC, memo } from 'react';
+import { borderColor } from './utils';
 
 const FormHr: FC<{ sortableId: string }> = ({ sortableId }) => {
   return (
@@ -11,7 +11,7 @@ const FormHr: FC<{ sortableId: string }> = ({ sortableId }) => {
         borderRadius: '5px'
       }}
     ></hr>
-  )
-}
+  );
+};
 
-export default memo(FormHr)
+export default memo(FormHr);

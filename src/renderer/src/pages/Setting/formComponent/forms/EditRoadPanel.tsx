@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   Button,
   Checkbox,
@@ -13,55 +10,55 @@ import {
   Row,
   Space,
   Switch
-} from 'antd'
-import { useTranslation } from 'react-i18next'
-import { SaveOutlined } from '@ant-design/icons'
-import { memo, useState } from 'react'
-import { initialRoadValue } from './formInitValue'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Road } from './road'
-import client from '@renderer/api/axiosClient'
-import FormHr from '../../utils/FormHr'
+} from 'antd';
+import { useTranslation } from 'react-i18next';
+import { SaveOutlined } from '@ant-design/icons';
+import { memo, useState } from 'react';
+import { initialRoadValue } from './formInitValue';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Road } from './road';
+import client from '@renderer/api/axiosClient';
+import FormHr from '../../utils/FormHr';
 
-function validateArray(arr: string[]) {
-  if (arr.includes('*')) {
-    return arr.length === 1
-  }
+// function validateArray(arr: string[]) {
+//   if (arr.includes('*')) {
+//     return arr.length === 1;
+//   }
 
-  if (arr.includes('0') || arr.includes('180')) {
-    return arr.every((val) => val === '0' || val === '180')
-  }
+//   if (arr.includes('0') || arr.includes('180')) {
+//     return arr.every((val) => val === '0' || val === '180');
+//   }
 
-  if (arr.includes('90') || arr.includes('270')) {
-    return arr.every((val) => val === '90' || val === '270')
-  }
+//   if (arr.includes('90') || arr.includes('270')) {
+//     return arr.every((val) => val === '90' || val === '270');
+//   }
 
-  return true
-}
+//   return true;
+// }
 
 const EditRoadPanel: React.FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-  roadPanelForm: FormInstance<unknown>
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+  roadPanelForm: FormInstance<unknown>;
 }> = ({ sortableId, attributes, listeners, roadPanelForm }) => {
-  const [chooseAngle, setChooseAngle] = useState<string>('')
-  const [messageApi, contextHolders] = message.useMessage()
-  const { t } = useTranslation()
-  const queryClient = useQueryClient()
+  const [chooseAngle, setChooseAngle] = useState<string>('');
+  const [messageApi, contextHolders] = message.useMessage();
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const saveRoadMutation = useMutation({
     mutationFn: (payload: Road) => {
-      return client.post('api/setting/save-edit-road', payload)
+      return client.post('api/setting/save-edit-road', payload);
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const saveRoad = () => {
     const payload: Road = {
@@ -71,9 +68,9 @@ const EditRoadPanel: React.FC<{
       roadType: roadPanelForm.getFieldValue('roadType') as string,
       validYawList: roadPanelForm.getFieldValue('validYawList') as number[] | string[],
       disabled: roadPanelForm.getFieldValue('disabled') as boolean
-    }
-    saveRoadMutation.mutate(payload)
-  }
+    };
+    saveRoadMutation.mutate(payload);
+  };
 
   return (
     <>
@@ -109,9 +106,9 @@ const EditRoadPanel: React.FC<{
                     }
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setChooseAngle('*')
+                        setChooseAngle('*');
                       } else {
-                        setChooseAngle('')
+                        setChooseAngle('');
                       }
                     }}
                   >
@@ -124,9 +121,9 @@ const EditRoadPanel: React.FC<{
                     disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setChooseAngle('0')
+                        setChooseAngle('0');
                       } else {
-                        setChooseAngle('')
+                        setChooseAngle('');
                       }
                     }}
                   >
@@ -139,9 +136,9 @@ const EditRoadPanel: React.FC<{
                     disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setChooseAngle('90')
+                        setChooseAngle('90');
                       } else {
-                        setChooseAngle('')
+                        setChooseAngle('');
                       }
                     }}
                   >
@@ -154,9 +151,9 @@ const EditRoadPanel: React.FC<{
                     disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setChooseAngle('180')
+                        setChooseAngle('180');
                       } else {
-                        setChooseAngle('')
+                        setChooseAngle('');
                       }
                     }}
                   >
@@ -169,9 +166,9 @@ const EditRoadPanel: React.FC<{
                     disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setChooseAngle('270')
+                        setChooseAngle('270');
                       } else {
-                        setChooseAngle('')
+                        setChooseAngle('');
                       }
                     }}
                   >
@@ -215,7 +212,7 @@ const EditRoadPanel: React.FC<{
         </Form>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default memo(EditRoadPanel)
+export default memo(EditRoadPanel);

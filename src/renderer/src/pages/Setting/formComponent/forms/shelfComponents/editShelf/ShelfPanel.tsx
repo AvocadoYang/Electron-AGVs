@@ -1,20 +1,20 @@
-/* eslint-disable no-void */
-import { Button, Flex } from 'antd'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import ShelfTable from './ShelfTable'
-import ShelfDrawer from './ShelfDrawer'
-import FormHr from '../../../../utils/FormHr'
+ 
+import { Button, Flex } from 'antd';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import ShelfTable from './ShelfTable';
+import ShelfDrawer from './ShelfDrawer';
+import FormHr from '../../../../utils/FormHr';
 
 const ShelfPanel: React.FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-  const [openDrawer, setOpenDrawer] = useState(false)
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [openDrawer, setOpenDrawer] = useState(false);
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <>
@@ -43,7 +43,7 @@ const ShelfPanel: React.FC<{
         selectedRowKeys={selectedRowKeys}
       />
     </>
-  )
-}
+  );
+};
 
-export default ShelfPanel
+export default ShelfPanel;

@@ -1,7 +1,7 @@
-import React from 'react'
-import './car_info.css'
+import React from 'react';
+import './car_info.css';
 // import { useTranslation } from 'react-i18next'
-import Card from './Card'
+import Card from './Card';
 
 const CarCardWrap: React.FC = () => {
   // const { t } = useTranslation()
@@ -11,7 +11,7 @@ const CarCardWrap: React.FC = () => {
         <Card key={2}></Card>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default CarCardWrap
+export default CarCardWrap;

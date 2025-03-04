@@ -1,6 +1,6 @@
-import { RectInfo } from '@renderer/pages/Setting/hooks/hook'
-import { FC, memo } from 'react'
-import styled from 'styled-components'
+import { RectInfo } from '@renderer/pages/Setting/hooks/hook';
+import { FC, memo } from 'react';
+import styled from 'styled-components';
 
 const Frame = styled.div.attrs<{
   left: number
@@ -19,15 +19,15 @@ const Frame = styled.div.attrs<{
   height: 6px;
   border: 2px solid red;
   background: rgba(255, 0, 0, 0.03);
-`
+`;
 
 const DragFrame: FC<{ rectInfo: RectInfo }> = ({ rectInfo }) => {
-  const { axisX, axisY, width, height } = rectInfo
+  const { axisX, axisY, width, height } = rectInfo;
   return (
     <>
       <Frame left={axisX} top={axisY} width={width} height={height}></Frame>
     </>
-  )
-}
+  );
+};
 
-export default memo(DragFrame)
+export default memo(DragFrame);

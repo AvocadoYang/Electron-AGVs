@@ -1,92 +1,85 @@
-import {
-  CaretRightOutlined,
-  ControlTwoTone,
-  DeleteTwoTone,
-  EditOutlined,
-  EditTwoTone
-} from '@ant-design/icons'
-import client from '@renderer/api/axiosClient'
-import { MTType } from '@renderer/api/useMissionTitle'
-import { Err } from '@renderer/utils/responseErr'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Col, Flex, message, Popconfirm, Row, Table, Tag } from 'antd'
-import { ColumnsType } from 'antd/es/table'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import { TitleMission } from './mission'
+import { ControlTwoTone, DeleteTwoTone, EditOutlined } from '@ant-design/icons';
+import client from '@renderer/api/axiosClient';
+import { MTType } from '@renderer/api/useMissionTitle';
+import { Err } from '@renderer/utils/responseErr';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Flex, message, Popconfirm, Table, Tag } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { TitleMission } from './mission';
 
 const TagWrapper = styled.div`
   display: flex;
   gap: 1em;
-`
+`;
 
 const MissionTable: FC<{
-  setEditMissionKey: React.Dispatch<React.SetStateAction<string>>
-  setOpenMissionModel: React.Dispatch<React.SetStateAction<boolean>>
-  selectedMissionKey: string
-  setSelectedMissionKey: React.Dispatch<React.SetStateAction<string>>
-  setSelectedMissionCar: React.Dispatch<React.SetStateAction<string>>
-  allMissionTitle: MTType
+  setEditMissionKey: React.Dispatch<React.SetStateAction<string>>;
+  setOpenMissionModel: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedMissionKey: string;
+  setSelectedMissionKey: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedMissionCar: React.Dispatch<React.SetStateAction<string>>;
+  allMissionTitle: MTType;
 }> = ({
   setEditMissionKey,
   setOpenMissionModel,
-  selectedMissionKey,
   setSelectedMissionKey,
   setSelectedMissionCar,
   allMissionTitle
 }) => {
-  const queryClient = useQueryClient()
-  const { t } = useTranslation()
-  const [messageApi, contextHolders] = message.useMessage()
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const [messageApi, contextHolders] = message.useMessage();
   const deleteMutation = useMutation({
     mutationFn: (deleteId: string) => {
       return client.post(
-        `api/setting/delete-mission-title`,
+        'api/setting/delete-mission-title',
         {
           id: deleteId
         },
         {
           headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
         }
-      )
+      );
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['all-mission-title']
-      })
+      });
       await queryClient.refetchQueries({
         queryKey: ['all-relate-task']
-      })
+      });
 
-      setSelectedMissionKey('')
+      setSelectedMissionKey('');
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg)
+      messageApi.error(error.response.data.msg);
     }
-  })
+  });
 
   const handleDelete = (key: string) => {
-    deleteMutation.mutate(key)
-  }
+    deleteMutation.mutate(key);
+  };
 
   const handleClick = async (record: TitleMission) => {
     if (record.Car) {
-      setSelectedMissionCar(record.Car.value)
+      setSelectedMissionCar(record.Car.value);
     }
-    setSelectedMissionKey(record.id)
+    setSelectedMissionKey(record.id);
     try {
-      await queryClient.refetchQueries({ queryKey: ['all-relate-task'] })
+      await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
+  };
 
   const showModal = (key: string) => {
-    setEditMissionKey(key)
-    setOpenMissionModel(true)
-    setSelectedMissionKey('')
-  }
+    setEditMissionKey(key);
+    setOpenMissionModel(true);
+    setSelectedMissionKey('');
+  };
 
   const columns: ColumnsType<TitleMission> = [
     {
@@ -102,7 +95,7 @@ const MissionTable: FC<{
       dataIndex: 'car_type',
       key: 'car_type',
       render: (_, record) => {
-        return <p>{record.Car?.name}</p>
+        return <p>{record.Car?.name}</p>;
       },
       sorter: (a, b) => a.name.localeCompare(b.name)
     },
@@ -115,8 +108,8 @@ const MissionTable: FC<{
           <Tag key={c.Category.id || idx} color={c.Category.color}>
             {c.Category.tagName}
           </Tag>
-        ))
-        return <TagWrapper>{tags || <></>}</TagWrapper>
+        ));
+        return <TagWrapper>{tags || <></>}</TagWrapper>;
       }
     },
     {
@@ -157,10 +150,10 @@ const MissionTable: FC<{
               </Button>
             </Flex>
           </>
-        )
+        );
       }
     }
-  ]
+  ];
 
   return (
     <>
@@ -172,7 +165,7 @@ const MissionTable: FC<{
         rowKey={(record) => record.id}
       />
     </>
-  )
-}
+  );
+};
 
-export default MissionTable
+export default MissionTable;

@@ -1,11 +1,11 @@
-import { forwardRef } from 'react'
-import { memo } from 'react'
-import useMap from '@renderer/api/useMap'
-import { Spin } from 'antd'
-import { LoadingOutlined, RobotOutlined } from '@ant-design/icons'
+import { forwardRef } from 'react';
+import { memo } from 'react';
+import useMap from '@renderer/api/useMap';
+import { Spin } from 'antd';
+import { LoadingOutlined, RobotOutlined } from '@ant-design/icons';
 
 const MapImage = forwardRef<HTMLImageElement>((props, ref) => {
-  const { data, isLoading, isError } = useMap()
+  const { data, isLoading, isError } = useMap();
 
   if (isLoading)
     return (
@@ -14,7 +14,7 @@ const MapImage = forwardRef<HTMLImageElement>((props, ref) => {
       >
         <Spin indicator={<LoadingOutlined style={{ fontSize: 55 }} spin />} />
       </div>
-    )
+    );
 
   if (isError)
     return (
@@ -51,7 +51,7 @@ const MapImage = forwardRef<HTMLImageElement>((props, ref) => {
           </h4>
         </div>
       </div>
-    )
+    );
 
   return (
     <img
@@ -61,7 +61,7 @@ const MapImage = forwardRef<HTMLImageElement>((props, ref) => {
       style={{ userSelect: 'none' }}
       alt="Map"
     />
-  )
-})
+  );
+});
 
-export default memo(MapImage)
+export default memo(MapImage);

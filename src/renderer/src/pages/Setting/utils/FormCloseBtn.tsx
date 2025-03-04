@@ -1,8 +1,8 @@
-import { FC, memo } from 'react'
-import { CloseOutlined } from '@ant-design/icons'
-import './utils.css'
+import { FC, memo } from 'react';
+import { CloseOutlined } from '@ant-design/icons';
+import './utils.css';
 
-const FormCloseBtn: FC<{ sortableId: string }> = ({ sortableId }) => {
+const FormCloseBtn: FC<{ sortableId: string }> = () => {
   return (
     <>
       <CloseOutlined
@@ -10,7 +10,7 @@ const FormCloseBtn: FC<{ sortableId: string }> = ({ sortableId }) => {
         style={{ position: 'absolute', right: '1em', top: '1em' }}
       />
     </>
-  )
-}
+  );
+};
 
-export default memo(FormCloseBtn)
+export default memo(FormCloseBtn);

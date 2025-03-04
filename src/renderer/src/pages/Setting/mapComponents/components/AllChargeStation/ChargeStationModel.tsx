@@ -1,15 +1,15 @@
-import { ChargeStationResponseObj } from '@renderer/api/type/useLocation'
-import { FC, memo, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import { CloseCircleOutlined } from '@ant-design/icons'
-import dayjs from 'dayjs'
-import { useAtom } from 'jotai'
-import { chargeStationModelProp } from '@renderer/utils/gloable'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import useMap from '@renderer/api/useMap'
-import useLocation from '@renderer/api/useLocation'
-import Draggable from 'react-draggable'
+import { ChargeStationResponseObj } from '@renderer/api/type/useLocation';
+import { FC, memo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { CloseCircleOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
+import { useAtom } from 'jotai';
+import { chargeStationModelProp } from '@renderer/utils/gloable';
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
+import useMap from '@renderer/api/useMap';
+import useLocation from '@renderer/api/useLocation';
+import Draggable from 'react-draggable';
 
 type Open = {
   $is_open: boolean
@@ -19,7 +19,7 @@ const Box = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1em;
-`
+`;
 
 const ModelStyle = styled.div<Open>`
   display: ${(prop) => (prop.$is_open ? 'flex' : 'none')};
@@ -36,19 +36,19 @@ const ModelStyle = styled.div<Open>`
 
   padding: 0.8em;
   gap: 1em;
-`
+`;
 
 const MyIcon = styled.div`
   position: absolute;
   right: 10px;
   z-index: 999;
-`
+`;
 
 const InfoWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.2em;
-`
+`;
 
 type HasTrigger = {
   b: boolean
@@ -57,30 +57,30 @@ type HasTrigger = {
 const C = styled.div<HasTrigger>`
   width: 100%;
   opacity: ${(props) => (props.b ? 1 : 0.5)};
-`
+`;
 
 const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const H3 = styled.h3`
   margin: 0;
-`
+`;
 
 const BlurText = styled.p`
   margin: 0;
   text-align: center;
   font-size: larger;
   font-weight: bolder;
-`
+`;
 
 const NoConnectBlock = styled.div`
   width: 100%;
   height: 100%;
   background: #c9c4c4;
   filter: blur(10px);
-`
+`;
 
 const PointDiv = styled.div.attrs<{
   left: number
@@ -100,21 +100,21 @@ const PointDiv = styled.div.attrs<{
   border-radius: ${(props) => (props.canrotate === 'true' ? 0 : '50%')};
   z-index: 10;
   transition-duration: 200ms;
-`
-export const Point = memo(PointDiv)
+`;
+export const Point = memo(PointDiv);
 
 const ChargeStationModel: FC = () => {
-  const { t } = useTranslation()
-  const [open, setOpen] = useAtom(chargeStationModelProp)
-  const { data } = useMap()
-  const { data: AllStation } = useLocation()
-  const nodeRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation();
+  const [open, setOpen] = useAtom(chargeStationModelProp);
+  const { data } = useMap();
+  const { data: AllStation } = useLocation();
+  const nodeRef = useRef<HTMLDivElement>(null);
 
-  if (!open || !data) return []
+  if (!open || !data) return [];
 
   const info =
     (AllStation?.chargingStations.find((v) => v.id === open.location)
-      ?.info as ChargeStationResponseObj) || null
+      ?.info as ChargeStationResponseObj) || null;
 
   const [displayX, displayY] = rosCoord2DisplayCoord({
     x: data?.locations.find((v) => v.locationId === open?.location)?.x || 0,
@@ -123,7 +123,7 @@ const ChargeStationModel: FC = () => {
     mapOriginX: data?.mapOriginX,
     mapOriginY: data.mapOriginY,
     mapResolution: data.mapResolution
-  })
+  });
 
   return (
     <>
@@ -193,7 +193,7 @@ const ChargeStationModel: FC = () => {
         </Point>
       </Draggable>
     </>
-  )
-}
+  );
+};
 
-export default ChargeStationModel
+export default ChargeStationModel;

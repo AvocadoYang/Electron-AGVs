@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const LoadingStation = styled.div`
   width: 15px;
@@ -32,4 +32,4 @@ export const LoadingStation = styled.div`
       transform: rotate(1turn);
     }
   }
-`
+`;

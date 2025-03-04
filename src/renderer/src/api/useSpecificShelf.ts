@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, number, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, number, object, string } from 'yup';
+import client from './axiosClient';
 
 const collectionSchema = object({
   name: string().optional().nullable(),
@@ -30,23 +30,23 @@ const collectionSchema = object({
   })
     .optional()
     .nullable()
-}).required()
+}).required();
 
 const getCollection = async (locId: string) => {
-  const { data } = await client.get<unknown>(`api/setting/specific-shelf?locId=${locId}`)
+  const { data } = await client.get<unknown>(`api/setting/specific-shelf?locId=${locId}`);
   const validatedData = await collectionSchema.validate(data, {
     stripUnknown: true
-  })
-  return validatedData
-}
+  });
+  return validatedData;
+};
 
 const useSpecificShelf = (locId: string) => {
   return useQuery(['specific-shelf'], {
     queryFn: () => {
-      return getCollection(locId)
+      return getCollection(locId);
     },
     enabled: !!locId
-  })
-}
+  });
+};
 
-export default useSpecificShelf
+export default useSpecificShelf;

@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, number, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, number, object, string } from 'yup';
+import client from './axiosClient';
 
 const getLoc = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-loc-only')
+  const { data } = await client.get<unknown>('api/setting/all-loc-only');
 
   const schema = () =>
     array(
@@ -16,22 +16,22 @@ const getLoc = async () => {
         rotate: number().required(),
         scale: number().required()
       }).required()
-    ).required()
+    ).required();
 
-  return schema().validate(data, { stripUnknown: true })
-}
+  return schema().validate(data, { stripUnknown: true });
+};
 
 const useLoc = (locId: string | undefined) => {
   return useQuery(['loc-only', locId], {
     queryFn: getLoc,
     select: (data) => {
       if (locId) {
-        return data.find((location) => location.locationId === locId)
+        return data.find((location) => location.locationId === locId);
       }
-      return data
+      return data;
     }
-  })
-}
+  });
+};
 
 export type LocWithoutArr = {
   id: string
@@ -43,4 +43,4 @@ export type LocWithoutArr = {
   scale: number
 }
 
-export default useLoc
+export default useLoc;

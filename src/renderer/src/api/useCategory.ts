@@ -1,9 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, object, string } from 'yup';
+import client from './axiosClient';
 
 const getCategory = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-category')
+  const { data } = await client.get<unknown>('api/setting/all-category');
 
   const schema = () =>
     array(
@@ -12,17 +12,17 @@ const getCategory = async () => {
         tagName: string().required(),
         color: string().required()
       }).required()
-    ).optional()
+    ).optional();
 
-  return schema().validate(data, { stripUnknown: true })
-}
+  return schema().validate(data, { stripUnknown: true });
+};
 
 const useCategory = () => {
   return useQuery(['all-category'], {
     queryFn: () => {
-      return getCategory()
+      return getCategory();
     }
-  })
-}
+  });
+};
 
-export default useCategory
+export default useCategory;

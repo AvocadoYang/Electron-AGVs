@@ -1,32 +1,32 @@
-import { Button, Table } from 'antd'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Button, Table } from 'antd';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { FormatPainterOutlined } from '@ant-design/icons'
+import { FormatPainterOutlined } from '@ant-design/icons';
 
-import { useAtom, useSetAtom } from 'jotai'
-import useAllChargeStation, { SingleChargeStation } from '@renderer/api/useAllCharge'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
-import SettingChargeStationStyleForm from './SettingChargeStationStyleForm'
-import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable'
+import { useAtom, useSetAtom } from 'jotai';
+import useAllChargeStation, { SingleChargeStation } from '@renderer/api/useAllCharge';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
+import SettingChargeStationStyleForm from './SettingChargeStationStyleForm';
+import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable';
 
 const ChargeStationStylePanel: FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const { t } = useTranslation()
-  const { data } = useAllChargeStation()
+  const { t } = useTranslation();
+  const { data } = useAllChargeStation();
 
-  const setSelectStation = useSetAtom(chargeStationEditData)
-  const [isEditStation, setIsEditStation] = useAtom(isEditChargeStation)
+  const setSelectStation = useSetAtom(chargeStationEditData);
+  const [isEditStation, setIsEditStation] = useAtom(isEditChargeStation);
   const handleEdit = (loc: number) => {
-    if (!data) return
-    const targetIndex = data.findIndex((a) => a?.locationId === loc)
+    if (!data) return;
+    const targetIndex = data.findIndex((a) => a?.locationId === loc);
 
     if (targetIndex === -1) {
-      setSelectStation(null)
-      return
+      setSelectStation(null);
+      return;
     }
 
     setSelectStation({
@@ -35,10 +35,10 @@ const ChargeStationStylePanel: FC<{
       translateY: data[targetIndex]?.translateY || 0,
       rotate: data[targetIndex]?.rotate || 270,
       scale: data[targetIndex]?.scale || 1
-    })
+    });
 
-    setIsEditStation(true)
-  }
+    setIsEditStation(true);
+  };
 
   const columns = [
     {
@@ -80,7 +80,7 @@ const ChargeStationStylePanel: FC<{
       title: t('other.edit_charge_station_icon_style.edit_position'),
       dataIndex: 'operation',
       key: 'operation',
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       render: (_v: unknown, record: SingleChargeStation) => {
         return (
           <Button
@@ -91,10 +91,10 @@ const ChargeStationStylePanel: FC<{
           >
             {t('other.edit_charge_station_icon_style.edit_position')}
           </Button>
-        )
+        );
       }
     }
-  ]
+  ];
 
   return (
     <div>
@@ -113,7 +113,7 @@ const ChargeStationStylePanel: FC<{
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ChargeStationStylePanel
+export default ChargeStationStylePanel;

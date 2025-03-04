@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import './form.css'
+ 
+import './form.css';
 import {
   InputNumber,
   Select,
@@ -12,25 +12,25 @@ import {
   message,
   Popconfirm,
   Flex
-} from 'antd'
-import { useSetAtom } from 'jotai'
-import { LocationType } from '@renderer/utils/jotai'
-import { useRef, useState } from 'react'
-import { FilterDropdownProps } from 'antd/es/table/interface'
-import { useTranslation } from 'react-i18next'
-import { tooltipProp } from '@renderer/utils/gloable'
-import { SearchOutlined, DeleteTwoTone, EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { EditableCellProps, DataIndex } from './antd'
+} from 'antd';
+import { useSetAtom } from 'jotai';
+import { LocationType } from '@renderer/utils/jotai';
+import { useRef, useState } from 'react';
+import { FilterDropdownProps } from 'antd/es/table/interface';
+import { useTranslation } from 'react-i18next';
+import { tooltipProp } from '@renderer/utils/gloable';
+import { SearchOutlined, DeleteTwoTone, EditOutlined, CloseOutlined } from '@ant-design/icons';
+import { EditableCellProps, DataIndex } from './antd';
 
-import React, { memo } from 'react'
-import { Space, Table, Tag, Form } from 'antd'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import useMap from '@renderer/api/useMap'
-import FormHr from '../../utils/FormHr'
-import SubmitButton from '@renderer/utils/SubmitButton'
+import React, { memo } from 'react';
+import { Space, Table, Tag, Form } from 'antd';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import useMap from '@renderer/api/useMap';
+import FormHr from '../../utils/FormHr';
+import SubmitButton from '@renderer/utils/SubmitButton';
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
@@ -38,7 +38,7 @@ const pointTypeWithColor = {
   預派點: '#7fc035',
   存貨區: '#e06a0a',
   待命區: '#e0dcd8'
-}
+};
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
@@ -46,41 +46,41 @@ const EditableCell: React.FC<EditableCellProps> = ({
   children,
   ...restProps
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const pointTypeOption = [
     { value: 'Extra', label: t('utils.location_property.none') },
     { value: '充電區', label: t('utils.location_property.charge_station') },
     { value: '預派點', label: t('utils.location_property.prepare_side') },
     { value: '存貨區', label: t('utils.location_property.shelve') },
     { value: '待命區', label: t('utils.location_property.wait_side') }
-  ]
+  ];
 
   const canRotateOption = [
     { value: true, label: t('utils.yes') },
     { value: false, label: t('utils.no') }
-  ]
+  ];
 
-  let inputNode
+  let inputNode;
 
   switch (dataIndex) {
     case 'locationId':
-      inputNode = <InputNumber />
-      break
+      inputNode = <InputNumber />;
+      break;
     case 'x':
-      inputNode = <InputNumber style={{ width: '150px' }} />
-      break
+      inputNode = <InputNumber style={{ width: '150px' }} />;
+      break;
     case 'y':
-      inputNode = <InputNumber style={{ width: '150px' }} />
-      break
+      inputNode = <InputNumber style={{ width: '150px' }} />;
+      break;
     case 'areaType':
-      inputNode = <Select options={pointTypeOption} style={{ width: '150px' }} />
-      break
+      inputNode = <Select options={pointTypeOption} style={{ width: '150px' }} />;
+      break;
 
     case 'canRotate':
-      inputNode = <Select options={canRotateOption} />
-      break
+      inputNode = <Select options={canRotateOption} />;
+      break;
     default:
-      ;<InputNumber />
+      ;<InputNumber />;
   }
 
   return (
@@ -93,7 +93,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           rules={[
             {
               required: true,
-              message: `Please Input !`
+              message: 'Please Input !'
             }
           ]}
         >
@@ -103,8 +103,8 @@ const EditableCell: React.FC<EditableCellProps> = ({
         children
       )}
     </td>
-  )
-}
+  );
+};
 
 export type LocationSubmit = {
   oldLocationId: string
@@ -121,79 +121,79 @@ const AllLocationTable: React.FC<{
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ listeners, attributes, sortableId }) => {
-  const [locationPanelForm] = Form.useForm()
-  const searchInput = useRef<InputRef>(null)
-  const [editingKey, setEditingKey] = useState<string | null>(null)
-  const { data: mapData } = useMap()
-  const setTooltip = useSetAtom(tooltipProp)
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
-  const [messageApi, contextHolders] = message.useMessage()
-  const { t } = useTranslation()
-  const queryClient = useQueryClient()
+  const [locationPanelForm] = Form.useForm();
+  const searchInput = useRef<InputRef>(null);
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const { data: mapData } = useMap();
+  const setTooltip = useSetAtom(tooltipProp);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [messageApi, contextHolders] = message.useMessage();
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType) => {
-      return client.post('api/setting/edit-edit-loc', payload)
+      return client.post('api/setting/edit-edit-loc', payload);
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success(t('utils.success'));
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteLocationMutation = useMutation({
     mutationFn: (locationId: string) => {
-      return client.post(`api/setting/delete-edit-loc`, {
+      return client.post('api/setting/delete-edit-loc', {
         locationId
-      })
+      });
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success(t('utils.success'));
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteMultiLocationMutation = useMutation({
     mutationFn: (locationId: string[]) => {
-      return client.post(`api/setting/delete-multi-edit-loc`, {
+      return client.post('api/setting/delete-multi-edit-loc', {
         locationId
-      })
+      });
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
-      setSelectedRowKeys([])
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
+      setSelectedRowKeys([]);
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteMultiItem = () => {
-    if (selectedRowKeys.length === 0) return
+    if (selectedRowKeys.length === 0) return;
 
-    deleteMultiLocationMutation.mutate(selectedRowKeys as string[])
-  }
+    deleteMultiLocationMutation.mutate(selectedRowKeys as string[]);
+  };
 
-  const isEditing = (record: LocationType) => record.locationId === editingKey
+  const isEditing = (record: LocationType) => record.locationId === editingKey;
 
   const edit = (record: Partial<LocationType> & { locationId: string }) => {
-    locationPanelForm.setFieldValue('x', Number(record.x))
-    locationPanelForm.setFieldValue('y', Number(record.y))
-    locationPanelForm.setFieldValue('canRotate', record.canRotate)
-    locationPanelForm.setFieldValue('areaType', record.areaType)
-    locationPanelForm.setFieldValue('locationId', record.locationId)
-    setEditingKey(record.locationId)
-  }
+    locationPanelForm.setFieldValue('x', Number(record.x));
+    locationPanelForm.setFieldValue('y', Number(record.y));
+    locationPanelForm.setFieldValue('canRotate', record.canRotate);
+    locationPanelForm.setFieldValue('areaType', record.areaType);
+    locationPanelForm.setFieldValue('locationId', record.locationId);
+    setEditingKey(record.locationId);
+  };
 
   /** About search function */
   const handleSearch = (confirm: FilterDropdownProps['confirm']) => {
-    confirm()
-  }
+    confirm();
+  };
 
   const handleReset = (clearFilters: () => void) => {
-    clearFilters()
-  }
+    clearFilters();
+  };
 
   const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<LocationType> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -230,7 +230,7 @@ const AllLocationTable: React.FC<{
             type="link"
             size="small"
             onClick={() => {
-              confirm({ closeDropdown: false })
+              confirm({ closeDropdown: false });
             }}
           >
             {t('utils.filter')}
@@ -239,7 +239,7 @@ const AllLocationTable: React.FC<{
             type="link"
             size="small"
             onClick={() => {
-              close()
+              close();
             }}
           >
             {t('utils.cancel')}
@@ -258,58 +258,58 @@ const AllLocationTable: React.FC<{
     filterDropdownProps: {
       onOpenChange: (visible) => {
         if (visible) {
-          setTimeout(() => searchInput.current?.select(), 100)
+          setTimeout(() => searchInput.current?.select(), 100);
         }
       }
     },
 
     render: (text: string) => text
-  })
+  });
 
   // --------------------------
 
   const savePos = (oldLocationId: string) => {
-    const payload = locationPanelForm.getFieldsValue() as LocationType
-    const isNegative = Number(payload.locationId) <= 0
+    const payload = locationPanelForm.getFieldsValue() as LocationType;
+    const isNegative = Number(payload.locationId) <= 0;
 
     if (isNegative) {
-      messageApi.warning(t('edit_location_panel.save_pose_notify.is_a_navigate'))
-      return
+      messageApi.warning(t('edit_location_panel.save_pose_notify.is_a_navigate'));
+      return;
     }
 
     const sanitizedPayload = {
       ...payload,
       newLocationId: payload.locationId.toString(),
       oldLocationId
-    }
+    };
 
-    saveLocationMutation.mutate(sanitizedPayload)
-  }
+    saveLocationMutation.mutate(sanitizedPayload);
+  };
 
   const cancel = () => {
-    setEditingKey(null)
-  }
+    setEditingKey(null);
+  };
 
   const save = (id: string) => {
-    savePos(id)
-    setEditingKey(null)
-  }
+    savePos(id);
+    setEditingKey(null);
+  };
 
   const deleteLocationInList = (id: string) => {
-    deleteLocationMutation.mutate(id.toString())
-  }
+    deleteLocationMutation.mutate(id.toString());
+  };
 
   const handleHover = (locationId: string, x: number, y: number) => {
     setTooltip({
       x,
       y,
       locationId
-    })
-  }
+    });
+  };
 
   const handleMouseLeave = () => {
-    setTooltip(null)
-  }
+    setTooltip(null);
+  };
 
   const columns = [
     {
@@ -342,7 +342,7 @@ const AllLocationTable: React.FC<{
       width: '20%',
       editable: true,
       render: (_: unknown, record: LocationType) => {
-        return <Checkbox checked={record.canRotate} />
+        return <Checkbox checked={record.canRotate} />;
       }
     },
     {
@@ -359,13 +359,13 @@ const AllLocationTable: React.FC<{
               <Tag color={pointTypeWithColor[record.areaType]} key={record.areaType}>
                 {t('utils.location_property.none')}
               </Tag>
-            )
+            );
           default:
             return (
               <Tag color={pointTypeWithColor[record.areaType]} key={record.areaType}>
                 {record.areaType}
               </Tag>
-            )
+            );
         }
       }
     },
@@ -374,12 +374,12 @@ const AllLocationTable: React.FC<{
       key: 'operation',
 
       render: (_: unknown, record: LocationType) => {
-        const editable = isEditing(record)
+        const editable = isEditing(record);
         return editable ? (
           <Flex gap="small">
             <Typography.Link
               onClick={() => {
-                save(record.locationId)
+                save(record.locationId);
               }}
               style={{ marginRight: 8 }}
             >
@@ -387,7 +387,7 @@ const AllLocationTable: React.FC<{
             </Typography.Link>
             <Typography.Link
               onClick={() => {
-                cancel()
+                cancel();
               }}
               style={{ marginRight: 8 }}
             >
@@ -401,7 +401,7 @@ const AllLocationTable: React.FC<{
             <Typography.Link
               disabled={editingKey !== null}
               onClick={() => {
-                edit(record)
+                edit(record);
               }}
             >
               <Button icon={<EditOutlined />} color="primary" variant="filled" type="link">
@@ -426,14 +426,14 @@ const AllLocationTable: React.FC<{
               </Button>
             </Popconfirm>
           </Flex>
-        )
+        );
       }
     }
-  ]
+  ];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
-      return col
+      return col;
     }
     return {
       ...col,
@@ -445,8 +445,8 @@ const AllLocationTable: React.FC<{
         title: col.title,
         editing: isEditing(record)
       })
-    }
-  })
+    };
+  });
   return (
     <>
       {contextHolders}
@@ -477,7 +477,7 @@ const AllLocationTable: React.FC<{
               rowSelection={{
                 type: 'checkbox',
                 onChange: (selectedRowKeys: React.Key[]) => {
-                  setSelectedRowKeys([...selectedRowKeys])
+                  setSelectedRowKeys([...selectedRowKeys]);
                 }
               }}
               rowKey={(property) => property.locationId}
@@ -487,7 +487,7 @@ const AllLocationTable: React.FC<{
                 }
               }}
               dataSource={mapData?.locations.map((loc) => {
-                return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) }
+                return { ...loc, x: loc.x.toFixed(3), y: loc.y.toFixed(3) };
               })}
               columns={mergedColumns as []}
               pagination={{
@@ -498,7 +498,7 @@ const AllLocationTable: React.FC<{
                 return {
                   onMouseEnter: () =>
                     handleHover(record.locationId, Number(record.x), Number(record.y))
-                }
+                };
               }}
               bordered
             />
@@ -506,7 +506,7 @@ const AllLocationTable: React.FC<{
         </Flex>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default memo(AllLocationTable)
+export default memo(AllLocationTable);

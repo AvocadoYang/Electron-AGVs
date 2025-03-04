@@ -1,22 +1,22 @@
-import { YawType } from '@renderer/api/useYaw'
-import SubmitButton from '@renderer/utils/SubmitButton'
-import { FormInstance, Form, Input, Modal } from 'antd'
-import { Dispatch, FC, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { YawType } from '@renderer/api/useYaw';
+import SubmitButton from '@renderer/utils/SubmitButton';
+import { FormInstance, Form, Input, Modal } from 'antd';
+import { Dispatch, FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const YawForm: FC<{
-  formYaw: FormInstance<unknown>
-  yawDataSource: YawType
-  selectYawId: string
-  openYawModel: boolean
-  setOpenYawModel: Dispatch<React.SetStateAction<boolean>>
-  editHandler: () => void
+  formYaw: FormInstance<unknown>;
+  yawDataSource: YawType;
+  selectYawId: string;
+  openYawModel: boolean;
+  setOpenYawModel: Dispatch<React.SetStateAction<boolean>>;
+  editHandler: () => void;
 }> = ({ formYaw, yawDataSource, selectYawId, openYawModel, setOpenYawModel, editHandler }) => {
-  const yawData = yawDataSource?.filter((v) => v.id === selectYawId)[0]
-  const { t } = useTranslation()
+  const yawData = yawDataSource?.filter((v) => v.id === selectYawId)[0];
+  const { t } = useTranslation();
   useEffect(() => {
-    formYaw.setFieldValue('yaw', yawData?.yaw)
-  }, [formYaw, yawData?.id, yawData?.yaw])
+    formYaw.setFieldValue('yaw', yawData?.yaw);
+  }, [formYaw, yawData?.id, yawData?.yaw]);
 
   return (
     <>
@@ -24,7 +24,7 @@ const YawForm: FC<{
         title={t('edit_yaw.edit_yaw')}
         open={openYawModel}
         onCancel={() => setOpenYawModel(false)}
-        footer={(_, { OkBtn, CancelBtn }) => (
+        footer={(_, { CancelBtn }) => (
           <>
             <CancelBtn />
             <SubmitButton form={formYaw} onOk={editHandler} isModel />
@@ -48,7 +48,7 @@ const YawForm: FC<{
         </Form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default YawForm
+export default YawForm;

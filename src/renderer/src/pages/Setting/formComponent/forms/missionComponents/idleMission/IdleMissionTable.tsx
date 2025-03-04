@@ -1,18 +1,18 @@
-/* eslint-disable no-void */
-import { FC } from 'react'
-import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import styled from 'styled-components'
-import { Button, Flex, Popconfirm, Table, message } from 'antd'
-import { nanoid } from 'nanoid'
-import { useTranslation } from 'react-i18next'
-import { array, boolean, number, object, string } from 'yup'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
+ 
+import { FC } from 'react';
+import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import styled from 'styled-components';
+import { Button, Flex, Popconfirm, Table, message } from 'antd';
+import { nanoid } from 'nanoid';
+import { useTranslation } from 'react-i18next';
+import { array, boolean, number, object, string } from 'yup';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
 const getTopic = async () => {
-  const { data } = await client.get<unknown>('api/setting/idle-task')
+  const { data } = await client.get<unknown>('api/setting/idle-task');
 
   const schema = () =>
     array(
@@ -25,17 +25,17 @@ const getTopic = async () => {
         taskName: string().required(),
         taskId: string().required()
       }).required()
-    ).required()
+    ).required();
 
-  return schema().validate(data, { stripUnknown: true })
-}
+  return schema().validate(data, { stripUnknown: true });
+};
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
   align-items: flex-start;
-`
+`;
 
 const ActiveBox = styled.div`
   min-width: 4em;
@@ -43,7 +43,7 @@ const ActiveBox = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-`
+`;
 
 type DotStyle = {
   $active: boolean
@@ -54,7 +54,7 @@ const Dot = styled.div<DotStyle>`
   width: 7px;
   height: 7px;
   background-color: ${(prop) => (prop.$active ? '#2bea00' : '#979797')};
-`
+`;
 
 interface DataType {
   id: string
@@ -67,40 +67,40 @@ interface DataType {
 }
 
 const IdleMissionTable: FC = () => {
-  const { t } = useTranslation()
-  const { data: idleData, refetch } = useQuery(['idle-task'], getTopic)
+  const { t } = useTranslation();
+  const { data: idleData, refetch } = useQuery(['idle-task'], getTopic);
 
-  const [messageApi, contextHolder] = message.useMessage()
+  const [messageApi, contextHolder] = message.useMessage();
 
   const activeMutation = useMutation({
     mutationFn: (payload: { idle_id: string; isActive: boolean }) => {
-      return client.post('api/setting/active-idle-task', payload)
+      return client.post('api/setting/active-idle-task', payload);
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      void refetch()
+      void messageApi.success(t('utils.success'));
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { idle_id: string }) => {
-      return client.post('api/setting/delete-idle-task', payload)
+      return client.post('api/setting/delete-idle-task', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+       
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleActive = (isActive: boolean, id: string) => {
-    activeMutation.mutate({ idle_id: id, isActive })
-  }
+    activeMutation.mutate({ idle_id: id, isActive });
+  };
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate({ idle_id: id })
-  }
+    deleteMutation.mutate({ idle_id: id });
+  };
 
   const columns = [
     {
@@ -118,7 +118,7 @@ const IdleMissionTable: FC = () => {
                 : t('mission.idle_mission.stale')}
             </>
           </ActiveBox>
-        )
+        );
       }
     },
     {
@@ -128,8 +128,8 @@ const IdleMissionTable: FC = () => {
       width: 150,
       render: (_: unknown, record: DataType) => {
         return record.amrId.map((item, i) => {
-          return <p key={`${item}-${i}`}>{item} ,</p>
-        })
+          return <p key={`${item}-${i}`}>{item} ,</p>;
+        });
       }
     },
     {
@@ -139,7 +139,7 @@ const IdleMissionTable: FC = () => {
       width: 300,
 
       render: (_v: unknown, record: DataType) => {
-        return record.idleMin
+        return record.idleMin;
       }
     },
 
@@ -150,7 +150,7 @@ const IdleMissionTable: FC = () => {
       width: 300,
 
       render: (_v: unknown, record: DataType) => {
-        return record.taskName
+        return record.taskName;
       }
     },
 
@@ -162,7 +162,7 @@ const IdleMissionTable: FC = () => {
 
       render: (_v: unknown, record: DataType) => {
         if (!record.preventLocation || record.preventLocation.length === 0) {
-          return <span style={{ color: '#999', fontStyle: 'italic' }}>None</span>
+          return <span style={{ color: '#999', fontStyle: 'italic' }}>None</span>;
         }
 
         return (
@@ -182,7 +182,7 @@ const IdleMissionTable: FC = () => {
               </span>
             ))}
           </div>
-        )
+        );
       }
     },
 
@@ -191,7 +191,7 @@ const IdleMissionTable: FC = () => {
       width: 30,
       dataIndex: 'operation',
       key: nanoid(),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       render(_v: unknown, record: DataType) {
         return (
           <>
@@ -234,17 +234,17 @@ const IdleMissionTable: FC = () => {
               </Popconfirm>
             </Flex>
           </>
-        )
+        );
       }
     }
-  ]
+  ];
 
   return (
     <Wrapper>
       {contextHolder}
       <Table rowKey={(record) => record.id} columns={columns} dataSource={idleData as DataType[]} />
     </Wrapper>
-  )
-}
+  );
+};
 
-export default IdleMissionTable
+export default IdleMissionTable;

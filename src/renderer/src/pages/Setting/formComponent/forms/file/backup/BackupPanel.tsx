@@ -1,57 +1,44 @@
-/* eslint-disable no-void */
-import dayjs from 'dayjs'
-import { Button, Popconfirm, Table, message, Form, Flex } from 'antd'
-import { ColumnsType } from 'antd/es/table'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import { useMutation } from '@tanstack/react-query'
-import client from '@renderer/api/axiosClient'
-import useVersion from '@renderer/api/useVersion'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import GlobalLoading from '@renderer/utils/GlobalLoading'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
-import { LoginOutlined, PlusOutlined } from '@ant-design/icons'
+import dayjs from 'dayjs';
+import { Button, Popconfirm, Table, message, Form, Flex } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
+import useVersion from '@renderer/api/useVersion';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import GlobalLoading from '@renderer/utils/GlobalLoading';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
+import { LoginOutlined, PlusOutlined } from '@ant-design/icons';
 type Backup = {
-  createAt: string
-  dbPath: string
-  id: string
-}
-
-const StyledSVG = styled.svg`
-  width: 20px;
-  transition: transform 0.3s ease;
-  cursor: pointer;
-  fill: '#97c3ff';
-  &:hover {
-    scale: 1.1;
-    fill: #4d6bff;
-  }
-`
+  createAt: string;
+  dbPath: string;
+  id: string;
+};
 
 const BackupPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ sortableId, attributes, listeners }) => {
-  const { data: backup, refetch } = useVersion()
-  const { t } = useTranslation()
-  const [messageApi, contextHolder] = message.useMessage()
-  const [backupFile] = Form.useForm()
+  const { data: backup, refetch } = useVersion();
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [backupFile] = Form.useForm();
 
   const backupMutation = useMutation({
     mutationFn: () => {
       return client.post('api/setting/backup-now', {
         headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
-      })
+      });
     },
     onSuccess: async () => {
-      void messageApi.success(t('utils.success'))
-      await refetch()
+      void messageApi.success(t('utils.success'));
+      await refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => {
@@ -61,36 +48,36 @@ const BackupPanel: FC<{
         {
           headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
         }
-      )
+      );
     },
     onSuccess: async () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const restoreMutation = useMutation({
     mutationFn: (id: string) => {
-      return client.post('api/setting/restore-now', { id })
+      return client.post('api/setting/restore-now', { id });
     },
     onSuccess: async () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteHandler = (id: string) => {
-    deleteMutation.mutate(id)
-  }
+    deleteMutation.mutate(id);
+  };
 
   const handleBackup = () => {
-    backupMutation.mutate()
-    backupFile.resetFields()
-  }
+    backupMutation.mutate();
+    backupFile.resetFields();
+  };
 
   const restoreData = (id: string) => {
-    restoreMutation.mutate(id)
-  }
+    restoreMutation.mutate(id);
+  };
 
   const columns: ColumnsType<Backup> = [
     {
@@ -98,9 +85,9 @@ const BackupPanel: FC<{
       dataIndex: 'createAt',
       key: 'createAt',
       render: (_v, record) => {
-        const formatDate = dayjs(record.createAt).format('YYYY/MM/DD HH:mm:ss')
+        const formatDate = dayjs(record.createAt).format('YYYY/MM/DD HH:mm:ss');
 
-        return <p>{formatDate}</p>
+        return <p>{formatDate}</p>;
       },
       sorter: (a, b) => new Date(a.createAt).getTime() - new Date(b.createAt).getTime()
     },
@@ -131,12 +118,12 @@ const BackupPanel: FC<{
               </Button>
             </Popconfirm>
           </Flex>
-        )
+        );
       }
     }
-  ]
+  ];
 
-  if (restoreMutation.isLoading) return <GlobalLoading />
+  if (restoreMutation.isLoading) return <GlobalLoading />;
   return (
     <>
       {contextHolder}
@@ -166,10 +153,10 @@ const BackupPanel: FC<{
         </Flex>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default BackupPanel
+export default BackupPanel;
 
 // 先帝創業未半，而中道崩殂；今天下三分，益州疲弊，此誠危急存亡之秋也！然侍衞之臣，不懈於內；忠志之士，忘身於外者，蓋追先帝之殊遇，欲報之於陛下也。
 // 誠宜開張聖聽，以光先帝遺德，恢弘志士之氣﹔不宜妄自菲薄，引喻失義，以塞忠諫之路也。

@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import styled from 'styled-components'
+ 
+import styled from 'styled-components';
 
 // ======= Login status icon ==========
 export const LogInStatus = styled.p.attrs<{ login: 'boolean' }>((props) => {
-  return { login: props.login }
+  return { login: props.login };
 })<{ login: boolean }>`
   background-color: ${(props) => (props.login ? '	#92e247' : 'red')};
   color: ${(props) => (props.login ? 'black' : 'white')};
@@ -13,7 +13,7 @@ export const LogInStatus = styled.p.attrs<{ login: 'boolean' }>((props) => {
   position: absolute;
   left: 0;
   top: 0;
-`
+`;
 // ================================
 
 // ======= First row in info card =======
@@ -26,7 +26,7 @@ export const CarRow1 = styled.div`
   align-items: center;
   overflow: hidden;
   border-bottom: 2px solid black;
-`
+`;
 
 export const AmrTitle = styled.h2`
   font-size: 9px;
@@ -36,7 +36,7 @@ export const AmrTitle = styled.h2`
   width: 100%;
   color: #000080;
   white-space: nowrap;
-`
+`;
 // ==============================
 
 // ======Second row in info card ============
@@ -47,7 +47,7 @@ export const CarRow2 = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-`
+`;
 
 export const CarStatus = styled.span`
   font-weight: bold;
@@ -57,7 +57,7 @@ export const CarStatus = styled.span`
   text-align: center;
   color: red;
   margin-right: 3px;
-`
+`;
 // ==============================
 
 // ======= Third row in info ===============
@@ -74,7 +74,7 @@ export const CarRow3 = styled.div`
   /* @media screen and (max-width: 960px) {
     font-size: 40%;
   } */
-`
+`;
 export const TextWrap = styled.div`
   margin-top: 1px;
   width: 30%;
@@ -83,6 +83,6 @@ export const TextWrap = styled.div`
   align-items: center;
   height: 35px;
   overflow: hidden;
-`
+`;
 
 // ==============================

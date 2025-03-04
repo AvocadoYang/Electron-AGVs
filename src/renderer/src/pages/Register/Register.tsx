@@ -1,5 +1,5 @@
-import React from 'react'
-import Header from '../../components/Header'
+import React from 'react';
+import Header from '../../components/Header';
 
 const Register: React.FC = () => {
   // const sceneRef = useRef<HTMLDivElement>(null);
@@ -7,7 +7,7 @@ const Register: React.FC = () => {
     <>
       <Header></Header>
     </>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

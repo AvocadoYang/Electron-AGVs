@@ -7,15 +7,15 @@ import {
   UndoOutlined,
   FullscreenOutlined,
   FullscreenExitOutlined
-} from '@ant-design/icons'
-import { Button, Col, Form, InputNumber, message, Row } from 'antd'
-import { FC, useEffect, useRef } from 'react'
-import styled from 'styled-components'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
-import { useAtom, useSetAtom } from 'jotai'
-import client from '@renderer/api/axiosClient'
-import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable'
+} from '@ant-design/icons';
+import { Button, Col, Form, InputNumber, message, Row } from 'antd';
+import { FC, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import { useAtom, useSetAtom } from 'jotai';
+import client from '@renderer/api/axiosClient';
+import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable';
 
 type Options = 'areaType' | 'translateX' | 'translateY' | 'rotate' | 'scale'
 
@@ -47,64 +47,64 @@ const Wrapper = styled.div`
   max-width: 31em;
   display: flex;
   gap: 1em;
-`
+`;
 
 const BtnWrapper = styled.div`
   display: flex;
   gap: 1em;
-`
+`;
 
 const SettingChargeStationStyleForm: FC = () => {
-  const [form] = Form.useForm()
-  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null)
-  const [selectStation, setSelectStation] = useAtom(chargeStationEditData)
-  const setIsEditStation = useSetAtom(isEditChargeStation)
-  const queryClient = useQueryClient()
-  const { t } = useTranslation()
-  const [messageApi, contextHolder] = message.useMessage()
+  const [form] = Form.useForm();
+  const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [selectStation, setSelectStation] = useAtom(chargeStationEditData);
+  const setIsEditStation = useSetAtom(isEditChargeStation);
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const submitMutation = useMutation({
     mutationFn: (payload: SubmitValue) => {
-      return client.post(`api/setting/edit-charge-station-style`, payload)
+      return client.post('api/setting/edit-charge-station-style', payload);
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['all-charge-station']
-      })
+      });
       await queryClient.refetchQueries({
         queryKey: ['loc-only']
-      })
-      // eslint-disable-next-line no-void
-      void messageApi.success(t('utils.success'))
+      });
+       
+      void messageApi.success(t('utils.success'));
     },
     onError: () => {
-      // eslint-disable-next-line no-void
-      void messageApi.error('無法排除 聯絡FAE工程師')
+       
+      void messageApi.error('無法排除 聯絡FAE工程師');
     }
-  })
+  });
 
   const saveStyle = () => {
-    if (!selectStation) return
+    if (!selectStation) return;
 
-    submitMutation.mutate(selectStation)
-  }
+    submitMutation.mutate(selectStation);
+  };
 
   const handChange = (val: Val) => {
     setSelectStation((prev) => {
-      if (!prev) return null
+      if (!prev) return null;
       return {
         loc: prev.loc,
         translateX: val.input === 'translateX' ? val.value : prev.translateX,
         translateY: val.input === 'translateY' ? val.value : prev.translateY,
         rotate: val.input === 'rotate' ? val.value : prev.rotate,
         scale: val.input === 'scale' ? val.value : prev.scale
-      }
-    })
-  }
+      };
+    });
+  };
 
   const handleBtnChange = (val: Val) => {
     setSelectStation((prev) => {
-      if (!prev) return null
+      if (!prev) return null;
       return {
         loc: prev.loc,
         translateX:
@@ -117,69 +117,69 @@ const SettingChargeStationStyleForm: FC = () => {
             : prev.translateY,
         rotate: val.input === 'rotate' ? Number((val.value + prev.rotate).toFixed(1)) : prev.rotate,
         scale: val.input === 'scale' ? Number((val.value + prev.scale).toFixed(1)) : prev.scale
-      }
-    })
-  }
+      };
+    });
+  };
 
   const transformStyle = (event: Event) => {
     switch (event) {
       case 'up':
-        handleBtnChange({ input: 'translateY', value: -0.1 })
-        break
+        handleBtnChange({ input: 'translateY', value: -0.1 });
+        break;
       case 'down':
-        handleBtnChange({ input: 'translateY', value: +0.1 })
-        break
+        handleBtnChange({ input: 'translateY', value: +0.1 });
+        break;
       case 'left':
-        handleBtnChange({ input: 'translateX', value: -0.1 })
-        break
+        handleBtnChange({ input: 'translateX', value: -0.1 });
+        break;
       case 'right':
-        handleBtnChange({ input: 'translateX', value: 0.1 })
-        break
+        handleBtnChange({ input: 'translateX', value: 0.1 });
+        break;
       case 'r-rotate':
-        handleBtnChange({ input: 'rotate', value: -1 })
-        break
+        handleBtnChange({ input: 'rotate', value: -1 });
+        break;
       case 'l-rotate':
-        handleBtnChange({ input: 'rotate', value: 1 })
-        break
+        handleBtnChange({ input: 'rotate', value: 1 });
+        break;
       case 'scale-up':
-        handleBtnChange({ input: 'scale', value: 0.1 })
-        break
+        handleBtnChange({ input: 'scale', value: 0.1 });
+        break;
       case 'scale-down':
-        handleBtnChange({ input: 'scale', value: -0.1 })
-        break
+        handleBtnChange({ input: 'scale', value: -0.1 });
+        break;
       default:
-        console.log('error')
+        console.log('error');
     }
-  }
+  };
 
   const handleButtonPress = (event: Event) => {
-    if (intervalId.current) return
-    transformStyle(event)
+    if (intervalId.current) return;
+    transformStyle(event);
     intervalId.current = setInterval(() => {
-      transformStyle(event)
-    }, 50)
-  }
+      transformStyle(event);
+    }, 50);
+  };
 
   const stopCounter = () => {
     if (intervalId.current) {
-      clearInterval(intervalId.current)
-      intervalId.current = null
+      clearInterval(intervalId.current);
+      intervalId.current = null;
     }
-  }
+  };
 
   useEffect(() => {
-    if (!selectStation) return
-    form.setFieldValue('translateX', selectStation.translateX)
-    form.setFieldValue('translateY', selectStation.translateY)
-    form.setFieldValue('scale', selectStation.scale)
-    form.setFieldValue('rotate', selectStation.rotate)
-  }, [selectStation])
+    if (!selectStation) return;
+    form.setFieldValue('translateX', selectStation.translateX);
+    form.setFieldValue('translateY', selectStation.translateY);
+    form.setFieldValue('scale', selectStation.scale);
+    form.setFieldValue('rotate', selectStation.rotate);
+  }, [selectStation]);
 
   useEffect(() => {
-    return () => stopCounter()
-  }, [])
+    return () => stopCounter();
+  }, []);
 
-  if (!selectStation) return []
+  if (!selectStation) return [];
   return (
     <>
       {contextHolder}
@@ -303,7 +303,7 @@ const SettingChargeStationStyleForm: FC = () => {
         </Row>
       </Wrapper>
     </>
-  )
-}
+  );
+};
 
-export default SettingChargeStationStyleForm
+export default SettingChargeStationStyleForm;

@@ -1,8 +1,7 @@
-/* eslint-disable no-void */
-import { nanoid } from 'nanoid'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types'
+import { nanoid } from 'nanoid';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 import {
   Button,
   ColorPicker,
@@ -14,55 +13,51 @@ import {
   Tooltip,
   Typography,
   message
-} from 'antd'
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
-import { useMutation } from '@tanstack/react-query'
-import usePallet from '@renderer/api/usePallet'
-import client from '@renderer/api/axiosClient'
-import FormHr from '../../../../utils/FormHr'
+} from 'antd';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import usePallet from '@renderer/api/usePallet';
+import client from '@renderer/api/axiosClient';
+import FormHr from '../../../../utils/FormHr';
 
 // bitch ant design not support the type
 interface Color {
-  toHexString(): string
+  toHexString(): string;
 }
 
 interface DataType {
-  id: string
-  name: string
-  color: string
+  id: string;
+  name: string;
+  color: string;
 }
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean
-  dataIndex: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  title: any
-  inputType: string
-  record: DataType
-  index: number
-  children: React.ReactNode
+  editing: boolean;
+  dataIndex: string;
+
+  title: string;
+  inputType: string;
+  record: DataType;
+  index: number;
+  children: React.ReactNode;
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
-  title,
-  inputType,
-  record,
-  index,
   children,
   ...restProps
 }) => {
-  let inputNode
+  let inputNode;
   switch (dataIndex) {
     case 'name':
-      inputNode = <Input />
-      break
+      inputNode = <Input />;
+      break;
     case 'color':
-      inputNode = <ColorPicker format="hex" size="small" showText />
-      break
+      inputNode = <ColorPicker format="hex" size="small" showText />;
+      break;
     default:
-      ;<Input />
+      <Input />;
   }
 
   return (
@@ -74,7 +69,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           rules={[
             {
               required: true,
-              message: `Please Input !`
+              message: 'Please Input !'
             }
           ]}
         >
@@ -84,117 +79,112 @@ const EditableCell: React.FC<EditableCellProps> = ({
         children
       )}
     </td>
-  )
-}
+  );
+};
 
 EditableCell.propTypes = {
   editing: PropTypes.bool.isRequired,
   dataIndex: PropTypes.string.isRequired,
-  title: PropTypes.node.isRequired,
   inputType: PropTypes.string.isRequired,
   record: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired
   }).isRequired,
-  index: PropTypes.number.isRequired,
-  children: PropTypes.node.isRequired
-}
+  index: PropTypes.number.isRequired
+};
 
 const PalletTable: React.FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ sortableId, attributes, listeners }) => {
-  const { t } = useTranslation()
-  const { data: pallet, refetch } = usePallet()
-  const [form] = Form.useForm()
-  const [messageApi, contextHolder] = message.useMessage()
-  const [editingKey, setEditingKey] = useState<string | null>(null)
-  const isEditing = (record: DataType) => record?.id === editingKey
+  const { t } = useTranslation();
+  const { data: pallet, refetch } = usePallet();
+  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const isEditing = (record: DataType) => record?.id === editingKey;
 
   const editMutation = useMutation({
     mutationFn: (payload: DataType) => {
-      return client.post(`api/setting/edit-pallet`, payload)
+      return client.post('api/setting/edit-pallet', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const addMutation = useMutation({
     mutationFn: () => {
-      return client.post(`api/setting/add-pallet`)
+      return client.post('api/setting/add-pallet');
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
-      return client.post(`api/setting/delete-pallet`, payload)
+      return client.post('api/setting/delete-pallet', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const edit = (record: Partial<DataType> & { id: string }) => {
     if (record.name === 'none') {
-      void messageApi.warning(t('edit_pallet.edit_default_warning'))
-      return
+      void messageApi.warning(t('edit_pallet.edit_default_warning'));
+      return;
     }
 
-    form.setFieldValue('name', record.name)
-    form.setFieldValue('color', record.color)
+    form.setFieldValue('name', record.name);
+    form.setFieldValue('color', record.color);
 
-    setEditingKey(record.id)
-  }
+    setEditingKey(record.id);
+  };
 
   const handleAdd = () => {
-    addMutation.mutate()
-  }
+    addMutation.mutate();
+  };
 
   const cancel = () => {
-    setEditingKey(null)
-  }
+    setEditingKey(null);
+  };
 
   const handleDelete = (record: Partial<DataType> & { id: string }) => {
     if (record.name === 'none') {
-      void messageApi.warning(t('edit_pallet.edit_default_warning'))
-      return
+      void messageApi.warning(t('edit_pallet.edit_default_warning'));
+      return;
     }
 
-    deleteMutation.mutate({ id: record.id })
-  }
+    deleteMutation.mutate({ id: record.id });
+  };
 
   const isColorWithToHexString = (obj: Color): obj is { toHexString: () => string } => {
-    return obj && typeof obj.toHexString === 'function'
-  }
+    return obj && typeof obj.toHexString === 'function';
+  };
 
   const save = (key: string) => {
-    const color = form.getFieldValue('color') as Color
+    const color = form.getFieldValue('color') as Color;
 
-    const hexColor = isColorWithToHexString(color) ? color.toHexString() : (color as string)
+    const hexColor = isColorWithToHexString(color) ? color.toHexString() : (color as string);
 
     const payload = {
       id: key,
       name: form.getFieldValue('name') as string,
       color: hexColor
-    }
+    };
 
     if (payload.name === null || payload.name.trim() === '') {
-      messageApi.warning(t('edit_pallet.name_warn'))
-      return
+      messageApi.warning(t('edit_pallet.name_warn'));
+      return;
     }
 
-    editMutation.mutate(payload)
-    setEditingKey(null)
-  }
+    editMutation.mutate(payload);
+    setEditingKey(null);
+  };
 
   const columns = [
     {
@@ -218,16 +208,16 @@ const PalletTable: React.FC<{
             value={record.color}
             onChange={(v) => form.setFieldValue('color', v.toHexString())}
           />
-        )
+        );
       }
     },
     {
       title: '',
       dataIndex: 'operation',
       key: nanoid(),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render(_v: unknown, record: DataType) {
-        const editable = isEditing(record)
+        const editable = isEditing(record);
 
         return editable ? (
           <Flex gap="small">
@@ -261,14 +251,14 @@ const PalletTable: React.FC<{
               </Button>
             </Tooltip>
           </Flex>
-        )
+        );
       }
     }
-  ]
+  ];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
-      return col
+      return col;
     }
     return {
       ...col,
@@ -279,8 +269,8 @@ const PalletTable: React.FC<{
         title: col.title,
         editing: isEditing(record)
       })
-    }
-  })
+    };
+  });
 
   return (
     <>
@@ -316,7 +306,7 @@ const PalletTable: React.FC<{
         </Flex>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default PalletTable
+export default PalletTable;

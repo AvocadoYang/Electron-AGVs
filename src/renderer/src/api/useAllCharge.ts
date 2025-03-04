@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, object, number, InferType } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, object, number, InferType } from 'yup';
+import client from './axiosClient';
 
 const chargeSchema = array(
   object({
@@ -12,19 +12,19 @@ const chargeSchema = array(
     rotate: number().required(),
     scale: number().required()
   }).optional()
-)
+);
 
 const getCharges = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-charge-station')
+  const { data } = await client.get<unknown>('api/setting/all-charge-station');
   const validatedData = await chargeSchema.validate(data, {
     stripUnknown: true
-  })
-  return validatedData
-}
+  });
+  return validatedData;
+};
 
 const useAllChargeStation = () => {
-  return useQuery(['all-charge-station'], getCharges)
-}
+  return useQuery(['all-charge-station'], getCharges);
+};
 
 export type SingleChargeStation = {
   locationId: number
@@ -38,4 +38,4 @@ export type SingleChargeStation = {
 
 export type AllChargeStationType = InferType<typeof chargeSchema>
 
-export default useAllChargeStation
+export default useAllChargeStation;

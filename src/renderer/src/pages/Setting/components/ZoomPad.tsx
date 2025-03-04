@@ -1,37 +1,36 @@
-/* eslint-disable react/prop-types */
-import styled from 'styled-components'
-import { Button, Space } from 'antd'
-import { useTranslation } from 'react-i18next'
-import useMap from '@renderer/api/useMap'
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
-import { memo } from 'react'
-import { useAtom } from 'jotai'
+import styled from 'styled-components';
+import { Button, Space } from 'antd';
+import { useTranslation } from 'react-i18next';
+import useMap from '@renderer/api/useMap';
+import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { memo } from 'react';
+import { useAtom } from 'jotai';
 import {
   isShowLocation,
   isShowLocationTooltip,
   isShowRoad,
   isShowRoadTooltip
-} from '@renderer/utils/siderGloble'
+} from '@renderer/utils/siderGloble';
 
 const ZoomPadWrap = styled.div`
   position: absolute;
   z-index: 4;
   bottom: 15px;
   right: 15px;
-`
+`;
 
 const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>> }> = ({
   setScale
 }) => {
-  const { data, isError } = useMap()
-  const { t } = useTranslation()
+  const { data, isError } = useMap();
+  const { t } = useTranslation();
 
-  const [showLocationToolTip, setShowLocationTooltip] = useAtom(isShowLocationTooltip)
-  const [showRoadToolTip, setShowRoadTooltip] = useAtom(isShowRoadTooltip)
-  const [showLocation, setShowLocation] = useAtom(isShowLocation)
-  const [showRoad, setShowRoad] = useAtom(isShowRoad)
+  const [showLocationToolTip, setShowLocationTooltip] = useAtom(isShowLocationTooltip);
+  const [showRoadToolTip, setShowRoadTooltip] = useAtom(isShowRoadTooltip);
+  const [showLocation, setShowLocation] = useAtom(isShowLocation);
+  const [showRoad, setShowRoad] = useAtom(isShowRoad);
 
-  if (isError || !data) return
+  if (isError || !data) return;
   return (
     <ZoomPadWrap>
       <Space.Compact>
@@ -41,7 +40,7 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
         <Button
           onClick={() =>
             setScale((pre) => {
-              return pre - 0.035
+              return pre - 0.035;
             })
           }
           icon={<MinusOutlined />}
@@ -110,7 +109,7 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
         </Button>
       </Space.Compact>
     </ZoomPadWrap>
-  )
-}
+  );
+};
 
-export default memo(ZoomPad)
+export default memo(ZoomPad);

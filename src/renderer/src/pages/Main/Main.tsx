@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import { Layout, Splitter, Col, Row, Button, Flex } from 'antd'
-import Header from '../../components/Header'
-import './components/PadViwe/style.css'
-import PadView from './components/PadViwe/PadView'
-import { Scene } from './3D'
-import CarCardWrap from './Car_Card/CardWrap'
-import MissionWrap from './Mission_Card/MissionWrap'
-import { useAtom } from 'jotai'
-import { viewBtn, ViewBtn } from './global/jotai'
+import React, { useEffect, useState } from 'react';
+import { Layout, Splitter, Col, Row, Button, Flex } from 'antd';
+import Header from '../../components/Header';
+import './components/PadViwe/style.css';
+import PadView from './components/PadViwe/PadView';
+// import { Scene } from './3D'
+// import CarCardWrap from './Car_Card/CardWrap'
+// import MissionWrap from './Mission_Card/MissionWrap'
+import { useAtom } from 'jotai';
+import { viewBtn, ViewBtn } from './global/jotai';
 
-const { Content } = Layout
+const { Content } = Layout;
 
 const Main: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 767)
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 767);
+  const [, setWindowHeight] = useState(window.innerHeight);
 
   useEffect(() => {
-    const updateHeight = () => setWindowHeight(window.innerHeight)
-    window.addEventListener('resize', updateHeight)
+    const updateHeight = () => setWindowHeight(window.innerHeight);
+    window.addEventListener('resize', updateHeight);
 
     // 確保初始設定正確
-    updateHeight()
+    updateHeight();
 
-    return () => window.removeEventListener('resize', updateHeight)
-  }, [isMobile])
+    return () => window.removeEventListener('resize', updateHeight);
+  }, [isMobile]);
 
-  const [_, setOpenEditLocationPanel] = useAtom(viewBtn)
+  const [_, setOpenEditLocationPanel] = useAtom(viewBtn);
   useEffect(() => {
-    setOpenEditLocationPanel(ViewBtn.missionView)
+    setOpenEditLocationPanel(ViewBtn.missionView);
 
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 767)
-    }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+      setIsMobile(window.innerWidth < 767);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <Layout style={{ height: '100dvh' }}>
@@ -80,7 +80,7 @@ const Main: React.FC = () => {
         </Content>
       )}
     </Layout>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;

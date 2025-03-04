@@ -1,64 +1,62 @@
-import client from '@renderer/api/axiosClient'
-import useRegionName from '@renderer/api/useLocRegionName'
-import useAllMissionTitles from '@renderer/api/useMissionTitle'
-import useShelfCategory from '@renderer/api/useShelfCategory'
-import useYaw from '@renderer/api/useYaw'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import SubmitButton from '@renderer/utils/SubmitButton'
-import { errorHandler } from '@renderer/utils/utils'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Button, Card, Drawer, Form, FormProps, InputNumber, message, Select } from 'antd'
-import { Dispatch, FC, Key, SetStateAction } from 'react'
-import { useTranslation } from 'react-i18next'
+import client from '@renderer/api/axiosClient';
+import useRegionName from '@renderer/api/useLocRegionName';
+import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import useShelfCategory from '@renderer/api/useShelfCategory';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import SubmitButton from '@renderer/utils/SubmitButton';
+import { errorHandler } from '@renderer/utils/utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Card, Drawer, Form, FormProps, InputNumber, message, Select } from 'antd';
+import { Dispatch, FC, Key, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type FieldType = {
-  shelfId?: Key[]
-  category: string
-  load: string
-  offload: string
-  yaw: string
-  cargo_limit
-}
+  shelfId?: Key[];
+  category: string;
+  load: string;
+  offload: string;
+  yaw: string;
+  cargo_limit: number;
+};
 
 const ShelfDrawer: FC<{
-  openDrawer: boolean
-  setOpenDrawer: Dispatch<SetStateAction<boolean>>
-  selectedRowKeys: Key[]
+  openDrawer: boolean;
+  setOpenDrawer: Dispatch<SetStateAction<boolean>>;
+  selectedRowKeys: Key[];
 }> = ({ openDrawer, setOpenDrawer, selectedRowKeys }) => {
-  const { data: misTitle } = useAllMissionTitles()
-  const { data: allCategory } = useShelfCategory()
-  const { data: yaw } = useYaw()
-  const { data: regionName } = useRegionName()
-  const [form] = Form.useForm()
-  const queryClient = useQueryClient()
-  const { t } = useTranslation()
-  const [messageApi, contextHolder] = message.useMessage()
+  const { data: misTitle } = useAllMissionTitles();
+  const { data: allCategory } = useShelfCategory();
+  const { data: regionName } = useRegionName();
+  const [form] = Form.useForm();
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const submitMutation = useMutation({
     mutationFn: (payload: FieldType) => {
-      return client.post('api/setting/edit-multi-shelf', payload)
+      return client.post('api/setting/edit-multi-shelf', payload);
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['shelf']
-      })
-      messageApi.success(t('utils.success'))
+      });
+      messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values)
+    console.log('Success:', values);
 
     const payload: FieldType = {
       ...values,
       shelfId: selectedRowKeys
-    }
+    };
 
-    submitMutation.mutate(payload)
-    form.resetFields()
-    setOpenDrawer(false)
-  }
+    submitMutation.mutate(payload);
+    form.resetFields();
+    setOpenDrawer(false);
+  };
 
   return (
     <>
@@ -74,7 +72,7 @@ const ShelfDrawer: FC<{
               <Select
                 disabled={selectedRowKeys.length === 0}
                 options={allCategory?.map((v) => {
-                  return { value: v.id, label: v.name }
+                  return { value: v.id, label: v.name };
                 })}
               />
             </Form.Item>
@@ -110,7 +108,7 @@ const ShelfDrawer: FC<{
                   return {
                     label: r?.name,
                     value: r?.id
-                  }
+                  };
                 })}
               />
             </Form.Item>
@@ -122,7 +120,7 @@ const ShelfDrawer: FC<{
         </Card>
       </Drawer>
     </>
-  )
-}
+  );
+};
 
-export default ShelfDrawer
+export default ShelfDrawer;

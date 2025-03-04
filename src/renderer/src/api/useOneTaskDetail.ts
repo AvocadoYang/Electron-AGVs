@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, boolean, number, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, boolean, number, object, string } from 'yup';
+import client from './axiosClient';
 
 const schema = object({
   id: string().required(),
@@ -34,23 +34,23 @@ const schema = object({
       ).required()
     }).required()
   }).required()
-}).required()
+}).required();
 
 const getOneTask = async (key: string) => {
   const { data } = await client.post<unknown>('api/setting/one-task-detail', {
     key
-  })
-  const validatedData = await schema.validate(data, { stripUnknown: true })
-  return validatedData
-}
+  });
+  const validatedData = await schema.validate(data, { stripUnknown: true });
+  return validatedData;
+};
 
 const useOneTaskDetail = (key: string) => {
   return useQuery(['one-task-detail', key], {
     queryFn: () => {
-      return getOneTask(key)
+      return getOneTask(key);
     },
     enabled: !!key
-  })
-}
+  });
+};
 
-export default useOneTaskDetail
+export default useOneTaskDetail;

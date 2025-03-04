@@ -1,10 +1,10 @@
-import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable'
-import { useAtomValue } from 'jotai'
-import { FC, memo } from 'react'
-import styled from 'styled-components'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import useMap from '@renderer/api/useMap'
-import useShelf from '@renderer/api/useShelf'
+import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable';
+import { useAtomValue } from 'jotai';
+import { FC, memo } from 'react';
+import styled from 'styled-components';
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
+import useMap from '@renderer/api/useMap';
+import useShelf from '@renderer/api/useShelf';
 
 const PointDiv = styled.div.attrs<{
   left: number
@@ -24,8 +24,8 @@ const PointDiv = styled.div.attrs<{
   border-radius: ${(props) => (props.canrotate === 'true' ? 0 : '50%')};
   z-index: 10;
   transition-duration: 200ms;
-`
-export const Point = memo(PointDiv)
+`;
+export const Point = memo(PointDiv);
 
 const Wrapper = styled.div<{
   translatex: number
@@ -42,7 +42,7 @@ const Wrapper = styled.div<{
   border-radius: 1px;
   transform: ${(props) =>
     `translate(${props.translatex}em, ${props.translatey}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
-`
+`;
 
 const Block = styled.div`
   display: flex;
@@ -63,7 +63,7 @@ const Block = styled.div`
     background-color: #717171;
     text-align: center;
   }
-`
+`;
 
 const BlockSpan = styled.span`
   text-align: center;
@@ -86,17 +86,17 @@ const BlockSpan = styled.span`
 
   -webkit-text-stroke-width: 0.1px;
   -webkit-text-stroke-color: #ff0000;
-`
+`;
 
 const SudoCargo: FC = () => {
-  const cStyle = useAtomValue(cargoStyle)
-  const { data } = useMap()
-  const shelfSelectedStyleId = useAtomValue(shelfSelectedStyleLocationId)
-  const { data: shelf } = useShelf()
-  if (!cStyle || !data) return
+  const cStyle = useAtomValue(cargoStyle);
+  const { data } = useMap();
+  const shelfSelectedStyleId = useAtomValue(shelfSelectedStyleLocationId);
+  const { data: shelf } = useShelf();
+  if (!cStyle || !data) return;
 
   const currentShelf =
-    shelf?.find((v) => v.Loc.locationId === shelfSelectedStyleId)?.ShelfConfig.length || 1
+    shelf?.find((v) => v.Loc.locationId === shelfSelectedStyleId)?.ShelfConfig.length || 1;
 
   const [displayX, displayY] = rosCoord2DisplayCoord({
     x: data?.locations.find((v) => v.locationId === shelfSelectedStyleId)?.x || 0,
@@ -105,7 +105,7 @@ const SudoCargo: FC = () => {
     mapOriginX: data?.mapOriginX,
     mapOriginY: data.mapOriginY,
     mapResolution: data.mapResolution
-  })
+  });
 
   return (
     <Point canrotate="false" left={displayX} top={displayY}>
@@ -122,7 +122,7 @@ const SudoCargo: FC = () => {
         ))}
       </Wrapper>
     </Point>
-  )
-}
+  );
+};
 
-export default SudoCargo
+export default SudoCargo;

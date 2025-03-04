@@ -1,60 +1,54 @@
-import { FormatPainterOutlined } from '@ant-design/icons'
-import { Button, Flex, Skeleton, Table } from 'antd'
-import { ColumnsType } from 'antd/es/table'
-import { FC, useState } from 'react'
-import styled from 'styled-components'
-import { useSetAtom } from 'jotai'
-import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types'
-import useYaw from '@renderer/api/useYaw'
-import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable'
-import useShelf from '@renderer/api/useShelf'
-import { ShelfWithoutList } from '@renderer/api/type/useShelf'
-import SettingCargoStyleForm from './SettingCargoStyleForm'
+import { FormatPainterOutlined } from '@ant-design/icons';
+import { Button, Flex, Skeleton, Table } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import { FC, useState } from 'react';
+import styled from 'styled-components';
+import { useSetAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
+import useYaw from '@renderer/api/useYaw';
+import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable';
+import useShelf from '@renderer/api/useShelf';
+import { ShelfWithoutList } from '@renderer/api/type/useShelf';
+import SettingCargoStyleForm from './SettingCargoStyleForm';
 
 const Wrapper = styled.div<{ $hasSelect: boolean }>`
   display: flex;
   align-items: center;
   display: ${(prop) => (prop.$hasSelect ? 'none' : 'flex')};
-`
+`;
 
 type ShelfCell = {
   Loc: {
-    locationId: string
-  }
-}
+    locationId: string;
+  };
+};
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  dataIndex: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  title: any
-  inputType: string
-  record: ShelfCell
-  index: number
-  children: React.ReactNode
+  dataIndex: string;
+  title: string;
+  inputType: string;
+  record: ShelfCell;
+  index: number;
+  children: React.ReactNode;
 }
 
-const EditableCell: React.FC<EditableCellProps> = ({ record, children, ...restProps }) => {
-  return <td {...restProps}>{children}</td>
-}
-
-EditableCell.propTypes = {
-  children: PropTypes.node.isRequired
-}
+const EditableCell: React.FC<EditableCellProps> = ({ children, ...restProps }) => {
+  return <td {...restProps}>{children}</td>;
+};
 
 const ShelfTable: FC<{
-  selectedRowKeys: React.Key[]
-  setSelectedRowKeys: React.Dispatch<React.SetStateAction<React.Key[]>>
+  selectedRowKeys: React.Key[];
+  setSelectedRowKeys: React.Dispatch<React.SetStateAction<React.Key[]>>;
 }> = ({ selectedRowKeys, setSelectedRowKeys }) => {
-  const [selectId, setSelectId] = useState<string | null>(null)
-  const { data: yaw } = useYaw()
-  const setCStyle = useSetAtom(cargoStyle)
-  const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId)
-  const { data: shelfDataSource, isLoading: isLoadingShelf } = useShelf()
-  const { t } = useTranslation()
+  const [selectId, setSelectId] = useState<string | null>(null);
+  const { data: yaw } = useYaw();
+  const setCStyle = useSetAtom(cargoStyle);
+  const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId);
+  const { data: shelfDataSource, isLoading: isLoadingShelf } = useShelf();
+  const { t } = useTranslation();
   const handleEdit = (id: string) => {
-    setSelectId(id)
-  }
+    setSelectId(id);
+  };
 
   const columns: ColumnsType<ShelfWithoutList> = [
     {
@@ -65,8 +59,8 @@ const ShelfTable: FC<{
       sortDirections: ['ascend', 'descend'],
       defaultSortOrder: 'ascend',
       render: (_v, recorder) => {
-        const { locationId } = recorder.Loc
-        return locationId
+        const { locationId } = recorder.Loc;
+        return locationId;
       }
     },
     {
@@ -74,9 +68,9 @@ const ShelfTable: FC<{
       dataIndex: 'type',
       key: 'type',
       render: (_c, recorder) => {
-        if (!recorder.ShelfCategory) return t('utils.no')
-        const type = recorder.ShelfCategory.name
-        return type
+        if (!recorder.ShelfCategory) return t('utils.no');
+        const type = recorder.ShelfCategory.name;
+        return type;
       }
     },
     {
@@ -84,9 +78,9 @@ const ShelfTable: FC<{
       dataIndex: 'level',
       key: 'level',
       render: (_v, recorder) => {
-        if (!recorder.ShelfConfig) return 0
-        const level = recorder.ShelfCategory.Height?.length
-        return level
+        if (!recorder.ShelfConfig) return 0;
+        const level = recorder.ShelfCategory.Height?.length;
+        return level;
       }
     },
     {
@@ -94,13 +88,13 @@ const ShelfTable: FC<{
       dataIndex: 'yaw',
       key: 'yaw',
       render: (_v, recorder) => {
-        if (!yaw) return 'not found'
+        if (!yaw) return 'not found';
 
-        const yawIndex = yaw?.findIndex((s) => s.id === recorder.Loc.dirId)
+        const yawIndex = yaw?.findIndex((s) => s.id === recorder.Loc.dirId);
 
-        if (yawIndex === -1) return 'not found'
+        if (yawIndex === -1) return 'not found';
 
-        return yaw[yawIndex].yaw
+        return yaw[yawIndex].yaw;
       }
     },
 
@@ -109,7 +103,7 @@ const ShelfTable: FC<{
       dataIndex: 'region_name',
       key: 'region_name',
       render: (_v, recorder) => {
-        return recorder.Loc?.loc_regions?.name || ''
+        return recorder.Loc?.loc_regions?.name || '';
       }
     },
 
@@ -117,7 +111,7 @@ const ShelfTable: FC<{
       title: t('edit_shelf_panel.setting'),
       dataIndex: 'operation',
       key: 'operation',
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render: (_v, recorder) => {
         return (
           <Button
@@ -128,25 +122,25 @@ const ShelfTable: FC<{
           >
             {t('edit_shelf_panel.edit_position')}
           </Button>
-        )
+        );
       }
     }
-  ]
+  ];
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys)
-  }
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
 
   const cancelEditStyle = () => {
-    setSelectId(null)
-    setCStyle(null)
-    setShelfSelectedStyle('')
-  }
+    setSelectId(null);
+    setCStyle(null);
+    setShelfSelectedStyle('');
+  };
 
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange
-  }
+  };
   // Jerusalem
   const mergedColumns = columns.map((col) => {
     return {
@@ -154,10 +148,10 @@ const ShelfTable: FC<{
       onCell: (record: ShelfWithoutList) => ({
         record
       })
-    }
-  })
+    };
+  });
 
-  if (isLoadingShelf) return <Skeleton active />
+  if (isLoadingShelf) return <Skeleton active />;
   return (
     <>
       <Wrapper $hasSelect={selectId !== null}>
@@ -186,7 +180,7 @@ const ShelfTable: FC<{
                             {item.disable ? t('utils.yes') : t('utils.no')}
                           </p>
                         </>
-                      )
+                      );
                     })}
                   </p>
                   <p>
@@ -198,7 +192,7 @@ const ShelfTable: FC<{
                             {t('edit_shelf_panel.height')}: {item.cargo_limit}
                           </p>
                         </>
-                      )
+                      );
                     })}
                   </p>
                 </Flex>
@@ -213,7 +207,7 @@ const ShelfTable: FC<{
         []
       )}
     </>
-  )
-}
+  );
+};
 
-export default ShelfTable
+export default ShelfTable;

@@ -1,24 +1,23 @@
-import useMap from '@renderer/api/useMap'
-import { TempStoredLocationsForQuickEditPanel, tooltipProp } from '@renderer/utils/gloable'
-import { isShowLocationTooltip } from '@renderer/utils/siderGloble'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { FC, memo, useEffect } from 'react'
-import { nanoid } from 'nanoid'
-import styled from 'styled-components'
+import useMap from '@renderer/api/useMap';
+import { TempStoredLocationsForQuickEditPanel, tooltipProp } from '@renderer/utils/gloable';
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
+import { useAtom, useSetAtom } from 'jotai';
+import { FC, memo, useEffect } from 'react';
+import { nanoid } from 'nanoid';
+import styled from 'styled-components';
 
 const PointDiv = styled.div.attrs<{
-  left: number
-  top: number
-  canrotate: string
-  hoverLoc?: boolean
+  left: number;
+  top: number;
+  canrotate: string;
+  hoverLoc?: boolean;
 }>(({ left, top, canrotate, hoverLoc }) => ({
   style: { left, top, canrotate, hoverLoc }
 }))<{
-  left: number
-  top: number
-  canrotate: string
-  hoverLoc?: boolean
+  left: number;
+  top: number;
+  canrotate: string;
+  hoverLoc?: boolean;
 }>`
   position: absolute;
   width: 5px;
@@ -33,29 +32,29 @@ const PointDiv = styled.div.attrs<{
     background: green;
     scale: 1.8;
   }
-`
+`;
 
-export const Point = memo(PointDiv)
+export const Point = memo(PointDiv);
 
 const TempLocations: FC = () => {
-  const [tempStoredLocationsForQuickEditPanel] = useAtom(TempStoredLocationsForQuickEditPanel)
-  const { data } = useMap()
-  const setTooltip = useSetAtom(tooltipProp)
+  const [tempStoredLocationsForQuickEditPanel] = useAtom(TempStoredLocationsForQuickEditPanel);
+  const { data } = useMap();
+  const setTooltip = useSetAtom(tooltipProp);
   const handleEnter = (locationId: string, x: number, y: number) => {
     setTooltip({
       x,
       y,
       locationId
-    })
-  }
+    });
+  };
 
   const handleLeave = () => {
-    setTooltip(null)
-  }
+    setTooltip(null);
+  };
 
-  useEffect(() => {}, [tempStoredLocationsForQuickEditPanel])
+  useEffect(() => {}, [tempStoredLocationsForQuickEditPanel]);
 
-  if (!tempStoredLocationsForQuickEditPanel.length || !data) return null
+  if (!tempStoredLocationsForQuickEditPanel.length || !data) return null;
 
   return (
     <>
@@ -67,13 +66,13 @@ const TempLocations: FC = () => {
           mapOriginX: data?.mapOriginX,
           mapOriginY: data.mapOriginY,
           mapResolution: data.mapResolution
-        })
+        });
         return (
           <div
             draggable={false}
             key={loc.locationId}
             onDragStart={(event) => {
-              event.preventDefault()
+              event.preventDefault();
             }}
             style={{ borderRadius: '50%' }}
           >
@@ -87,10 +86,10 @@ const TempLocations: FC = () => {
               onMouseLeave={() => handleLeave()}
             ></Point>
           </div>
-        )
+        );
       })}
     </>
-  )
-}
+  );
+};
 
-export default memo(TempLocations)
+export default memo(TempLocations);

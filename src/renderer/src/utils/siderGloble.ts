@@ -1,87 +1,87 @@
-import { atom } from 'jotai'
+import { atom } from 'jotai';
 
 /** 1-1 編輯點位開關 */
-export const EditLocationPanelSwitch = atom<boolean>(false)
+export const EditLocationPanelSwitch = atom<boolean>(false);
 
 /** 1-2 快速編輯點位開關 */
-export const QuickEditLocationPanelSwitch = atom<boolean>(false)
+export const QuickEditLocationPanelSwitch = atom<boolean>(false);
 
 /** 1-3 顯示所有點位表單 */
-export const EditLocationListTableSwitch = atom<boolean>(false)
+export const EditLocationListTableSwitch = atom<boolean>(false);
 
 /** 2-1 編輯路徑開關 */
-export const EditRoadPanelSwitch = atom<boolean>(false)
+export const EditRoadPanelSwitch = atom<boolean>(false);
 
 /** 2-2 顯示所有路徑表單 */
-export const RoadListTableSwitch = atom<boolean>(false)
+export const RoadListTableSwitch = atom<boolean>(false);
 
 /** 3-1 編輯區域開關 */
-export const EditZoneSwitch = atom<boolean>(false)
+export const EditZoneSwitch = atom<boolean>(false);
 
 /** 3-2 顯示區域開關 */
-export const showAllZonesSwitch = atom<boolean>(true)
+export const showAllZonesSwitch = atom<boolean>(true);
 
 /** 3-3 顯示區域表開關 */
-export const showZonesTableSwitch = atom<boolean>(false)
+export const showZonesTableSwitch = atom<boolean>(false);
 
 /** 4-1 顯示 編輯貨架 */
-export const EditShelfPanelSwitch = atom<boolean>(false)
+export const EditShelfPanelSwitch = atom<boolean>(false);
 
 /** 4-2 顯示 編輯貨架種類 */
-export const EditShelfCategoryPanelSwitch = atom<boolean>(false)
+export const EditShelfCategoryPanelSwitch = atom<boolean>(false);
 
 /** 4-3 顯示 編輯YAW */
-export const EditShelfYawPanelSwitch = atom<boolean>(false)
+export const EditShelfYawPanelSwitch = atom<boolean>(false);
 
 /** 4-4 顯示 編輯棧版 */
-export const EditPalletSwitch = atom<boolean>(false)
+export const EditPalletSwitch = atom<boolean>(false);
 
-export const SideSwitchToShowForm = atom<boolean>(false)
+export const SideSwitchToShowForm = atom<boolean>(false);
 
 /** 地點tooltip */
-export const isShowLocationTooltip = atom<boolean>(false)
+export const isShowLocationTooltip = atom<boolean>(false);
 
 /** 路線tooltip */
-export const isShowRoadTooltip = atom<boolean>(false)
+export const isShowRoadTooltip = atom<boolean>(false);
 
 /** 顯示目前地點 */
-export const isShowLocation = atom<boolean>(true)
+export const isShowLocation = atom<boolean>(true);
 
 /** 顯示目前路徑 */
-export const isShowRoad = atom<boolean>(true)
+export const isShowRoad = atom<boolean>(true);
 
 /** 5-1 顯示編輯任務 */
-export const isShowEditMission = atom<boolean>(false)
+export const isShowEditMission = atom<boolean>(false);
 
 /** 5-2 顯示編輯充電任務 */
-export const isShowEditChargeMission = atom<boolean>(false)
+export const isShowEditChargeMission = atom<boolean>(false);
 
 /** 5-3 顯示循環任務 */
-export const isShowEditCycleMission = atom<boolean>(false)
+export const isShowEditCycleMission = atom<boolean>(false);
 
 /** 5-4 顯示編輯離開充電站強制任務 */
-export const isShowEditBeforeLeftChargeStationMission = atom<boolean>(false)
+export const isShowEditBeforeLeftChargeStationMission = atom<boolean>(false);
 
 /** 5-5 顯示定時任務 */
-export const isShowEditScheduleMission = atom<boolean>(false)
+export const isShowEditScheduleMission = atom<boolean>(false);
 
 /** 5-6 顯示閒置任務 */
-export const isShowEditIdleMission = atom<boolean>(false)
+export const isShowEditIdleMission = atom<boolean>(false);
 
 /** 5-7 顯示topic任務 */
-export const isShowEditTopicMission = atom<boolean>(false)
+export const isShowEditTopicMission = atom<boolean>(false);
 
 /** 6-1 顯示編輯標籤 */
-export const isShowEditMissionTag = atom<boolean>(false)
+export const isShowEditMissionTag = atom<boolean>(false);
 
 /** 6-2 顯示編輯充電站icon位置 */
-export const isShowEditChargeStationPosition = atom<boolean>(false)
+export const isShowEditChargeStationPosition = atom<boolean>(false);
 
 /** 8-1 顯示編輯warning id */
-export const isShowEditWarningId = atom<boolean>(false)
+export const isShowEditWarningId = atom<boolean>(false);
 
 /** 8-2 上傳錯誤表 */
-export const isOpenUploadWarningIDModal = atom<boolean>(false)
+export const isOpenUploadWarningIDModal = atom<boolean>(false);
 
-/** 8-2 顯示編輯備份 */
-export const isShowEditBackup = atom<boolean>(false)
+/** 7-2 顯示編輯備份 */
+export const isShowEditBackup = atom<boolean>(false);

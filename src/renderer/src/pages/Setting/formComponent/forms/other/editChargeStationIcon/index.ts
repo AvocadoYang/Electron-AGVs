@@ -1,1 +1,1 @@
-export { default as ChargeStationStylePanel } from './ChargeStationStylePanel'
+export { default as ChargeStationStylePanel } from './ChargeStationStylePanel';

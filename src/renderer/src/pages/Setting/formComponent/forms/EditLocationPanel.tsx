@@ -1,43 +1,41 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { memo } from 'react'
-import { LocationType } from '@renderer/utils/jotai'
-import './form.css'
-import { openNotificationWithIcon } from '../../utils/notification'
-import { useTranslation } from 'react-i18next'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Form, Input, Radio, Button, FormInstance, Checkbox, message, Space } from 'antd'
-import { initialLocationFormValue } from './formInitValue'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import useMap from '@renderer/api/useMap'
-import FormHr from '../../utils/FormHr'
-import { SaveOutlined } from '@ant-design/icons'
+import React, { memo } from 'react';
+import { LocationType } from '@renderer/utils/jotai';
+import './form.css';
+import { openNotificationWithIcon } from '../../utils/notification';
+import { useTranslation } from 'react-i18next';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Form, Input, Radio, Button, FormInstance, Checkbox, message, Space } from 'antd';
+import { initialLocationFormValue } from './formInitValue';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import FormHr from '../../utils/FormHr';
+import { SaveOutlined } from '@ant-design/icons';
 
 const EditLocationPanel: React.FC<{
-  locationPanelForm: FormInstance<unknown>
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  locationPanelForm: FormInstance<unknown>;
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ locationPanelForm, sortableId, attributes, listeners }) => {
-  const queryClient = useQueryClient()
-  const [messageApi, contextHolders] = message.useMessage()
-  const { t } = useTranslation()
+  const queryClient = useQueryClient();
+  const [messageApi, contextHolders] = message.useMessage();
+  const { t } = useTranslation();
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType) => {
-      return client.post('api/setting/save-edit-loc', payload)
+      return client.post('api/setting/save-edit-loc', payload);
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const savePose = () => {
-    const payload = locationPanelForm.getFieldsValue() as LocationType
-    const isNegative = Number(payload.locationId) <= 0
+    const payload = locationPanelForm.getFieldsValue() as LocationType;
+    const isNegative = Number(payload.locationId) <= 0;
 
     if (payload.x === undefined || payload.y === undefined) {
       openNotificationWithIcon(
@@ -45,8 +43,8 @@ const EditLocationPanel: React.FC<{
         t('edit_location_panel.save_pose_notify.empty_value'),
         t('edit_location_panel.save_pose_notify.fill_in_value'),
         'bottomLeft'
-      )
-      return
+      );
+      return;
     }
 
     if (isNegative) {
@@ -55,8 +53,8 @@ const EditLocationPanel: React.FC<{
         t('edit_location_panel.save_pose_notify.format_warn'),
         t('edit_location_panel.save_pose_notify.is_a_navigate'),
         'bottomLeft'
-      )
-      return
+      );
+      return;
     }
 
     const sanitizedPayload = {
@@ -65,10 +63,10 @@ const EditLocationPanel: React.FC<{
       rotation: Number(payload.rotation),
       x: Number(payload.x),
       y: Number(payload.y)
-    }
+    };
 
-    saveLocationMutation.mutate(sanitizedPayload)
-  }
+    saveLocationMutation.mutate(sanitizedPayload);
+  };
 
   return (
     <>
@@ -148,7 +146,7 @@ const EditLocationPanel: React.FC<{
         </Form>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default memo(EditLocationPanel)
+export default memo(EditLocationPanel);

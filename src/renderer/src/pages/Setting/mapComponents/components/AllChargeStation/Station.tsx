@@ -1,7 +1,7 @@
-import { chargeStationModelProp } from '@renderer/utils/gloable'
-import { useSetAtom } from 'jotai'
-import { FC } from 'react'
-import styled, { keyframes } from 'styled-components'
+import { chargeStationModelProp } from '@renderer/utils/gloable';
+import { useSetAtom } from 'jotai';
+import { FC } from 'react';
+import styled, { keyframes } from 'styled-components';
 
 type ChargeStyle = {
   $is_in_service: boolean
@@ -22,7 +22,7 @@ const pulse = keyframes`
   100% {
     opacity: 0.5;
   }
-`
+`;
 
 const CStation = styled.div<ChargeStyle>`
   width: 21px;
@@ -46,16 +46,16 @@ const CStation = styled.div<ChargeStyle>`
   animation-name: ${(props) => (props.$is_in_service ? 'none' : pulse)};
   animation-duration: ${(props) => (props.$is_in_service ? '0s' : '1.5s')};
   animation-iteration-count: ${(props) => (props.$is_in_service ? '0' : 'infinite')};
-`
+`;
 
 const Svg = styled.svg`
   width: 20px;
   color: white;
-`
+`;
 
 const PathStyle = styled.path<ChargeStyle>`
   fill: ${(prop) => (prop.$is_in_service ? '#ffffff' : '#b30000')};
-`
+`;
 const Station: FC<{
   locationId: string
   translateX: number
@@ -63,7 +63,7 @@ const Station: FC<{
   rotate: number
   scale: number
 }> = ({ locationId, translateX, translateY, rotate, scale }) => {
-  const setOpen = useSetAtom(chargeStationModelProp)
+  const setOpen = useSetAtom(chargeStationModelProp);
 
   return (
     <CStation
@@ -81,7 +81,7 @@ const Station: FC<{
         />
       </Svg>
     </CStation>
-  )
-}
+  );
+};
 
-export default Station
+export default Station;

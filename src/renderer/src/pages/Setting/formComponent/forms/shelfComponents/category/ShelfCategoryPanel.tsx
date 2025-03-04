@@ -1,63 +1,65 @@
-import { FC, useState } from 'react'
-import { Form, Modal } from 'antd'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
-import client from '@renderer/api/axiosClient'
-import ShelfCategoryTable from './ShelfCategoryTable'
-import ShelfCategoryForm from './ShelfCategoryForm'
-import { borderColor } from '../../../../utils/utils'
+import { FC, useState } from 'react';
+import { Form } from 'antd';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import client from '@renderer/api/axiosClient';
+import ShelfCategoryTable from './ShelfCategoryTable';
+import ShelfCategoryForm from './ShelfCategoryForm';
+import { borderColor } from '../../../../utils/utils';
 
 const ShelfCategoryPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ sortableId, attributes, listeners }) => {
-  const queryClient = useQueryClient()
-  const [open, setOpen] = useState(false)
-  const [selectId, setSelectId] = useState('')
-  const [cateHeight, setCateHeight] = useState<number[] | undefined>([])
-  const [form] = Form.useForm()
-  const { t } = useTranslation()
-  const [hasDelete, setHasDelete] = useState(false)
+  const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [selectId, setSelectId] = useState('');
+  const [cateHeight, setCateHeight] = useState<number[] | undefined>([]);
+  const [form] = Form.useForm();
+  const { t } = useTranslation();
+  const [hasDelete, setHasDelete] = useState(false);
 
   const editMutation = useMutation({
     mutationFn: (payload: {
-      id: string
-      name: string
-      shelf_style: string
-      height: number[] | undefined
-      hasDelete: boolean
+      id: string;
+      name: string;
+      shelf_style: string;
+      height: number[] | undefined;
+      hasDelete: boolean;
     }) => {
-      const result = Promise.all([client.post<unknown>(`api/setting/edit-shelf-category`, payload)])
-      return result
+      const result = Promise.all([
+        client.post<unknown>('api/setting/edit-shelf-category', payload)
+      ]);
+      return result;
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['all-shelf-category']
-      })
+      });
       await queryClient.refetchQueries({
         queryKey: ['shelf']
-      })
+      });
     }
-  })
+  });
 
   const editHandler = () => {
-    const fieldName = form.getFieldValue('name') as string
-    const style = form.getFieldValue('shelfStyle') as string
+    const fieldName = form.getFieldValue('name') as string;
+    const style = form.getFieldValue('shelfStyle') as string;
     const payload = {
       id: selectId,
       shelf_style: style,
       name: fieldName,
       height: cateHeight,
       hasDelete
-    }
+    };
 
-    editMutation.mutate(payload)
-    form.resetFields()
-    setCateHeight([])
-    setOpen(false)
-    setHasDelete(false)
-  }
+    editMutation.mutate(payload);
+    form.resetFields();
+    setCateHeight([]);
+    setOpen(false);
+    setHasDelete(false);
+  };
 
   return (
     <>
@@ -87,7 +89,7 @@ const ShelfCategoryPanel: FC<{
         setOpenModel={setOpen}
       />
     </>
-  )
-}
+  );
+};
 
-export default ShelfCategoryPanel
+export default ShelfCategoryPanel;

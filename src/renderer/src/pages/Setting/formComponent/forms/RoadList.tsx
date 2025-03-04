@@ -14,154 +14,144 @@ import {
   Table,
   TableColumnType,
   Typography
-} from 'antd'
-import { memo, useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import {
-  CloseOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  SaveOutlined,
-  SearchOutlined
-} from '@ant-design/icons'
-import PropTypes from 'prop-types'
-import { nanoid } from 'nanoid'
-import { FilterDropdownProps } from 'antd/es/table/interface'
-import { useSetAtom } from 'jotai'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import useMap from '@renderer/api/useMap'
-import { hoverRoad } from '@renderer/utils/gloable'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import FormHr from '../../utils/FormHr'
-import SubmitButton from '@renderer/utils/SubmitButton'
+} from 'antd';
+import { memo, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { CloseOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
+import { nanoid } from 'nanoid';
+import { FilterDropdownProps } from 'antd/es/table/interface';
+import { useSetAtom } from 'jotai';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useMap from '@renderer/api/useMap';
+import { hoverRoad } from '@renderer/utils/gloable';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import FormHr from '../../utils/FormHr';
+import SubmitButton from '@renderer/utils/SubmitButton';
 
 type RoadListType = {
-  roadId: string
-  validYawList?: string | number[]
-  spot1Id: string
-  spot2Id: string
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-  disabled: boolean
-  limit: boolean
-  roadType: string
-}
+  roadId: string;
+  validYawList?: string | number[];
+  spot1Id: string;
+  spot2Id: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  disabled: boolean;
+  limit: boolean;
+  roadType: string;
+};
 
-type DataIndex = keyof RoadListType
+type DataIndex = keyof RoadListType;
 
-const yawOptions = ['0', '90', '180', '270', '*'].map((v) => ({ value: v }))
+const yawOptions = ['0', '90', '180', '270', '*'].map((v) => ({ value: v }));
 
 const whenAll = yawOptions.map((m) => {
-  const disabled = ['0', '90', '180', '270'].includes(m.value)
-  return { ...m, disabled }
-})
+  const disabled = ['0', '90', '180', '270'].includes(m.value);
+  return { ...m, disabled };
+});
 
 const when0 = yawOptions.map((m) => {
-  const disabled = ['*', '90', '270'].includes(m.value)
-  return { ...m, disabled }
-})
+  const disabled = ['*', '90', '270'].includes(m.value);
+  return { ...m, disabled };
+});
 
 const when90 = yawOptions.map((m) => {
-  const disabled = ['0', '180', '*'].includes(m.value)
-  return { ...m, disabled }
-})
+  const disabled = ['0', '180', '*'].includes(m.value);
+  return { ...m, disabled };
+});
 
 const when180 = yawOptions.map((m) => {
-  const disabled = ['*', '90', '270'].includes(m.value)
-  return { ...m, disabled }
-})
+  const disabled = ['*', '90', '270'].includes(m.value);
+  return { ...m, disabled };
+});
 
 const when270 = yawOptions.map((m) => {
-  const disabled = ['0', '180', '270'].includes(m.value)
-  return { ...m, disabled }
-})
+  const disabled = ['0', '180', '270'].includes(m.value);
+  return { ...m, disabled };
+});
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean
-  dataIndex: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  title: any
-  inputType: string
-  record: RoadListType
-  index: number
-  children: React.ReactNode
+  editing: boolean;
+  dataIndex: string;
+
+  title: string;
+  inputType: string;
+  record: RoadListType;
+  index: number;
+  children: React.ReactNode;
 }
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
-  title,
-  inputType,
-  record,
-  index,
   children,
   ...restProps
 }) => {
-  let inputNode
-  const { t } = useTranslation()
-  const [chooseAngle, setChooseAngle] = useState<string>('')
-  const [yawOption, setYawOption] = useState<typeof yawOptions>(yawOptions)
+  let inputNode;
+  const { t } = useTranslation();
+  const [chooseAngle, setChooseAngle] = useState<string>('');
+  const [yawOption, setYawOption] = useState<typeof yawOptions>(yawOptions);
 
   useEffect(() => {
     switch (chooseAngle) {
       case '*':
-        setYawOption(whenAll)
-        break
+        setYawOption(whenAll);
+        break;
       case '0':
-        setYawOption(when0)
-        break
+        setYawOption(when0);
+        break;
       case '90':
-        setYawOption(when90)
-        break
+        setYawOption(when90);
+        break;
       case '180':
-        setYawOption(when180)
-        break
+        setYawOption(when180);
+        break;
       case '270':
-        setYawOption(when270)
-        break
+        setYawOption(when270);
+        break;
       default:
       // console.log('errpr')
     }
-  }, [chooseAngle])
+  }, [chooseAngle]);
 
   switch (dataIndex) {
     case 'spot1Id':
-      inputNode = <InputNumber disabled />
-      break
+      inputNode = <InputNumber disabled />;
+      break;
     case 'spot2Id':
-      inputNode = <InputNumber disabled />
-      break
+      inputNode = <InputNumber disabled />;
+      break;
     case 'disable':
-      inputNode = <Switch />
-      break
+      inputNode = <Switch />;
+      break;
     case 'limit':
-      inputNode = <Switch />
-      break
+      inputNode = <Switch />;
+      break;
     case 'roadType':
       inputNode = (
         <Radio.Group buttonStyle="solid" disabled>
           <Radio.Button value="oneWayRoad">{t('edit_road_panel.single_road')}</Radio.Button>
           <Radio.Button value="twoWayRoad">{t('edit_road_panel.two_way_road')}</Radio.Button>
         </Radio.Group>
-      )
-      break
+      );
+      break;
     case 'validYawList':
       inputNode = (
         <Select
           mode="multiple"
           options={yawOption}
           onChange={(value: string[]) => {
-            setChooseAngle(value[0] || '')
+            setChooseAngle(value[0] || '');
           }}
         />
-      )
-      break
+      );
+      break;
     default:
-      ;<Input />
+      <Input />;
   }
 
   return (
@@ -173,7 +163,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           rules={[
             {
               required: true,
-              message: `Please Input !`
+              message: 'Please Input !'
             }
           ]}
         >
@@ -183,13 +173,12 @@ const EditableCell: React.FC<EditableCellProps> = ({
         children
       )}
     </td>
-  )
-}
+  );
+};
 
 EditableCell.propTypes = {
   editing: PropTypes.bool.isRequired,
   dataIndex: PropTypes.string.isRequired,
-  title: PropTypes.node.isRequired,
   inputType: PropTypes.string.isRequired,
   record: PropTypes.shape({
     roadId: PropTypes.string.isRequired,
@@ -204,9 +193,8 @@ EditableCell.propTypes = {
     limit: PropTypes.bool.isRequired,
     roadType: PropTypes.string.isRequired
   }).isRequired,
-  index: PropTypes.number.isRequired,
-  children: PropTypes.node.isRequired
-}
+  index: PropTypes.number.isRequired
+};
 
 const ActiveBox = styled.div`
   min-width: 4em;
@@ -214,59 +202,59 @@ const ActiveBox = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-`
+`;
 
 type DotStyle = {
-  $active: boolean
-}
+  $active: boolean;
+};
 
 type SubmitRoad = {
-  roadId: string
-  limit: boolean
-  validYawList: number[] | string[]
-}
+  roadId: string;
+  limit: boolean;
+  validYawList: number[] | string[];
+};
 
 const Dot = styled.div<DotStyle>`
   border-radius: 99%;
   width: 7px;
   height: 7px;
   background-color: ${(prop) => (prop.$active ? '#979797' : '#2bea00')};
-`
+`;
 
 const RoadList: React.FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ sortableId, attributes, listeners }) => {
-  const { data: currentMap } = useMap()
-  const searchInput = useRef<InputRef>(null)
-  const [messageApi, contextHolders] = message.useMessage()
-  const queryClient = useQueryClient()
-  const { t } = useTranslation()
-  const [editingKey, setEditingKey] = useState<string | null>(null)
-  const isEditing = (record: RoadListType) => record.roadId === editingKey
-  const setHoverRoad = useSetAtom(hoverRoad)
-  const [formRoad] = Form.useForm()
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+  const { data: currentMap } = useMap();
+  const searchInput = useRef<InputRef>(null);
+  const [messageApi, contextHolders] = message.useMessage();
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const isEditing = (record: RoadListType) => record.roadId === editingKey;
+  const setHoverRoad = useSetAtom(hoverRoad);
+  const [formRoad] = Form.useForm();
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const deleteRoadMutation = useMutation({
     mutationFn: (roadId: string) => {
-      return client.post('api/setting/delete-edit-road', { roadId })
+      return client.post('api/setting/delete-edit-road', { roadId });
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleSearch = (confirm: FilterDropdownProps['confirm']) => {
-    confirm()
-  }
+    confirm();
+  };
 
   const handleReset = (clearFilters: () => void) => {
-    clearFilters()
-  }
+    clearFilters();
+  };
 
   const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<RoadListType> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -303,7 +291,7 @@ const RoadList: React.FC<{
             type="link"
             size="small"
             onClick={() => {
-              confirm({ closeDropdown: false })
+              confirm({ closeDropdown: false });
             }}
           >
             {t('utils.filter')}
@@ -312,7 +300,7 @@ const RoadList: React.FC<{
             type="link"
             size="small"
             onClick={() => {
-              close()
+              close();
             }}
           >
             {t('utils.cancel')}
@@ -331,86 +319,86 @@ const RoadList: React.FC<{
     filterDropdownProps: {
       onOpenChange: (visible) => {
         if (visible) {
-          setTimeout(() => searchInput.current?.select(), 100)
+          setTimeout(() => searchInput.current?.select(), 100);
         }
       }
     },
     render: (text: string) => text
-  })
+  });
 
   const handleHover = (id: string) => {
-    if (!id) return
-    setHoverRoad(id)
-  }
+    if (!id) return;
+    setHoverRoad(id);
+  };
 
   const handleMouseLeave = () => {
-    setHoverRoad('')
-  }
+    setHoverRoad('');
+  };
 
   const editRoadMutation = useMutation({
     mutationFn: (payload: SubmitRoad) => {
-      return client.post(`api/setting/edit-edit-road`, payload)
+      return client.post('api/setting/edit-edit-road', payload);
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const edit = (record: Partial<RoadListType> & { roadId: string }) => {
     const a = () => {
       if (record.validYawList === '*') {
-        return ['*']
+        return ['*'];
       }
-      return (record.validYawList as number[]).map((c) => c.toString())
-    }
+      return (record.validYawList as number[]).map((c) => c.toString());
+    };
 
-    formRoad.setFieldValue('spot1Id', record.spot1Id)
-    formRoad.setFieldValue('spot2Id', record.spot2Id)
-    formRoad.setFieldValue('limit', record.limit)
-    formRoad.setFieldValue('roadType', record.roadType)
-    formRoad.setFieldValue('validYawList', a())
+    formRoad.setFieldValue('spot1Id', record.spot1Id);
+    formRoad.setFieldValue('spot2Id', record.spot2Id);
+    formRoad.setFieldValue('limit', record.limit);
+    formRoad.setFieldValue('roadType', record.roadType);
+    formRoad.setFieldValue('validYawList', a());
 
-    setEditingKey(record.roadId)
-  }
+    setEditingKey(record.roadId);
+  };
 
   const deleteMultiRoadMutation = useMutation({
     mutationFn: (roadId: string[]) => {
       return client.post('api/setting/delete-multi-edit-road', {
         roadId
-      })
+      });
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
-      setSelectedRowKeys([])
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
+      setSelectedRowKeys([]);
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteMultiItem = () => {
-    if (selectedRowKeys.length === 0) return
+    if (selectedRowKeys.length === 0) return;
 
-    deleteMultiRoadMutation.mutate(selectedRowKeys as string[])
-  }
+    deleteMultiRoadMutation.mutate(selectedRowKeys as string[]);
+  };
 
   const cancel = () => {
-    setEditingKey(null)
-  }
+    setEditingKey(null);
+  };
 
   const save = (key: string) => {
     const payload: SubmitRoad = {
       roadId: key,
       limit: formRoad.getFieldValue('limit') as boolean,
       validYawList: formRoad.getFieldValue('validYawList') as number[] | string[]
-    }
+    };
 
-    editRoadMutation.mutate(payload)
+    editRoadMutation.mutate(payload);
 
-    formRoad.setFieldsValue(payload)
-    setEditingKey(null)
-  }
+    formRoad.setFieldsValue(payload);
+    setEditingKey(null);
+  };
 
   const columns = [
     {
@@ -437,7 +425,7 @@ const RoadList: React.FC<{
       render: (_v: unknown, record: RoadListType) => {
         return record.roadType === 'oneWayRoad'
           ? t('edit_road_panel.single_road')
-          : t('edit_road_panel.two_way_road')
+          : t('edit_road_panel.two_way_road');
       },
       editable: true,
       sorter: (a: RoadListType, b: RoadListType) => a.roadType.localeCompare(b.roadType)
@@ -448,7 +436,7 @@ const RoadList: React.FC<{
       key: 'validYawList',
       editable: true,
       render: (_: unknown, record: RoadListType) => {
-        return record.validYawList?.toString() || ''
+        return record.validYawList?.toString() || '';
       }
     },
     {
@@ -457,7 +445,7 @@ const RoadList: React.FC<{
       key: 'limit',
       editable: true,
       render: (_: unknown, record: RoadListType) => {
-        return record.limit ? t('utils.yes') : t('utils.no')
+        return record.limit ? t('utils.yes') : t('utils.no');
       }
     },
 
@@ -472,7 +460,7 @@ const RoadList: React.FC<{
             <Dot $active={record.disabled as boolean} />{' '}
             <>{record.disabled ? t('utils.no') : t('utils.yes')}</>
           </ActiveBox>
-        )
+        );
       }
     },
 
@@ -481,9 +469,9 @@ const RoadList: React.FC<{
       width: 30,
       dataIndex: 'operation',
       key: nanoid(),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render(_v: unknown, record: RoadListType) {
-        const editable = isEditing(record)
+        const editable = isEditing(record);
 
         return editable ? (
           <Flex gap="small">
@@ -526,14 +514,14 @@ const RoadList: React.FC<{
               </Button>
             </Popconfirm>
           </Flex>
-        )
+        );
       }
     }
-  ]
+  ];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
-      return col
+      return col;
     }
     return {
       ...col,
@@ -544,8 +532,8 @@ const RoadList: React.FC<{
         title: col.title,
         editing: isEditing(record)
       })
-    }
-  })
+    };
+  });
 
   return (
     <>
@@ -577,7 +565,7 @@ const RoadList: React.FC<{
             rowSelection={{
               type: 'checkbox',
               onChange: (selectedRowKeys: React.Key[]) => {
-                setSelectedRowKeys([...selectedRowKeys])
+                setSelectedRowKeys([...selectedRowKeys]);
               }
             }}
             components={{
@@ -587,7 +575,7 @@ const RoadList: React.FC<{
             }}
             onRow={(record) => ({
               onMouseEnter: () => {
-                handleHover(record.roadId)
+                handleHover(record.roadId);
               }
             })}
             columns={mergedColumns as []}
@@ -598,7 +586,7 @@ const RoadList: React.FC<{
         </Form>
       </Flex>
     </>
-  )
-}
+  );
+};
 
-export default memo(RoadList)
+export default memo(RoadList);

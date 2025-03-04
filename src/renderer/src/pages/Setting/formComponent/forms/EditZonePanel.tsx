@@ -1,6 +1,6 @@
-import { memo, useEffect, useState } from 'react'
-import './form.css'
-import { useTranslation } from 'react-i18next'
+import { memo, useEffect, useState } from 'react';
+import './form.css';
+import { useTranslation } from 'react-i18next';
 import {
   Badge,
   Button,
@@ -16,19 +16,19 @@ import {
   Tag,
   Modal,
   Checkbox
-} from 'antd'
-import { SaveOutlined } from '@ant-design/icons'
-import FormHr from '../../utils/FormHr'
-import { initialZoneValue } from './formInitValue'
-import { openNotificationWithIcon } from '../../utils/notification'
-import { TagSettingType, ZoneType } from '@renderer/utils/jotai'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import useMap from '@renderer/api/useMap'
-import { borderColor } from '../../utils/utils'
-import useAmrName from '@renderer/api/useAmrName'
+} from 'antd';
+import { SaveOutlined } from '@ant-design/icons';
+import FormHr from '../../utils/FormHr';
+import { initialZoneValue } from './formInitValue';
+import { openNotificationWithIcon } from '../../utils/notification';
+import { TagSettingType, ZoneType } from '@renderer/utils/jotai';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import useMap from '@renderer/api/useMap';
+import { borderColor } from '../../utils/utils';
+import useAmrName from '@renderer/api/useAmrName';
 
 type TagRender = SelectProps['tagRender']
 
@@ -36,7 +36,7 @@ const zoneType: SelectProps['options'] = [
   { value: '減速區' },
   { value: '限高區' },
   { value: '禁止區' }
-]
+];
 
 type Save_Zone = {
   name: string
@@ -58,11 +58,11 @@ type Save_Zone = {
 }
 
 const tagRender: TagRender = (props) => {
-  const { label, closable, onClose } = props
+  const { label, closable, onClose } = props;
   const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-  }
+    event.preventDefault();
+    event.stopPropagation();
+  };
   return (
     <Tag
       color={'cyan'}
@@ -73,8 +73,8 @@ const tagRender: TagRender = (props) => {
     >
       {label}
     </Tag>
-  )
-}
+  );
+};
 
 const EditZonePanel: React.FC<{
   zonePanelForm: FormInstance<unknown>
@@ -83,41 +83,41 @@ const EditZonePanel: React.FC<{
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ attributes, listeners, sortableId, zonePanelForm, tagSettingForm }) => {
-  const { t } = useTranslation()
-  const { data } = useMap()
-  const { data: allAmr = [] } = useAmrName()
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { t } = useTranslation();
+  const { data } = useMap();
+  const { data: allAmr = [] } = useAmrName();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [isHint, setIsHint] = useState(false)
-  const queryClient = useQueryClient()
-  const [zoneTags, setZoneTags] = useState<string[] | undefined>([])
-  const [allVehicleForbidden, setAllVehicleForbidden] = useState(false)
-  const [notVehicleForbidden, setNotVehicleForbidden] = useState(false)
-  const [messageApi, contextHolders] = message.useMessage()
+  const [isHint, setIsHint] = useState(false);
+  const queryClient = useQueryClient();
+  const [zoneTags, setZoneTags] = useState<string[] | undefined>([]);
+  const [allVehicleForbidden, setAllVehicleForbidden] = useState(false);
+  const [notVehicleForbidden, setNotVehicleForbidden] = useState(false);
+  const [messageApi, contextHolders] = message.useMessage();
 
   const AmrsID: SelectProps['options'] = allAmr.map((amr) => {
-    return { value: amr.id }
-  })
+    return { value: amr.id };
+  });
 
   const handleCancel = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
   const saveZoneMutation = useMutation({
     mutationFn: (payload: Save_Zone) => {
-      return client.post('api/setting/save-new-zone', payload)
+      return client.post('api/setting/save-new-zone', payload);
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const save = () => {
     if (!zonePanelForm.getFieldsValue() || (!tagSettingForm.getFieldsValue() && !zoneTags?.length))
-      return
+      return;
     const { name, color, category, startX, startY, endX, endY } =
-      zonePanelForm.getFieldsValue() as ZoneType
+      zonePanelForm.getFieldsValue() as ZoneType;
 
     if ((startX === endX && startY === endY) || !startX || !startY) {
       openNotificationWithIcon(
@@ -125,8 +125,8 @@ const EditZonePanel: React.FC<{
         t('edit_zone_panel.waring.invalid_frame'),
         t('edit_zone_panel.waring.invalid_frame'),
         'bottomLeft'
-      )
-      return
+      );
+      return;
     }
     if (!name) {
       openNotificationWithIcon(
@@ -134,13 +134,13 @@ const EditZonePanel: React.FC<{
         t('edit_zone_panel.waring.name_empty_error'),
         t('edit_zone_panel.waring.name_empty_error'),
         'bottomLeft'
-      )
-      return
+      );
+      return;
     }
 
     const exists = data!.zones.some((zone) => {
-      return zone.name.trim() === name.trim()
-    })
+      return zone.name.trim() === name.trim();
+    });
 
     if (exists) {
       openNotificationWithIcon(
@@ -148,8 +148,8 @@ const EditZonePanel: React.FC<{
         t('edit_zone_panel.waring.name_duplicated_error'),
         t('edit_zone_panel.waring.name_duplicated_error'),
         'bottomLeft'
-      )
-      return
+      );
+      return;
     }
     if (!color) {
       openNotificationWithIcon(
@@ -157,8 +157,8 @@ const EditZonePanel: React.FC<{
         t('edit_zone_panel.waring.color_error'),
         t('edit_zone_panel.waring.color_error'),
         'bottomLeft'
-      )
-      return
+      );
+      return;
     }
     if (isHint) {
       openNotificationWithIcon(
@@ -166,14 +166,14 @@ const EditZonePanel: React.FC<{
         t('edit_zone_panel.waring.tag_not_yet_setting'),
         t('edit_zone_panel.waring.tag_not_yet_setting'),
         'bottomLeft'
-      )
-      return
+      );
+      return;
     }
 
     const { speed_limit, hight_limit, forbidden } =
-      tagSettingForm.getFieldsValue() as TagSettingType
+      tagSettingForm.getFieldsValue() as TagSettingType;
 
-    let rgba = `rgba(${color.metaColor.r}, ${color.metaColor.g}, ${color.metaColor.b} , 0.05)`
+    let rgba = `rgba(${color.metaColor.r}, ${color.metaColor.g}, ${color.metaColor.b} , 0.05)`;
     const newZone = {
       name,
       backgroundColor: rgba,
@@ -192,21 +192,21 @@ const EditZonePanel: React.FC<{
         endX,
         endY
       }
-    }
+    };
 
-    saveZoneMutation.mutate(newZone)
-    setAllVehicleForbidden(false)
-    setNotVehicleForbidden(false)
-    setZoneTags([])
-    zonePanelForm.resetFields()
-    tagSettingForm.resetFields()
-  }
+    saveZoneMutation.mutate(newZone);
+    setAllVehicleForbidden(false);
+    setNotVehicleForbidden(false);
+    setZoneTags([]);
+    zonePanelForm.resetFields();
+    tagSettingForm.resetFields();
+  };
 
   useEffect(() => {
     if (zoneTags?.length) {
       if (Object.keys(tagSettingForm.getFieldsValue(true) as {}).length === 0) {
-        setIsHint(true)
-        return
+        setIsHint(true);
+        return;
       }
       // console.log(tagSettingForm.getFieldsValue())
       if (
@@ -218,22 +218,22 @@ const EditZonePanel: React.FC<{
             tagSettingForm.getFieldValue('forbidden').length)
         )
       ) {
-        setIsHint(true)
-        return
+        setIsHint(true);
+        return;
       }
       if (zoneTags.includes('減速區') && !tagSettingForm.getFieldValue('speed_limit')) {
-        setIsHint(true)
-        return
+        setIsHint(true);
+        return;
       }
 
       if (zoneTags.includes('限高區') && !tagSettingForm.getFieldValue('hight_limit')) {
-        setIsHint(true)
-        return
+        setIsHint(true);
+        return;
       }
     }
-    setIsHint(false)
-    return
-  })
+    setIsHint(false);
+    return;
+  });
 
   return (
     <>
@@ -306,7 +306,7 @@ const EditZonePanel: React.FC<{
             />
           </Form.Item>
           {zoneTags?.length ? (
-            <Form.Item style={{ textAlign: 'right', marginBottom: `8px` }}>
+            <Form.Item style={{ textAlign: 'right', marginBottom: '8px' }}>
               <Space>
                 {isHint ? <p style={{ color: 'red' }}>{t('edit_zone_panel.hint')}</p> : <p>✅</p>}
                 <ConfigProvider
@@ -416,7 +416,7 @@ const EditZonePanel: React.FC<{
         </Form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default memo(EditZonePanel)
+export default memo(EditZonePanel);

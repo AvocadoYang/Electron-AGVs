@@ -1,22 +1,21 @@
-/* eslint-disable no-void */
-import { FC } from 'react'
-import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons'
-import { useMutation } from '@tanstack/react-query'
-import styled from 'styled-components'
-import { Button, Col, Flex, Popconfirm, Row, Table, Tooltip, message } from 'antd'
-import { nanoid } from 'nanoid'
-import { useTranslation } from 'react-i18next'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import client from '@renderer/api/axiosClient'
-import { useTopicMission } from '@renderer/api/useTopicMission'
+import { FC } from 'react';
+import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import styled from 'styled-components';
+import { Button, Flex, Popconfirm, Table, message } from 'antd';
+import { nanoid } from 'nanoid';
+import { useTranslation } from 'react-i18next';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import client from '@renderer/api/axiosClient';
+import { useTopicMission } from '@renderer/api/useTopicMission';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
   align-items: flex-start;
-`
+`;
 
 const ActiveBox = styled.div`
   min-width: 4em;
@@ -24,63 +23,62 @@ const ActiveBox = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-`
+`;
 
 type DotStyle = {
-  $active: boolean
-}
+  $active: boolean;
+};
 
 const Dot = styled.div<DotStyle>`
   border-radius: 99%;
   width: 7px;
   height: 7px;
   background-color: ${(prop) => (prop.$active ? '#2bea00' : '#979797')};
-`
+`;
 
 interface DataType {
-  id: string
-  amrId: string[]
-  topicId: number
-  active: boolean
-  taskName: string
-  taskId: string
+  id: string;
+  amrId: string[];
+  topicId: number;
+  active: boolean;
+  taskName: string;
+  taskId: string;
 }
 
 const TopicTaskTable: FC = () => {
-  const { t } = useTranslation()
-  const { data: topicData, refetch } = useTopicMission()
+  const { t } = useTranslation();
+  const { data: topicData, refetch } = useTopicMission();
 
-  const [messageApi, contextHolder] = message.useMessage()
+  const [messageApi, contextHolder] = message.useMessage();
 
   const activeMutation = useMutation({
     mutationFn: (payload: { id: string; isActive: boolean }) => {
-      return client.post('api/setting/active-topic-task', payload)
+      return client.post('api/setting/active-topic-task', payload);
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      void refetch()
+      void messageApi.success(t('utils.success'));
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
-      return client.post('api/setting/delete-topic-task', payload)
+      return client.post('api/setting/delete-topic-task', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleActive = (isActive: boolean, id: string) => {
-    activeMutation.mutate({ id, isActive })
-  }
+    activeMutation.mutate({ id, isActive });
+  };
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate({ id })
-  }
+    deleteMutation.mutate({ id });
+  };
 
   const columns = [
     {
@@ -98,7 +96,7 @@ const TopicTaskTable: FC = () => {
                 : t('mission.topic_mission.stale')}
             </>
           </ActiveBox>
-        )
+        );
       }
     },
     {
@@ -108,8 +106,8 @@ const TopicTaskTable: FC = () => {
       width: 150,
       render: (_: unknown, record: DataType) => {
         return record.amrId.map((item, i) => {
-          return <p key={`${item}-${i}`}>{item} ,</p>
-        })
+          return <p key={`${item}-${i}`}>{item} ,</p>;
+        });
       }
     },
     {
@@ -119,7 +117,7 @@ const TopicTaskTable: FC = () => {
       width: 300,
 
       render: (_v: unknown, record: DataType) => {
-        return record.topicId
+        return record.topicId;
       }
     },
 
@@ -130,7 +128,7 @@ const TopicTaskTable: FC = () => {
       width: 300,
 
       render: (_v: unknown, record: DataType) => {
-        return record.taskName
+        return record.taskName;
       }
     },
     {
@@ -138,7 +136,7 @@ const TopicTaskTable: FC = () => {
       width: 30,
       dataIndex: 'operation',
       key: nanoid(),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render(_v: unknown, record: DataType) {
         return (
           <>
@@ -181,10 +179,10 @@ const TopicTaskTable: FC = () => {
               </Popconfirm>
             </Flex>
           </>
-        )
+        );
       }
     }
-  ]
+  ];
 
   return (
     <Wrapper>
@@ -195,7 +193,7 @@ const TopicTaskTable: FC = () => {
         dataSource={topicData as DataType[]}
       />
     </Wrapper>
-  )
-}
+  );
+};
 
-export default TopicTaskTable
+export default TopicTaskTable;
