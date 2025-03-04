@@ -27,7 +27,8 @@ import {
   isShowEditMissionTag,
   isShowEditChargeStationPosition,
   isShowEditWarningId,
-  isShowEditBackup
+  isShowEditBackup,
+  isOpenUploadWarningIDModal
 } from '@renderer/utils/siderGloble'
 import {
   AimOutlined,
@@ -107,7 +108,10 @@ const Sider: React.FC<{
   ) // 6-2
 
   const [openWarningId, setOpenWarningId] = useAtom(isShowEditWarningId) // 7-1
-  const [openBackup, setOpenBackup] = useAtom(isShowEditBackup) // 7-2
+  const [OpenUploadWarningIDModal, setOpenUploadWarningIDModal] = useAtom(
+    isOpenUploadWarningIDModal
+  ) //7-2
+  const [openBackup, setOpenBackup] = useAtom(isShowEditBackup) // 7-3
 
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip) //地點tooltip
   const [collapsed, setCollapsed] = useState(true)
@@ -270,6 +274,9 @@ const Sider: React.FC<{
       // === file ===
       case 'warning_id':
         setOpenWarningId(check)
+        break
+      case 'upload_warning_file':
+        setOpenUploadWarningIDModal(check)
         break
       case 'backup_file':
         setOpenBackup(check)
@@ -476,8 +483,16 @@ const Sider: React.FC<{
         />
       ),
       getItem(
-        t('toolbar.file_setting.backup_file'),
+        t('toolbar.file_setting.upload_warning_file'),
         '8-2',
+        <Switch
+          checked={OpenUploadWarningIDModal}
+          onChange={(checked) => handleShowPanel(checked, 'upload_warning_file')}
+        />
+      ),
+      getItem(
+        t('toolbar.file_setting.backup_file'),
+        '8-3',
         <Switch
           checked={openBackup}
           onChange={(checked) => handleShowPanel(checked, 'backup_file')}

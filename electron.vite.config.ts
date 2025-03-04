@@ -38,7 +38,7 @@ export default defineConfig({
     },
     server: {
       host: localIP,
-      port: 3000,
+      port: 3001,
       https: {
         key: fs.readFileSync('certs/server.key'),
         cert: fs.readFileSync('certs/server.crt')

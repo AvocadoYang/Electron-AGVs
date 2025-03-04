@@ -3,6 +3,8 @@ import { Layout } from 'antd'
 import { useAtomValue } from 'jotai'
 import CardWrap from './PadContentCards/CardWrap'
 import { memo, useEffect, useState } from 'react'
+import CycleMissionTable from '../../missionModal/CycleMission/CycleMissionTable'
+import AlarmView from './AlarmView/AlarmView'
 
 const dataIndex = [
   [{ key: 'map_2D_view' }, { key: 'map_3D_view' }],
@@ -20,6 +22,7 @@ const PadContent = () => {
   const view = useAtomValue(viewBtn)
   const [displayArray, setDisplayArray] = useState<{ key: string }[]>(dataIndex[1])
   const [showAlertView, setShowAlertView] = useState<boolean>(false)
+  const [openCycleMissionList, setOpenCycleMissionList] = useState<boolean>(false)
   useEffect(() => {
     switch (view) {
       case 0:
@@ -42,16 +45,29 @@ const PadContent = () => {
         break
     }
   }, [view])
-
   return (
     <Content className="pad-content" style={{ overflowY: 'scroll' }}>
-      {showAlertView ? (
-        <div>123</div>
-      ) : (
-        displayArray.map((card) => {
-          return <CardWrap key={card.key} id={card.key}></CardWrap>
+      {(() => {
+        if (showAlertView) {
+          return <AlarmView></AlarmView>
+        }
+        if (openCycleMissionList) {
+          return (
+            <CycleMissionTable
+              setOpenCycleMissionList={setOpenCycleMissionList}
+            ></CycleMissionTable>
+          )
+        }
+        return displayArray.map((card) => {
+          return (
+            <CardWrap
+              key={card.key}
+              id={card.key}
+              setOpenCycleMissionList={setOpenCycleMissionList}
+            ></CardWrap>
+          )
         })
-      )}
+      })()}
     </Content>
   )
 }

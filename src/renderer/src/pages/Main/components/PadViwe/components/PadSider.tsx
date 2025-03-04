@@ -54,13 +54,17 @@ const PadSider = () => {
       t('main.pad_view.sider.mission_view'),
       '2',
       <ScheduleOutlined className="mission-icon" />,
-      () => handleViewChange(ViewBtn.missionView)
+      () => {
+        handleViewChange(ViewBtn.missionView)
+      }
     ),
     getItem(
       t('main.pad_view.sider.info_view'),
       '3',
       <InsertRowAboveOutlined className="info-icon" />,
-      () => handleViewChange(ViewBtn.infoView)
+      () => {
+        handleViewChange(ViewBtn.infoView)
+      }
     ),
     getItem(
       t('main.pad_view.sider.alert_view'),
@@ -68,7 +72,9 @@ const PadSider = () => {
       <Badge count={12} size="small">
         <AlertOutlined className="alert-icon" />
       </Badge>,
-      () => handleViewChange(ViewBtn.alertView)
+      () => {
+        handleViewChange(ViewBtn.alertView)
+      }
     )
   ]
 

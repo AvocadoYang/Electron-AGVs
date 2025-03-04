@@ -1,16 +1,31 @@
 import { Button, Form, message, Modal, Radio, Select } from 'antd'
 import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
-import { OpenQuickMission } from '../../global/jotai'
+import { OpenQuickMission } from '../../../global/jotai'
 import useName from '@renderer/api/useAmrName'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useShelvesInfo from '@renderer/api/useShelvesInfo'
+import { useMutation } from '@tanstack/react-query'
+import { ErrorResponse } from 'react-router-dom'
+import client from '@renderer/api/axiosClient'
 
 enum MissionPriority {
   TRIVIAL, //沒差最後再做
   NORMAL, //普通
   PIVOTAL, //特別優先
   CRITICAL // 緊急
+}
+type AssignPayload = {
+  missionType: 'normal' | 'load' | 'offload'
+  columnName: string
+  locationId: string
+  level: number
+}
+
+type QuickMissionType = {
+  amrId: string
+  priority: number
+  task: AssignPayload[]
 }
 
 const QuickMission = () => {
@@ -22,6 +37,7 @@ const QuickMission = () => {
   const { data: name } = useName()
   const [, setAmrGenre] = useState<string | null>(null)
   const { data: shelves } = useShelvesInfo()
+  const [openQuickMission, setOpenQuickMission] = useAtom(OpenQuickMission)
 
   useEffect(() => {
     if (!shelves || !shelves.length) {
@@ -31,10 +47,10 @@ const QuickMission = () => {
     const loadShelves = shelves
       .filter((shelf) => shelf.hasCargo)
       .map((shelf) => {
-        const columnName = shelf.columnName || '未設定名稱'
+        const columnName = shelf.columnName || 'X'
         const label = `${columnName}-${shelf.locationId}-${shelf.level}`
         return {
-          value: shelf.locationId,
+          value: label,
           label
         }
       })
@@ -43,10 +59,10 @@ const QuickMission = () => {
     const offLoadShelves = shelves
       .filter((shelf) => !shelf.hasCargo)
       .map((shelf) => {
-        const columnName = shelf.columnName || '未設定名稱'
+        const columnName = shelf.columnName || 'X'
         const label = `${columnName}-${shelf.locationId}-${shelf.level}`
         return {
-          value: shelf.locationId,
+          value: label,
           label
         }
       })
@@ -54,15 +70,68 @@ const QuickMission = () => {
     setOffLoadShelf(offLoadShelves)
   }, [shelves])
 
-  const [openQuickMission, setOpenQuickMission] = useAtom(OpenQuickMission)
-  const AmrOption: { value: null | string; label: string }[] | undefined = name?.map((v) => ({
-    value: v.id,
-    label: v.id
-  }))
+  const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
+    if (!name) return []
+    const options = name.map((v) => ({
+      value: v.id,
+      label: v.id
+    }))
 
-  AmrOption?.push({ value: null, label: t('utils.random') })
+    options.unshift({ value: '*', label: t('utils.random') })
+
+    return options
+  }, [name])
+
+  const submitMutation = useMutation({
+    mutationFn: (data: QuickMissionType) => {
+      return client.post('api/missions/fast-mission', data, {
+        headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
+      })
+    },
+    onSuccess: () => {
+      form.resetFields()
+      void messageApi.open({
+        type: 'success',
+        content: t('utils.success')
+      })
+    },
+    onError: (e: ErrorResponse) => {
+      void messageApi.error(e.statusText)
+    }
+  })
+
   const handleCancel = () => {
     setOpenQuickMission(false)
+  }
+
+  const submit = () => {
+    const { load, offload, amrId, priority } = form.getFieldsValue()
+    if (!load || !offload || !amrId || !priority) {
+      void messageApi.warning('欄位尚未填寫完整')
+      return
+    }
+    const loadInfo = (load as string).split('-')
+    const loadShelf = {
+      missionType: 'load',
+      columnName: loadInfo[0] == 'X' ? '' : loadInfo[0],
+      locationId: loadInfo[1],
+      level: Number(loadInfo[2])
+    }
+
+    const offloadInfo = (offload as string).split('-')
+    const offloadShelf = {
+      missionType: 'offload',
+      columnName: offloadInfo[0] == 'X' ? '' : offloadInfo[0],
+      locationId: offloadInfo[1],
+      level: Number(offloadInfo[2])
+    }
+
+    const quickMission = {
+      amrId,
+      priority,
+      task: [loadShelf, offloadShelf] as AssignPayload[]
+    }
+    submitMutation.mutate(quickMission)
   }
 
   return (
@@ -73,7 +142,7 @@ const QuickMission = () => {
         open={openQuickMission}
         onClose={handleCancel}
         footer={[
-          <Button key="submit" color="primary" variant="filled">
+          <Button key="submit" color="primary" variant="filled" onClick={submit}>
             {t('utils.submit')}
           </Button>
         ]}
@@ -120,7 +189,7 @@ const QuickMission = () => {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item label={t('car_control_translate.load')}>
+          <Form.Item label={t('car_control_translate.load')} name={'load'}>
             <Select
               placeholder={'Select a load shelf'}
               style={{ width: '100%' }}
@@ -139,7 +208,7 @@ const QuickMission = () => {
             />
           </Form.Item>
 
-          <Form.Item label={t('car_control_translate.offload')}>
+          <Form.Item label={t('car_control_translate.offload')} name={'offload'}>
             <Select
               placeholder={'Select a offload shelf'}
               style={{ width: '100%' }}

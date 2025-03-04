@@ -65,7 +65,7 @@ const AutoMission = () => {
 
   return (
     <Modal
-      title={t('main.card_name.auto_mission')}
+      title={t('toolbar.mission.cycle_mission')}
       open={openAutoMission}
       onClose={handleCancel}
       footer={[

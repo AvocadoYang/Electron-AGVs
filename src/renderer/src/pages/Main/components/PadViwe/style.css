@@ -21,6 +21,26 @@
   align-items: center;
 }
 
+.pad-map-content {
+  overflow: scroll;
+  height: 100%;
+  width: 100%;
+}
+
+.close-pad-map-button {
+  position: fixed;
+  z-index: 1000;
+  top: 10.5%;
+  left: 10px;
+}
+
+.zoom-pad-wrap {
+  position: fixed;
+  z-index: 1000;
+  top: 10.2%;
+  right: 15px;
+}
+
 .pad-sider li {
   overflow: visible !important;
 }
@@ -37,4 +57,32 @@ html, body, #root {
   height: -webkit-fill-available;
 }
 
+.alarm-icon svg {
+  fill: rgb(250, 171, 0);
+}
+.alarm-text {
+  color: rgb(250, 171, 0);
+}
+
+.error-list-icon svg {
+  fill: rgb(0, 110, 255);
+}
+
+.error-list-text {
+  color: rgb(0, 110, 255);
+}
+
+.error-list-wrap {
+  font-weight: bold;
+  font-size: 18px;
+  /* transition: 0.1s; */
+  cursor: pointer;
+}
+
+.alarm-wrap {
+  font-weight: bold;
+  font-size: 18px;
+  /* transition: 0.1s; */
+  cursor: pointer;
+}
 

@@ -6,16 +6,22 @@ import {
   OpenCarCardInfo,
   OpenInputMission,
   OpenMissionCardInfo,
-  OpenQuickMission
+  OpenQuickMission,
+  viewBtn
 } from '@renderer/pages/Main/global/jotai'
-import { Card, Button } from 'antd'
-import { useSetAtom } from 'jotai'
+import { Card, Button, Space } from 'antd'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AutoMission, DialogMission, InputMission, QuickMission } from '../../../missionModal'
+import { useCycleMission } from '@renderer/sockets/useCycleMission'
 
-const CardWrap: React.FC<{ id: string }> = ({ id }) => {
+const CardWrap: React.FC<{ id: string; setOpenCycleMissionList: React.Dispatch<boolean> }> = ({
+  id,
+  setOpenCycleMissionList
+}) => {
   const { t } = useTranslation()
+  const view = useAtomValue(viewBtn)
   const [borderColor, setBorderColor] = useState('')
 
   const open2DMap = useSetAtom(Open2DMap)
@@ -85,18 +91,34 @@ const CardWrap: React.FC<{ id: string }> = ({ id }) => {
         style={{ borderTop: `6px solid ${borderColor}` }}
         extra={
           <>
-            <Button
-              key={id}
-              id={id}
-              color="primary"
-              variant="filled"
-              disabled={id === 'map_3D_view'}
-              onClick={() => {
-                btnClick(id)
-              }}
-            >
-              {t('utils.open')}
-            </Button>
+            <Space>
+              {id === 'auto_mission' ? (
+                <Button
+                  size="small"
+                  color="default"
+                  variant="filled"
+                  onClick={() => {
+                    setOpenCycleMissionList(true)
+                  }}
+                >
+                  {t('utils.detail')}
+                </Button>
+              ) : (
+                []
+              )}
+              <Button
+                key={id}
+                id={id}
+                color="primary"
+                variant="filled"
+                disabled={id === 'map_3D_view'}
+                onClick={() => {
+                  btnClick(id)
+                }}
+              >
+                {t('utils.open')}
+              </Button>
+            </Space>
           </>
         }
       >
@@ -107,6 +129,7 @@ const CardWrap: React.FC<{ id: string }> = ({ id }) => {
       </Card>
 
       {((id) => {
+        if (view !== 1) return []
         switch (id) {
           case 'auto_mission':
             return <AutoMission></AutoMission>

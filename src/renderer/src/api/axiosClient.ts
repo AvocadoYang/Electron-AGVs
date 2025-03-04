@@ -8,7 +8,7 @@ import { MISSION_CONTROL_URL } from '../configs/config'
 // )
 // console.log(location.host)
 const client = axios.create({
-  baseURL: MISSION_CONTROL_URL.replace('localhost', location.host).replace('3000', '4000')
+  baseURL: MISSION_CONTROL_URL.replace('localhost', location.host).replace('3001', '4000')
 })
 
 export default client

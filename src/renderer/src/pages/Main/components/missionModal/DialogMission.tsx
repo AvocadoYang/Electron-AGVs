@@ -79,10 +79,6 @@ const DialogMission = () => {
     canSubmitMutation.mutate(payload)
   }
 
-  useEffect(() => {
-    missionForm.setFieldValue('priority', MissionPriority.PIVOTAL)
-  }, [])
-
   const handleCancel = () => {
     setOpenDialogMission(false)
   }

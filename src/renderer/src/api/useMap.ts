@@ -71,7 +71,7 @@ const getMap = async () => {
   const parsed = await schema.validate(data, { stripUnknown: true })
   if (parsed.imageUrl) {
     parsed.imageUrl = `${MISSION_CONTROL_URL.replace('localhost', location.host).replace(
-      '3000',
+      '3001',
       '4000'
     )}${parsed.imageUrl}`
   }
