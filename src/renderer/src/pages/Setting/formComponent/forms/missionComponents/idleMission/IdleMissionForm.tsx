@@ -1,14 +1,14 @@
-import client from '@renderer/api/axiosClient'
-import useName from '@renderer/api/useAmrName'
-import useAllMissionTitles from '@renderer/api/useMissionTitle'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Flex, Form, InputNumber, message, Select } from 'antd'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { array, object, string } from 'yup'
-import SubmitButton from '@renderer/utils/SubmitButton'
+import client from '@renderer/api/axiosClient';
+import useName from '@renderer/api/useAmrName';
+import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Flex, Form, InputNumber, message, Select } from 'antd';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { array, object, string } from 'yup';
+import SubmitButton from '@renderer/utils/SubmitButton';
 
 type SubmitPayload = {
   amrId: string[]
@@ -18,7 +18,7 @@ type SubmitPayload = {
 }
 
 const getIdleSelect = async () => {
-  const { data } = await client.get<unknown>('api/setting/idle-task-loc-selection')
+  const { data } = await client.get<unknown>('api/setting/idle-task-loc-selection');
 
   const schema = () =>
     array(
@@ -26,57 +26,57 @@ const getIdleSelect = async () => {
         label: string().optional(),
         value: string().optional()
       })
-    ).optional()
+    ).optional();
 
-  return schema().validate(data, { stripUnknown: true })
-}
+  return schema().validate(data, { stripUnknown: true });
+};
 
 const IdleMissionForm: FC = () => {
-  const [form] = Form.useForm()
-  const { t } = useTranslation()
-  const { data: name } = useName()
-  const { data: missionTitle } = useAllMissionTitles()
-  const [messageApi, contextHolder] = message.useMessage()
-  const { data: idleLocSelect, isLoading } = useQuery(['idle-task-selection'], getIdleSelect)
-  const queryClient = useQueryClient()
+  const [form] = Form.useForm();
+  const { t } = useTranslation();
+  const { data: name } = useName();
+  const { data: missionTitle } = useAllMissionTitles();
+  const [messageApi, contextHolder] = message.useMessage();
+  const { data: idleLocSelect, isLoading } = useQuery(['idle-task-selection'], getIdleSelect);
+  const queryClient = useQueryClient();
 
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }))
+  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
 
   const missionOptions = missionTitle?.map((v) => {
     return {
       value: v.id,
       label: v.name
-    }
-  })
+    };
+  });
 
   const setMissionMutation = useMutation({
     mutationFn: (payload: SubmitPayload) => {
-      return client.post('api/setting/add-idle-task', payload)
+      return client.post('api/setting/add-idle-task', payload);
     },
     onSuccess: async () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
       await queryClient.refetchQueries({
         queryKey: ['idle-task']
-      })
+      });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const submit = () => {
-    const payload = form.getFieldsValue() as SubmitPayload
+    const payload = form.getFieldsValue() as SubmitPayload;
 
     if (payload.amrId.length === 0) {
-      messageApi.warning('amrId少填資料')
-      return
+      messageApi.warning('amrId少填資料');
+      return;
     }
 
     if (payload.idle_min < 3) {
-      messageApi.warning('不可少於3分鐘')
-      return
+      messageApi.warning('不可少於3分鐘');
+      return;
     }
 
-    setMissionMutation.mutate(payload)
-  }
+    setMissionMutation.mutate(payload);
+  };
 
   return (
     <Flex>
@@ -143,7 +143,7 @@ const IdleMissionForm: FC = () => {
         </Form.Item>
       </Form>
     </Flex>
-  )
-}
+  );
+};
 
-export default IdleMissionForm
+export default IdleMissionForm;

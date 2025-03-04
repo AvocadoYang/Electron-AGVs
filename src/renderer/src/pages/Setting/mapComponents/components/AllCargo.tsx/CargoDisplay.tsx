@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import styled from 'styled-components'
+import { FC } from 'react';
+import styled from 'styled-components';
 
 interface BlockProps {
   $hasCargo: boolean
@@ -27,7 +27,7 @@ const Block = styled.div<BlockProps>`
     background-color: #717171;
     text-align: center;
   }
-`
+`;
 
 const BlockSpan = styled.span<{ rotate: number; $hasCargo: boolean }>`
   text-align: center;
@@ -52,7 +52,7 @@ const BlockSpan = styled.span<{ rotate: number; $hasCargo: boolean }>`
 
   -webkit-text-stroke-width: 0.1px;
   -webkit-text-stroke-color: black;
-`
+`;
 
 const CargoDisplay: FC<{
   level: number
@@ -76,7 +76,7 @@ const CargoDisplay: FC<{
         {levelName}
       </BlockSpan>
     </Block>
-  )
-}
+  );
+};
 
-export default CargoDisplay
+export default CargoDisplay;

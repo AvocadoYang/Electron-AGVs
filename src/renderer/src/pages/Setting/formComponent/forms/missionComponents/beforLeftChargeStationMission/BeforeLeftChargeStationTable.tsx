@@ -1,35 +1,21 @@
-/* eslint-disable no-void */
-import { FC } from 'react'
-import { Button, Flex, Popconfirm, Skeleton, Table, Tooltip, message } from 'antd'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import { useMutation } from '@tanstack/react-query'
-import useBLCS from '@renderer/api/useBeforeleftChargeStation'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import {
-  CloseCircleOutlined,
-  DeleteTwoTone,
-  EditOutlined,
-  PlayCircleOutlined,
-  PlusOutlined
-} from '@ant-design/icons'
+import { FC } from 'react';
+import { Button, Flex, Popconfirm, Skeleton, Table, message } from 'antd';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { useMutation } from '@tanstack/react-query';
+import useBLCS from '@renderer/api/useBeforeleftChargeStation';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons';
 
 interface DataType {
-  id: string
-  active: boolean
-  amrId: string[]
-  missionId: string
-  name: string
+  id: string;
+  active: boolean;
+  amrId: string[];
+  missionId: string;
+  name: string;
 }
-
-const Svg = styled.svg`
-  //why this is not work?
-  & :hover {
-    background-color: #ff2929;
-  }
-`
 
 const ActiveBox = styled.div`
   min-width: 4em;
@@ -37,64 +23,64 @@ const ActiveBox = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-`
+`;
 
 type DotStyle = {
-  $active: boolean
-}
+  $active: boolean;
+};
 
 const Dot = styled.div<DotStyle>`
   border-radius: 99%;
   width: 7px;
   height: 7px;
   background-color: ${(prop) => (prop.$active ? '#2bea00' : '#979797')};
-`
+`;
 
 const AmrBox = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const AmrText = styled.span`
   margin: 0;
   padding: 0;
   color: #4d4d4d;
-`
+`;
 
 const BeforeLeftChargeStationTable: FC = () => {
-  const { data, isLoading, refetch } = useBLCS()
-  const { t } = useTranslation()
-  const [messageApi, contextHolder] = message.useMessage()
+  const { data, isLoading, refetch } = useBLCS();
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const activeMutation = useMutation({
     mutationFn: (payload: { id: string; isActive: boolean }) => {
-      return client.post(`api/setting/active-BLCS`, payload)
+      return client.post('api/setting/active-BLCS', payload);
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      void refetch()
+      void messageApi.success(t('utils.success'));
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
-      return client.post(`api/setting/delete-BLCS`, payload)
+      return client.post('api/setting/delete-BLCS', payload);
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      void refetch()
+      void messageApi.success(t('utils.success'));
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleActive = (isActive: boolean, id: string) => {
-    activeMutation.mutate({ id, isActive })
-  }
+    activeMutation.mutate({ id, isActive });
+  };
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate({ id })
-  }
+    deleteMutation.mutate({ id });
+  };
 
   const columns = [
     {
@@ -112,7 +98,7 @@ const BeforeLeftChargeStationTable: FC = () => {
                 : t('mission.before_left_charge_station_mission.stale')}
             </>
           </ActiveBox>
-        )
+        );
       }
     },
     {
@@ -126,12 +112,12 @@ const BeforeLeftChargeStationTable: FC = () => {
       key: 'amrId',
       render: (_v: unknown, record: DataType) => {
         const da = record.amrId.map((s, i) => {
-          const subName = s.split('-').slice(1).join('-')
+          const subName = s.split('-').slice(1).join('-');
 
-          return <AmrText key={`${subName}-${i}`}>{subName}</AmrText>
-        })
+          return <AmrText key={`${subName}-${i}`}>{subName}</AmrText>;
+        });
 
-        return <AmrBox>{da}</AmrBox>
+        return <AmrBox>{da}</AmrBox>;
       }
     },
     {
@@ -176,12 +162,12 @@ const BeforeLeftChargeStationTable: FC = () => {
               </Popconfirm>
             </Flex>
           </>
-        )
+        );
       }
     }
-  ]
+  ];
 
-  if (isLoading) return <Skeleton />
+  if (isLoading) return <Skeleton />;
   return (
     <>
       {contextHolder}
@@ -191,7 +177,7 @@ const BeforeLeftChargeStationTable: FC = () => {
         dataSource={data as DataType[]}
       />
     </>
-  )
-}
+  );
+};
 
-export default BeforeLeftChargeStationTable
+export default BeforeLeftChargeStationTable;

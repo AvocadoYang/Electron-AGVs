@@ -1,40 +1,40 @@
-import useMap from '@renderer/api/useMap'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { memo } from 'react'
-import Cargo from './Cargo'
-import { tooltipProp } from '@renderer/utils/gloable'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/utils/siderGloble'
-import { draggableLineInitialPoint } from '../../../hooks/hook'
-import { DraggableLine, Point } from '../AllLocation/components/PointAndLine'
-import { nanoid } from 'nanoid'
-import useLoc, { LocWithoutArr } from '@renderer/api/useLoc'
-import useCargoInfo from '@renderer/sockets/useCargoInfo'
+import useMap from '@renderer/api/useMap';
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
+import { memo } from 'react';
+import Cargo from './Cargo';
+import { tooltipProp } from '@renderer/utils/gloable';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/utils/siderGloble';
+import { draggableLineInitialPoint } from '../../../hooks/hook';
+import { DraggableLine, Point } from '../AllLocation/components/PointAndLine';
+import { nanoid } from 'nanoid';
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
+import useCargoInfo from '@renderer/sockets/useCargoInfo';
 
 const AllCargo: React.FC<{
   setInitPoint: React.Dispatch<draggableLineInitialPoint>
   handleMouseDown: (startId: string) => void
 }> = ({ setInitPoint, handleMouseDown }) => {
-  const setTooltip = useSetAtom(tooltipProp)
-  const shelfInfo = useCargoInfo()
-  const showLocation = useAtomValue(isShowLocation)
-  const { data } = useMap()
-  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
-  const openEditZone = useAtomValue(EditZoneSwitch)
+  const setTooltip = useSetAtom(tooltipProp);
+  const shelfInfo = useCargoInfo();
+  const showLocation = useAtomValue(isShowLocation);
+  const { data } = useMap();
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch);
+  const openEditZone = useAtomValue(EditZoneSwitch);
 
-  const { data: locInfo } = useLoc(undefined)
+  const { data: locInfo } = useLoc(undefined);
   const handleEnter = (locationId: string, x: number, y: number) => {
     setTooltip({
       x,
       y,
       locationId
-    })
-  }
+    });
+  };
 
   const handleLeave = () => {
-    setTooltip(null)
-  }
-  if (!data || !showLocation) return
+    setTooltip(null);
+  };
+  if (!data || !showLocation) return;
   return (
     <>
       {data.locations
@@ -47,20 +47,20 @@ const AllCargo: React.FC<{
             mapOriginX: data?.mapOriginX,
             mapOriginY: data.mapOriginY,
             mapResolution: data.mapResolution
-          })
+          });
 
-          const info = locInfo as LocWithoutArr[]
+          const info = locInfo as LocWithoutArr[];
 
-          const translateX = info?.find((i) => i.locationId === loc.locationId)?.translateX || 0
-          const translateY = info?.find((i) => i.locationId === loc.locationId)?.translateY || 0
-          const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 270
-          const LocScale = info?.find((i) => i.locationId === loc.locationId)?.scale || 1
+          const translateX = info?.find((i) => i.locationId === loc.locationId)?.translateX || 0;
+          const translateY = info?.find((i) => i.locationId === loc.locationId)?.translateY || 0;
+          const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 270;
+          const LocScale = info?.find((i) => i.locationId === loc.locationId)?.scale || 1;
           return (
             <div
               draggable={false}
               key={loc.locationId}
               onDragStart={(event) => {
-                event.preventDefault()
+                event.preventDefault();
               }}
               style={{ borderRadius: '50%' }}
             >
@@ -73,9 +73,9 @@ const AllCargo: React.FC<{
                 onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
                 onMouseLeave={() => handleLeave()}
                 onMouseDown={(e) => {
-                  if (!openEditRoadPanel || openEditZone) return
-                  setInitPoint({ clientX: e.clientX, clientY: e.clientY })
-                  handleMouseDown((e.target as HTMLInputElement).id)
+                  if (!openEditRoadPanel || openEditZone) return;
+                  setInitPoint({ clientX: e.clientX, clientY: e.clientY });
+                  handleMouseDown((e.target as HTMLInputElement).id);
                 }}
               >
                 <Cargo
@@ -95,10 +95,10 @@ const AllCargo: React.FC<{
                 key={nanoid()}
               ></DraggableLine>
             </div>
-          )
+          );
         })}
     </>
-  )
-}
+  );
+};
 
-export default memo(AllCargo)
+export default memo(AllCargo);

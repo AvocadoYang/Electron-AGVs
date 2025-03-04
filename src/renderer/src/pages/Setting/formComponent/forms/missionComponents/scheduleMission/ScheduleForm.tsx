@@ -1,16 +1,16 @@
-/* eslint-disable no-void */
+ 
 
-import dayjs from 'dayjs'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Checkbox, Form, FormInstance, Modal, Select, TimePicker, message } from 'antd'
-import { Dispatch, FC, SetStateAction } from 'react'
-import { useTranslation } from 'react-i18next'
-import useAllMissionTitles from '@renderer/api/useMissionTitle'
-import useName from '@renderer/api/useAmrName'
-import client from '@renderer/api/axiosClient'
-import { errorHandler } from '@renderer/utils/utils'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import SubmitButton from '@renderer/utils/SubmitButton'
+import dayjs from 'dayjs';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Checkbox, Form, FormInstance, Modal, Select, TimePicker, message } from 'antd';
+import { Dispatch, FC, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
+import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import useName from '@renderer/api/useAmrName';
+import client from '@renderer/api/axiosClient';
+import { errorHandler } from '@renderer/utils/utils';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import SubmitButton from '@renderer/utils/SubmitButton';
 
 interface DataType {
   id: string
@@ -33,17 +33,17 @@ interface SubmitValue {
   amrId: string[]
 }
 
-const format = 'HH:mm'
+const format = 'HH:mm';
 
-const weekArr = Array.from({ length: 7 }, (_v, i) => i + 1)
+const weekArr = Array.from({ length: 7 }, (_v, i) => i + 1);
 
 const weekOptions = weekArr.map((v) => ({
   label: `星期${v}`,
   value: v
-}))
+}));
 
 function convertCommaSeparatedToString(commaSeparated: string): string {
-  return commaSeparated.split(',').join('')
+  return commaSeparated.split(',').join('');
 }
 
 const ScheduleForm: FC<{
@@ -53,60 +53,60 @@ const ScheduleForm: FC<{
   selectId: string | null
   setSelectId: Dispatch<SetStateAction<string | null>>
 }> = ({ form, isModalOpen, setIsModalOpen, selectId, setSelectId }) => {
-  const { t } = useTranslation()
-  const [messageApi, contextHolder] = message.useMessage()
-  const { data: missionTitle } = useAllMissionTitles()
-  const queryClient = useQueryClient()
-  const { data: name } = useName()
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }))
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
+  const { data: missionTitle } = useAllMissionTitles();
+  const queryClient = useQueryClient();
+  const { data: name } = useName();
+  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
 
   const handleCancel = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
   const missionOptions = missionTitle?.map((v) => {
     return {
       value: v.id,
       label: v.name
-    }
-  })
+    };
+  });
 
   const updateMutation = useMutation({
     mutationFn: (payload: SubmitValue) => {
-      return client.post(`api/setting/update-schedule`, payload)
+      return client.post('api/setting/update-schedule', payload);
     },
     onSuccess: async () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
       await queryClient.refetchQueries({
         queryKey: ['all-schedule']
-      })
+      });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleUpdate = () => {
-    const payload = form.getFieldsValue() as DataType
+    const payload = form.getFieldsValue() as DataType;
 
     if (!payload.amrId || !payload.missionId || !payload.day || !payload.time || !selectId) {
-      void messageApi.error(t('utils.error'))
-      return
+      void messageApi.error(t('utils.error'));
+      return;
     }
     const schedule = `${convertCommaSeparatedToString(
       payload.day.toString()
-    )}-${payload.time?.$H}-${payload.time?.$m}`
+    )}-${payload.time?.$H}-${payload.time?.$m}`;
 
     const value = {
       id: selectId,
       schedule,
       missionId: payload.missionId,
       amrId: payload.amrId
-    }
+    };
 
-    updateMutation.mutate(value)
-    form.resetFields()
-    setSelectId(null)
-    setIsModalOpen(false)
-  }
+    updateMutation.mutate(value);
+    form.resetFields();
+    setSelectId(null);
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -183,7 +183,7 @@ const ScheduleForm: FC<{
         </Form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default ScheduleForm
+export default ScheduleForm;

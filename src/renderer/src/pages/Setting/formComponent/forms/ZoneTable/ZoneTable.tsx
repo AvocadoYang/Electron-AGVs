@@ -1,51 +1,51 @@
-import { memo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import FormHr from '../../../utils/FormHr'
-import { Button, ColorPicker, Flex, message, Popconfirm, Space, Table, Tag, Typography } from 'antd'
-import { DeleteTwoTone, EditOutlined } from '@ant-design/icons'
-import useMap from '@renderer/api/useMap'
-import { nanoid } from 'nanoid'
-import { tagColor } from '../../../utils/utils'
-import { ZoneTableData } from '../antd'
-import EditZoneTable from './component/EditZoneTable'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
+import { memo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import FormHr from '../../../utils/FormHr';
+import { Button, ColorPicker, Flex, message, Popconfirm, Space, Table, Tag, Typography } from 'antd';
+import { DeleteTwoTone, EditOutlined } from '@ant-design/icons';
+import useMap from '@renderer/api/useMap';
+import { nanoid } from 'nanoid';
+import { tagColor } from '../../../utils/utils';
+import { ZoneTableData } from '../antd';
+import EditZoneTable from './component/EditZoneTable';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
 const ZoneTable: React.FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ listeners, attributes, sortableId }) => {
-  const { data } = useMap()
-  const [editingKey, setEditingKey] = useState<string | null>(null)
-  const [oldData, setOldData] = useState<ZoneTableData | null>(null)
-  const { t } = useTranslation()
-  const [messageApi, contextHolders] = message.useMessage()
-  const queryClient = useQueryClient()
+  const { data } = useMap();
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [oldData, setOldData] = useState<ZoneTableData | null>(null);
+  const { t } = useTranslation();
+  const [messageApi, contextHolders] = message.useMessage();
+  const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
     mutationFn: (zoneId: string) => {
-      return client.post(`api/setting/delete-edit-zone`, {
+      return client.post('api/setting/delete-edit-zone', {
         zoneId
-      })
+      });
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   //選擇要修改的區域列, 並且設定表單
   const edit = (record: Partial<ZoneTableData> & { id: string }) => {
     const isValidRecord = (
       record: Partial<ZoneTableData> & { id: string }
     ): record is ZoneTableData & { id: string } => {
-      return Object.values(record).every((value) => value !== undefined)
-    }
-    if (!isValidRecord(record)) return
+      return Object.values(record).every((value) => value !== undefined);
+    };
+    if (!isValidRecord(record)) return;
     const data = {
       id: record.id,
       backgroundColor: record.backgroundColor,
@@ -54,11 +54,11 @@ const ZoneTable: React.FC<{
       startPoint: record.startPoint,
       tagSetting: record.tagSetting,
       name: record.name
-    }
+    };
 
-    setOldData(data)
-    setEditingKey(record.id)
-  }
+    setOldData(data);
+    setEditingKey(record.id);
+  };
 
   const columns = [
     {
@@ -78,7 +78,7 @@ const ZoneTable: React.FC<{
             <p>{`X: ${(data.startX as number).toFixed(2)}`}</p>
             <p>{`Y: ${(data.startY as number).toFixed(2)}`}</p>
           </Flex>
-        )
+        );
       },
       editable: true,
       width: '16%'
@@ -94,7 +94,7 @@ const ZoneTable: React.FC<{
             <p>{`X: ${(data.endX as number).toFixed(2)}`}</p>
             <p>{`Y: ${(data.endY as number).toFixed(2)}`}</p>
           </Flex>
-        )
+        );
       },
       width: '16%'
     },
@@ -111,10 +111,10 @@ const ZoneTable: React.FC<{
                 <Tag color={tagColor(tag)} key={nanoid()}>
                   {tag}
                 </Tag>
-              )
+              );
             })}
           </Space>
-        )
+        );
       },
       width: '23%'
     },
@@ -124,7 +124,7 @@ const ZoneTable: React.FC<{
       key: 'backgroundColor',
       render: (data) => {
         // console.log(data)
-        return <ColorPicker disabled defaultValue={data}></ColorPicker>
+        return <ColorPicker disabled defaultValue={data}></ColorPicker>;
       },
       editable: true,
       width: '6%'
@@ -137,7 +137,7 @@ const ZoneTable: React.FC<{
           <Flex vertical align="center" justify="space-between" gap={'middle'}>
             <Typography.Link
               onClick={() => {
-                edit(record)
+                edit(record);
               }}
             >
               <Button icon={<EditOutlined />} color="primary" variant="filled" type="link">
@@ -161,13 +161,13 @@ const ZoneTable: React.FC<{
               </Button>
             </Popconfirm>
           </Flex>
-        )
+        );
       },
       width: '12%'
     }
-  ]
+  ];
 
-  if (!data) return
+  if (!data) return;
   return (
     <>
       {contextHolders}
@@ -184,7 +184,7 @@ const ZoneTable: React.FC<{
             rowSelection={{
               type: 'checkbox',
               onChange: (selectedRowKeys: React.Key[]) => {
-                console.log(selectedRowKeys)
+                console.log(selectedRowKeys);
               }
             }}
             rowKey={(record) => record.id}
@@ -201,7 +201,7 @@ const ZoneTable: React.FC<{
         ></EditZoneTable>
       )}
     </>
-  )
-}
+  );
+};
 
-export default memo(ZoneTable)
+export default memo(ZoneTable);

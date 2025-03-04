@@ -1,23 +1,23 @@
-/* eslint-disable no-void */
-import { Button, Flex, Popconfirm, Table, TableProps, message } from 'antd'
-import { FC } from 'react'
-import styled from 'styled-components'
-import { useTranslation } from 'react-i18next'
-import { useMutation } from '@tanstack/react-query'
-import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons'
-import client from '@renderer/api/axiosClient'
-import { errorHandler } from '@renderer/utils/utils'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { useCycleMission } from '@renderer/sockets/useCycleMission'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
-import CycleForm from './CycleForm'
+ 
+import { Button, Flex, Popconfirm, Table, TableProps, message } from 'antd';
+import { FC } from 'react';
+import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
+import { CloseCircleOutlined, DeleteTwoTone, PlayCircleOutlined } from '@ant-design/icons';
+import client from '@renderer/api/axiosClient';
+import { errorHandler } from '@renderer/utils/utils';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { useCycleMission } from '@renderer/sockets/useCycleMission';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
+import CycleForm from './CycleForm';
 
 const NotActive = styled.div`
   /* HTML: <div class="loader"></div> */
 
   min-width: 65px;
   min-height: 65px;
-`
+`;
 
 const ActiveLogo = styled.div`
   /* HTML: <div class="loader"></div> */
@@ -68,13 +68,13 @@ const ActiveLogo = styled.div`
         20% 50%;
     }
   }
-`
+`;
 
 /* HTML: <div class="loader"></div> */
 
 const MinWid = styled.div`
   min-width: 12em;
-`
+`;
 
 type CM = {
   isActive: boolean
@@ -89,9 +89,9 @@ const CycleMissionPanel: FC<{
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const { t } = useTranslation()
-  const data = useCycleMission()
-  const [messageApi, contextHolder] = message.useMessage()
+  const { t } = useTranslation();
+  const data = useCycleMission();
+  const [messageApi, contextHolder] = message.useMessage();
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
       return client.post(
@@ -102,13 +102,13 @@ const CycleMissionPanel: FC<{
         {
           headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
         }
-      )
+      );
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const activeMutation = useMutation({
     mutationFn: (payload: { id: string; isActive: boolean }) => {
@@ -121,21 +121,21 @@ const CycleMissionPanel: FC<{
         {
           headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
         }
-      )
+      );
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const activeSwitch = (id: string, isActive: boolean) => {
-    activeMutation.mutate({ id, isActive })
-  }
+    activeMutation.mutate({ id, isActive });
+  };
 
   const deleteOne = (id: string) => {
-    deleteMutation.mutate({ id })
-  }
+    deleteMutation.mutate({ id });
+  };
 
   const columns: TableProps<CM>['columns'] = [
     {
@@ -148,7 +148,7 @@ const CycleMissionPanel: FC<{
       dataIndex: 'amrId',
       key: 'amrId',
       render(_, record) {
-        return record.amrId ? record.amrId : t('mission.cycle_mission.random')
+        return record.amrId ? record.amrId : t('mission.cycle_mission.random');
       }
     },
     {
@@ -156,7 +156,7 @@ const CycleMissionPanel: FC<{
       dataIndex: 'status',
       key: 'status',
       render(_, record) {
-        return record.isActive ? <ActiveLogo /> : <NotActive />
+        return record.isActive ? <ActiveLogo /> : <NotActive />;
       }
     },
     {
@@ -198,7 +198,7 @@ const CycleMissionPanel: FC<{
         </MinWid>
       )
     }
-  ]
+  ];
 
   return (
     <>
@@ -220,7 +220,7 @@ const CycleMissionPanel: FC<{
         </Flex>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CycleMissionPanel
+export default CycleMissionPanel;

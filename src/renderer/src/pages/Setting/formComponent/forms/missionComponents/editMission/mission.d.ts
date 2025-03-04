@@ -1,4 +1,4 @@
-import { WriteAction } from '~/configs/dispatcher'
+import { WriteAction } from '~/configs/dispatcher';
 
 export interface MissionListType {
   key: string

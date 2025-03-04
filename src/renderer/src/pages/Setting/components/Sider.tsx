@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useState, memo, useEffect } from 'react'
-import { Layout, Menu, message, Switch } from 'antd'
-import useMap from '@renderer/api/useMap'
-import { useAtom, useSetAtom } from 'jotai'
+import React, { useState, memo, useEffect } from 'react';
+import { Layout, Menu, message, Switch } from 'antd';
+import useMap from '@renderer/api/useMap';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   EditLocationPanelSwitch,
   EditLocationListTableSwitch,
@@ -28,7 +27,7 @@ import {
   isShowEditChargeStationPosition,
   isShowEditWarningId,
   isShowEditBackup
-} from '@renderer/utils/siderGloble'
+} from '@renderer/utils/siderGloble';
 import {
   AimOutlined,
   NodeIndexOutlined,
@@ -37,19 +36,19 @@ import {
   DeploymentUnitOutlined,
   ScheduleOutlined,
   FileOutlined
-} from '@ant-design/icons'
-import { useTranslation } from 'react-i18next'
-import type { MenuProps } from 'antd'
-import '../setting.css'
-import { ToolBarItemType } from './siderElement'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
+} from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
+import type { MenuProps } from 'antd';
+import '../setting.css';
+import { ToolBarItemType } from './siderElement';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
-export type MenuItem = Required<MenuProps>['items'][number]
+export type MenuItem = Required<MenuProps>['items'][number];
 
-export function getItem(
+function getItem(
   label: React.ReactNode,
   key: React.Key,
   icon?: React.ReactNode,
@@ -62,56 +61,57 @@ export function getItem(
     children,
     label,
     type
-  } as MenuItem
+  } as MenuItem;
 }
 
-const { Sider: AntdSider } = Layout
+const { Sider: AntdSider } = Layout;
 
 const Sider: React.FC<{
-  setHasOpenTool: React.Dispatch<React.SetStateAction<boolean>>
+  setHasOpenTool: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setHasOpenTool }) => {
-  const { data } = useMap()
-  const queryClient = useQueryClient()
+  const { data } = useMap();
+  const queryClient = useQueryClient();
 
-  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch) // 1-1
-  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch) // 1-2
+  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch); // 1-1
+  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch); // 1-2
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
     EditLocationListTableSwitch
-  ) // 1-4
+  ); // 1-4
 
-  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch) // 2-1
-  const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch) // 2-2
+  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch); // 2-1
+  const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch); // 2-2
 
-  const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch) // 3-1
-  const [showAllZones, setShowAllZones] = useAtom(showAllZonesSwitch) // 3-2
-  const [showZonesTable, setShowZonesTable] = useAtom(showZonesTableSwitch) // 3-3
+  const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch); // 3-1
+  const [showAllZones, setShowAllZones] = useAtom(showAllZonesSwitch); // 3-2
+  const [showZonesTable, setShowZonesTable] = useAtom(showZonesTableSwitch); // 3-3
 
-  const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch) //4-1
-  const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch) //4-2
-  const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch) //4-3
-  const [openPalletTable, setOpenPalletTable] = useAtom(EditPalletSwitch) //4-4
+  const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch); //4-1
+  const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch); //4-2
+  const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch); //4-3
+  const [openPalletTable, setOpenPalletTable] = useAtom(EditPalletSwitch); //4-4
 
-  const [openMissionPanel, setOpenMissionPanel] = useAtom(isShowEditMission) // 5-1
-  const [openChargeMissionPanel, setOpenChargeMissionPanel] = useAtom(isShowEditChargeMission) // 5-2
-  const [openCycleMissionPanel, setOpenCycleMissionPanel] = useAtom(isShowEditCycleMission) // 5-3
+  const [openMissionPanel, setOpenMissionPanel] = useAtom(isShowEditMission); // 5-1
+  const [openChargeMissionPanel, setOpenChargeMissionPanel] = useAtom(isShowEditChargeMission); // 5-2
+  const [openCycleMissionPanel, setOpenCycleMissionPanel] = useAtom(isShowEditCycleMission); // 5-3
   const [openBeforeLeftStationMissionPanel, setOpenBeforeLeftStationMissionPanel] = useAtom(
     isShowEditBeforeLeftChargeStationMission
-  ) // 5-4
-  const [openScheduleMissionPanel, setOpenScheduleMissionPanel] = useAtom(isShowEditScheduleMission) // 5-5
-  const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission) // 5-6
-  const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission) // 5-7
+  ); // 5-4
+  const [openScheduleMissionPanel, setOpenScheduleMissionPanel] =
+    useAtom(isShowEditScheduleMission); // 5-5
+  const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission); // 5-6
+  const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission); // 5-7
 
-  const [openTagMissionPanel, setOpenTagMissionPanel] = useAtom(isShowEditMissionTag) // 6-1
+  const [openTagMissionPanel, setOpenTagMissionPanel] = useAtom(isShowEditMissionTag); // 6-1
   const [openEditChargeStationIconPanel, setOpenEditChargeStationIconPanel] = useAtom(
     isShowEditChargeStationPosition
-  ) // 6-2
+  ); // 6-2
 
-  const [openWarningId, setOpenWarningId] = useAtom(isShowEditWarningId) // 7-1
-  const [openBackup, setOpenBackup] = useAtom(isShowEditBackup) // 7-2
+  const [openWarningId, setOpenWarningId] = useAtom(isShowEditWarningId); // 7-1
+  const [openBackup, setOpenBackup] = useAtom(isShowEditBackup); // 7-2
 
-  const setShowLocationToolTip = useSetAtom(isShowLocationTooltip) //地點tooltip
-  const [collapsed, setCollapsed] = useState(true)
-  const { t } = useTranslation()
+  const setShowLocationToolTip = useSetAtom(isShowLocationTooltip); //地點tooltip
+  const [collapsed, setCollapsed] = useState(true);
+  const { t } = useTranslation();
   useEffect(() => {
     const isOpen = [
       openEditLocationPanel,
@@ -136,9 +136,9 @@ const Sider: React.FC<{
       openEditChargeStationIconPanel,
       openWarningId,
       openBackup
-    ].some((item) => item)
+    ].some((item) => item);
 
-    setHasOpenTool(isOpen)
+    setHasOpenTool(isOpen);
   }, [
     openEditLocationPanel,
     showAllLocationListTable,
@@ -162,64 +162,64 @@ const Sider: React.FC<{
     openEditChargeStationIconPanel,
     openWarningId,
     openBackup
-  ])
+  ]);
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
-    if (!data) return
+    if (!data) return;
     switch (itemType) {
       // === location ===
       case 'location_panel':
-        setOpenEditLocationPanel(check)
-        break
+        setOpenEditLocationPanel(check);
+        break;
       case 'quick_location_panel':
-        setQuickEditLocationPanel(check)
-        break
+        setQuickEditLocationPanel(check);
+        break;
       case 'location_list':
-        setShowAllLocationListTable(check)
-        setShowLocationToolTip(true)
+        setShowAllLocationListTable(check);
+        setShowLocationToolTip(true);
 
-        break
+        break;
       // ===================
       // === road ===
       case 'road_panel':
-        setOpenEditRoadPanel(check)
-        break
+        setOpenEditRoadPanel(check);
+        break;
       case 'show_roads_table':
-        setShowAllRoadListTable(check)
-        break
+        setShowAllRoadListTable(check);
+        break;
 
       // ===================
 
       // === zone ===
       case 'edit_zone':
-        setOpenEditZone(check)
-        break
+        setOpenEditZone(check);
+        break;
       case 'show_zone_list':
-        setShowAllZones(check)
-        break
+        setShowAllZones(check);
+        break;
       case 'show_zone_table':
-        setShowZonesTable(check)
-        break
+        setShowZonesTable(check);
+        break;
       // ===================
       // === shelves ===
       // === shelf ===
 
       case 'edit_shelve':
-        await queryClient.refetchQueries({ queryKey: ['shelf'] })
-        setOpenEditShelf(check)
-        break
+        await queryClient.refetchQueries({ queryKey: ['shelf'] });
+        setOpenEditShelf(check);
+        break;
       case 'edit_shelve_type':
-        await queryClient.refetchQueries({ queryKey: ['all-shelf-category'] })
-        setOpenEditShelfCategory(check)
-        break
+        await queryClient.refetchQueries({ queryKey: ['all-shelf-category'] });
+        setOpenEditShelfCategory(check);
+        break;
       case 'edit_yaw':
-        await queryClient.refetchQueries({ queryKey: ['yaw'] })
-        setOpenYawTable(check)
-        break
+        await queryClient.refetchQueries({ queryKey: ['yaw'] });
+        setOpenYawTable(check);
+        break;
 
       case 'edit_pallet':
-        setOpenPalletTable(check)
-        break
+        setOpenPalletTable(check);
+        break;
 
       // ===================
 
@@ -227,32 +227,32 @@ const Sider: React.FC<{
       // === missions ===
 
       case 'edit_mission':
-        setOpenMissionPanel(check)
-        break
+        setOpenMissionPanel(check);
+        break;
 
       case 'charge_mission':
-        setOpenChargeMissionPanel(check)
-        break
+        setOpenChargeMissionPanel(check);
+        break;
 
       case 'cycle_mission':
-        setOpenCycleMissionPanel(check)
-        break
+        setOpenCycleMissionPanel(check);
+        break;
 
       case 'before_left_charge_station_task':
-        setOpenBeforeLeftStationMissionPanel(check)
-        break
+        setOpenBeforeLeftStationMissionPanel(check);
+        break;
 
       case 'idle_mission':
-        setOpenIdleMissionPanel(check)
-        break
+        setOpenIdleMissionPanel(check);
+        break;
 
       case 'schedule_mission':
-        setOpenScheduleMissionPanel(check)
-        break
+        setOpenScheduleMissionPanel(check);
+        break;
 
       case 'topic_mission':
-        setOpenTopicMissionPanel(check)
-        break
+        setOpenTopicMissionPanel(check);
+        break;
       // ===================
 
       // ===================
@@ -261,22 +261,22 @@ const Sider: React.FC<{
       //   console.log('edit_gauge')
       //   break
       case 'edit_tag':
-        setOpenTagMissionPanel(check)
-        break
+        setOpenTagMissionPanel(check);
+        break;
       case 'edit_charge_station_icon_style':
-        setOpenEditChargeStationIconPanel(check)
-        break
+        setOpenEditChargeStationIconPanel(check);
+        break;
       // ===================
       // === file ===
       case 'warning_id':
-        setOpenWarningId(check)
-        break
+        setOpenWarningId(check);
+        break;
       case 'backup_file':
-        setOpenBackup(check)
-        break
+        setOpenBackup(check);
+        break;
       //=======
     }
-  }
+  };
 
   const toolItem: MenuItem[] = [
     getItem(t('toolbar.location.edit_locations'), '1', <AimOutlined className="location_icon" />, [
@@ -485,27 +485,27 @@ const Sider: React.FC<{
       ),
       getItem(t('toolbar.restart.restart'), '8-3')
     ])
-  ]
-  const [messageApi, contextHolders] = message.useMessage()
+  ];
+  const [messageApi, contextHolders] = message.useMessage();
   const restartMutate = useMutation({
     mutationFn: () => {
-      return client.post(`api/setting/restart`)
+      return client.post('api/setting/restart');
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleRestart = (keyPath: Array<string>) => {
-    if (JSON.stringify(keyPath) !== '["8-3","8"]') return
-    restartMutate.mutate()
+    if (JSON.stringify(keyPath) !== '["8-3","8"]') return;
+    restartMutate.mutate();
 
     setTimeout(() => {
-      window.location.reload()
-    }, 6000)
-  }
+      window.location.reload();
+    }, 6000);
+  };
   return (
     <>
       {contextHolders}
@@ -525,7 +525,7 @@ const Sider: React.FC<{
         />
       </AntdSider>
     </>
-  )
-}
+  );
+};
 
-export default memo(Sider)
+export default memo(Sider);

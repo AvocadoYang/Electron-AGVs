@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable react/prop-types */
-import { Tooltip } from 'antd'
-import { memo } from 'react'
-import styled from 'styled-components'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { PointInfo, MapInfo } from '../locationInfo'
+import { Tooltip } from 'antd';
+import { memo } from 'react';
+import styled from 'styled-components';
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
+import { PointInfo, MapInfo } from '../locationInfo';
 
 const Container = styled.div.attrs<{ left: number; top: number; canrotate: string }>(
   ({ left, top }) => ({
@@ -18,7 +16,7 @@ const Container = styled.div.attrs<{ left: number; top: number; canrotate: strin
   height: 6.5px;
   z-index: 20px;
   border-radius: 50%;
-`
+`;
 
 const Location: React.FC<{ pointInfo: PointInfo; mapInfo: MapInfo }> = ({ pointInfo, mapInfo }) => {
   const [left, top] = rosCoord2DisplayCoord({
@@ -28,7 +26,7 @@ const Location: React.FC<{ pointInfo: PointInfo; mapInfo: MapInfo }> = ({ pointI
     mapOriginX: mapInfo.mapOriginX,
     mapOriginY: mapInfo.mapOriginY,
     mapResolution: mapInfo.mapResolution
-  })
+  });
   return (
     <Tooltip
       placement="bottom"
@@ -43,11 +41,11 @@ const Location: React.FC<{ pointInfo: PointInfo; mapInfo: MapInfo }> = ({ pointI
         key={pointInfo.locationId}
         className="location-wrap"
         onDragStart={(event) => {
-          event.preventDefault()
+          event.preventDefault();
         }}
       />
     </Tooltip>
-  )
-}
+  );
+};
 
-export default memo(Location)
+export default memo(Location);

@@ -1,19 +1,19 @@
-import { FC, useState } from 'react'
-import { Flex, Form } from 'antd'
-import { useTranslation } from 'react-i18next'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
-import ScheduleForm from './ScheduleForm'
-import ScheduleTable from './ScheduleTable'
+import { FC, useState } from 'react';
+import { Flex, Form } from 'antd';
+import { useTranslation } from 'react-i18next';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
+import ScheduleForm from './ScheduleForm';
+import ScheduleTable from './ScheduleTable';
 
 const SchedulePanel: FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const [selectId, setSelectId] = useState<null | string>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [form] = Form.useForm()
-  const { t } = useTranslation()
+  const [selectId, setSelectId] = useState<null | string>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -35,7 +35,7 @@ const SchedulePanel: FC<{
         </Flex>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default SchedulePanel
+export default SchedulePanel;

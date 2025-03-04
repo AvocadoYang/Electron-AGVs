@@ -1,5 +1,5 @@
-import translateEN from '../renderer/src/i18n/languages/en/translation.json'
-import translateTW from '../renderer/src/i18n/languages/tw/translation.json'
+import translateEN from '../renderer/src/i18n/languages/en/translation.json';
+import translateTW from '../renderer/src/i18n/languages/tw/translation.json';
 
 const resources = {
   en: {
@@ -8,6 +8,6 @@ const resources = {
   tw: {
     translation: translateTW
   }
-} as const
+} as const;
 
-export default resources
+export default resources;

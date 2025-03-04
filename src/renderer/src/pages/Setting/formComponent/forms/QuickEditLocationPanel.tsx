@@ -5,32 +5,26 @@ import {
   message,
   Select,
   Checkbox,
-  Card,
   FormInstance,
   Flex,
-  Row,
-  Col,
   Space
-} from 'antd'
-import client from '@renderer/api/axiosClient'
-import { memo, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { borderColor } from '../../utils/utils'
-import { LocationType, RoadListType } from '@renderer/utils/jotai'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import useMap from '@renderer/api/useMap'
-import { openNotificationWithIcon } from '../../utils/notification'
-import { useAtom, useAtomValue } from 'jotai'
+} from 'antd';
+import client from '@renderer/api/axiosClient';
+import { memo, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { LocationType, RoadListType } from '@renderer/utils/jotai';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import useMap from '@renderer/api/useMap';
+import { openNotificationWithIcon } from '../../utils/notification';
+import { useAtom, useAtomValue } from 'jotai';
 import {
   locationXForQuickEditLocationPanel,
   locationYForQuickEditLocationPanel,
-  mousePoint_X,
-  mousePoint_Y,
   TempStoredLocationsForQuickEditPanel
-} from '@renderer/utils/gloable'
-import FormHr from '../../utils/FormHr'
+} from '@renderer/utils/gloable';
+import FormHr from '../../utils/FormHr';
 
 const initialFormDate = {
   genre: 'Extra',
@@ -44,86 +38,77 @@ const initialFormDate = {
   dirX: 'right',
   dirY: 'down',
   connectRoad: false
-}
-
-type Road = {
-  spot1Id: string
-  spot2Id: string
-  validYawList: string[] | number[]
-  disabled: boolean
-  limit: boolean
-  roadType: string
-}
+};
 
 type FormT = {
-  genre: string
-  originId: number
-  originX: number
-  originY: number
-  multiplyX: number
-  multiplyY: number
-  xGap: number
-  yGap: number
-  dirX: string
-  dirY: string
-}
+  genre: string;
+  originId: number;
+  originX: number;
+  originY: number;
+  multiplyX: number;
+  multiplyY: number;
+  xGap: number;
+  yGap: number;
+  dirX: string;
+  dirY: string;
+};
 
-const selectDirX = [{ value: 'left' }, { value: 'right' }]
-const selectDirY = [{ value: 'top' }, { value: 'down' }]
+const selectDirX = [{ value: 'left' }, { value: 'right' }];
+const selectDirY = [{ value: 'top' }, { value: 'down' }];
 
 const locGenre = ['Extra', '充電區', '預派點', '待命區', '存貨區'].map((v) => ({
   value: v
-}))
+}));
 
 const QuickEditLocationPanel: React.FC<{
-  locationPanelForm: FormInstance<unknown>
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  locationPanelForm: FormInstance<unknown>;
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ sortableId, attributes, listeners }) => {
-  const [form] = Form.useForm()
-  const { data } = useMap()
-  const [FL, setFL] = useState<LocationType[]>([])
-  const [FLR, setFLR] = useState<RoadListType[]>([])
-  const mousePointX = useAtomValue(locationXForQuickEditLocationPanel)
-  const mousePointY = useAtomValue(locationYForQuickEditLocationPanel)
-  const [, setTempStoredLocationsForQuickEditPanel] = useAtom(TempStoredLocationsForQuickEditPanel)
+  const [form] = Form.useForm();
+  const { data } = useMap();
+  const [FL, setFL] = useState<LocationType[]>([]);
+  const [, setFLR] = useState<RoadListType[]>([]);
+  const mousePointX = useAtomValue(locationXForQuickEditLocationPanel);
+  const mousePointY = useAtomValue(locationYForQuickEditLocationPanel);
+  const [, setTempStoredLocationsForQuickEditPanel] = useAtom(TempStoredLocationsForQuickEditPanel);
 
-  const [messageApi, contextHolder] = message.useMessage()
-  const queryClient = useQueryClient()
+  const [messageApi, contextHolder] = message.useMessage();
+  const queryClient = useQueryClient();
 
-  const [formValues, setFormValues] = useState<FormT | null>(null)
-  const [isAutoProduceRoad, setIsAutoProduceRoad] = useState<boolean>(false)
-  const { t } = useTranslation()
+  const [formValues, setFormValues] = useState<FormT | null>(null);
+  const [isAutoProduceRoad, setIsAutoProduceRoad] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const saveLocationMutation = useMutation({
     mutationFn: (payload: LocationType[]) => {
-      return client.post('api/setting/save-edit-loc-fastShelve', payload)
+      return client.post('api/setting/save-edit-loc-fastShelve', payload);
     },
     onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
+      void messageApi.success('success');
+      queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
-  const saveRoadMutation = useMutation({
-    mutationFn: (payload: Road[]) => {
-      return client.post('api/setting/save-edit-road-fastShelve', payload)
-    },
-    onSuccess: () => {
-      void messageApi.success('success')
-      queryClient.refetchQueries({ queryKey: ['map'] })
-    },
-    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  // const saveRoadMutation = useMutation({
+  //   mutationFn: (payload: Road[]) => {
+  //     return client.post('api/setting/save-edit-road-fastShelve', payload);
+  //   },
+  //   onSuccess: () => {
+  //     void messageApi.success('success');
+  //     queryClient.refetchQueries({ queryKey: ['map'] });
+  //   },
+  //   onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  // });
 
   const savePose = () => {
-    if (!data) return false
-    if (!FL.length) return false
-    const payload = FL
+    if (!data) return false;
+    if (!FL.length) return false;
+    const payload = FL;
 
-    const isNegative = payload.findIndex((loc) => loc.locationId <= 0)
+    const isNegative = payload.findIndex((loc) => Number(loc.locationId) <= 0);
 
     if (isNegative != -1) {
       openNotificationWithIcon(
@@ -131,33 +116,33 @@ const QuickEditLocationPanel: React.FC<{
         t('quick_edit_location_panel.save_pose_notify.is_a_navigate'),
         t('quick_edit_location_panel.save_pose_notify.is_a_navigate'),
         'bottomLeft'
-      )
-      return false
+      );
+      return false;
     }
 
     const isDuplicate = data?.locations.some((v) => {
-      const dbData = v.locationId
+      const dbData = v.locationId;
       for (const loc of payload) {
         if (loc.locationId.toString() === dbData) {
-          return true
+          return true;
         }
       }
-      return false
-    })
+      return false;
+    });
 
     if (isDuplicate) {
-      void messageApi.warning(t('quick_edit_location_panel.save_pose_notify.duplicate_id'))
-      return false
+      void messageApi.warning(t('quick_edit_location_panel.save_pose_notify.duplicate_id'));
+      return false;
     }
 
     const formatData = payload.map((loc) => {
       return {
         ...loc,
-        locationId: Number(loc.locationId)
-      }
-    })
+        locationId: loc.locationId
+      };
+    });
 
-    saveLocationMutation.mutate(formatData)
+    saveLocationMutation.mutate(formatData);
 
     // if (!isAutoProduceRoad) return;
     // if (!FLR.length) return;
@@ -172,64 +157,66 @@ const QuickEditLocationPanel: React.FC<{
     //   };
     // });
     // saveRoadMutation.mutate(newData);
-    return true
-  }
+    return true;
+  };
 
   const save = () => {
-    const result = savePose()
-    if (!result) return
-    setFL([])
-    setFLR([])
-    setTempStoredLocationsForQuickEditPanel([])
-  }
+    const result = savePose();
+    if (!result) return;
+    setFL([]);
+    setFLR([]);
+    setTempStoredLocationsForQuickEditPanel([]);
+  };
 
   useEffect(() => {
-    if (!formValues) return
+    if (!formValues) return;
 
     const { genre, originId, originX, originY, multiplyX, multiplyY, xGap, yGap, dirX, dirY } =
-      formValues
+      formValues;
 
     // Check if any value is `0`, return early
     if (!originId || !originX || !originY || !multiplyX || !multiplyY) {
-      return
+      return;
     }
 
-    const newLocationData: LocationType[] = []
-    const newRoadData: RoadListType[] = []
+    const newLocationData: LocationType[] = [];
+    const newRoadData: RoadListType[] = [];
 
-    let xWhileIndex = 0
+    let xWhileIndex = 0;
     while (xWhileIndex < multiplyX) {
-      const xPrefix = dirX === 'right' ? originX + xWhileIndex * xGap : originX - xWhileIndex * xGap
+      const xPrefix =
+        dirX === 'right' ? originX + xWhileIndex * xGap : originX - xWhileIndex * xGap;
 
-      let yWhileIndex = 0
+      let yWhileIndex = 0;
 
       while (yWhileIndex < multiplyY) {
-        const yPrefix = dirY === 'top' ? originY + yWhileIndex * yGap : originY - yWhileIndex * yGap
+        const yPrefix =
+          dirY === 'top' ? originY + yWhileIndex * yGap : originY - yWhileIndex * yGap;
 
         const data: LocationType = {
-          locationId: originId + yWhileIndex + multiplyY * xWhileIndex,
+          locationId: (originId + yWhileIndex + multiplyY * xWhileIndex).toString(),
           areaType: genre,
           x: xPrefix,
           y: yPrefix,
           rotation: 0,
           canRotate: true
-        }
+        };
 
-        newLocationData.push(data)
-        yWhileIndex++
+        newLocationData.push(data);
+        yWhileIndex++;
       }
 
-      xWhileIndex++
+      xWhileIndex++;
     }
     if (isAutoProduceRoad) {
       for (let row = 0; row < multiplyY; row++) {
         for (let col = 0; col < multiplyX; col++) {
-          if (row === multiplyY - 1 && col === multiplyX - 1) continue
+          if (row === multiplyY - 1 && col === multiplyX - 1) continue;
 
-          const currentId = originId + row * multiplyX + col
-          const nextId = currentId + 1
-          const curPose = newLocationData.find((v) => v.locationId === currentId)
-          const nextPose = newLocationData.find((v) => v.locationId === nextId)
+          const currentId = originId + row * multiplyX + col;
+          const nextId = currentId + 1;
+          const curPose = newLocationData.find((v) => Number(v.locationId) === currentId);
+          const nextPose = newLocationData.find((v) => Number(v.locationId) === nextId);
 
           newRoadData.push({
             roadId: `${currentId} <-> ${nextId}`,
@@ -243,30 +230,30 @@ const QuickEditLocationPanel: React.FC<{
             roadType: 'twoWayRoad',
             disabled: false,
             limit: false
-          })
+          });
         }
       }
     }
-    setFL(newLocationData)
-    setFLR(newRoadData)
-    setTempStoredLocationsForQuickEditPanel(newLocationData)
-  }, [formValues, setFL, setFLR, isAutoProduceRoad])
+    setFL(newLocationData);
+    setFLR(newRoadData);
+    setTempStoredLocationsForQuickEditPanel(newLocationData);
+  }, [formValues, setFL, setFLR, isAutoProduceRoad]);
 
   useEffect(() => {
-    setTempStoredLocationsForQuickEditPanel([])
-    form.setFieldValue('genre', 'Extra')
-    form.setFieldValue('multiplyX', 2)
-    form.setFieldValue('multiplyY', 2)
-    form.setFieldValue('xGap', 1)
-    form.setFieldValue('yGap', 1)
-    setFL([])
-    setFLR([])
-  }, [])
+    setTempStoredLocationsForQuickEditPanel([]);
+    form.setFieldValue('genre', 'Extra');
+    form.setFieldValue('multiplyX', 2);
+    form.setFieldValue('multiplyY', 2);
+    form.setFieldValue('xGap', 1);
+    form.setFieldValue('yGap', 1);
+    setFL([]);
+    setFLR([]);
+  }, []);
 
   useEffect(() => {
-    form.setFieldValue('originX', Number(mousePointX))
-    form.setFieldValue('originY', Number(mousePointY))
-  }, [mousePointX, mousePointY])
+    form.setFieldValue('originX', Number(mousePointX));
+    form.setFieldValue('originY', Number(mousePointY));
+  }, [mousePointX, mousePointY]);
 
   return (
     <>
@@ -281,7 +268,7 @@ const QuickEditLocationPanel: React.FC<{
           title="設定依照車輛回傳的id來做任務"
           initialValues={initialFormDate}
           onValuesChange={(_, allValues) => {
-            setFormValues(allValues as FormT)
+            setFormValues(allValues as FormT);
           }}
           style={{ fontWeight: 'bold' }}
         >
@@ -353,7 +340,7 @@ const QuickEditLocationPanel: React.FC<{
         </Form>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default memo(QuickEditLocationPanel)
+export default memo(QuickEditLocationPanel);

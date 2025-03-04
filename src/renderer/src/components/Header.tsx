@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Layout, Menu, Flex, ConfigProvider } from 'antd'
-import '../components/component.css'
-import { useNavigate } from 'react-router-dom'
-import { Select } from 'antd'
-import { memo } from 'react'
-import { useTranslation } from 'react-i18next'
-import { UserOutlined } from '@ant-design/icons'
-const { Header: AntdHeader } = Layout
+ 
+import { Layout, Menu, Flex, ConfigProvider } from 'antd';
+import '../components/component.css';
+import { useNavigate } from 'react-router-dom';
+import { Select } from 'antd';
+import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { UserOutlined } from '@ant-design/icons';
+const { Header: AntdHeader } = Layout;
 
 const Header: React.FC = () => {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const items = [
     `${t('page_dashboard')}`,
@@ -20,26 +20,26 @@ const Header: React.FC = () => {
   ].map((name, index) => ({
     key: index + 1,
     label: name
-  }))
+  }));
 
   const handleMenuClick = (e: { key: string }) => {
     switch (e.key) {
       case '1':
-        navigate('/dashboard')
-        break
+        navigate('/dashboard');
+        break;
       case '2':
-        navigate('/view')
-        break
+        navigate('/view');
+        break;
       case '3':
-        navigate('/setting')
-        break
+        navigate('/setting');
+        break;
       case '4':
-        navigate('/simulate')
-        break
+        navigate('/simulate');
+        break;
       default:
-        break
+        break;
     }
-  }
+  };
 
   return (
     <ConfigProvider
@@ -81,7 +81,7 @@ const Header: React.FC = () => {
         </Flex>
       </AntdHeader>
     </ConfigProvider>
-  )
-}
+  );
+};
 
-export default memo(Header)
+export default memo(Header);

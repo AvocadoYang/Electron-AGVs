@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { InferType, array, boolean, number, object, string, date } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { InferType, array, boolean, number, object, string, date } from 'yup';
+import client from './axiosClient';
 
 const schema = array(
   object({
@@ -76,19 +76,19 @@ const schema = array(
         .nullable()
     ).optional()
   }).required()
-)
+);
 
 const getAllMissionTitle = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-mission-title')
+  const { data } = await client.get<unknown>('api/setting/all-mission-title');
 
-  const parsed = await schema.validate(data, { stripUnknown: true })
-  return parsed
-}
+  const parsed = await schema.validate(data, { stripUnknown: true });
+  return parsed;
+};
 
 export type MTType = InferType<typeof schema>
 
 const useAllMissionTitles = () => {
-  return useQuery(['all-mission-title'], getAllMissionTitle)
-}
+  return useQuery(['all-mission-title'], getAllMissionTitle);
+};
 
-export default useAllMissionTitles
+export default useAllMissionTitles;

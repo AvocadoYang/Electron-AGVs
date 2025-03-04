@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
+ 
 
-import { notification } from 'antd'
+import { notification } from 'antd';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error'
 
@@ -14,7 +14,7 @@ const openNotificationWithIcon = (
     message: title,
     description,
     placement
-  })
-}
+  });
+};
 
-export { openNotificationWithIcon }
+export { openNotificationWithIcon };

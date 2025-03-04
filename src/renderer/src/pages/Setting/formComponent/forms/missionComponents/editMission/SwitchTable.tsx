@@ -1,7 +1,7 @@
-import { MTType } from '@renderer/api/useMissionTitle'
-import React, { FC } from 'react'
-import MissionTable from './MissionTable'
-import MissionList from './MissionList'
+import { MTType } from '@renderer/api/useMissionTitle';
+import React, { FC } from 'react';
+import MissionTable from './MissionTable';
+import MissionList from './MissionList';
 
 interface SwitchTableProps {
   selectedMissionKey: string
@@ -42,5 +42,5 @@ const SwitchTable: FC<SwitchTableProps> = ({
       setSelectedMissionKey={setSelectedMissionKey}
       selectedMissionCar={selectedMissionCar}
     />
-  )
-export default SwitchTable
+  );
+export default SwitchTable;

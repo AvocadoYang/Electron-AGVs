@@ -1,11 +1,11 @@
-import React from 'react'
-import './login.css'
-import { Col, Row } from 'antd'
-import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons'
-import { Button, Input, Space } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import './login.css';
+import { Col, Row } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from '@ant-design/icons';
+import { Button, Input, Space } from 'antd';
+import { useNavigate } from 'react-router-dom';
 const Login: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="background">
       <p style={{ position: 'fixed', right: '10px', bottom: '1px' }}>version: 1.0.0</p>
@@ -34,7 +34,7 @@ const Login: React.FC = () => {
               <Button
                 size="large"
                 onClick={() => {
-                  navigate('/Setting')
+                  navigate('/Setting');
                 }}
               >
                 LogIn
@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         </Col>
       </Row>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

@@ -1,16 +1,16 @@
-import { FC, useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Form, Row, Col, Button, Modal, message, InputNumber } from 'antd'
-import { useTranslation } from 'react-i18next'
-import useYaw, { YawTypeWithoutList } from '@renderer/api/useYaw'
-import client from '@renderer/api/axiosClient'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-import YawTable from './YawTable'
-import YawForm from './YawForm'
-import FormHr from '../../../../utils/FormHr'
-import { PlusOutlined } from '@ant-design/icons'
-import SubmitButton from '@renderer/utils/SubmitButton'
+import { FC, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Form, Row, Col, Button, Modal, message, InputNumber } from 'antd';
+import { useTranslation } from 'react-i18next';
+import useYaw, { YawTypeWithoutList } from '@renderer/api/useYaw';
+import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
+import YawTable from './YawTable';
+import YawForm from './YawForm';
+import FormHr from '../../../../utils/FormHr';
+import { PlusOutlined } from '@ant-design/icons';
+import SubmitButton from '@renderer/utils/SubmitButton';
 type FieldType = {
   yaw?: string
 }
@@ -20,69 +20,69 @@ const YawPanel: FC<{
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const [openYawModel, setOpenYawModel] = useState(false)
-  const [openNewYawModal, setOpenNewYawModal] = useState(false)
-  const [selectYawId, setSelectYawId] = useState('')
-  const queryClient = useQueryClient()
-  const [formYaw] = Form.useForm()
-  const [NewYawForm] = Form.useForm()
-  const { data: yawDataSource } = useYaw()
-  const { t } = useTranslation()
-  const [messageApi, contextHolders] = message.useMessage()
+  const [openYawModel, setOpenYawModel] = useState(false);
+  const [openNewYawModal, setOpenNewYawModal] = useState(false);
+  const [selectYawId, setSelectYawId] = useState('');
+  const queryClient = useQueryClient();
+  const [formYaw] = Form.useForm();
+  const [NewYawForm] = Form.useForm();
+  const { data: yawDataSource } = useYaw();
+  const { t } = useTranslation();
+  const [messageApi, contextHolders] = message.useMessage();
 
   const addYawMutation = useMutation({
     mutationFn: (newYawPayload: FieldType) => {
-      return client.post(`api/setting/add-yaw`, newYawPayload)
+      return client.post('api/setting/add-yaw', newYawPayload);
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['yaw']
-      })
+      });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const editYawMutation = useMutation({
     mutationFn: (payload: YawTypeWithoutList) => {
-      return client.post(`api/setting/edit-yaw`, {
+      return client.post('api/setting/edit-yaw', {
         id: payload.id,
         yaw: payload.yaw
-      })
+      });
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['yaw']
-      })
+      });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const addHandler = () => {
-    setOpenNewYawModal(true)
-  }
+    setOpenNewYawModal(true);
+  };
 
   const submitNewYaw = () => {
-    const newYawPayload = NewYawForm.getFieldsValue() as FieldType
-    addYawMutation.mutate(newYawPayload)
-    setOpenNewYawModal(false)
-    NewYawForm.resetFields()
-  }
+    const newYawPayload = NewYawForm.getFieldsValue() as FieldType;
+    addYawMutation.mutate(newYawPayload);
+    setOpenNewYawModal(false);
+    NewYawForm.resetFields();
+  };
 
   const handleCancel = () => {
-    setOpenNewYawModal(false)
-    NewYawForm.resetFields()
-  }
+    setOpenNewYawModal(false);
+    NewYawForm.resetFields();
+  };
 
   const editHandler = () => {
-    const values = formYaw.getFieldsValue() as YawTypeWithoutList
+    const values = formYaw.getFieldsValue() as YawTypeWithoutList;
     const payload = {
       ...values,
       id: selectYawId
-    }
-    editYawMutation.mutate(payload)
-    setSelectYawId('')
-    setOpenYawModel(false)
-  }
+    };
+    editYawMutation.mutate(payload);
+    setSelectYawId('');
+    setOpenYawModel(false);
+  };
 
   return (
     <>
@@ -151,7 +151,7 @@ const YawPanel: FC<{
         </Modal>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default YawPanel
+export default YawPanel;

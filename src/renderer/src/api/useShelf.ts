@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, object, string, number, InferType, boolean } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, object, string, number, InferType, boolean } from 'yup';
+import client from './axiosClient';
 
 const shelfSchema = array(
   object({
@@ -46,20 +46,20 @@ const shelfSchema = array(
       }).optional()
     ).required()
   }).required()
-)
+);
 
 const getShelves = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-shelf')
+  const { data } = await client.get<unknown>('api/setting/all-shelf');
   const validatedData = await shelfSchema.validate(data, {
     stripUnknown: true
-  })
-  return validatedData
-}
+  });
+  return validatedData;
+};
 
 const useShelf = () => {
-  return useQuery(['shelf'], getShelves)
-}
+  return useQuery(['shelf'], getShelves);
+};
 
 export type ShelfType = InferType<typeof shelfSchema>
 
-export default useShelf
+export default useShelf;

@@ -1,5 +1,5 @@
-import { InfoWrap } from './components/InfoWrap'
-import Battery from './components/Battery'
+import { InfoWrap } from './components/InfoWrap';
+import Battery from './components/Battery';
 import {
   CarRow1,
   CarRow2,
@@ -8,8 +8,8 @@ import {
   CarStatus,
   AmrTitle,
   TextWrap
-} from './components/Lists'
-import './car_info.css'
+} from './components/Lists';
+import './car_info.css';
 
 const Card: React.FC = () => {
   return (
@@ -64,12 +64,12 @@ const Card: React.FC = () => {
                           return undefined;
                         return `${x.toFixed(2)}/${y.toFixed(2)}`;
                       })(fleetInfo.originPose?.x, fleetInfo.originPose?.y)} */}
-            {`112.3/123.1`}
+            {'112.3/123.1'}
           </p>
         </TextWrap>
       </CarRow3>
     </InfoWrap>
-  )
-}
+  );
+};
 
-export default Card
+export default Card;

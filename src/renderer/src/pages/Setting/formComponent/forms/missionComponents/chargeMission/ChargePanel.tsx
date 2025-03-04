@@ -1,109 +1,108 @@
-import { FC, useState } from 'react'
-import { Button, Flex, Form, message, Modal, Popconfirm, Table, Tooltip } from 'antd'
-import type { TableProps } from 'antd'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-import { useMutation } from '@tanstack/react-query'
-import useCharge from '@renderer/api/useCharge'
-import client from '@renderer/api/axiosClient'
-import ChargeForm from './ChargeForm'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
+import { FC, useState } from 'react';
+import { Button, Flex, Form, message, Modal, Popconfirm, Table } from 'antd';
+import type { TableProps } from 'antd';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { useMutation } from '@tanstack/react-query';
+import useCharge from '@renderer/api/useCharge';
+import client from '@renderer/api/axiosClient';
+import ChargeForm from './ChargeForm';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
 import {
   CloseCircleOutlined,
   DeleteTwoTone,
   EditOutlined,
   PlayCircleOutlined,
   PlusOutlined
-} from '@ant-design/icons'
+} from '@ant-design/icons';
 
 type ChargeData = {
-  id: string
-  active: boolean
-  amrIds: string[]
-  aggressiveThreshold: number
-  fullThreshold: number
-  passiveFullThreshold: number
-  passiveWaitTime: number
-  availableGetTaskThreshold: number
-  autoTimeZone: string
-  titleId: string
-  title: string
-}
+  id: string;
+  active: boolean;
+  amrIds: string[];
+  aggressiveThreshold: number;
+  fullThreshold: number;
+  passiveFullThreshold: number;
+  passiveWaitTime: number;
+  availableGetTaskThreshold: number;
+  autoTimeZone: string;
+  titleId: string;
+  title: string;
+};
 
 type FormData = {
-  id: string
-  amrId: string[]
-  taskId: string
-  aggressiveThreshold: number
-  fullThreshold: number
-  activeIdle: boolean
-  passiveFullThreshold: number
-  passiveWaitTime: number
-  availableGetTaskThreshold: number
-  activeAuto: boolean
-  autoTimeZone: number
-}
+  id: string;
+  amrId: string[];
+  taskId: string;
+  aggressiveThreshold: number;
+  fullThreshold: number;
+  activeIdle: boolean;
+  passiveFullThreshold: number;
+  passiveWaitTime: number;
+  availableGetTaskThreshold: number;
+  activeAuto: boolean;
+  autoTimeZone: number;
+};
 
 const BtnBox = styled.div`
   width: 3em;
-`
+`;
 
 const ActiveBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-`
+`;
 
 type DotStyle = {
-  $active: boolean
-}
+  $active: boolean;
+};
 
 const Dot = styled.div<DotStyle>`
   border-radius: 99%;
   width: 7px;
   height: 7px;
   background-color: ${(prop) => (prop.$active ? '#2bea00' : '#ff1818')};
-`
+`;
 
 const ChargePanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ sortableId, attributes, listeners }) => {
-  const { data, refetch } = useCharge()
-  const { t } = useTranslation()
-  const [form] = Form.useForm()
-  const [open, setOpen] = useState(false)
-  const [selectKey, setSelectKey] = useState('')
-  const [messageApi, contextHolders] = message.useMessage()
+  const { data, refetch } = useCharge();
+  const { t } = useTranslation();
+  const [form] = Form.useForm();
+  const [open, setOpen] = useState(false);
+  const [selectKey, setSelectKey] = useState('');
+  const [messageApi, contextHolders] = message.useMessage();
 
   const showModal = (id: string) => {
-    setSelectKey(id)
-    setOpen(true)
-  }
+    setSelectKey(id);
+    setOpen(true);
+  };
 
   const saveMutation = useMutation({
     mutationFn: (payload: FormData) => {
-      return client.post(`api/setting/save-charge-mission`, payload)
+      return client.post('api/setting/save-charge-mission', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const handleSave = () => {
-    const payload = form.getFieldsValue() as FormData
+    const payload = form.getFieldsValue() as FormData;
 
     const newPayload = {
       ...payload,
       id: selectKey
-    }
+    };
 
     if (!Array.isArray(newPayload.amrId) || newPayload.amrId.length === 0) {
-      messageApi.warning(t('mission.charge_mission.amr_warn'))
-      return
+      messageApi.warning(t('mission.charge_mission.amr_warn'));
+      return;
     }
 
     if (
@@ -111,8 +110,8 @@ const ChargePanel: FC<{
       typeof newPayload.taskId !== 'string' ||
       newPayload.taskId.trim() === ''
     ) {
-      messageApi.warning(t('mission.charge_mission.mission_warn'))
-      return
+      messageApi.warning(t('mission.charge_mission.mission_warn'));
+      return;
     }
 
     if (
@@ -120,8 +119,8 @@ const ChargePanel: FC<{
       isNaN(newPayload.aggressiveThreshold) ||
       newPayload.aggressiveThreshold <= 0
     ) {
-      messageApi.warning(t('mission.charge_mission.aggressive_warn'))
-      return
+      messageApi.warning(t('mission.charge_mission.aggressive_warn'));
+      return;
     }
 
     if (
@@ -129,8 +128,8 @@ const ChargePanel: FC<{
       isNaN(newPayload.fullThreshold) ||
       newPayload.fullThreshold <= newPayload.aggressiveThreshold
     ) {
-      messageApi.warning(t('mission.charge_mission.full_less_than_aggressive'))
-      return
+      messageApi.warning(t('mission.charge_mission.full_less_than_aggressive'));
+      return;
     }
 
     if (
@@ -138,68 +137,65 @@ const ChargePanel: FC<{
       isNaN(newPayload.availableGetTaskThreshold) ||
       newPayload.availableGetTaskThreshold <= newPayload.aggressiveThreshold
     ) {
-      messageApi.warning(t('mission.charge_mission.available_less_than_aggressive'))
-      return
+      messageApi.warning(t('mission.charge_mission.available_less_than_aggressive'));
+      return;
     }
 
     if (
       newPayload.availableGetTaskThreshold === 0 ||
       newPayload.availableGetTaskThreshold === null
     ) {
-      messageApi.warning(t('mission.charge_mission.aggressive_warn'))
-      return
+      messageApi.warning(t('mission.charge_mission.aggressive_warn'));
+      return;
     }
 
-    saveMutation.mutate(newPayload)
+    saveMutation.mutate(newPayload);
 
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   const handleCancel = () => {
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   const addMutation = useMutation({
     mutationFn: () => {
-      return client.post(`api/setting/add-charge-mission`)
+      return client.post('api/setting/add-charge-mission');
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const activeMutation = useMutation({
     mutationFn: (payload: { active: boolean; id: string; amrId: string[] }) => {
-      return client.post(`api/setting/active-charge-mission`, payload)
+      return client.post('api/setting/active-charge-mission', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string; amrId: string[] }) => {
-      return client.post(`api/setting/delete-charge-mission`, payload)
+      return client.post('api/setting/delete-charge-mission', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const handleAdd = () => {
-    addMutation.mutate()
-  }
+    addMutation.mutate();
+  };
 
   const handleActive = (event: boolean, id: string, amrId: string[]) => {
-    activeMutation.mutate({ active: event, id, amrId })
-  }
+    activeMutation.mutate({ active: event, id, amrId });
+  };
 
   const handleDelete = (id: string, amrId: string[]) => {
-    deleteMutation.mutate({ id, amrId })
-  }
+    deleteMutation.mutate({ id, amrId });
+  };
 
   const columns: TableProps<ChargeData>['columns'] = [
     {
@@ -217,7 +213,7 @@ const ChargePanel: FC<{
                 : t('mission.charge_mission.stale')}
             </>
           </ActiveBox>
-        )
+        );
       }
     },
     {
@@ -225,7 +221,7 @@ const ChargePanel: FC<{
       dataIndex: 'name',
       key: 'name',
       render(_, record) {
-        return <>{record.title}</>
+        return <>{record.title}</>;
       }
     },
     {
@@ -233,7 +229,7 @@ const ChargePanel: FC<{
       dataIndex: 'amrId',
       key: 'amrId',
       render(_, record) {
-        return <>{record.amrIds}</>
+        return <>{record.amrIds}</>;
       }
     },
     {
@@ -241,7 +237,7 @@ const ChargePanel: FC<{
       dataIndex: 'aggressive',
       key: 'aggressive',
       render(_, record) {
-        return <>{record.aggressiveThreshold}</>
+        return <>{record.aggressiveThreshold}</>;
       }
     },
     {
@@ -249,7 +245,7 @@ const ChargePanel: FC<{
       dataIndex: 'fullThreshold',
       key: 'fullThreshold',
       render(_, record) {
-        return <>{record.fullThreshold}</>
+        return <>{record.fullThreshold}</>;
       }
     },
     {
@@ -257,7 +253,7 @@ const ChargePanel: FC<{
       dataIndex: 'aggressiveThreshold',
       key: 'aggressiveThreshold',
       render(_, record) {
-        return <>{record.aggressiveThreshold}</>
+        return <>{record.aggressiveThreshold}</>;
       }
     },
 
@@ -315,10 +311,10 @@ const ChargePanel: FC<{
               </Popconfirm>
             </Flex>
           </>
-        )
+        );
       }
     }
-  ]
+  ];
 
   return (
     <>
@@ -353,7 +349,7 @@ const ChargePanel: FC<{
         <ChargeForm form={form} selectKey={selectKey} />
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default ChargePanel
+export default ChargePanel;

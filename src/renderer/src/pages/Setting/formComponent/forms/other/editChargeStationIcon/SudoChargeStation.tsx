@@ -1,14 +1,14 @@
-import useAllChargeStation from '@renderer/api/useAllCharge'
-import useMap from '@renderer/api/useMap'
-import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable'
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils'
-import { useAtomValue } from 'jotai'
-import styled from 'styled-components'
+import useAllChargeStation from '@renderer/api/useAllCharge';
+import useMap from '@renderer/api/useMap';
+import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable';
+import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
+import { useAtomValue } from 'jotai';
+import styled from 'styled-components';
 
 const Svg = styled.svg`
   width: 20px;
   color: white;
-`
+`;
 
 type Station = {
   scale: number
@@ -30,7 +30,7 @@ const Container = styled.div<CType>`
   background: #3bbdc1;
   height: 3px;
   border-radius: 50%;
-`
+`;
 
 const CStation = styled.div<Station>`
   width: 21px;
@@ -47,17 +47,17 @@ const CStation = styled.div<Station>`
   align-items: center;
   transform: ${(props) =>
     `translate(${props.translate_x}em, ${props.translate_y}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
-`
+`;
 
 const SudoChargeStation = () => {
-  const selectStation = useAtomValue(chargeStationEditData)
-  const { data: defaultData } = useAllChargeStation()
-  const isEditChargeStationNow = useAtomValue(isEditChargeStation)
-  const defaultStyle = defaultData?.find((v) => v?.locationId === Number(selectStation?.loc))
-  const mapData = useMap()
+  const selectStation = useAtomValue(chargeStationEditData);
+  const { data: defaultData } = useAllChargeStation();
+  const isEditChargeStationNow = useAtomValue(isEditChargeStation);
+  const defaultStyle = defaultData?.find((v) => v?.locationId === Number(selectStation?.loc));
+  const mapData = useMap();
 
   if (!mapData.data || !isEditChargeStationNow) {
-    return null
+    return null;
   }
 
   const [left, top] = rosCoord2DisplayCoord({
@@ -67,10 +67,10 @@ const SudoChargeStation = () => {
     mapOriginX: mapData.data.mapOriginX,
     mapOriginY: mapData.data.mapOriginY,
     mapResolution: mapData.data.mapResolution
-  })
+  });
 
-  if (defaultStyle === undefined || defaultStyle === null) return <>something not working</>
-  if (!selectStation) return []
+  if (defaultStyle === undefined || defaultStyle === null) return <>something not working</>;
+  if (!selectStation) return [];
   return (
     <Container left={left} top={top} key={selectStation.loc}>
       <CStation
@@ -84,7 +84,7 @@ const SudoChargeStation = () => {
         </Svg>
       </CStation>
     </Container>
-  )
-}
+  );
+};
 
-export default SudoChargeStation
+export default SudoChargeStation;

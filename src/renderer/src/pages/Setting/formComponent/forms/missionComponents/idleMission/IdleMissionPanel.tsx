@@ -1,16 +1,16 @@
-import { FC } from 'react'
-import { Flex } from 'antd'
-import { useTranslation } from 'react-i18next'
-import IdleMissionForm from './IdleMissionForm'
-import IdleMissionTable from './IdleMissionTable'
-import FormHr from '@renderer/pages/Setting/utils/FormHr'
+import { FC } from 'react';
+import { Flex } from 'antd';
+import { useTranslation } from 'react-i18next';
+import IdleMissionForm from './IdleMissionForm';
+import IdleMissionTable from './IdleMissionTable';
+import FormHr from '@renderer/pages/Setting/utils/FormHr';
 
 const IdleMissionPanel: FC<{
   sortableId: string
   attributes: import('@dnd-kit/core').DraggableAttributes
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
 }> = ({ sortableId, attributes, listeners }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -24,7 +24,7 @@ const IdleMissionPanel: FC<{
         <IdleMissionTable />
       </Flex>
     </div>
-  )
-}
+  );
+};
 
-export default IdleMissionPanel
+export default IdleMissionPanel;

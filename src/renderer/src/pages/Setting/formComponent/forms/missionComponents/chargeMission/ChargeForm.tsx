@@ -1,15 +1,15 @@
-import { Form, FormInstance, InputNumber, Select } from 'antd'
-import { FC, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useQuery } from '@tanstack/react-query'
-import { array, boolean, number, object, string } from 'yup'
-import client from '@renderer/api/axiosClient'
-import useAllMissionTitles from '@renderer/api/useMissionTitle'
-import useName from '@renderer/api/useAmrName'
-import GlobalLoading from '@renderer/utils/GlobalLoading'
+import { Form, FormInstance, InputNumber, Select } from 'antd';
+import { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import { array, boolean, number, object, string } from 'yup';
+import client from '@renderer/api/axiosClient';
+import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import useName from '@renderer/api/useAmrName';
+import GlobalLoading from '@renderer/utils/GlobalLoading';
 
 const getSelectedCharge = async (id: string) => {
-  const { data } = await client.get<unknown>(`api/setting/selected-charge?id=${id}`)
+  const { data } = await client.get<unknown>(`api/setting/selected-charge?id=${id}`);
 
   const schema = () =>
     object({
@@ -23,10 +23,10 @@ const getSelectedCharge = async (id: string) => {
       availableGetTaskThreshold: number().optional().nullable(),
       autoTimeZone: string().optional().nullable(),
       missionTitleId: string().optional().nullable()
-    }).required()
+    }).required();
 
-  return schema().validate(data, { stripUnknown: true })
-}
+  return schema().validate(data, { stripUnknown: true });
+};
 
 const ChargeForm: FC<{ form: FormInstance<unknown>; selectKey: string }> = ({
   form,
@@ -38,28 +38,28 @@ const ChargeForm: FC<{ form: FormInstance<unknown>; selectKey: string }> = ({
     {
       enabled: !!selectKey // Prevent fetching when selectKey is not set
     }
-  )
-  const { data: missionTitle } = useAllMissionTitles()
-  const { t } = useTranslation()
+  );
+  const { data: missionTitle } = useAllMissionTitles();
+  const { t } = useTranslation();
 
-  const { data: name } = useName()
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }))
+  const { data: name } = useName();
+  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
 
   const taskOption = missionTitle?.map((v) => {
-    return { value: v.id, label: v.name }
-  })
+    return { value: v.id, label: v.name };
+  });
 
   useEffect(() => {
-    if (!selectKey || !selectedCharge) return
+    if (!selectKey || !selectedCharge) return;
 
-    form.setFieldValue('amrId', selectedCharge?.amrIds)
-    form.setFieldValue('taskId', selectedCharge.missionTitleId)
-    form.setFieldValue('aggressiveThreshold', selectedCharge?.aggressiveThreshold)
-    form.setFieldValue('fullThreshold', selectedCharge?.fullThreshold)
-    form.setFieldValue('availableGetTaskThreshold', selectedCharge?.availableGetTaskThreshold)
-  }, [form, selectKey, selectedCharge])
+    form.setFieldValue('amrId', selectedCharge?.amrIds);
+    form.setFieldValue('taskId', selectedCharge.missionTitleId);
+    form.setFieldValue('aggressiveThreshold', selectedCharge?.aggressiveThreshold);
+    form.setFieldValue('fullThreshold', selectedCharge?.fullThreshold);
+    form.setFieldValue('availableGetTaskThreshold', selectedCharge?.availableGetTaskThreshold);
+  }, [form, selectKey, selectedCharge]);
 
-  if (isLoading) return <GlobalLoading />
+  if (isLoading) return <GlobalLoading />;
   return (
     <Form
       style={{
@@ -90,7 +90,7 @@ const ChargeForm: FC<{ form: FormInstance<unknown>; selectKey: string }> = ({
         <InputNumber min={11} />
       </Form.Item>
     </Form>
-  )
-}
+  );
+};
 
-export default ChargeForm
+export default ChargeForm;

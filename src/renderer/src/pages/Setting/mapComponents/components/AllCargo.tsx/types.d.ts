@@ -1,4 +1,4 @@
-import { Info } from '~/api/useLocation'
+import { Info } from '~/api/useLocation';
 
 export type CargoMissionEdit = {
   loc: string

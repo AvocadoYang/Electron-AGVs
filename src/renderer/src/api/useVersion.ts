@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, object, string } from 'yup';
+import client from './axiosClient';
 
 const versionSchema = array(
   object({
@@ -8,19 +8,19 @@ const versionSchema = array(
     createAt: string().required(),
     dbPath: string().required()
   }).optional()
-).optional()
+).optional();
 
 const getVersion = async () => {
-  const { data } = await client.get<unknown>('api/setting/backup-file')
+  const { data } = await client.get<unknown>('api/setting/backup-file');
 
   const validatedData = await versionSchema.validate(data, {
     stripUnknown: true
-  })
-  return validatedData
-}
+  });
+  return validatedData;
+};
 
 const useVersion = () => {
-  return useQuery(['version'], getVersion)
-}
+  return useQuery(['version'], getVersion);
+};
 
-export default useVersion
+export default useVersion;

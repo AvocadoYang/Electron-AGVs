@@ -1,8 +1,6 @@
-/* eslint-disable no-void */
-import { nanoid } from 'nanoid'
-import { FC, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import PropTypes from 'prop-types'
+import { nanoid } from 'nanoid';
+import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   ColorPicker,
@@ -11,74 +9,54 @@ import {
   Input,
   Popconfirm,
   Table,
-  Tooltip,
   Typography,
   message
-} from 'antd'
-import {
-  CloseOutlined,
-  DeleteOutlined,
-  DeleteTwoTone,
-  EditOutlined,
-  SaveOutlined
-} from '@ant-design/icons'
-import { useMutation } from '@tanstack/react-query'
-import styled from 'styled-components'
-import useCategory from '@renderer/api/useCategory'
-import client from '@renderer/api/axiosClient'
-import SubmitButton from '@renderer/utils/SubmitButton'
-
-const BtnWrapper = styled.div`
-  display: flex;
-`
-
-const Btn = styled.div`
-  width: 66px;
-`
+} from 'antd';
+import { CloseOutlined, DeleteTwoTone, EditOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import useCategory from '@renderer/api/useCategory';
+import client from '@renderer/api/axiosClient';
+import SubmitButton from '@renderer/utils/SubmitButton';
 
 // bitch ant design not support the type
 interface Color {
-  toHexString(): string
+  toHexString(): string;
 }
 
 interface DataType {
-  id: string
-  tagName: string
-  color: string
+  id: string;
+  tagName: string;
+  color: string;
 }
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean
-  dataIndex: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  title: any
-  inputType: string
-  record: DataType
-  index: number
-  children: React.ReactNode
+  editing: boolean;
+  dataIndex: string;
+
+  title: string;
+  inputType: string;
+  record: DataType;
+  index: number;
+  children: React.ReactNode;
 }
 
 const EditableCell: React.FC<EditableCellProps> = ({
   editing,
   dataIndex,
-  title,
-  inputType,
-  record,
-  index,
   children,
   ...restProps
 }) => {
-  let inputNode
-  const { t } = useTranslation()
+  let inputNode;
+  const { t } = useTranslation();
   switch (dataIndex) {
     case 'tagName':
-      inputNode = <Input style={{ width: '150px' }} />
-      break
+      inputNode = <Input style={{ width: '150px' }} />;
+      break;
     case 'color':
-      inputNode = <ColorPicker format="hex" size="small" showText />
-      break
+      inputNode = <ColorPicker format="hex" size="small" showText />;
+      break;
     default:
-      ;<Input />
+      <Input />;
   }
 
   return (
@@ -101,98 +79,91 @@ const EditableCell: React.FC<EditableCellProps> = ({
         children
       )}
     </td>
-  )
-}
-
-EditableCell.propTypes = {
-  children: PropTypes.node.isRequired
-}
+  );
+};
 
 const TagTable: FC = () => {
-  const { t } = useTranslation()
-  const { data: category, refetch } = useCategory()
-  const [form] = Form.useForm()
-  const [messageApi, contextHolder] = message.useMessage()
-  const [editingKey, setEditingKey] = useState<string | null>(null)
-  const isEditing = (record: DataType) => record?.id === editingKey
+  const { t } = useTranslation();
+  const { data: category, refetch } = useCategory();
+  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const isEditing = (record: DataType) => record?.id === editingKey;
 
   const editMutation = useMutation({
     mutationFn: (payload: DataType) => {
-      return client.post(`api/setting/edit-category`, payload)
+      return client.post('api/setting/edit-category', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const addMutation = useMutation({
     mutationFn: () => {
-      return client.post(`api/setting/add-category`)
+      return client.post('api/setting/add-category');
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
-      return client.post(`api/setting/delete-category`, payload)
+      return client.post('api/setting/delete-category', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     }
-  })
+  });
 
   const edit = (record: Partial<DataType> & { id: string }) => {
     if (record.tagName === 'none') {
-      void messageApi.warning(t('other.edit_mission_tag.forbidden_edit_default'))
-      return
+      void messageApi.warning(t('other.edit_mission_tag.forbidden_edit_default'));
+      return;
     }
 
-    form.setFieldValue('tagName', record.tagName)
-    form.setFieldValue('color', record.color)
+    form.setFieldValue('tagName', record.tagName);
+    form.setFieldValue('color', record.color);
 
-    setEditingKey(record.id)
-  }
+    setEditingKey(record.id);
+  };
 
   const handleAdd = () => {
-    addMutation.mutate()
-  }
+    addMutation.mutate();
+  };
 
   const cancel = () => {
-    setEditingKey(null)
-  }
+    setEditingKey(null);
+  };
 
   const handleDelete = (record: Partial<DataType> & { id: string }) => {
     if (record.tagName === '強制') {
-      void messageApi.warning(t('other.edit_mission_tag.forbidden_edit_default'))
-      return
+      void messageApi.warning(t('other.edit_mission_tag.forbidden_edit_default'));
+      return;
     }
 
-    deleteMutation.mutate({ id: record.id })
-  }
+    deleteMutation.mutate({ id: record.id });
+  };
 
   const isColorWithToHexString = (obj: Color): obj is { toHexString: () => string } => {
-    return obj && typeof obj.toHexString === 'function'
-  }
+    return obj && typeof obj.toHexString === 'function';
+  };
 
   const save = (key: string) => {
-    const color = form.getFieldValue('color') as Color
+    const color = form.getFieldValue('color') as Color;
 
-    const hexColor = isColorWithToHexString(color) ? color.toHexString() : (color as string)
+    const hexColor = isColorWithToHexString(color) ? color.toHexString() : (color as string);
 
     const payload = {
       id: key,
       tagName: form.getFieldValue('tagName') as string,
       color: hexColor
-    }
+    };
 
-    editMutation.mutate(payload)
-    setEditingKey(null)
-  }
+    editMutation.mutate(payload);
+    setEditingKey(null);
+  };
 
   const columns = [
     {
@@ -218,7 +189,7 @@ const TagTable: FC = () => {
             value={record.color}
             onChange={(v) => form.setFieldValue('color', v.toHexString())}
           />
-        )
+        );
       }
     },
     {
@@ -226,15 +197,15 @@ const TagTable: FC = () => {
       width: 30,
       dataIndex: 'operation',
       key: nanoid(),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render(_v: unknown, record: DataType) {
-        const editable = isEditing(record)
+        const editable = isEditing(record);
 
         return editable ? (
           <Flex gap="small">
             <Typography.Link
               onClick={() => {
-                save(record.id)
+                save(record.id);
               }}
               style={{ marginRight: 8 }}
             >
@@ -242,7 +213,7 @@ const TagTable: FC = () => {
             </Typography.Link>
             <Typography.Link
               onClick={() => {
-                cancel()
+                cancel();
               }}
               style={{ marginRight: 8 }}
             >
@@ -256,7 +227,7 @@ const TagTable: FC = () => {
             <Typography.Link
               disabled={editingKey !== null}
               onClick={() => {
-                edit(record)
+                edit(record);
               }}
             >
               <Button icon={<EditOutlined />} color="primary" variant="filled" type="link">
@@ -281,14 +252,14 @@ const TagTable: FC = () => {
               </Button>
             </Popconfirm>
           </Flex>
-        )
+        );
       }
     }
-  ]
+  ];
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
-      return col
+      return col;
     }
     return {
       ...col,
@@ -299,8 +270,8 @@ const TagTable: FC = () => {
         title: col.title,
         editing: isEditing(record)
       })
-    }
-  })
+    };
+  });
 
   return (
     <>
@@ -321,7 +292,7 @@ const TagTable: FC = () => {
         />
       </Form>
     </>
-  )
-}
+  );
+};
 
-export default TagTable
+export default TagTable;

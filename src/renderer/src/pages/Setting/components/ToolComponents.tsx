@@ -1,4 +1,4 @@
-import { FC, memo } from 'react'
+import { FC, memo } from 'react';
 import {
   AllLocationTable,
   EditLocationPanel,
@@ -7,8 +7,8 @@ import {
   QuickEditLocationPanel,
   RoadList,
   ZoneTable
-} from '../formComponent/forms'
-import { Card, FormInstance } from 'antd'
+} from '../formComponent/forms';
+import { Card, FormInstance } from 'antd';
 import {
   EditLocationListTableSwitch,
   EditLocationPanelSwitch,
@@ -32,27 +32,27 @@ import {
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch,
   showZonesTableSwitch
-} from '@renderer/utils/siderGloble'
-import { useAtomValue } from 'jotai'
-import { ToolBarItemType, ToolBarType } from './siderElement'
-import { useSortable } from '@dnd-kit/sortable'
-import cardStyle from '../utils/cardStyle'
-import { ShelfPanel } from '../formComponent/forms/shelfComponents/editShelf'
-import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/category'
-import { YawPanel } from '../formComponent/forms/shelfComponents/yaw'
-import { PalletTable } from '../formComponent/forms/shelfComponents/pallet'
-import FormCloseBtn from '../utils/FormCloseBtn'
-import EditMissionPanel from '../formComponent/forms/missionComponents/editMission/MissionPanel'
-import { ChargePanel } from '../formComponent/forms/missionComponents/chargeMission'
-import { CycleMIssionPanel } from '../formComponent/forms/missionComponents/cycleMission'
-import { BeforeLeftChargeStationPanel } from '../formComponent/forms/missionComponents/beforLeftChargeStationMission'
-import { SchedulePanel } from '../formComponent/forms/missionComponents/scheduleMission'
-import { IdleMissionPanel } from '../formComponent/forms/missionComponents/idleMission'
-import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topicMission'
-import { EditTagPanel } from '../formComponent/forms/other/editTag'
-import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon'
-import { EditWarningListPanel } from '../formComponent/forms/file/warningId'
-import { BackupPanel } from '../formComponent/forms/file/backup'
+} from '@renderer/utils/siderGloble';
+import { useAtomValue } from 'jotai';
+import { ToolBarItemType, ToolBarType } from './siderElement';
+import { useSortable } from '@dnd-kit/sortable';
+import cardStyle from '../utils/cardStyle';
+import { ShelfPanel } from '../formComponent/forms/shelfComponents/editShelf';
+import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/category';
+import { YawPanel } from '../formComponent/forms/shelfComponents/yaw';
+import { PalletTable } from '../formComponent/forms/shelfComponents/pallet';
+import FormCloseBtn from '../utils/FormCloseBtn';
+import EditMissionPanel from '../formComponent/forms/missionComponents/editMission/MissionPanel';
+import { ChargePanel } from '../formComponent/forms/missionComponents/chargeMission';
+import { CycleMIssionPanel } from '../formComponent/forms/missionComponents/cycleMission';
+import { BeforeLeftChargeStationPanel } from '../formComponent/forms/missionComponents/beforLeftChargeStationMission';
+import { SchedulePanel } from '../formComponent/forms/missionComponents/scheduleMission';
+import { IdleMissionPanel } from '../formComponent/forms/missionComponents/idleMission';
+import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topicMission';
+import { EditTagPanel } from '../formComponent/forms/other/editTag';
+import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon';
+import { EditWarningListPanel } from '../formComponent/forms/file/warningId';
+import { BackupPanel } from '../formComponent/forms/file/backup';
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType
@@ -67,8 +67,8 @@ const SortableWrap: FC<{
       duration: 500,
       easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
     }
-  })
-  const styles = cardStyle(transform, transition, sortableId)
+  });
+  const styles = cardStyle(transform, transition, sortableId);
   return (
     <>
       {(() => {
@@ -85,7 +85,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
           // 1-2 快速編輯點位的彈跳視窗
           case 'location_list':
             return (
@@ -98,7 +98,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
           case 'quick_location_panel':
             // 1-3 顯示地點列表
             return (
@@ -110,7 +110,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 ></AllLocationTable>
               </Card>
-            )
+            );
           case 'road_panel':
             // 2-1 編輯路徑
             return (
@@ -123,7 +123,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
           case 'show_roads_table':
             // 2-2 顯示路徑列表
             return (
@@ -131,7 +131,7 @@ const SortableWrap: FC<{
                 <FormCloseBtn sortableId={sortableId} />
                 <RoadList sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
-            )
+            );
           case 'edit_zone':
             // 3-1 編輯區域
             return (
@@ -145,7 +145,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
           case 'show_zone_table':
             // 3-3 顯示區域表
             return (
@@ -157,7 +157,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 ></ZoneTable>
               </Card>
-            )
+            );
           case 'edit_shelve':
             // 4-1 顯示編輯貨架
             return (
@@ -165,7 +165,7 @@ const SortableWrap: FC<{
                 <FormCloseBtn sortableId={sortableId} />
                 <ShelfPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
-            )
+            );
           case 'edit_shelve_type':
             // 4-2 顯示編輯類型
             return (
@@ -176,14 +176,14 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
           case 'edit_yaw':
             // 4-3 顯示編輯類型
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
                 <YawPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
-            )
+            );
           case 'edit_pallet':
             // 4-4 顯示編輯類型
             return (
@@ -194,7 +194,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'edit_mission':
             // 5-1 顯示編輯任務
@@ -206,7 +206,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'charge_mission':
             // 5-2 顯示充電任務
@@ -218,7 +218,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'cycle_mission':
             // 5-2 顯示充電任務
@@ -230,7 +230,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'before_left_charge_station_task':
             // 5-3 顯示充電任務
@@ -242,7 +242,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'schedule_mission':
             // 5-4 顯示定時任務
@@ -254,7 +254,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'idle_mission':
             // 5-5 顯示定時任務
@@ -266,7 +266,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'topic_mission':
             // 5-6 顯示定時任務
@@ -278,7 +278,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'edit_tag':
             // 6-1 顯示編輯標籤
@@ -290,7 +290,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'edit_charge_station_icon_style':
             // 6-2 顯示編輯標籤
@@ -302,7 +302,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
           case 'warning_id':
             // 7-1 顯示編輯warning id
             return (
@@ -313,7 +313,7 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           case 'backup_file':
             // 7-2 顯示編輯back up
@@ -325,15 +325,15 @@ const SortableWrap: FC<{
                   listeners={listeners}
                 />
               </Card>
-            )
+            );
 
           default:
-            return null
+            return null;
         }
       })()}
     </>
-  )
-}
+  );
+};
 
 const ToolComponents: FC<{
   locationPanelForm: FormInstance<unknown>
@@ -342,31 +342,31 @@ const ToolComponents: FC<{
   tagSettingForm: FormInstance<unknown>
   dataList: ToolBarType
 }> = ({ locationPanelForm, dataList, roadPanelForm, zonePanelForm, tagSettingForm }) => {
-  const showEditLocationPanel = useAtomValue(EditLocationPanelSwitch)
-  const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch)
-  const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch)
-  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
-  const showRoadList = useAtomValue(RoadListTableSwitch)
-  const openZonePanel = useAtomValue(EditZoneSwitch)
-  const openZoneTable = useAtomValue(showZonesTableSwitch)
-  const openEditShelf = useAtomValue(EditShelfPanelSwitch)
-  const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch)
-  const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch)
-  const openEditPalletTable = useAtomValue(EditPalletSwitch)
-  const openMissionPanel = useAtomValue(isShowEditMission)
-  const openChargePanel = useAtomValue(isShowEditChargeMission)
-  const openCyclePanel = useAtomValue(isShowEditCycleMission)
-  const openBLCSPanel = useAtomValue(isShowEditBeforeLeftChargeStationMission)
-  const openSchedulePanel = useAtomValue(isShowEditScheduleMission)
-  const openIdlePanel = useAtomValue(isShowEditIdleMission)
-  const openTopicPanel = useAtomValue(isShowEditTopicMission)
-  const openTagPanel = useAtomValue(isShowEditMissionTag)
-  const openChargeStylePanel = useAtomValue(isShowEditChargeStationPosition)
-  const openWarningPanel = useAtomValue(isShowEditWarningId)
-  const openBackupPanel = useAtomValue(isShowEditBackup)
+  const showEditLocationPanel = useAtomValue(EditLocationPanelSwitch);
+  const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch);
+  const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch);
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch);
+  const showRoadList = useAtomValue(RoadListTableSwitch);
+  const openZonePanel = useAtomValue(EditZoneSwitch);
+  const openZoneTable = useAtomValue(showZonesTableSwitch);
+  const openEditShelf = useAtomValue(EditShelfPanelSwitch);
+  const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch);
+  const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch);
+  const openEditPalletTable = useAtomValue(EditPalletSwitch);
+  const openMissionPanel = useAtomValue(isShowEditMission);
+  const openChargePanel = useAtomValue(isShowEditChargeMission);
+  const openCyclePanel = useAtomValue(isShowEditCycleMission);
+  const openBLCSPanel = useAtomValue(isShowEditBeforeLeftChargeStationMission);
+  const openSchedulePanel = useAtomValue(isShowEditScheduleMission);
+  const openIdlePanel = useAtomValue(isShowEditIdleMission);
+  const openTopicPanel = useAtomValue(isShowEditTopicMission);
+  const openTagPanel = useAtomValue(isShowEditMissionTag);
+  const openChargeStylePanel = useAtomValue(isShowEditChargeStationPosition);
+  const openWarningPanel = useAtomValue(isShowEditWarningId);
+  const openBackupPanel = useAtomValue(isShowEditBackup);
 
   return dataList.map((form) => {
-    const { key: formKey } = form
+    const { key: formKey } = form;
 
     if (formKey === 'location_panel' && showEditLocationPanel) {
       return (
@@ -375,7 +375,7 @@ const ToolComponents: FC<{
           key={formKey}
           locationPanelForm={locationPanelForm}
         ></SortableWrap>
-      )
+      );
     }
     if (formKey === 'location_list' && showQuickEditLocationPanel) {
       return (
@@ -384,7 +384,7 @@ const ToolComponents: FC<{
           key={formKey}
           locationPanelForm={locationPanelForm}
         ></SortableWrap>
-      )
+      );
     }
     if (formKey === 'quick_location_panel' && showAllLocationListTable) {
       return (
@@ -393,7 +393,7 @@ const ToolComponents: FC<{
           key={formKey}
           locationPanelForm={locationPanelForm}
         ></SortableWrap>
-      )
+      );
     }
     if (formKey === 'road_panel' && openEditRoadPanel) {
       return (
@@ -403,7 +403,7 @@ const ToolComponents: FC<{
           locationPanelForm={locationPanelForm}
           roadPanelForm={roadPanelForm}
         ></SortableWrap>
-      )
+      );
     }
     if (formKey === 'show_roads_table' && showRoadList) {
       return (
@@ -413,7 +413,7 @@ const ToolComponents: FC<{
           locationPanelForm={locationPanelForm}
           roadPanelForm={roadPanelForm}
         ></SortableWrap>
-      )
+      );
     }
     if (formKey === 'edit_zone' && openZonePanel) {
       return (
@@ -423,62 +423,62 @@ const ToolComponents: FC<{
           zonePanelForm={zonePanelForm}
           tagSettingForm={tagSettingForm}
         ></SortableWrap>
-      )
+      );
     }
     if (formKey === 'show_zone_table' && openZoneTable) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'edit_shelve' && openEditShelf) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 
     if (formKey === 'edit_shelve_type' && openEditShelfCategory) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 
     if (formKey === 'edit_yaw' && openEditShelfYaw) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 
     if (formKey === 'edit_pallet' && openEditPalletTable) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 
     if (formKey === 'edit_mission' && openMissionPanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 
     if (formKey === 'charge_mission' && openChargePanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'cycle_mission' && openCyclePanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'before_left_charge_station_task' && openBLCSPanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'schedule_mission' && openSchedulePanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'idle_mission' && openIdlePanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'topic_mission' && openTopicPanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'edit_tag' && openTagPanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'edit_charge_station_icon_style' && openChargeStylePanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'warning_id' && openWarningPanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'backup_file' && openBackupPanel) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
-    return []
-  })
-}
-export default memo(ToolComponents)
+    return [];
+  });
+};
+export default memo(ToolComponents);

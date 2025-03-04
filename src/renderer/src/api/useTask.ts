@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { InferType, array, boolean, number, object, string } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { InferType, array, boolean, number, object, string } from 'yup';
+import client from './axiosClient';
 
 const schema = array(
   object({
@@ -37,31 +37,31 @@ const schema = array(
       }).required()
     }).required()
   }).optional()
-).optional()
+).optional();
 
 const getRelateTask = async (key: string) => {
   const { data } = await client.post<unknown>('api/setting/relative-task', {
     key
-  })
-  const validatedData = await schema.validate(data, { stripUnknown: true })
-  return validatedData
-}
+  });
+  const validatedData = await schema.validate(data, { stripUnknown: true });
+  return validatedData;
+};
 
 const useTask = (key: string) => {
   return useQuery(['all-relate-task', key], {
     queryFn: () => {
-      return getRelateTask(key)
+      return getRelateTask(key);
     },
     select: (data) => {
-      if (!data) return []
-      const newData = [...data]
-      return newData.sort((a, b) => (a?.order || 0) - (b?.order || 0))
+      if (!data) return [];
+      const newData = [...data];
+      return newData.sort((a, b) => (a?.order || 0) - (b?.order || 0));
     },
     staleTime: Infinity,
     refetchOnWindowFocus: 'always',
     refetchInterval: 2000
-  })
-}
+  });
+};
 export type TaskType = InferType<typeof schema>
 
-export default useTask
+export default useTask;

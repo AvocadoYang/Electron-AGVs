@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import styled from 'styled-components'
+ 
+import styled from 'styled-components';
 
 export const InfoWrap = styled.div.attrs<{
   randomcolor: string
   isstop: boolean
 }>((props) => {
-  return { randomcolor: props.randomcolor, isstop: props.isstop }
+  return { randomcolor: props.randomcolor, isstop: props.isstop };
 })<{ randomcolor: string; isstop: boolean }>`
   /* margin-bottom: 3%; */
   margin-top: 6%;
@@ -21,4 +21,4 @@ export const InfoWrap = styled.div.attrs<{
   cursor: pointer;
   position: relative;
   opacity: ${(props) => (props.isstop ? '0.3' : '1')};
-`
+`;

@@ -1,4 +1,6 @@
 singleQuote: true
-semi: false
+semi: true
 printWidth: 100
 trailingComma: none
+quoteProps: 'consistent'
+prettier/prettier: ['error']

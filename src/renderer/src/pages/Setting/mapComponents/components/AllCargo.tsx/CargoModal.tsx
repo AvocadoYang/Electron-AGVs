@@ -1,16 +1,16 @@
-import { FC, SetStateAction } from 'react'
-import { FormInstance, message, Modal } from 'antd'
-import { useCargoMutations } from './hook/useCargoMutations'
-import styled from 'styled-components'
-import { FormCargo } from './types'
-import { useTranslation } from 'react-i18next'
-import { Info } from '@renderer/api/type/useLocation'
-import CargoMissionForm from './CargoMissionForm'
-import LayerForm from './LayerForm'
+import { FC, SetStateAction } from 'react';
+import { FormInstance, message, Modal } from 'antd';
+import { useCargoMutations } from './hook/useCargoMutations';
+import styled from 'styled-components';
+import { FormCargo } from './types';
+import { useTranslation } from 'react-i18next';
+import { Info } from '@renderer/api/type/useLocation';
+import CargoMissionForm from './CargoMissionForm';
+import LayerForm from './LayerForm';
 
 const FormWrapper = styled.div`
   display: flex;
-`
+`;
 
 const CargoModal: FC<{
   locId: string
@@ -31,16 +31,16 @@ const CargoModal: FC<{
   setIsEditModalOpen,
   setIsEditLayer
 }) => {
-  const [messageApi, contextHolders] = message.useMessage()
-  const { editMutation } = useCargoMutations(messageApi)
+  const [messageApi, contextHolders] = message.useMessage();
+  const { editMutation } = useCargoMutations(messageApi);
 
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const handleEditOk = () => {
-    const payload = settingForm.getFieldsValue() as FormCargo
-    const layerPayload = layerForm.getFieldsValue() as []
+    const payload = settingForm.getFieldsValue() as FormCargo;
+    const layerPayload = layerForm.getFieldsValue() as [];
 
-    layerForm.resetFields()
-    setIsEditLayer(false)
+    layerForm.resetFields();
+    setIsEditLayer(false);
 
     const mis = {
       loc: locId,
@@ -50,15 +50,15 @@ const CargoModal: FC<{
       loadId: payload.load,
       offloadId: payload.offload,
       layer: { ...layerPayload, isEditLayer }
-    }
+    };
 
-    editMutation.mutate(mis)
-    setIsEditModalOpen(false)
-  }
+    editMutation.mutate(mis);
+    setIsEditModalOpen(false);
+  };
 
   const handleEditCancel = () => {
-    setIsEditModalOpen(false)
-  }
+    setIsEditModalOpen(false);
+  };
 
   return (
     <>
@@ -89,7 +89,7 @@ const CargoModal: FC<{
         </FormWrapper>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default CargoModal
+export default CargoModal;

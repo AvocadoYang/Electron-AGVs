@@ -1,41 +1,41 @@
-import { DeleteTwoTone, EditOutlined, EditTwoTone } from '@ant-design/icons'
-import client from '@renderer/api/axiosClient'
-import { YawType, YawTypeWithoutList } from '@renderer/api/useYaw'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Row, Col, Popconfirm, Skeleton, Table, Flex, Button } from 'antd'
-import { ColumnsType } from 'antd/es/table'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { DeleteTwoTone, EditOutlined } from '@ant-design/icons';
+import client from '@renderer/api/axiosClient';
+import { YawType, YawTypeWithoutList } from '@renderer/api/useYaw';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Popconfirm, Skeleton, Table, Flex, Button } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const YawTable: FC<{
-  setOpenYawModel: React.Dispatch<React.SetStateAction<boolean>>
-  setSelectYawId: React.Dispatch<React.SetStateAction<string>>
-  yawDataSource: YawType
+  setOpenYawModel: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectYawId: React.Dispatch<React.SetStateAction<string>>;
+  yawDataSource: YawType;
 }> = ({ setOpenYawModel, setSelectYawId, yawDataSource }) => {
-  const queryClient = useQueryClient()
-  const { t } = useTranslation()
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const deleteMutation = useMutation({
     mutationFn: (id: string) => {
-      return client.post(`api/setting/delete-yaw`, {
+      return client.post('api/setting/delete-yaw', {
         id
-      })
+      });
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
         queryKey: ['yaw']
-      })
-      await queryClient.refetchQueries({ queryKey: ['cargoLoc-mission'] })
+      });
+      await queryClient.refetchQueries({ queryKey: ['cargoLoc-mission'] });
     }
-  })
+  });
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate(id)
-  }
+    deleteMutation.mutate(id);
+  };
 
   const handleEdit = (id: string) => {
-    setSelectYawId(id)
-    setOpenYawModel(true)
-  }
+    setSelectYawId(id);
+    setOpenYawModel(true);
+  };
 
   const columns: ColumnsType<YawTypeWithoutList> = [
     {
@@ -48,7 +48,7 @@ const YawTable: FC<{
       title: '',
       dataIndex: 'operation',
       key: 'operation',
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render: (_, record: YawTypeWithoutList) => {
         return (
           <Flex gap="small">
@@ -72,11 +72,11 @@ const YawTable: FC<{
               {t('utils.edit')}
             </Button>
           </Flex>
-        )
+        );
       }
     }
-  ]
-  if (!yawDataSource) return <Skeleton active />
+  ];
+  if (!yawDataSource) return <Skeleton active />;
 
   return (
     <Table
@@ -84,7 +84,7 @@ const YawTable: FC<{
       columns={columns}
       rowKey={(record: YawTypeWithoutList) => record.id}
     />
-  )
-}
+  );
+};
 
-export default YawTable
+export default YawTable;

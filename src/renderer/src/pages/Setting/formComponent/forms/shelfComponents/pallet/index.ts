@@ -1,1 +1,1 @@
-export { default as PalletTable } from './PalletTable'
+export { default as PalletTable } from './PalletTable';

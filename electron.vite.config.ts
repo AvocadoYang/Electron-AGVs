@@ -1,8 +1,8 @@
-import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import react from '@vitejs/plugin-react'
-import * as dotenv from 'dotenv'
-dotenv.config()
+import { resolve } from 'path';
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+import react from '@vitejs/plugin-react';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 export default defineConfig({
   main: {
@@ -22,4 +22,4 @@ export default defineConfig({
     },
     plugins: [react()]
   }
-})
+});

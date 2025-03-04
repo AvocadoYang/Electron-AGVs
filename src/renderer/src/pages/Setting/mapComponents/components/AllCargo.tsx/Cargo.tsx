@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Form, message } from 'antd'
-import { FC, memo, useCallback, useState } from 'react'
+ 
+import { Form, message } from 'antd';
+import { FC, memo, useCallback, useState } from 'react';
 
-import { WrapperType } from './types'
-import styled from 'styled-components'
-import { useCargoMutations } from './hook/useCargoMutations'
-import CargoDisplay from './CargoDisplay'
-import CargoModal from './CargoModal'
-import { Info } from '@renderer/sockets/useCargoInfo'
-import { useAtomValue } from 'jotai'
-import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble'
-import { LoadingStation } from './LoadingStation'
+import { WrapperType } from './types';
+import styled from 'styled-components';
+import { useCargoMutations } from './hook/useCargoMutations';
+import CargoDisplay from './CargoDisplay';
+import CargoModal from './CargoModal';
+import { Info } from '@renderer/sockets/useCargoInfo';
+import { useAtomValue } from 'jotai';
+import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble';
+import { LoadingStation } from './LoadingStation';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -22,9 +22,9 @@ const Wrapper = styled.div<WrapperType>`
   border-radius: 1px;
   transform: ${(props) =>
     `translate(${props.translatex}em, ${props.translatey}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
-`
+`;
 
-const WrapperDiv = memo(Wrapper)
+const WrapperDiv = memo(Wrapper);
 
 const MemoizedCargo = memo(CargoDisplay, (prevProps, nextProps) => {
   return (
@@ -33,8 +33,8 @@ const MemoizedCargo = memo(CargoDisplay, (prevProps, nextProps) => {
     prevProps.cargoValue == nextProps.cargoValue &&
     prevProps.isDisable == nextProps.isDisable &&
     prevProps.rotate == nextProps.rotate
-  )
-})
+  );
+});
 
 const Cargo: FC<{
   locId: string
@@ -44,25 +44,25 @@ const Cargo: FC<{
   scale: number
   shelfInfo: Info | undefined
 }> = ({ locId, translateX, translateY, rotate, scale, shelfInfo }) => {
-  const [settingForm] = Form.useForm()
-  const [layerForm] = Form.useForm()
-  const [messageApi, contextHolder] = message.useMessage()
+  const [settingForm] = Form.useForm();
+  const [layerForm] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const openEditZone = useAtomValue(EditZoneSwitch)
-  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch)
-  const [isEditLayer, setIsEditLayer] = useState(false)
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const openEditZone = useAtomValue(EditZoneSwitch);
+  const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch);
+  const [isEditLayer, setIsEditLayer] = useState(false);
 
-  const { editColumnMutation } = useCargoMutations(messageApi)
+  const { editColumnMutation } = useCargoMutations(messageApi);
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>, targetId: string, targetLevel: number) => {
-      if (event.button !== 1) return
-      editColumnMutation.mutate({ locationId: targetId, level: targetLevel })
+      if (event.button !== 1) return;
+      editColumnMutation.mutate({ locationId: targetId, level: targetLevel });
     },
     [editColumnMutation]
-  )
+  );
 
-  if (!shelfInfo) return <LoadingStation />
+  if (!shelfInfo) return <LoadingStation />;
   return (
     <>
       {contextHolder}
@@ -72,20 +72,20 @@ const Cargo: FC<{
         scale={scale}
         rotate={rotate}
         onClick={() => {
-          if (openEditRoadPanel || openEditZone) return
-          setIsEditModalOpen(true)
+          if (openEditRoadPanel || openEditZone) return;
+          setIsEditModalOpen(true);
         }}
       >
         {' '}
         {shelfInfo?.layer?.map((cargo, index: number) => {
-          const level = index
-          const nameLevel = cargo[level]?.levelName || ''
-          const cargoValue = cargo[level]?.cargo.hasCargo || false
+          const level = index;
+          const nameLevel = cargo[level]?.levelName || '';
+          const cargoValue = cargo[level]?.cargo.hasCargo || false;
           const borderColor = (
             cargo[level]?.pallet?.color !== null ? cargo[level]?.pallet?.color : '#c7c7c7'
-          ) as string
+          ) as string;
 
-          const isDisable = cargo[level]?.disable
+          const isDisable = cargo[level]?.disable;
 
           return (
             <MemoizedCargo
@@ -99,7 +99,7 @@ const Cargo: FC<{
               rotate={0}
               handleMouseDown={(e) => handleMouseDown(e, locId, level)}
             />
-          )
+          );
         })}
       </WrapperDiv>
       <CargoModal
@@ -113,9 +113,9 @@ const Cargo: FC<{
         setIsEditLayer={setIsEditLayer}
       />
     </>
-  )
-}
+  );
+};
 
 export default memo(Cargo, (prev, next) => {
-  return prev.locId !== next.locId
-})
+  return prev.locId !== next.locId;
+});

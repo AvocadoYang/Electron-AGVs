@@ -1,6 +1,6 @@
-import 'i18next'
-import translateEN from '../renderer/src/i18n/languages/en/translation.json'
-import translateTW from '../renderer/src/i18n/languages/tw/translation.json'
+import 'i18next';
+import translateEN from '../renderer/src/i18n/languages/en/translation.json';
+import translateTW from '../renderer/src/i18n/languages/tw/translation.json';
 // import resources from './resources';
 type ENType = typeof translateEN
 type TWType = typeof translateTW

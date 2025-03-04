@@ -1,11 +1,11 @@
-/* eslint-disable no-nested-ternary */
+ 
 
-import { FC, useRef } from 'react'
-import styled, { css } from 'styled-components'
-import { useAtomValue } from 'jotai'
-import { Tooltip } from 'antd'
-import { rad2Deg } from '@renderer/utils/utils'
-import { isShowRoadTooltip } from '@renderer/utils/siderGloble'
+import { FC, useRef } from 'react';
+import styled, { css } from 'styled-components';
+import { useAtomValue } from 'jotai';
+import { Tooltip } from 'antd';
+import { rad2Deg } from '@renderer/utils/utils';
+import { isShowRoadTooltip } from '@renderer/utils/siderGloble';
 
 const Container = styled.div.attrs<{
   left: number
@@ -15,7 +15,7 @@ const Container = styled.div.attrs<{
   top: number
 }>`
   position: absolute;
-`
+`;
 
 const Line = styled.div.attrs<{
   length: number
@@ -69,7 +69,7 @@ const Line = styled.div.attrs<{
         transform: rotate(45deg);
       }
     `}
-`
+`;
 
 const Road: FC<{
   roadId: string
@@ -84,11 +84,11 @@ const Road: FC<{
   limit: boolean
   isRoadOnHover: boolean
 }> = ({ roadId, roadType, x1, y1, x2, y2, isClaimedBy, limit, disabled, isRoadOnHover }) => {
-  const ref = useRef(null)
-  const length = Math.hypot(x1 - x2, y1 - y2)
-  const angle = rad2Deg(Math.atan2(y2 - y1, x2 - x1))
+  const ref = useRef(null);
+  const length = Math.hypot(x1 - x2, y1 - y2);
+  const angle = rad2Deg(Math.atan2(y2 - y1, x2 - x1));
 
-  const showRoadTooltip = useAtomValue(isShowRoadTooltip)
+  const showRoadTooltip = useAtomValue(isShowRoadTooltip);
 
   return (
     <Container left={x1} top={y1}>
@@ -135,7 +135,7 @@ const Road: FC<{
         </Line>
       </Tooltip>
     </Container>
-  )
-}
+  );
+};
 
-export default Road
+export default Road;

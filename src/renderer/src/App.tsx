@@ -1,7 +1,7 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Routes, Route, HashRouter } from 'react-router-dom'
-import { Main, LogIn, Setting, Register } from './pages'
-import Simulate from './pages/Simulate/Simulate'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Routes, Route, HashRouter } from 'react-router-dom';
+import { Main, LogIn, Setting, Register } from './pages';
+import Simulate from './pages/Simulate/Simulate';
 
 const client = new QueryClient({
   defaultOptions: {
@@ -9,7 +9,7 @@ const client = new QueryClient({
       refetchOnWindowFocus: false
     }
   }
-})
+});
 
 function App(): JSX.Element {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping');
@@ -26,7 +26,7 @@ function App(): JSX.Element {
         </Routes>
       </HashRouter>
     </QueryClientProvider>
-  )
+  );
 }
 
-export default App
+export default App;

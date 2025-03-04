@@ -1,37 +1,36 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import React, { useState, useRef, useEffect, useMemo } from 'react'
-import { Layout, Form, Splitter, Flex, Col, Row } from 'antd'
-import Header from '../../components/Header'
-import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components'
-import MapView from './mapComponents/MapView'
-import { useResetSiderSwitch } from './hooks'
-import './setting.css'
-import { DndContext } from '@dnd-kit/core'
-import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { restrictToParentElement } from '@dnd-kit/modifiers'
-import { getMoveIndex } from './utils/utils'
-import { toolbarState } from './components/siderElement'
-const { Content } = Layout
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { Layout, Form, Splitter, Flex } from 'antd';
+import Header from '../../components/Header';
+import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components';
+import MapView from './mapComponents/MapView';
+import { useResetSiderSwitch } from './hooks';
+import './setting.css';
+import { DndContext } from '@dnd-kit/core';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToParentElement } from '@dnd-kit/modifiers';
+import { getMoveIndex } from './utils/utils';
+import { toolbarState } from './components/siderElement';
+const { Content } = Layout;
 
 const Setting: React.FC = () => {
-  const mapRef = useRef(null)
-  const [hasOpenTool, setHasOpenTool] = useState(false)
-  const mapWrapRef = useRef(null)
-  const [locationPanelForm] = Form.useForm()
-  const [roadPanelForm] = Form.useForm()
-  const [zonePanelForm] = Form.useForm()
-  const [tagSettingForm] = Form.useForm()
-  const [dataList, setDataList] = useState(toolbarState)
-  const [scale, setScale] = useState(1)
-  const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%'])
+  const mapRef = useRef(null);
+  const [hasOpenTool, setHasOpenTool] = useState(false);
+  const mapWrapRef = useRef(null);
+  const [locationPanelForm] = Form.useForm();
+  const [roadPanelForm] = Form.useForm();
+  const [zonePanelForm] = Form.useForm();
+  const [tagSettingForm] = Form.useForm();
+  const [dataList, setDataList] = useState(toolbarState);
+  const [scale, setScale] = useState(1);
+  const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%']);
   const dragEndEvent = (dragItem) => {
     setDataList((prevDataList) => {
-      const moveDataList = prevDataList
-      const { activeIndex, overIndex } = getMoveIndex(moveDataList, dragItem)
-      const newDataList = arrayMove(moveDataList, activeIndex, overIndex)
-      return newDataList
-    })
-  }
+      const moveDataList = prevDataList;
+      const { activeIndex, overIndex } = getMoveIndex(moveDataList, dragItem);
+      const newDataList = arrayMove(moveDataList, activeIndex, overIndex);
+      return newDataList;
+    });
+  };
 
   const dndContextMemo = useMemo(() => {
     return (
@@ -50,22 +49,22 @@ const Setting: React.FC = () => {
           </Flex>
         </SortableContext>
       </DndContext>
-    )
-  }, [dataList, locationPanelForm])
+    );
+  }, [dataList, locationPanelForm]);
 
   useEffect(() => {
     if (hasOpenTool) {
-      setSplitterSize(['30%', '100%'])
+      setSplitterSize(['30%', '100%']);
     } else {
-      setSplitterSize(['0%', '100%'])
+      setSplitterSize(['0%', '100%']);
     }
-  }, [hasOpenTool])
+  }, [hasOpenTool]);
 
   const updateSize = (size) => {
-    setSplitterSize(size)
-  }
+    setSplitterSize(size);
+  };
 
-  useResetSiderSwitch()
+  useResetSiderSwitch();
 
   return (
     <>
@@ -116,7 +115,7 @@ const Setting: React.FC = () => {
         </Content>
       </Layout>
     </>
-  )
-}
+  );
+};
 
-export default Setting
+export default Setting;

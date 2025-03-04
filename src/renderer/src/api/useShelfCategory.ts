@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { array, object, string, number, InferType } from 'yup'
-import client from './axiosClient'
+import { useQuery } from '@tanstack/react-query';
+import { array, object, string, number, InferType } from 'yup';
+import client from './axiosClient';
 
 const shelfSchema = array(
   object({
@@ -15,21 +15,21 @@ const shelfSchema = array(
       }).optional()
     ).optional()
   }).required()
-)
+);
 
 const getShelfCategory = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-shelf-category')
+  const { data } = await client.get<unknown>('api/setting/all-shelf-category');
 
   // console.log(data);
   const validatedData = await shelfSchema.validate(data, {
     stripUnknown: true
-  })
-  return validatedData
-}
+  });
+  return validatedData;
+};
 
 const useShelfCategory = () => {
-  return useQuery(['all-shelf-category'], getShelfCategory)
-}
+  return useQuery(['all-shelf-category'], getShelfCategory);
+};
 
 type ShelfHeight = {
   id: string
@@ -46,4 +46,4 @@ export type ShelfCategoryWithoutList = {
 
 export type ShelfCategory = InferType<typeof shelfSchema>
 
-export default useShelfCategory
+export default useShelfCategory;

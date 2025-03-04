@@ -10,28 +10,28 @@ export const initialRoadValue = {
   disabled: false,
   limit: false,
   roadType: 'twoWayRoad'
-}
+};
 
 export const initialLocationFormValue = {
   locationId: 0,
   areaType: 'Extra',
   rotation: 0,
   canRotate: false
-}
+};
 
 export const initialZoneValue = {
   startX: 0,
   startY: 0,
   endX: 0,
   endY: 0
-}
+};
 
 export const initialTagSettingValue = {
   speed_limit: undefined,
   hight_limit: undefined,
   all_forbidden: undefined,
   forbidden: undefined
-}
+};
 
 export type TagSettingFormType = {
   speed_limit?: number

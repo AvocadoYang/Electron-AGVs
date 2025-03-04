@@ -1,10 +1,10 @@
-import client from '@renderer/api/axiosClient'
-import useAllMissionTitles from '@renderer/api/useMissionTitle'
-import { Err } from '@renderer/utils/responseErr'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Form, message, Modal, Select } from 'antd'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import client from '@renderer/api/axiosClient';
+import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import { Err } from '@renderer/utils/responseErr';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Form, message, Modal, Select } from 'antd';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type ImportTask = {
   order: number
@@ -20,58 +20,58 @@ const ImportMissionForm: FC<{
     key: string
   } | null
 }> = ({ showImportMission, setShowImportMission, importConfig }) => {
-  const [formImportMission] = Form.useForm()
-  const [messageApi, contextHolder] = message.useMessage()
-  const queryClient = useQueryClient()
-  const { data } = useAllMissionTitles()
-  const { t } = useTranslation()
+  const [formImportMission] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
+  const queryClient = useQueryClient();
+  const { data } = useAllMissionTitles();
+  const { t } = useTranslation();
   const importMutation = useMutation({
     mutationFn: (payload: ImportTask) => {
-      return client.post('api/setting/import-task', payload)
+      return client.post('api/setting/import-task', payload);
     },
     onSuccess: async () => {
-      void messageApi.success(t('utils.success'))
-      await queryClient.refetchQueries({ queryKey: ['all-relate-task'] })
+      void messageApi.success(t('utils.success'));
+      await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg)
+      messageApi.error(error.response.data.msg);
     }
-  })
+  });
 
   const handleImportMissionOk = () => {
     if (!importConfig) {
-      messageApi.warning(t('utils.error'))
-      return
+      messageApi.warning(t('utils.error'));
+      return;
     }
 
-    setShowImportMission(false)
+    setShowImportMission(false);
 
-    const payload = formImportMission.getFieldsValue() as ImportTask
+    const payload = formImportMission.getFieldsValue() as ImportTask;
 
     if (!payload.importTaskId || payload.importTaskId.trim() === '') {
-      messageApi.warning(t('mission.add_mission.name_warn'))
-      return
+      messageApi.warning(t('mission.add_mission.name_warn'));
+      return;
     }
 
     const newPayload = {
       ...payload,
       currentTaskId: importConfig?.key,
       order: importConfig?.order
-    }
+    };
 
-    importMutation.mutate(newPayload)
+    importMutation.mutate(newPayload);
 
-    formImportMission.resetFields()
-  }
+    formImportMission.resetFields();
+  };
 
   const handleImportMissionCancel = () => {
-    formImportMission.resetFields()
-    setShowImportMission(false)
-  }
+    formImportMission.resetFields();
+    setShowImportMission(false);
+  };
 
   const options = data?.map((v) => {
-    return { value: v.id, label: v.name }
-  })
+    return { value: v.id, label: v.name };
+  });
 
   return (
     <>
@@ -101,7 +101,7 @@ const ImportMissionForm: FC<{
         </Form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default ImportMissionForm
+export default ImportMissionForm;

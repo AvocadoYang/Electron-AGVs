@@ -44,9 +44,9 @@ export const formList = [
   // === config ===
   { key: 'warning_id' },
   { key: 'backup_file' }
-] as const
+] as const;
 
-export const toolbarState = formList.map((item) => ({ ...item }))
+export const toolbarState = formList.map((item) => ({ ...item }));
 
 export type formListType = typeof formList
 export type ToolBarItemType = (typeof formList)[number]['key']

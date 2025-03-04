@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const Loader = styled.div`
   width: 50px;
@@ -18,10 +18,10 @@ const Loader = styled.div`
       transform: rotate(1turn);
     }
   }
-`
+`;
 
 const GlobalLoading = () => {
-  return <Loader />
-}
+  return <Loader />;
+};
 
-export default GlobalLoading
+export default GlobalLoading;

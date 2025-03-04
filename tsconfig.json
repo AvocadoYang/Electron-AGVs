@@ -1,4 +1,19 @@
 {
+
+  "compilerOptions": {
+    "composite": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true
+  },
   "files": [],
-  "references": [{ "path": "./tsconfig.node.json" }, { "path": "./tsconfig.web.json" }]
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "./tsconfig.web.json" }
+  ],
+  "include": [
+    "src/**/*",        // Make sure all TS files are included
+    "src/renderer/**/*",
+    "src/preload/**/*"
+  ]
 }

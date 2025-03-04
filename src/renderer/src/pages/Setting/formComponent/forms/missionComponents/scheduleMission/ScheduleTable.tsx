@@ -1,37 +1,27 @@
-/* eslint-disable no-void */
-import dayjs from 'dayjs'
-import { Dispatch, FC, SetStateAction } from 'react'
+import dayjs from 'dayjs';
+import { Dispatch, FC, SetStateAction } from 'react';
 import {
   CloseCircleOutlined,
-  DeleteTwoTone,
   EditOutlined,
-  EditTwoTone,
   PlayCircleOutlined,
   PlusOutlined
-} from '@ant-design/icons'
-import { useMutation } from '@tanstack/react-query'
-import styled from 'styled-components'
-import { Button, Col, Flex, FormInstance, Popconfirm, Row, Table, Tooltip, message } from 'antd'
-import { nanoid } from 'nanoid'
-import { useTranslation } from 'react-i18next'
-import client from '@renderer/api/axiosClient'
-import useSchedule from '@renderer/api/useSchedule'
-import { ErrorResponse } from '@renderer/utils/globalType'
-import { errorHandler } from '@renderer/utils/utils'
-
-const Svg = styled.svg`
-  //why this is not work?
-  & :hover {
-    background-color: #ff2929;
-  }
-`
+} from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import styled from 'styled-components';
+import { Button, Flex, FormInstance, Popconfirm, Table, message } from 'antd';
+import { nanoid } from 'nanoid';
+import { useTranslation } from 'react-i18next';
+import client from '@renderer/api/axiosClient';
+import useSchedule from '@renderer/api/useSchedule';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
   align-items: flex-start;
-`
+`;
 
 const ActiveBox = styled.div`
   min-width: 4em;
@@ -39,109 +29,108 @@ const ActiveBox = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-`
+`;
 
 type DotStyle = {
-  $active: boolean
-}
+  $active: boolean;
+};
 
 const Dot = styled.div<DotStyle>`
   border-radius: 99%;
   width: 7px;
   height: 7px;
   background-color: ${(prop) => (prop.$active ? '#2bea00' : '#979797')};
-`
+`;
 
 interface DataType {
-  id: string
-  active: boolean
-  amrId?: string[]
-  schedule: string
-  missionId?: string
-  missionName: string
+  id: string;
+  active: boolean;
+  amrId?: string[];
+  schedule: string;
+  missionId?: string;
+  missionName: string;
 }
 
 const TimeStyle = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const ScheduleTable: FC<{
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>
-  form: FormInstance<unknown>
-  setSelectId: Dispatch<SetStateAction<string | null>>
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  form: FormInstance<unknown>;
+  setSelectId: Dispatch<SetStateAction<string | null>>;
 }> = ({ form, setIsModalOpen, setSelectId }) => {
-  const { t } = useTranslation()
-  const { data: schedule, refetch } = useSchedule()
+  const { t } = useTranslation();
+  const { data: schedule, refetch } = useSchedule();
 
-  const [messageApi, contextHolder] = message.useMessage()
+  const [messageApi, contextHolder] = message.useMessage();
 
   const numberToDigitsArray = (num: string): number[] => {
-    return num.split('').map((digit) => parseInt(digit, 10))
-  }
+    return num.split('').map((digit) => parseInt(digit, 10));
+  };
 
   const activeMutation = useMutation({
     mutationFn: (payload: { id: string; isActive: boolean }) => {
-      return client.post(`api/setting/active-schedule`, payload)
+      return client.post('api/setting/active-schedule', payload);
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      void refetch()
+      void messageApi.success(t('utils.success'));
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const addMutation = useMutation({
     mutationFn: () => {
-      return client.post(`api/setting/add-schedule`)
+      return client.post('api/setting/add-schedule');
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
-      void refetch()
+      void messageApi.success(t('utils.success'));
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleAdd = () => {
-    addMutation.mutate()
-  }
+    addMutation.mutate();
+  };
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
-      return client.post(`api/setting/remove-schedule`, payload)
+      return client.post('api/setting/remove-schedule', payload);
     },
     onSuccess() {
-      // eslint-disable-next-line no-void
-      void refetch()
+      void refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  })
+  });
 
   const handleActive = (isActive: boolean, id: string) => {
-    activeMutation.mutate({ id, isActive })
-  }
+    activeMutation.mutate({ id, isActive });
+  };
 
   const handleDelete = (id: string) => {
-    deleteMutation.mutate({ id })
-  }
+    deleteMutation.mutate({ id });
+  };
 
   const handleEdit = (id: string) => {
-    if (!schedule) return
-    setIsModalOpen(true)
-    setSelectId(id)
+    if (!schedule) return;
+    setIsModalOpen(true);
+    setSelectId(id);
 
-    const data = schedule.find((v) => v.id === id)
+    const data = schedule.find((v) => v.id === id);
 
-    const [day, min, sec] = data?.schedule.split('-') as string[]
+    const [day, min, sec] = data?.schedule.split('-') as string[];
 
-    const week = numberToDigitsArray(day)
-    const time = dayjs(`${min}:${sec}`, 'HH:mm')
+    const week = numberToDigitsArray(day);
+    const time = dayjs(`${min}:${sec}`, 'HH:mm');
 
-    form.setFieldValue('amrId', data?.amrId)
-    form.setFieldValue('missionId', data?.missionId)
-    form.setFieldValue('day', week)
-    form.setFieldValue('time', time)
-  }
+    form.setFieldValue('amrId', data?.amrId);
+    form.setFieldValue('missionId', data?.missionId);
+    form.setFieldValue('day', week);
+    form.setFieldValue('time', time);
+  };
 
   const columns = [
     {
@@ -159,7 +148,7 @@ const ScheduleTable: FC<{
                 : t('mission.schedule_mission.stale')}
             </>
           </ActiveBox>
-        )
+        );
       }
     },
     {
@@ -176,19 +165,19 @@ const ScheduleTable: FC<{
       width: 120,
       editable: true,
       sorter: (a: DataType, b: DataType) => {
-        const [weekA, hourA, minusA] = a.schedule.split('-')
-        const [weekB, hourB, minusB] = b.schedule.split('-')
-        return Number(hourA) - Number(hourB)
+        const hourA = a.schedule.split('-')[1];
+        const hourB = b.schedule.split('-')[1];
+        return Number(hourA) - Number(hourB);
       },
       render: (_v: unknown, record: DataType) => {
-        const [week, hour, minus] = record.schedule.split('-')
+        const [week, hour, minus] = record.schedule.split('-');
 
         return (
           <TimeStyle>
             <span>{`星期: ${week}`}</span>
             <span>{`${hour}:${minus}`}</span>
           </TimeStyle>
-        )
+        );
       }
     },
     {
@@ -199,7 +188,7 @@ const ScheduleTable: FC<{
       sorter: (a: DataType, b: DataType) => a.missionName.localeCompare(b.missionName),
       editable: true,
       render: (_v: unknown, record: DataType) => {
-        return record.missionName
+        return record.missionName;
       }
     },
     {
@@ -207,7 +196,7 @@ const ScheduleTable: FC<{
       width: 30,
       dataIndex: 'operation',
       key: nanoid(),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
       render(_v: unknown, record: DataType) {
         return (
           <Flex gap="small">
@@ -251,10 +240,10 @@ const ScheduleTable: FC<{
               </Button>
             </Popconfirm>
           </Flex>
-        )
+        );
       }
     }
-  ]
+  ];
 
   return (
     <Wrapper>
@@ -264,7 +253,7 @@ const ScheduleTable: FC<{
       </Button>
       <Table rowKey={() => nanoid()} columns={columns} dataSource={schedule as DataType[]} />
     </Wrapper>
-  )
-}
+  );
+};
 
-export default ScheduleTable
+export default ScheduleTable;
