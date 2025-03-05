@@ -532,6 +532,27 @@
     "add_car": "新增車輛",
     "start_sim": "開始模擬",
     "stop_sim": "停止模擬",
-    "reset_sim": "重新模擬"
+    "reset_sim": "重新模擬",
+    "cargo": {
+      "input": {
+        "input": "入貨",
+        "auto_shift_cargo": "自動轉出貨",
+        "shift_location": "轉出位置",
+        "shift_speed": "轉出速度"
+      },
+      "output": {
+        "output": "出貨",
+        "cargo_number": "貨物數量",
+        "speed": "出貨速度",
+        "specify_car": "指定車輛",
+        "placement": "放置位置"
+      }
+    },
+    "modal": {
+      "current": "使用腳本名稱",
+      "name": "名稱",
+      "haven't_set_default": "尚未設定任何模擬任務",
+      "do_you_want_to_create_one": "必須創建新的任務模擬才能使用"
+    }
   }
 }
