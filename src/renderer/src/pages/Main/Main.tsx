@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Layout, Splitter, Col, Row, Button, Flex } from 'antd';
+import { Layout } from 'antd';
+import WebView from './components/WebView/WebView';
 import Header from '../../components/Header';
 import './components/PadViwe/style.css';
 import PadView from './components/PadViwe/PadView';
@@ -8,8 +9,6 @@ import PadView from './components/PadViwe/PadView';
 // import MissionWrap from './Mission_Card/MissionWrap'
 import { useAtom } from 'jotai';
 import { viewBtn, ViewBtn } from './global/jotai';
-
-const { Content } = Layout;
 
 const Main: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 767);
@@ -37,7 +36,7 @@ const Main: React.FC = () => {
   }, []);
 
   return (
-    <Layout style={{ height: '100dvh' }}>
+    <Layout style={{ height: `${isMobile ? '100dvh' : '100%'}` }}>
       <Header isMobile={isMobile}></Header>
       {isMobile ? (
         <>
@@ -46,38 +45,7 @@ const Main: React.FC = () => {
           </Layout>
         </>
       ) : (
-        <Content>
-          <Row style={{ width: '100%', height: '100%' }}>
-            <Col span={3} style={{ padding: '20px 15px 0 15px' }}>
-              <Flex vertical justify="center" align="center">
-                <Button
-                  color="default"
-                  variant="solid"
-                  style={{ width: '80%', fontWeight: 'bold' }}
-                >
-                  ++快速任務派發
-                </Button>
-              </Flex>
-            </Col>
-            <Col span={21}>
-              <div style={{ width: '100%', height: '100%' }}>
-                <Splitter>
-                  <Splitter.Panel defaultSize="75%" style={{ overflowX: 'hidden' }}>
-                    324
-                  </Splitter.Panel>
-                  <Splitter.Panel defaultSize="25%" style={{ overflowX: 'hidden' }} min="25%">
-                    234
-                  </Splitter.Panel>
-                </Splitter>
-              </div>
-            </Col>
-          </Row>
-          {/* <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-            <CarCardWrap></CarCardWrap>
-            <Scene></Scene>
-            <MissionWrap></MissionWrap>
-            </div> */}
-        </Content>
+        <WebView></WebView>
       )}
     </Layout>
   );

@@ -1,9 +1,8 @@
- 
 import styled from 'styled-components';
 
 export const InfoWrap = styled.div.attrs<{
-  randomcolor: string
-  isstop: boolean
+  randomcolor: string;
+  isstop: boolean;
 }>((props) => {
   return { randomcolor: props.randomcolor, isstop: props.isstop };
 })<{ randomcolor: string; isstop: boolean }>`
@@ -13,7 +12,7 @@ export const InfoWrap = styled.div.attrs<{
   /* overflow: hidden; */
   border-radius: 4px;
   border: ${(props) => `0.1vw solid ${props.randomcolor}`};
-  width: 90%;
+  width: 190px;
   border-right: ${(props) => `0.35vw solid ${props.randomcolor}`};
   background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
   box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.3);

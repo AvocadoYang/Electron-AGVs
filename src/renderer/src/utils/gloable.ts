@@ -16,13 +16,15 @@ export const hoverRoad = atom<string>('');
 
 // ** 貨架樣式 */
 export const cargoStyle = atom<{
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
 } | null>(null);
 
 export const shelfSelectedStyleLocationId = atom<string>('');
+
+export const darkMode = atom<boolean>(false);
 
 export const mousePoint_X = atom<number>(-5); // MousePoint 編輯點位小紅點
 export const mousePoint_Y = atom<number>(-5); // MousePoint 編輯點位小紅點
@@ -33,14 +35,14 @@ export const locationYForQuickEditLocationPanel = atom<number>(0);
 export const TempStoredLocationsForQuickEditPanel = atom<LocationType[]>([]);
 
 export const tooltipProp = atom<{
-  x: number
-  y: number
-  locationId: string
+  x: number;
+  y: number;
+  locationId: string;
 } | null>(null);
 
 export const chargeStationModelProp = atom<{
-  open: boolean
-  location: string
+  open: boolean;
+  location: string;
 } | null>(null);
 
 export const isEditChargeStation = atom(false);

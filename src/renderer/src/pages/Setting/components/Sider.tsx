@@ -1,6 +1,7 @@
 import React, { useState, memo, useEffect } from 'react';
 import { Layout, Menu, message, Switch } from 'antd';
 import useMap from '@renderer/api/useMap';
+import UploadWarningModal from './UploadWarningModal';
 import { useAtom, useSetAtom } from 'jotai';
 import {
   EditLocationPanelSwitch,
@@ -498,9 +499,10 @@ const Sider: React.FC<{
           onChange={(checked) => handleShowPanel(checked, 'backup_file')}
         />
       ),
-      getItem(t('toolbar.restart.restart'), '8-3')
+      getItem(t('toolbar.restart.restart'), '8-4')
     ])
   ];
+
   const [messageApi, contextHolders] = message.useMessage();
   const restartMutate = useMutation({
     mutationFn: () => {
@@ -539,6 +541,10 @@ const Sider: React.FC<{
           className="setting-sider-menu"
         />
       </AntdSider>
+
+      {/**  -------- 錯誤表 --------  */}
+
+      <UploadWarningModal></UploadWarningModal>
     </>
   );
 };

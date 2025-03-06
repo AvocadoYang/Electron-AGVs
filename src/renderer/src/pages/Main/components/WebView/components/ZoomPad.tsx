@@ -13,10 +13,10 @@ import {
 } from '@renderer/utils/siderGloble';
 
 const ZoomPadWrap = styled.div`
-  position: fixed;
-  z-index: 4;
-  bottom: 15px;
-  right: 15px;
+  background-color: 'red';
+  position: absolute;
+  bottom: 2%;
+  left: 1%;
 `;
 
 const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>> }> = ({

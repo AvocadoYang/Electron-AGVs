@@ -1,18 +1,18 @@
-import { Layout, Menu, MenuProps, theme, Badge } from 'antd'
+import { Layout, Menu, MenuProps, theme, Badge } from 'antd';
 import {
   ScheduleOutlined,
   GlobalOutlined,
   InsertRowAboveOutlined,
   AlertOutlined
-} from '@ant-design/icons'
-import { useState } from 'react'
-import { viewBtn } from '@renderer/pages/Main/global/jotai'
-import { useAtom } from 'jotai'
-import '../style.css'
-import { ViewBtn } from '@renderer/pages/Main/global/jotai'
-import { useTranslation } from 'react-i18next'
+} from '@ant-design/icons';
+import { useState } from 'react';
+import { viewBtn } from '@renderer/pages/Main/global/jotai';
+import { useAtom } from 'jotai';
+import '../style.css';
+import { ViewBtn } from '@renderer/pages/Main/global/jotai';
+import { useTranslation } from 'react-i18next';
 
-type MenuItem = Required<MenuProps>['items'][number]
+type MenuItem = Required<MenuProps>['items'][number];
 
 function getItem(
   label: React.ReactNode,
@@ -29,22 +29,22 @@ function getItem(
     onClick,
     label,
     type
-  } as MenuItem
+  } as MenuItem;
 }
 
-const { Sider } = Layout
+const { Sider } = Layout;
 
 const PadSider = () => {
-  const [collapsed, setCollapsed] = useState(true)
-  const { t } = useTranslation()
-  const [_, setOpenEditLocationPanel] = useAtom(viewBtn)
+  const [collapsed, setCollapsed] = useState(true);
+  const { t } = useTranslation();
+  const [_, setOpenEditLocationPanel] = useAtom(viewBtn);
   const {
     token: { colorBgContainer }
-  } = theme.useToken()
+  } = theme.useToken();
 
   const handleViewChange = (itemType: number) => {
-    setOpenEditLocationPanel(itemType)
-  }
+    setOpenEditLocationPanel(itemType);
+  };
 
   const viewItem: MenuItem[] = [
     getItem(t('main.pad_view.sider.map_view'), '1', <GlobalOutlined className="map-icon" />, () =>
@@ -55,7 +55,7 @@ const PadSider = () => {
       '2',
       <ScheduleOutlined className="mission-icon" />,
       () => {
-        handleViewChange(ViewBtn.missionView)
+        handleViewChange(ViewBtn.missionView);
       }
     ),
     getItem(
@@ -63,7 +63,7 @@ const PadSider = () => {
       '3',
       <InsertRowAboveOutlined className="info-icon" />,
       () => {
-        handleViewChange(ViewBtn.infoView)
+        handleViewChange(ViewBtn.infoView);
       }
     ),
     getItem(
@@ -73,15 +73,15 @@ const PadSider = () => {
         <AlertOutlined className="alert-icon" />
       </Badge>,
       () => {
-        handleViewChange(ViewBtn.alertView)
+        handleViewChange(ViewBtn.alertView);
       }
     )
-  ]
+  ];
 
   return (
     <Sider
       width={200}
-      style={{ background: colorBgContainer, width: 80 }}
+      style={{ background: colorBgContainer, width: 80, backgroundColor: '#f5f5f5' }}
       collapsed={collapsed}
       onCollapse={(value) => setCollapsed(value)}
     >
@@ -89,11 +89,11 @@ const PadSider = () => {
         mode="inline"
         className="pad-sider"
         defaultSelectedKeys={['2']}
-        style={{ height: '100%', borderRight: 0 }}
+        style={{ height: '100%', borderRight: 0, backgroundColor: '#f5f5f5' }}
         items={viewItem}
       />
     </Sider>
-  )
-}
+  );
+};
 
-export default PadSider
+export default PadSider;

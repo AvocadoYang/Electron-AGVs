@@ -4,14 +4,17 @@ import '../components/component.css';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import { memo, useState } from 'react';
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { UserOutlined } from '@ant-design/icons';
+import { useAtom } from 'jotai';
+import { darkMode } from '@renderer/utils/gloable';
 const { Header: AntdHeader } = Layout;
 
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [isDark, setIsDark] = useAtom(darkMode);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const items = [
@@ -60,9 +63,9 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           justifyContent: 'space-between',
           padding: '0 16px'
         }}
-        className="custom-header"
+        className={`custom-header ${isDark ? 'dark-mode' : ''}`}
       >
-        <div className="demo-logo" />
+        <div className={`demo-logo ${isDark ? 'dark-mode' : ''}`} />
 
         {/* 行動裝置顯示 Drawer 按鈕 */}
         {isMobile ? (
@@ -108,6 +111,11 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               className="custom-menu"
             />
             <Flex gap="middle" align="start" style={{ marginRight: '10px' }}>
+              {isDark ? (
+                <SunOutlined className="light-mode-icon" onClick={() => setIsDark(false)} />
+              ) : (
+                <MoonOutlined className="dark-mode-icon" onClick={() => setIsDark(true)} />
+              )}
               <Select
                 defaultValue="ch.tw"
                 style={{ width: 120 }}
@@ -116,6 +124,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   { value: 'en', label: 'English' },
                   { value: 'ch.tw', label: 'Chinese' }
                 ]}
+                className={`${isDark ? 'select-lang' : ''}`}
               />
               <UserOutlined
                 style={{ color: 'blue', textAlign: 'center', fontSize: '150%', marginTop: '5px' }}

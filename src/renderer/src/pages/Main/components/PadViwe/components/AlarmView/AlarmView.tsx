@@ -1,9 +1,9 @@
-import { Flex, Space } from 'antd'
-import { memo, useState } from 'react'
-import { MutedOutlined, FileOutlined } from '@ant-design/icons'
+import { Space } from 'antd';
+import { memo, useState } from 'react';
+import { MutedOutlined, FileOutlined } from '@ant-design/icons';
 
 const AlarmView = () => {
-  const [display, setDisplay] = useState(0)
+  const [display, setDisplay] = useState(0);
   return (
     <Space style={{ margin: '10px 0 10px 0' }}>
       <Space
@@ -24,7 +24,7 @@ const AlarmView = () => {
         <p className={display == 1 ? 'error-list-text' : ''}>234</p>
       </Space>
     </Space>
-  )
-}
+  );
+};
 
-export default memo(AlarmView)
+export default memo(AlarmView);

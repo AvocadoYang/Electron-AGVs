@@ -8,34 +8,33 @@ import {
   OpenMissionCardInfo,
   OpenQuickMission,
   viewBtn
-} from '@renderer/pages/Main/global/jotai'
-import { Card, Button, Space } from 'antd'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { memo, useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { AutoMission, DialogMission, InputMission, QuickMission } from '../../../missionModal'
-import { useCycleMission } from '@renderer/sockets/useCycleMission'
+} from '@renderer/pages/Main/global/jotai';
+import { Card, Button, Space } from 'antd';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { memo, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { AutoMission, DialogMission, InputMission, QuickMission } from '../../../missionModal';
 
 const CardWrap: React.FC<{ id: string; setOpenCycleMissionList: React.Dispatch<boolean> }> = ({
   id,
   setOpenCycleMissionList
 }) => {
-  const { t } = useTranslation()
-  const view = useAtomValue(viewBtn)
-  const [borderColor, setBorderColor] = useState('')
+  const { t } = useTranslation();
+  const view = useAtomValue(viewBtn);
+  const [borderColor, setBorderColor] = useState('');
 
-  const open2DMap = useSetAtom(Open2DMap)
-  const open3DMap = useSetAtom(Open3DMap)
-  const openQuickMission = useSetAtom(OpenQuickMission)
-  const openAssignMission = useSetAtom(OpenAssignMission)
-  const openAutoMission = useSetAtom(OpenAutoMission)
-  const openInputMission = useSetAtom(OpenInputMission)
-  const openCarCardInfo = useSetAtom(OpenCarCardInfo)
-  const openMissionCardInfo = useSetAtom(OpenMissionCardInfo)
+  const open2DMap = useSetAtom(Open2DMap);
+  const open3DMap = useSetAtom(Open3DMap);
+  const openQuickMission = useSetAtom(OpenQuickMission);
+  const openAssignMission = useSetAtom(OpenAssignMission);
+  const openAutoMission = useSetAtom(OpenAutoMission);
+  const openInputMission = useSetAtom(OpenInputMission);
+  const openCarCardInfo = useSetAtom(OpenCarCardInfo);
+  const openMissionCardInfo = useSetAtom(OpenMissionCardInfo);
 
   useEffect(() => {
     if (id === 'map_2D_view' || id === 'map_3D_view') {
-      setBorderColor('rgb(56, 142, 240)')
+      setBorderColor('rgb(56, 142, 240)');
     }
     if (
       id === 'quick_mission' ||
@@ -43,43 +42,43 @@ const CardWrap: React.FC<{ id: string; setOpenCycleMissionList: React.Dispatch<b
       id === 'new_mission' ||
       id === 'input_mission'
     ) {
-      setBorderColor('rgb(247, 108, 10)')
+      setBorderColor('rgb(247, 108, 10)');
     }
     if (id === 'mission_info' || id === 'car_info') {
-      setBorderColor('rgb(71, 138, 129)')
+      setBorderColor('rgb(71, 138, 129)');
     }
-  }, [])
+  }, []);
 
   const btnClick = useCallback((id) => {
     switch (id) {
       case 'map_2D_view':
-        open2DMap(true)
-        break
+        open2DMap(true);
+        break;
       case 'map_3D_view':
-        open3DMap(true)
-        break
+        open3DMap(true);
+        break;
       case 'quick_mission':
-        openQuickMission(true)
-        break
+        openQuickMission(true);
+        break;
       case 'auto_mission':
-        openAutoMission(true)
-        break
+        openAutoMission(true);
+        break;
       case 'new_mission':
-        openAssignMission(true)
-        break
+        openAssignMission(true);
+        break;
       case 'input_mission':
-        openInputMission(true)
-        break
+        openInputMission(true);
+        break;
       case 'mission_info':
-        openMissionCardInfo(true)
-        break
+        openMissionCardInfo(true);
+        break;
       case 'car_info':
-        openCarCardInfo(true)
-        break
+        openCarCardInfo(true);
+        break;
       default:
-        break
+        break;
     }
-  }, [])
+  }, []);
 
   return (
     <>
@@ -98,7 +97,7 @@ const CardWrap: React.FC<{ id: string; setOpenCycleMissionList: React.Dispatch<b
                   color="default"
                   variant="filled"
                   onClick={() => {
-                    setOpenCycleMissionList(true)
+                    setOpenCycleMissionList(true);
                   }}
                 >
                   {t('utils.detail')}
@@ -113,7 +112,7 @@ const CardWrap: React.FC<{ id: string; setOpenCycleMissionList: React.Dispatch<b
                 variant="filled"
                 disabled={id === 'map_3D_view'}
                 onClick={() => {
-                  btnClick(id)
+                  btnClick(id);
                 }}
               >
                 {t('utils.open')}
@@ -129,21 +128,21 @@ const CardWrap: React.FC<{ id: string; setOpenCycleMissionList: React.Dispatch<b
       </Card>
 
       {((id) => {
-        if (view !== 1) return []
+        if (view !== 1) return [];
         switch (id) {
           case 'auto_mission':
-            return <AutoMission></AutoMission>
+            return <AutoMission></AutoMission>;
           case 'new_mission':
-            return <DialogMission></DialogMission>
+            return <DialogMission></DialogMission>;
           case 'input_mission':
-            return <InputMission></InputMission>
+            return <InputMission></InputMission>;
           case 'quick_mission':
-            return <QuickMission></QuickMission>
+            return <QuickMission></QuickMission>;
           default:
-            return []
+            return [];
         }
       })(id)}
     </>
-  )
-}
-export default memo(CardWrap)
+  );
+};
+export default memo(CardWrap);
