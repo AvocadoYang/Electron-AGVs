@@ -2,7 +2,7 @@ import { FC, memo, RefObject, useEffect, useState } from 'react';
 import useMap from '@renderer/api/useMap';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
-import { SelectByZone } from '@renderer/pages/Simulate/utils/status';
+import { isSelectCargo } from '@renderer/pages/Simulate/utils/status';
 
 const Container = styled.div.attrs<{ left: number; top: number }>(({ left, top }) => ({
   style: { left, top }
@@ -55,7 +55,7 @@ const ZoneIconHint: FC<{
   scale: number;
   isDragging: boolean;
 }> = ({ mapWrapRef, mapRef, mapImageRef, scale, isDragging }) => {
-  const openEditZone = useAtomValue(SelectByZone);
+  const openEditZone = useAtomValue(isSelectCargo);
 
   const [mouseMoveLocationForFrame, setMouseMoveLocationForFrame] = useState({
     displayX: -1000,

@@ -4,7 +4,7 @@ import { RefObject, useEffect } from 'react';
 import { fromEvent, switchMap, takeUntil, tap, EMPTY, take, merge } from 'rxjs';
 import { rvizCoord } from '@renderer/utils/utils';
 import { MouseLocationForFrame, RectInfo } from '@renderer/pages/Setting/hooks/hook';
-import { SelectByZone, zoneValue } from '../utils/status';
+import { isSelectCargo, zoneValue } from '../utils/status';
 
 const useZoneFrame = (
   mapWrapRef: RefObject<HTMLDivElement>,
@@ -17,7 +17,7 @@ const useZoneFrame = (
   setRectInfo: React.Dispatch<RectInfo>
 ) => {
   const { data } = useMap();
-  const openEditZone = useAtomValue(SelectByZone);
+  const openEditZone = useAtomValue(isSelectCargo);
   const setZoneValue = useSetAtom(zoneValue);
 
   useEffect(() => {

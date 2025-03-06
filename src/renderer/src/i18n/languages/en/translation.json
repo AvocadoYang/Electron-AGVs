@@ -554,6 +554,8 @@
     "modal": {
       "current": "Current Script",
       "name": "Name",
+      "location": "Location",
+      "select_locations": "Map select locations",
       "haven't_set_default": "Haven't set default script",
       "do_you_want_to_create_one": "A default Script mission is required or can not use"
     }

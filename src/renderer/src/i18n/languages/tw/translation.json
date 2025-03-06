@@ -551,6 +551,8 @@
     "modal": {
       "current": "使用腳本名稱",
       "name": "名稱",
+      "select_locations": "地圖選取地點",
+      "location": "地點",
       "haven't_set_default": "尚未設定任何模擬任務",
       "do_you_want_to_create_one": "必須創建新的任務模擬才能使用"
     }

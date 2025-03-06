@@ -7,8 +7,12 @@ import { useCargoMutations } from './hook/useCargoMutations';
 import CargoDisplay from './CargoDisplay';
 import { Info } from '@renderer/sockets/useCargoInfo';
 import { LoadingStation } from './LoadingStation';
-import { isSelectCargo } from '@renderer/pages/Simulate/utils/status';
-import { useSetAtom } from 'jotai';
+import {
+  isOpenCargoModal,
+  isSelectCargo,
+  targetKeyJotai
+} from '@renderer/pages/Simulate/utils/status';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -43,7 +47,9 @@ const Cargo: FC<{
   shelfInfo: Info | undefined;
 }> = ({ locId, translateX, translateY, rotate, scale, shelfInfo }) => {
   const [messageApi, contextHolder] = message.useMessage();
-  const setIsSelecting = useSetAtom(isSelectCargo);
+  const setTargetKey = useSetAtom(targetKeyJotai);
+  const setIsOpening = useSetAtom(isOpenCargoModal);
+  const isSelecting = useAtomValue(isSelectCargo);
   const { editColumnMutation } = useCargoMutations(messageApi);
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>, targetId: string, targetLevel: number) => {
@@ -53,12 +59,24 @@ const Cargo: FC<{
     [editColumnMutation]
   );
 
+  const handleClick = (locationId: string) => {
+    if (!isSelecting) {
+      setIsOpening(true);
+      return;
+    }
+
+    setTargetKey((prev) => {
+      if (!prev) return;
+      return [...prev, locationId];
+    });
+  };
+
   if (!shelfInfo) return <LoadingStation />;
   return (
     <>
       {contextHolder}
       <WrapperDiv
-        onClick={() => setIsSelecting(true)}
+        onClick={() => handleClick(locId)}
         translatex={translateX}
         translatey={translateY}
         scale={scale}
