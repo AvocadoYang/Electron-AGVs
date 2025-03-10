@@ -12,6 +12,7 @@ const WebView = () => {
   const mapRef = useRef(null);
   const isDark = useAtomValue(darkMode);
   const [scale, setScale] = useState(1);
+
   return (
     <Content>
       <ConfigProvider
@@ -27,11 +28,10 @@ const WebView = () => {
       >
         <Splitter>
           <Splitter.Panel
-            defaultSize="12%"
-            min={'1%'}
-            max="13.5%"
+            defaultSize="14%"
+            collapsible={true}
             className={`${isDark ? 'dark-mode-side' : ''}`}
-            style={{ overflow: 'hidden' }}
+            style={{ overflow: 'hidden', position: 'relative' }}
           >
             <CarCardWrap></CarCardWrap>
           </Splitter.Panel>
