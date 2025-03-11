@@ -56,7 +56,7 @@ const TittleTools = () => {
             size="middle"
             placeholder="Search AMR"
             suffix={<SearchOutlined />}
-            style={{ width: '82%', marginTop: '3%' }}
+            style={{ width: '82%', margin: '3% 0 3% 0' }}
           />
         </ConfigProvider>
       ) : (

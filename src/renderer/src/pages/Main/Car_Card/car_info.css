@@ -20,10 +20,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-
-  /* display: grid;
-  place-items: center; */
   padding-bottom: 10px;
   overflow-y: auto;
 }
@@ -36,14 +32,6 @@
   place-items: center; /* 同時水平 & 垂直置中 */
 
 }
-
-/* .car-list-select  span {
-  color: #969393 !important;
-}
-
-.car-list-search span {
-  color: #969393 !important;
-} */
 
 .drop-icon {
   font-size: 10px;
@@ -70,9 +58,87 @@
   width: 90%;
 }
 
-.value {
+.amr-title-category {
   font-size: 10px;
-  word-break: break-all;
+  color: #646963;
+}
+
+.amr-title-category-dark-mode {
+  font-size: 10px;
+  color: #fafafa;
+}
+
+.value {
+  text-align: center;
+  font-size: 0.85em;
+}
+
+.login-text {
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.offline-text {
+  color: #a7a6a6;
+}
+
+.second-row-wrap {
+  color: white;
+}
+
+.icon {
+  font-size: 0.8em;
+}
+
+.dark-icon {
+  font-size: 0.9em;
+}
+
+.location-icon svg {
+  fill: rgb(13, 102, 218);
+}
+
+.location-icon-dark svg {
+  fill: rgb(1, 255, 255);
+}
+
+.symbol {
+  color: gray;
+  font-size: 0.85em;
+}
+
+.symbol-dark {
+  font-size: 0.85em;
+  color: white;
+}
+
+
+
+
+.power-icon svg {
+  fill: rgb(240, 132, 9)
+}
+
+.power-icon-dark svg {
+  fill: rgb(253, 228, 5)
+}
+
+.yaw-icon svg {
+  fill: rgb(4, 110, 4)
+}
+.yaw-icon-dark svg {
+  fill: rgb(1, 233, 1)
+}
+
+.third-row-span {
+  color: #808080;
+  text-align: center;
+  width: 20%;
+  font-size: 65%;
+}
+
+.third-row-span-dark {
+  color: #fcfafa;
 }
 
 @media screen and (max-width: 1000px) {

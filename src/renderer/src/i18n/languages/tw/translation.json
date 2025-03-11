@@ -382,6 +382,8 @@
     }
   },
 
+  "car_card": {},
+
   "mission": {
     "add_mission": {
       "title": "編輯任務",

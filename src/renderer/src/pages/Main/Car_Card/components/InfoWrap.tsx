@@ -2,16 +2,18 @@ import styled from 'styled-components';
 
 export const InfoWrap = styled.div.attrs<{
   randomcolor: string;
+  is_dark: string;
 }>((props) => {
-  return { randomcolor: props.randomcolor };
+  return { randomcolor: props.randomcolor, is_dark: props.is_dark };
 })<{ randomcolor: string }>`
-  margin-top: 6%;
+  margin-top: 1%;
   z-index: 2;
   border-radius: 5px;
   border: ${(props) => `0.15vw solid ${props.randomcolor}`};
-  min-width: 215px;
-  max-width: 235px;
+  min-width: 200px;
+  max-width: 220px;
   border-top: ${(props) => `0.45vw solid ${props.randomcolor}`};
-  background-color: #ffffff;
+  background-color: ${(props) => `${props.is_dark === 'true' ? '#313131' : '#ffffff'}`};
+  // #262626
   cursor: pointer;
 `;

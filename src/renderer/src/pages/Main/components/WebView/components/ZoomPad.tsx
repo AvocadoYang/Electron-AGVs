@@ -15,8 +15,8 @@ import {
 const ZoomPadWrap = styled.div`
   background-color: 'red';
   position: absolute;
-  bottom: 2%;
-  left: 1%;
+  bottom: 1.5%;
+  left: 0.5%;
 `;
 
 const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>> }> = ({

@@ -7,6 +7,7 @@ import WebMapView from './components/WebMapView';
 import { useAtomValue } from 'jotai';
 import CarCardWrap from '../../Car_Card/CardWrap';
 import { darkMode } from '@renderer/utils/gloable';
+import MissionWrap from '../../Mission_Card/MissionWrap';
 const { Content } = Layout;
 const WebView = () => {
   const mapRef = useRef(null);
@@ -14,7 +15,7 @@ const WebView = () => {
   const [scale, setScale] = useState(1);
 
   return (
-    <Content>
+    <Content style={{ width: '100%', overflow: 'hidden' }}>
       <ConfigProvider
         theme={{
           components: {
@@ -31,12 +32,12 @@ const WebView = () => {
             defaultSize="14%"
             collapsible={true}
             className={`${isDark ? 'dark-mode-side' : ''}`}
-            style={{ overflow: 'hidden', position: 'relative' }}
+            style={{ overflow: 'hidden' }}
           >
             <CarCardWrap></CarCardWrap>
           </Splitter.Panel>
           <Splitter.Panel
-            defaultSize="68%"
+            defaultSize="66%"
             style={{ position: 'relative', overflow: 'hidden' }}
             className={`${isDark ? 'dark-mode-map' : ''}`}
           >
@@ -48,10 +49,11 @@ const WebView = () => {
           </Splitter.Panel>
           <Splitter.Panel
             defaultSize="20%"
-            min={'1%'}
+            collapsible={true}
+            // min={'1%'}
             className={`${isDark ? 'dark-mode-side' : ''}`}
           >
-            234
+            <MissionWrap></MissionWrap>
           </Splitter.Panel>
         </Splitter>
       </ConfigProvider>
