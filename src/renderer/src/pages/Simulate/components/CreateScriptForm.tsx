@@ -6,7 +6,7 @@ import SubmitButton from '@renderer/utils/SubmitButton';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation } from '@tanstack/react-query';
 import { Flex, Form, Input, message, Modal, Typography } from 'antd';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type FieldType = {
@@ -17,7 +17,8 @@ const CreateScriptForm: FC = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [messageApi, contextHolders] = message.useMessage();
-  const { isLoading, isError } = useSimulateScript();
+  const { isLoading, isError, refetch } = useSimulateScript();
+  const [open, setOpen] = useState(false);
 
   const createMutation = useMutation({
     mutationFn: (payload: FieldType) => {
@@ -25,6 +26,8 @@ const CreateScriptForm: FC = () => {
     },
     onSuccess: () => {
       void messageApi.success(t('utils.success'));
+      setOpen(false);
+      refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -34,13 +37,17 @@ const CreateScriptForm: FC = () => {
     createMutation.mutate(payload);
   };
 
+  useEffect(() => {
+    if (isError) setOpen(true);
+  }, [isError]);
+
   if (isLoading) return <GlobalLoadingPage />;
   return (
     <>
       {contextHolders}
 
       <Modal
-        open={isError}
+        open={open}
         title={t("sim.modal.haven't_set_default")}
         footer={() => <SubmitButton isModel form={form} onOk={onFinish} />}
       >

@@ -11,7 +11,7 @@ import {
   type TransferProps
 } from 'antd';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { FC, useEffect, useState, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import {
   isOpenCargoModal,
   isSelectCargo,
@@ -37,7 +37,6 @@ type DataType = {
 
 const ZoneItemTable: FC = () => {
   const [targetKeys, setTargetKeys] = useAtom(targetKeyJotai);
-  const [selectedKeys, setSelectedKeys] = useState<TransferProps['targetKeys']>([]);
   const data = useMap();
   const value = useAtomValue(zoneValue);
   const [temp, setTemp] = useAtom(outputFormData);
@@ -82,13 +81,18 @@ const ZoneItemTable: FC = () => {
         })
       )
       .subscribe((shelvesInZone) => {
-        if (!_.isEqual(selectedKeys, shelvesInZone)) {
-          setSelectedKeys(shelvesInZone);
+        if (!_.isEqual(targetKeys, shelvesInZone)) {
+          setTargetKeys((prev) => {
+            if (!prev) return shelvesInZone;
+
+            const combinedSet = new Set([...prev, ...shelvesInZone]);
+            return Array.from(combinedSet);
+          });
         }
       });
 
     return () => subscription.unsubscribe();
-  }, [value, shelves, selectedKeys]);
+  }, [value, shelves]);
 
   const onChange: TransferProps['onChange'] = (nextTargetKeys) => {
     setTargetKeys(nextTargetKeys);
@@ -124,7 +128,6 @@ const ZoneItemTable: FC = () => {
               .map((v) => ({ locationId: v.locationId }))}
             titles={['Source', 'Target']}
             targetKeys={targetKeys}
-            selectedKeys={selectedKeys}
             onChange={onChange}
             showSearch
             filterOption={filterOption}
@@ -160,14 +163,12 @@ const TableTransfer: React.FC<TableTransferProps> = (props) => {
       {({
         direction,
         filteredItems,
-        onItemSelect,
         onItemSelectAll,
         selectedKeys: listSelectedKeys,
         disabled: listDisabled
       }) => {
         const columns = direction === 'left' ? leftColumns : rightColumns;
         const rowSelection: TableRowSelection<TransferItem> = {
-          getCheckboxProps: () => ({ disabled: listDisabled }),
           onChange(selectedRowKeys) {
             onItemSelectAll(selectedRowKeys, 'replace');
           },
@@ -181,15 +182,8 @@ const TableTransfer: React.FC<TableTransferProps> = (props) => {
             columns={columns}
             dataSource={filteredItems}
             size="small"
+            rowKey={(record) => record.locationId}
             style={{ pointerEvents: listDisabled ? 'none' : undefined }}
-            onRow={({ key, disabled: itemDisabled }) => ({
-              onClick: () => {
-                if (itemDisabled || listDisabled) {
-                  return;
-                }
-                onItemSelect(key, !listSelectedKeys.includes(key));
-              }
-            })}
           />
         );
       }}

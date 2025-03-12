@@ -537,6 +537,7 @@
     "stop_sim": "Stop simulate",
     "reset_sim": "Reset simulate",
     "cargo": {
+      "already_exist": "already exist in table",
       "input": {
         "input": "Input",
         "auto_shift_cargo": "Auto Shift Cargo",
@@ -554,8 +555,11 @@
     "modal": {
       "current": "Current Script",
       "name": "Name",
-      "location": "Location",
       "select_locations": "Map select locations",
+      "edit_info": "Edit Mission Info",
+      "location": "Location",
+      "none": "none",
+      "not_info_yet": "Haven't set default script",
       "haven't_set_default": "Haven't set default script",
       "do_you_want_to_create_one": "A default Script mission is required or can not use"
     }

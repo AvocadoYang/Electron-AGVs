@@ -1,22 +1,19 @@
 import useName from '@renderer/api/useAmrName';
 import useMap from '@renderer/api/useMap';
-import { OutputForm } from '@renderer/pages/Simulate/type/common';
-import {
-  isOpenCargoModal,
-  isSelectCargo,
-  outputFormData
-} from '@renderer/pages/Simulate/utils/status';
-import { Button, Flex, Form, FormInstance, InputNumber, Select } from 'antd';
-import { useAtom, useSetAtom } from 'jotai';
-import { FC, useEffect, useMemo } from 'react';
+import { outputFormData } from '@renderer/pages/Simulate/utils/status';
+import { Button, Flex, Form, FormInstance, InputNumber, Select, Switch } from 'antd';
+import { useAtomValue } from 'jotai';
+import { FC, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const OutputFrom: FC<{ form: FormInstance<unknown> }> = ({ form }) => {
+const OutputFrom: FC<{
+  form: FormInstance<unknown>;
+  tempSaveData: () => void;
+}> = ({ form, tempSaveData }) => {
   const { t } = useTranslation();
-  const setIsSelecting = useSetAtom(isSelectCargo);
-  const setIsOpening = useSetAtom(isOpenCargoModal);
-  const [tempFormData, setTempFormData] = useAtom(outputFormData);
+  const tempFormData = useAtomValue(outputFormData);
   const data = useMap();
+  const ref = useRef(null);
 
   const shelves = useMemo(() => {
     return (
@@ -27,55 +24,58 @@ const OutputFrom: FC<{ form: FormInstance<unknown> }> = ({ form }) => {
   }, [data.data?.locations]);
 
   const { data: name, isLoading: loadingCar } = useName();
-  const AmrOption: { value: string; label: string }[] | undefined = name?.map((v) => ({
-    value: v.id,
-    label: v.id
-  }));
 
-  const tempSaveData = () => {
-    const data = form.getFieldsValue() as OutputForm;
-    setIsOpening(false);
-    setIsSelecting(true);
-    setTempFormData(data);
-  };
+  const AmrOption = useMemo(() => {
+    const result =
+      name?.map((v) => ({
+        value: v.id,
+        label: v.id
+      })) || [];
 
-  const onFinish = (values: any) => {
-    console.log(values);
-  };
+    return [{ label: t('sim.modal.none'), value: 'none' }, ...result];
+  }, [name]);
 
   useEffect(() => {
-    if (tempFormData !== null) {
-      form.setFieldsValue({
-        cargoNumber: tempFormData.cargoNumber,
-        speed: tempFormData.speed,
-        car: tempFormData.car,
-        placement: tempFormData?.placement || []
-      });
-      return;
+    if (tempFormData !== null && ref.current !== null) {
+      setTimeout(() => {
+        form.setFieldsValue({
+          is_active: tempFormData.is_active,
+          cargo_number: tempFormData.cargo_number,
+          output_cargo_speed: tempFormData.output_cargo_speed,
+          specify_car: tempFormData.specify_car || [],
+          placement: tempFormData?.placement || []
+        });
+        return;
+      }, 500);
     }
   }, [tempFormData]);
+  console.log('render output form');
 
   return (
     <>
-      <Form form={form} name="control-hooks" onFinish={onFinish} style={{ maxWidth: 600 }}>
+      <Form ref={ref} form={form} name="control-hooks" style={{ maxWidth: 600 }}>
+        <Form.Item name="is_active" label={t('utils.active')} rules={[{ required: true }]}>
+          <Switch checkedChildren={t('utils.active')} unCheckedChildren={t('utils.inactive')} />
+        </Form.Item>
+
         <Form.Item
-          name="cargoNumber"
+          name="cargo_number"
           label={t('sim.cargo.output.cargo_number')}
           rules={[{ required: true }]}
         >
-          <InputNumber min={0} />
-        </Form.Item>
-
-        <Form.Item name="speed" label={t('sim.cargo.output.speed')} rules={[{ required: true }]}>
-          <InputNumber min={0} />
+          <InputNumber min={1} />
         </Form.Item>
 
         <Form.Item
-          name="car"
-          label={t('sim.cargo.output.specify_car')}
+          name="output_cargo_speed"
+          label={t('sim.cargo.output.speed')}
           rules={[{ required: true }]}
         >
-          <Select options={AmrOption} loading={loadingCar} />
+          <InputNumber min={1} />
+        </Form.Item>
+
+        <Form.Item name="specify_car" label={t('sim.cargo.output.specify_car')}>
+          <Select mode="multiple" options={AmrOption} loading={loadingCar} />
         </Form.Item>
 
         <Flex gap="large">

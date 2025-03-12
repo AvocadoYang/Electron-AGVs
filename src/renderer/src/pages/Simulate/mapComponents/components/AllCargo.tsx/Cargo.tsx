@@ -10,9 +10,11 @@ import { LoadingStation } from './LoadingStation';
 import {
   isOpenCargoModal,
   isSelectCargo,
+  selectedLocation,
   targetKeyJotai
 } from '@renderer/pages/Simulate/utils/status';
 import { useAtomValue, useSetAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -50,6 +52,8 @@ const Cargo: FC<{
   const setTargetKey = useSetAtom(targetKeyJotai);
   const setIsOpening = useSetAtom(isOpenCargoModal);
   const isSelecting = useAtomValue(isSelectCargo);
+  const setSelectLoc = useSetAtom(selectedLocation);
+  const { t } = useTranslation();
   const { editColumnMutation } = useCargoMutations(messageApi);
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>, targetId: string, targetLevel: number) => {
@@ -61,12 +65,17 @@ const Cargo: FC<{
 
   const handleClick = (locationId: string) => {
     if (!isSelecting) {
+      setSelectLoc(locationId);
       setIsOpening(true);
       return;
     }
-
+    // 這個是在要在哪些地點拉區域時在地圖上按 會觸發
     setTargetKey((prev) => {
-      if (!prev) return;
+      if (!prev) return [locationId];
+      if (prev.includes(locationId)) {
+        messageApi.warning(t('sim.cargo.already_exist'));
+        return prev;
+      }
       return [...prev, locationId];
     });
   };
