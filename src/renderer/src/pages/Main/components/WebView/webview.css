@@ -29,6 +29,14 @@
 
 }
 
+.mission-btn-wrap {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  width: 99%;
+  margin-right: 10px;
+
+}
 .map-wrap {
   position: relative;
   overflow: hidden;

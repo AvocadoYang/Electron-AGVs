@@ -1,7 +1,8 @@
 import { MessageInstance } from 'antd/es/message/interface';
 import { ErrorResponse } from './globalType';
+import { MD5 } from 'crypto-js';
+import { hsl } from 'color-convert';
 
- 
 export const rosCoord2DisplayCoord = ({
   x,
   y,
@@ -10,12 +11,12 @@ export const rosCoord2DisplayCoord = ({
   mapOriginY,
   mapHeight
 }: {
-  x: number
-  y: number
-  mapResolution: number
-  mapOriginX: number
-  mapOriginY: number
-  mapHeight: number
+  x: number;
+  y: number;
+  mapResolution: number;
+  mapOriginX: number;
+  mapOriginY: number;
+  mapHeight: number;
 }) => [(x - mapOriginX) / mapResolution, mapHeight - (y - mapOriginY) / mapResolution];
 
 export const rvizCoord = ({
@@ -27,13 +28,13 @@ export const rvizCoord = ({
   mapHeight,
   scaleSize
 }: {
-  displayX: number
-  displayY: number
-  mapResolution: number
-  mapOriginX: number
-  mapOriginY: number
-  mapHeight: number
-  scaleSize: number
+  displayX: number;
+  displayY: number;
+  mapResolution: number;
+  mapOriginX: number;
+  mapOriginY: number;
+  mapHeight: number;
+  scaleSize: number;
 }) => [
   (displayX / scaleSize) * mapResolution + mapOriginX,
   (mapHeight - displayY / scaleSize) * mapResolution + mapOriginY
@@ -48,13 +49,13 @@ export const rvizCoord2 = ({
   mapHeight,
   scaleSize
 }: {
-  displayX: number
-  displayY: number
-  mapResolution: number
-  mapOriginX: number
-  mapOriginY: number
-  mapHeight: number
-  scaleSize: number
+  displayX: number;
+  displayY: number;
+  mapResolution: number;
+  mapOriginX: number;
+  mapOriginY: number;
+  mapHeight: number;
+  scaleSize: number;
 }) => [
   displayX * scaleSize * mapResolution + mapOriginX,
   (mapHeight - displayY * scaleSize) * mapResolution + mapOriginY
@@ -72,4 +73,13 @@ export const errorHandler = (e: ErrorResponse, messageApi: MessageInstance) => {
   const errorMessage = e?.response?.data?.message || 'An unknown error occurred';
 
   void messageApi.error(errorMessage);
+};
+
+export const amrId2Color = (amrId: string) => {
+  const seed = parseInt(`0x${MD5(amrId).toString()}`, 16);
+  const h = seed % 360;
+  const s = (seed % 70) + 80;
+  const l = (seed % 60) + 10;
+  const color = `#${hsl.hex([h, s, l])}`;
+  return color;
 };

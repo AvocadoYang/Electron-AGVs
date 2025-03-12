@@ -1,12 +1,12 @@
-import { Button, Form, message, Modal, Radio, Select, Tag } from 'antd'
-import { useAtom } from 'jotai'
-import { useTranslation } from 'react-i18next'
-import { OpenAssignMission } from '../../global/jotai'
-import useAllMissionTitles from '@renderer/api/useMissionTitle'
-import { useEffect, useMemo, useState } from 'react'
-import useName from '@renderer/api/useAmrName'
-import { useMutation } from '@tanstack/react-query'
-import client from '@renderer/api/axiosClient'
+import { Button, Form, message, Modal, Radio, Select } from 'antd';
+import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
+import { OpenAssignMission } from '../../global/jotai';
+import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import { useMemo, useState } from 'react';
+import useName from '@renderer/api/useAmrName';
+import { useMutation } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
 
 enum MissionPriority {
   TRIVIAL, //沒差最後再做
@@ -16,73 +16,73 @@ enum MissionPriority {
 }
 
 type MissionFrom = {
-  amrId: string
-  titleId: string
-  priority: MissionPriority
-}
+  amrId: string;
+  titleId: string;
+  priority: MissionPriority;
+};
 
 const DialogMission = () => {
-  const { t } = useTranslation()
-  const [missionForm] = Form.useForm()
-  const { data } = useAllMissionTitles()
-  const { data: name } = useName()
-  const [messageApi, contextHolder] = message.useMessage()
+  const { t } = useTranslation();
+  const [missionForm] = Form.useForm();
+  const { data } = useAllMissionTitles();
+  const { data: name } = useName();
+  const [messageApi, contextHolder] = message.useMessage();
 
-  const [openDialogMission, setOpenDialogMission] = useAtom(OpenAssignMission)
-  const [, setAmrGenre] = useState<string | null>(null)
+  const [openDialogMission, setOpenDialogMission] = useAtom(OpenAssignMission);
+  const [, setAmrGenre] = useState<string | null>(null);
   const AmrOption: { value: null | string; label: string }[] | undefined = name?.map((v) => ({
     value: v.id,
     label: v.id
-  }))
-  AmrOption?.push({ value: null, label: t('utils.random') })
+  }));
+  AmrOption?.push({ value: null, label: t('utils.random') });
 
   const canSubmitMutation = useMutation({
     mutationFn: (payload: MissionFrom) => {
       return client.post('api/missions/dialog-mission', payload, {
         headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
-      })
+      });
     },
     onSuccess: (resData) => {
-      const errorMessage = resData?.data.message
+      const errorMessage = resData?.data.message;
       if (!errorMessage) {
-        void messageApi.success(t('utils.success'))
-        return
+        void messageApi.success(t('utils.success'));
+        return;
       }
-      const splitErrorMessage = errorMessage.split(' ')
+      const splitErrorMessage = errorMessage.split(' ');
       if (splitErrorMessage[0] === '[CustomError]') {
-        console.log(splitErrorMessage)
-        void messageApi.error('無法排除 聯絡FAE工程師')
+        console.log(splitErrorMessage);
+        void messageApi.error('無法排除 聯絡FAE工程師');
       }
     },
     onError: () => {
-      void messageApi.error('無法排除 聯絡FAE工程師')
+      void messageApi.error('無法排除 聯絡FAE工程師');
     }
-  })
+  });
 
   const misOptions = useMemo(() => {
-    if (!data) return []
+    if (!data) return [];
     return data?.map((v) => {
       return {
         value: v.id,
         label: v.name
-      }
-    })
-  }, [data])
+      };
+    });
+  }, [data]);
 
   const submit = () => {
-    if (!data) return
-    const payload = missionForm.getFieldsValue() as MissionFrom
-    const { amrId, titleId, priority } = payload
+    if (!data) return;
+    const payload = missionForm.getFieldsValue() as MissionFrom;
+    const { amrId, titleId, priority } = payload;
     if (!amrId || !titleId || !priority) {
-      void messageApi.error('尚未完成選項')
+      void messageApi.error('尚未完成選項');
     }
-    canSubmitMutation.mutate(payload)
-  }
+    canSubmitMutation.mutate(payload);
+  };
 
   const handleCancel = () => {
-    setOpenDialogMission(false)
-  }
-  if (!data) return []
+    setOpenDialogMission(false);
+  };
+  if (!data) return [];
   return (
     <Modal
       title={t('main.card_name.new_mission')}
@@ -111,20 +111,20 @@ const DialogMission = () => {
             placeholder={'Select an AMR'}
             onMouseDown={(e) => e.preventDefault()}
             onPopupScroll={(e) => {
-              e.stopPropagation()
+              e.stopPropagation();
             }}
             onDropdownVisibleChange={(open) => {
               if (open) {
-                document.body.style.overflow = 'hidden'
+                document.body.style.overflow = 'hidden';
               } else {
-                document.body.style.overflow = 'auto'
+                document.body.style.overflow = 'auto';
               }
             }}
           />
         </Form.Item>
 
         <Form.Item
-          label={`${t('main.mission_modal.dialog_mission.task_priority')} -`}
+          label={`${t('main.mission_modal.dialog_mission.task_priority')}`}
           name="priority"
           shouldUpdate
         >
@@ -150,20 +150,20 @@ const DialogMission = () => {
             placeholder="Select a mission "
             onMouseDown={(e) => e.preventDefault()}
             onPopupScroll={(e) => {
-              e.stopPropagation()
+              e.stopPropagation();
             }}
             onDropdownVisibleChange={(open) => {
               if (open) {
-                document.body.style.overflow = 'hidden'
+                document.body.style.overflow = 'hidden';
               } else {
-                document.body.style.overflow = 'auto'
+                document.body.style.overflow = 'auto';
               }
             }}
           />
         </Form.Item>
       </Form>
     </Modal>
-  )
-}
+  );
+};
 
-export default DialogMission
+export default DialogMission;

@@ -43,6 +43,18 @@
   font-size: 1.3rem;
 }
 
+.full-tag-wrap {
+  padding: 3px;
+  min-height: 10px;
+  border-top: 1px dashed gray
+}
+
+.hide-tag-wrap {
+  height: 0;
+  overflow: hidden;
+}
+
+
 .dark-mode-title {
   color: aliceblue;
 }

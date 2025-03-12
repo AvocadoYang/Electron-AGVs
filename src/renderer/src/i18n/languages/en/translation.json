@@ -32,6 +32,7 @@
     "inactive": "Inactive",
     "required": "Required",
     "delete_warn": "Are you sure?",
+    "cost_time": "Cost Time (minutes)",
     "location_property": {
       "none": "Normal",
       "charge_station": "Charge Station",

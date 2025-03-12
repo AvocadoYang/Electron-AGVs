@@ -1,12 +1,14 @@
-import { RefObject } from 'react';
+import { memo, RefObject } from 'react';
 import { MapImage } from '@renderer/pages/Setting/mapComponents/components';
 import '../webview.css';
 import { AllZones } from '@renderer/pages/Setting/mapComponents/components';
 import AllLocation from '../../PadViwe/components/PadMapContent/component/AllLocation';
+import { useAtomValue } from 'jotai';
+import { Scale } from '@renderer/utils/gloable';
 const WebMapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>;
-  scale: number;
-}> = ({ mapRef, scale }) => {
+}> = ({ mapRef }) => {
+  const scale = useAtomValue(Scale);
   return (
     <div
       className="map-view"
@@ -21,4 +23,4 @@ const WebMapView: React.FC<{
   );
 };
 
-export default WebMapView;
+export default memo(WebMapView);

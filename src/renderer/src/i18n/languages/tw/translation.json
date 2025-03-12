@@ -32,6 +32,7 @@
     "inactive": "停止",
     "required": "必填",
     "delete_warn": "確定刪除？",
+    "cost_time": "耗時（分鐘)",
     "location_property": {
       "none": "點位",
       "charge_station": "充電站",

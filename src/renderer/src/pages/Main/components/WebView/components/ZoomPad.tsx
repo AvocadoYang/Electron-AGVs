@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next';
 import useMap from '@renderer/api/useMap';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { memo } from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   isShowLocation,
   isShowLocationTooltip,
   isShowRoad,
   isShowRoadTooltip
 } from '@renderer/utils/siderGloble';
+import { Scale } from '@renderer/utils/gloable';
 
 const ZoomPadWrap = styled.div`
   background-color: 'red';
@@ -19,12 +20,11 @@ const ZoomPadWrap = styled.div`
   left: 0.5%;
 `;
 
-const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>> }> = ({
-  setScale
-}) => {
+const ZoomPad = () => {
   const { data, isError } = useMap();
   const { t } = useTranslation();
 
+  const setScale = useSetAtom(Scale);
   const [showLocationToolTip, setShowLocationTooltip] = useAtom(isShowLocationTooltip);
   const [showRoadToolTip, setShowRoadTooltip] = useAtom(isShowRoadTooltip);
   const [showLocation, setShowLocation] = useAtom(isShowLocation);

@@ -5,10 +5,53 @@ import {
   EnvironmentOutlined,
   ThunderboltOutlined,
   CompassOutlined,
-  CarOutlined
+  CarOutlined,
+  CaretUpOutlined,
+  CaretDownOutlined
 } from '@ant-design/icons';
 import { Space, Tag, Flex } from 'antd';
 
+// ======= DropArrow =================
+const Arrow = styled.div<{ random_color: string }>`
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid gray;
+  border: 2px solid ${({ random_color }) => random_color}; /* Use template literal for dynamic border color */
+  border-radius: 50%;
+  position: absolute;
+  background-color: ${({ random_color }) =>
+    random_color}; /* Use template literal for dynamic background color */
+
+  /* top: 7%;
+  right: -5%; */
+  top: -0.3rem;
+  right: -0.12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+export const DropDown: React.FC<{
+  color: string;
+  openFullInfoFn: () => void;
+  openFullInfo: boolean;
+}> = memo(({ color, openFullInfo, openFullInfoFn }) => {
+  return (
+    <Arrow
+      random_color={color}
+      onClick={(e) => {
+        e.stopPropagation();
+        openFullInfoFn();
+      }}
+    >
+      {openFullInfo ? (
+        <CaretUpOutlined style={{ color: 'white' }} />
+      ) : (
+        <CaretDownOutlined style={{ color: 'white' }} />
+      )}
+    </Arrow>
+  );
+});
 // ======= Login status icon ==========
 export const LogInStatus = styled.p.attrs<{ login: string }>((props) => {
   return { login: props.login };
@@ -19,7 +62,6 @@ export const LogInStatus = styled.p.attrs<{ login: string }>((props) => {
   margin-left: 3%;
   border-radius: 50%;
 `;
-// ================================
 
 // ======= First row in info card =======
 export const CarRow1 = styled.div.attrs<{ is_dark: string }>((props) => {
@@ -64,7 +106,6 @@ export const RowOne: React.FC<{ isDark: boolean }> = memo(({ isDark }) => {
     </CarRow1>
   );
 });
-// ==============================
 
 // ======Second row in info card ============
 export const RowSecond: React.FC<{
@@ -132,7 +173,6 @@ export const RowSecond: React.FC<{
     </Flex>
   );
 });
-//==========================
 
 //=======Hidden row ===================
 const HiddenInfo = styled.div.attrs<{ open_hidden_row: string; is_dark: string }>((props) => {
@@ -154,7 +194,6 @@ export const HiddenRow: React.FC<{ openHiddenRow: boolean; isDark: boolean }> = 
     );
   }
 );
-//=================================
 
 // ======= Third row in info ===============
 export const CarRow3 = styled.div.attrs<{ is_dark: string }>((props) => {
@@ -167,7 +206,6 @@ export const CarRow3 = styled.div.attrs<{ is_dark: string }>((props) => {
   justify-content: center;
   align-items: center;
   padding: 5px 5px 5px 8px;
-  border-bottom: ${(props) => (props.is_dark === 'true' ? '1px dashed white' : '1px dashed gray')};
   overflow: hidden;
 `;
 export const RowThread: React.FC<{ isDark: boolean }> = memo(({ isDark }) => {
@@ -191,14 +229,14 @@ export const CarStatus = styled.span`
   color: red;
   margin-right: 3px;
 `;
-// ==============================
 
-export const CarTag = memo(() => {
+// ======= Tag Wrap ==============
+export const CarTag: React.FC<{ openFullInfo: boolean }> = memo(({ openFullInfo }) => {
   return (
     <Flex
       justify="center"
       align="center"
-      style={{ padding: '3px', minHeight: '10px' }}
+      className={` ${openFullInfo ? 'full-tag-wrap' : 'hide-tag-wrap'}`}
       wrap
       gap={'small'}
     >

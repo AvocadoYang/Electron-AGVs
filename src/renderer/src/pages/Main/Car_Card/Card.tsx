@@ -1,16 +1,22 @@
 import { InfoWrap } from './components/InfoWrap';
-import { RowOne, RowThread, RowSecond, CarTag, HiddenRow } from './components/Lists';
+import { RowOne, RowThread, RowSecond, CarTag, HiddenRow, DropDown } from './components/Lists';
 import './car_info.css';
 import { useState } from 'react';
 import { ConfigProvider, Popover } from 'antd';
 import BtnGroup from './components/BtnGroup';
 import { useAtomValue } from 'jotai';
 import { darkMode } from '@renderer/utils/gloable';
+import { amrId2Color } from '@renderer/utils/utils';
 
-const Card: React.FC<{ id: number }> = ({ id }) => {
+const Card: React.FC<{ id: string }> = ({ id }) => {
   const [openHiddenRow, setOpenHiddenRow] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
+  const [openFullInfo, setOpenFullInfo] = useState(false);
   const isDark = useAtomValue(darkMode);
+
+  const openFullInfoFn = () => {
+    setOpenFullInfo((pre) => !pre);
+  };
 
   const handleOpenChange = (newOpen: boolean) => {
     setPopoverOpen(newOpen);
@@ -38,7 +44,12 @@ const Card: React.FC<{ id: number }> = ({ id }) => {
           placement="rightTop"
           onOpenChange={handleOpenChange}
         >
-          <InfoWrap randomcolor={'red'} is_dark={isDark.toString()}>
+          <InfoWrap randomcolor={amrId2Color(id)} is_dark={isDark.toString()}>
+            <DropDown
+              color={amrId2Color(id)}
+              openFullInfo={openFullInfo}
+              openFullInfoFn={openFullInfoFn}
+            ></DropDown>
             <RowOne isDark={isDark}></RowOne>
             <RowSecond
               setOpenHiddenRow={setOpenHiddenRow}
@@ -47,7 +58,7 @@ const Card: React.FC<{ id: number }> = ({ id }) => {
             ></RowSecond>
             <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark}></HiddenRow>
             <RowThread isDark={isDark}></RowThread>
-            <CarTag></CarTag>
+            <CarTag openFullInfo={openFullInfo}></CarTag>
           </InfoWrap>
         </Popover>
       </ConfigProvider>

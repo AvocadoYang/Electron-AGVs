@@ -1,5 +1,5 @@
 import { ConfigProvider, Splitter } from 'antd';
-import { memo, useRef, useState } from 'react';
+import { memo, useRef } from 'react';
 import { Layout } from 'antd';
 import './webview.css';
 import ZoomPad from './components/ZoomPad';
@@ -8,11 +8,11 @@ import { useAtomValue } from 'jotai';
 import CarCardWrap from '../../Car_Card/CardWrap';
 import { darkMode } from '@renderer/utils/gloable';
 import MissionWrap from '../../Mission_Card/MissionWrap';
+import MissionBtn from './components/MissionBtn';
 const { Content } = Layout;
 const WebView = () => {
   const mapRef = useRef(null);
   const isDark = useAtomValue(darkMode);
-  const [scale, setScale] = useState(1);
 
   return (
     <Content style={{ width: '100%', overflow: 'hidden' }}>
@@ -29,7 +29,7 @@ const WebView = () => {
       >
         <Splitter>
           <Splitter.Panel
-            defaultSize="14%"
+            defaultSize="13%"
             collapsible={true}
             className={`${isDark ? 'dark-mode-side' : ''}`}
             style={{ overflow: 'hidden' }}
@@ -37,20 +37,19 @@ const WebView = () => {
             <CarCardWrap></CarCardWrap>
           </Splitter.Panel>
           <Splitter.Panel
-            defaultSize="66%"
+            defaultSize="67%"
             style={{ position: 'relative', overflow: 'hidden' }}
             className={`${isDark ? 'dark-mode-map' : ''}`}
           >
             <Content className={`map-view-wrap ${isDark ? 'dark-mode-map' : ''}`}>
-              <WebMapView mapRef={mapRef} scale={scale}></WebMapView>
+              <WebMapView mapRef={mapRef}></WebMapView>
             </Content>
-
-            <ZoomPad setScale={setScale}></ZoomPad>
+            <ZoomPad></ZoomPad>
+            <MissionBtn></MissionBtn>
           </Splitter.Panel>
           <Splitter.Panel
             defaultSize="20%"
             collapsible={true}
-            // min={'1%'}
             className={`${isDark ? 'dark-mode-side' : ''}`}
           >
             <MissionWrap></MissionWrap>
