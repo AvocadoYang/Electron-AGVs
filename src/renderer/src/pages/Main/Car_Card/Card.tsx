@@ -1,74 +1,68 @@
 import { InfoWrap } from './components/InfoWrap';
-import Battery from './components/Battery';
-import {
-  CarRow1,
-  CarRow2,
-  CarRow3,
-  LogInStatus,
-  CarStatus,
-  AmrTitle,
-  TextWrap
-} from './components/Lists';
+import { RowOne, RowThread, RowSecond, CarTag, HiddenRow, DropDown } from './components/Lists';
 import './car_info.css';
+import { useState } from 'react';
+import { ConfigProvider, Popover } from 'antd';
+import BtnGroup from './components/BtnGroup';
+import { useAtomValue } from 'jotai';
+import { darkMode } from '@renderer/utils/gloable';
+import { amrId2Color } from '@renderer/utils/utils';
 
-const Card: React.FC = () => {
+const Card: React.FC<{ id: string }> = ({ id }) => {
+  const [openHiddenRow, setOpenHiddenRow] = useState(false);
+  const [isPopoverOpen, setPopoverOpen] = useState(false);
+  const [openFullInfo, setOpenFullInfo] = useState(false);
+  const isDark = useAtomValue(darkMode);
+
+  const openFullInfoFn = () => {
+    setOpenFullInfo((pre) => !pre);
+  };
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setPopoverOpen(newOpen);
+  };
+
   return (
-    <InfoWrap randomcolor={'red'} isstop={false}>
-      <CarRow1>
-        <LogInStatus login={true}></LogInStatus>
-        <div className="car-name">
-          <AmrTitle>{'anfa-ps14-16-002'}</AmrTitle>
-        </div>
-      </CarRow1>
-      <CarRow2>
-        <CarStatus>{'test car status 12333'}</CarStatus>
-      </CarRow2>
-      <CarRow3>
-        <TextWrap style={{ width: '30%' }}>
-          <p style={{ textAlign: 'center', marginBottom: '0.1em' }} className="tittle">
-            {'θ'}
-          </p>
-          <p style={{ textAlign: 'center', marginBottom: '0.5em' }} className="value">
-            {/* {((yaw: number | undefined) => {
-                        if (yaw === undefined) return undefined;
-                        return parseFloat(yaw.toFixed(2));
-                      })(fleetInfo.originPose?.yaw)} */}
-            {123}
-          </p>
-        </TextWrap>
-        <TextWrap>
-          {/* <p style={{ textAlign: 'center', marginBottom: '0.1em' }} className="tittle">
-            {'Power'}
-          </p> */}
-          <p style={{ position: 'absolute', fontSize: '12px' }}>{'⚡︎'}</p>
-          <Battery></Battery>
-          <p style={{ textAlign: 'center', marginBottom: '0.5em' }} className="value">
-            {/* {fleetInfo.data.IO?.battery} */}
-            {'90%'}
-          </p>
-        </TextWrap>
-        <TextWrap style={{ width: '40%' }}>
-          <p style={{ textAlign: 'center', marginBottom: '0.1em' }} className="tittle">
-            {'x/y'}
-          </p>
-          <p
-            style={{
-              textAlign: 'center',
-              wordWrap: 'break-word',
-              marginBottom: '0.5em'
-            }}
-            className="value"
-          >
-            {/* {((x: number | undefined, y: number | undefined) => {
-                        if (x === undefined || y === undefined)
-                          return undefined;
-                        return `${x.toFixed(2)}/${y.toFixed(2)}`;
-                      })(fleetInfo.originPose?.x, fleetInfo.originPose?.y)} */}
-            {'112.3/123.1'}
-          </p>
-        </TextWrap>
-      </CarRow3>
-    </InfoWrap>
+    <>
+      <ConfigProvider
+        theme={{
+          token: {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            colorBgElevated: 'rgba(255, 254, 254, 0.65)'
+          },
+          components: {
+            Popover: {
+              titleMinWidth: 110
+            }
+          }
+        }}
+      >
+        <Popover
+          content={<BtnGroup />}
+          trigger="click"
+          open={isPopoverOpen}
+          placement="rightTop"
+          onOpenChange={handleOpenChange}
+        >
+          <InfoWrap randomcolor={amrId2Color(id)} is_dark={isDark.toString()}>
+            <DropDown
+              color={amrId2Color(id)}
+              openFullInfo={openFullInfo}
+              openFullInfoFn={openFullInfoFn}
+            ></DropDown>
+            <RowOne isDark={isDark}></RowOne>
+            <RowSecond
+              setOpenHiddenRow={setOpenHiddenRow}
+              openHiddenRow={openHiddenRow}
+              isDark={isDark}
+            ></RowSecond>
+            <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark}></HiddenRow>
+            <RowThread isDark={isDark}></RowThread>
+            <CarTag openFullInfo={openFullInfo}></CarTag>
+          </InfoWrap>
+        </Popover>
+      </ConfigProvider>
+    </>
   );
 };
 

@@ -1,4 +1,3 @@
- 
 import { useQuery } from '@tanstack/react-query';
 import { array, boolean, lazy, mixed, number, object, string } from 'yup';
 import { MISSION_CONTROL_URL } from '../configs/config';
@@ -71,11 +70,10 @@ const getMap = async () => {
   const parsed = await schema.validate(data, { stripUnknown: true });
   if (parsed.imageUrl) {
     parsed.imageUrl = `${MISSION_CONTROL_URL.replace('localhost', location.host).replace(
-      '5173',
+      '3001',
       '4000'
     )}${parsed.imageUrl}`;
   }
-
   return parsed;
 };
 

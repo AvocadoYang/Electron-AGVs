@@ -3,17 +3,16 @@ import { array, object, string, boolean, date } from 'yup';
 import api from './axiosClient';
 
 export type CargoAreaInfo = {
-  cargoName: string
+  cargoName: string;
   hasCargo: {
-    [level: number]: boolean
-  }
-  areaId: string
-  isDropping: boolean
-}
+    [level: number]: boolean;
+  };
+  areaId: string;
+  isDropping: boolean;
+};
 
 const getLocations = async () => {
   const { data } = await api.get<unknown>('api/test/locations');
-
   const schema = () =>
     object({
       chargingStations: array(

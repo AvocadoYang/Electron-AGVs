@@ -1,7 +1,17 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FormHr from '../../../utils/FormHr';
-import { Button, ColorPicker, Flex, message, Popconfirm, Space, Table, Tag, Typography } from 'antd';
+import {
+  Button,
+  ColorPicker,
+  Flex,
+  message,
+  Popconfirm,
+  Space,
+  Table,
+  Tag,
+  Typography
+} from 'antd';
 import { DeleteTwoTone, EditOutlined } from '@ant-design/icons';
 import useMap from '@renderer/api/useMap';
 import { nanoid } from 'nanoid';
@@ -14,25 +24,31 @@ import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 
 const ZoneTable: React.FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ listeners, attributes, sortableId }) => {
   const { data } = useMap();
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [oldData, setOldData] = useState<ZoneTableData | null>(null);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const { t } = useTranslation();
   const [messageApi, contextHolders] = message.useMessage();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
-    mutationFn: (zoneId: string) => {
-      return client.post('api/setting/delete-edit-zone', {
-        zoneId
+    mutationFn: (zoneId: string[]) => {
+      return client.post(`api/setting/delete-edit-zone`, {
+        zoneIds: zoneId
       });
     },
-    onSuccess: () => {
+    onSuccess: (__data, zonIds) => {
       void messageApi.success('success');
+
+      setSelectedRowKeys((pre) => {
+        return [...pre].filter((zoneId) => !zonIds.includes(zoneId as string));
+      });
+      console.log(selectedRowKeys);
       queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
@@ -147,7 +163,7 @@ const ZoneTable: React.FC<{
             <Popconfirm
               title={t('utils.delete')}
               description={t('edit_location_panel.table_notify.are_you_sure')}
-              onConfirm={() => deleteMutation.mutate(record.id)}
+              onConfirm={() => deleteMutation.mutate([record.id])}
               okText={t('utils.yes')}
               cancelText={t('utils.no')}
             >
@@ -177,14 +193,27 @@ const ZoneTable: React.FC<{
       <FormHr sortableId={sortableId}></FormHr>
       {!editingKey ? (
         <Flex gap="middle" justify="flex-start" align="start" vertical>
-          <Button icon={<DeleteTwoTone twoToneColor="#f30303" />} color="danger" variant="filled">
-            {t('utils.delete')}
-          </Button>
+          <Popconfirm
+            title={t('utils.delete')}
+            description={t('edit_location_panel.table_notify.are_you_sure')}
+            onConfirm={() => deleteMutation.mutate(selectedRowKeys as string[])}
+            okText={t('utils.yes')}
+            cancelText={t('utils.no')}
+          >
+            <Button
+              icon={<DeleteTwoTone twoToneColor="#f30303" />}
+              disabled={selectedRowKeys.length === 0}
+              color="danger"
+              variant="filled"
+            >
+              {t('utils.delete')}
+            </Button>
+          </Popconfirm>
           <Table
             rowSelection={{
               type: 'checkbox',
               onChange: (selectedRowKeys: React.Key[]) => {
-                console.log(selectedRowKeys);
+                setSelectedRowKeys([...selectedRowKeys]);
               }
             }}
             rowKey={(record) => record.id}

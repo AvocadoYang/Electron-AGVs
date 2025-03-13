@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { memo } from 'react';
 import './car_info.css';
-// import { useTranslation } from 'react-i18next'
-import Card from './Card';
+
+import Cards from './Cards';
+import { useAtomValue } from 'jotai';
+import { darkMode } from '@renderer/utils/gloable';
+import TittleTools from './TittleTools';
 
 const CarCardWrap: React.FC = () => {
-  // const { t } = useTranslation()
+  const isDark = useAtomValue(darkMode);
   return (
-    <div className="card-wrap" draggable="false">
-      {[1, 2, 3].map(() => (
-        <Card key={2}></Card>
-      ))}
-    </div>
+    <>
+      <div className={`card-wrap-2d ${isDark ? 'dark-mode-wrap' : ''}`} draggable="false">
+        <TittleTools></TittleTools>
+        <Cards></Cards>
+      </div>
+    </>
   );
 };
 
-export default CarCardWrap;
+export default memo(CarCardWrap);

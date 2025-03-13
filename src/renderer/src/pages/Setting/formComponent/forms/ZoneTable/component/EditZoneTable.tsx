@@ -24,6 +24,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
+import useMap from '@renderer/api/useMap';
 
 type FormType = {
   all_forbidden: boolean | undefined;
@@ -78,6 +79,7 @@ const EditZoneTable: FC<{
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageApi, contextHolders] = message.useMessage();
   const { data: allAmr = [] } = useAmrName();
+  const { data: mapData } = useMap();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -102,6 +104,29 @@ const EditZoneTable: FC<{
       return;
     }
     const data = editZoneForm.getFieldsValue() as FormType;
+    console.log(data);
+
+    const { name, startX, startY, endX, endY, color } = data;
+    console.log(data);
+    if (!name || name.trim() === '') {
+      messageApi.warning(t('edit_zone_panel.waring.name_empty_error'));
+      return;
+    }
+    if (!startX || !startY || !endX || !endY) {
+      messageApi.warning(t('edit_zone_panel.waring.invalid_frame'));
+      return;
+    }
+    if (!color) {
+      messageApi.warning(t('edit_zone_panel.waring.color_error'));
+      return;
+    }
+    const exists = mapData!.zones.some((zone) => {
+      return zone.name.trim() === name.trim() && oldData?.id !== zone.id;
+    });
+    if (exists) {
+      messageApi.warning(t('edit_zone_panel.waring.name_duplicated_error'));
+      return;
+    }
 
     let forbiddenCars: string[] = [];
 
@@ -145,6 +170,7 @@ const EditZoneTable: FC<{
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const tagRender: TagRender = (props) => {
     const { label, closable, onClose } = props;
     const onPreventMouseDown = (event: React.MouseEvent<HTMLSpanElement>) => {
@@ -409,11 +435,14 @@ const EditZoneTable: FC<{
               <Form.Item
                 name="speed_limit"
                 label={`${t('edit_zone_panel.highest_speed')}: (${t('edit_zone_panel.necessary')}) `}
+                rules={[{ required: true }]}
               >
                 <InputNumber
                   addonAfter="m/s"
                   onChange={(e) => handleSyneForm('speed_limit', e)}
                   type="number"
+                  min={0.8}
+                  max={1.5}
                   placeholder="0.8~1.5"
                   style={{ width: '50%' }}
                 />

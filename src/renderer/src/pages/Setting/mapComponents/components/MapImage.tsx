@@ -4,7 +4,7 @@ import useMap from '@renderer/api/useMap';
 import { Spin } from 'antd';
 import { LoadingOutlined, RobotOutlined } from '@ant-design/icons';
 
-const MapImage = forwardRef<HTMLImageElement>((props, ref) => {
+const MapImage = forwardRef<HTMLImageElement>((_props, ref) => {
   const { data, isLoading, isError } = useMap();
 
   if (isLoading)

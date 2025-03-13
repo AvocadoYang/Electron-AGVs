@@ -2,14 +2,23 @@
   "utils": {
     "yes": "Yes",
     "no": "No",
+    "open": "Open",
+    "detail": "Detail",
     "location": "Location",
     "search": "search",
     "reset": "reset",
+    "close": "Close",
+    "random": "random",
+    "working": "Working",
+    "stopping": "Stop",
     "filter": "filter",
     "cancel": "cancel",
+    "amr_id": "Amr ID",
     "yaw": "Yaw",
     "opacity": "opacity",
     "show": "show",
+    "status": "Status",
+    "mission_is_required": "Mission is required",
     "point_type": "Point Type",
     "save": "Save",
     "delete": "Delete",
@@ -23,6 +32,7 @@
     "inactive": "Inactive",
     "required": "Required",
     "delete_warn": "Are you sure?",
+    "cost_time": "Cost Time (minutes)",
     "location_property": {
       "none": "Normal",
       "charge_station": "Charge Station",
@@ -111,6 +121,7 @@
     "file_setting": {
       "file_setting": "File Setting",
       "warning_id": "Warning ID Setting",
+      "upload_warning_file": "Upload warning id file",
       "backup_file": "Backup"
     },
     "restart": {
@@ -341,6 +352,39 @@
     "returning": "returning",
     "isStretching": "is stretching",
     "reset": "reset"
+  },
+
+  "main": {
+    "pad_view": {
+      "sider": {
+        "alert_view": "Alert",
+        "map_view": "Map",
+        "mission_view": "Mission",
+        "info_view": "Information"
+      }
+    },
+    "card_name": {
+      "map_2D_view": "2D Map",
+      "map_3D_view": "3D Map",
+      "quick_mission": "Quick mission",
+      "auto_mission": "Cycle mission",
+      "new_mission": "New mission",
+      "input_mission": "Input mission",
+      "mission_info": "Mission information cards",
+      "car_info": "Car information cards"
+    },
+    "mission_modal": {
+      "dialog_mission": {
+        "task_priority": "Task priority",
+        "mission_type": "Mission Type",
+        "priority": {
+          "TRIVIAL": "Trivial",
+          "NORMAL": "Normal",
+          "PIVOTAL": "Pivotal",
+          "CRITICAL": "Critical"
+        }
+      }
+    }
   },
 
   "mission": {

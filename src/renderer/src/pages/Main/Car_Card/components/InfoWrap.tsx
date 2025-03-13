@@ -1,24 +1,20 @@
- 
 import styled from 'styled-components';
 
 export const InfoWrap = styled.div.attrs<{
-  randomcolor: string
-  isstop: boolean
+  randomcolor: string;
+  is_dark: string;
 }>((props) => {
-  return { randomcolor: props.randomcolor, isstop: props.isstop };
-})<{ randomcolor: string; isstop: boolean }>`
-  /* margin-bottom: 3%; */
-  margin-top: 6%;
+  return { randomcolor: props.randomcolor, is_dark: props.is_dark };
+})<{ randomcolor: string }>`
+  margin-top: 1%;
   z-index: 2;
-  /* overflow: hidden; */
-  border-radius: 4px;
-  border: ${(props) => `0.1vw solid ${props.randomcolor}`};
-  width: 90%;
-  border-right: ${(props) => `0.35vw solid ${props.randomcolor}`};
-  background-image: linear-gradient(to top, #dfe9f3 0%, white 100%);
-  box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  cursor: pointer;
+  border-radius: 5px;
   position: relative;
-  opacity: ${(props) => (props.isstop ? '0.3' : '1')};
+  border: ${(props) => `0.15vw solid ${props.randomcolor}`};
+  min-width: 200px;
+  max-width: 220px;
+  border-top: ${(props) => `0.45vw solid ${props.randomcolor}`};
+  background-color: ${(props) => `${props.is_dark === 'true' ? '#3a3939' : '#ffffff'}`};
+  // #262626
+  cursor: pointer;
 `;

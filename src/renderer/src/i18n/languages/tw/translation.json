@@ -2,14 +2,23 @@
   "utils": {
     "yes": "是",
     "no": "否",
+    "open": "開啟",
+    "close": "關閉",
+    "detail": "詳情",
     "search": "搜尋",
     "reset": "重設",
+    "random": "不指定",
+    "working": "運行中",
+    "stopping": "未運行",
     "filter": "過濾",
     "cancel": "取消",
+    "amr_id": "車輛",
+    "status": "狀態",
     "location": "地點",
     "yaw": "轉角",
     "opacity": "淡化",
     "show": "顯示",
+    "mission_is_required": "任務為必填選項",
     "point_type": "地點類型",
     "save": "儲存",
     "delete": "刪除",
@@ -23,6 +32,7 @@
     "inactive": "停止",
     "required": "必填",
     "delete_warn": "確定刪除？",
+    "cost_time": "耗時（分鐘)",
     "location_property": {
       "none": "點位",
       "charge_station": "充電站",
@@ -108,7 +118,8 @@
     },
     "file_setting": {
       "file_setting": "檔案設定",
-      "warning_id": "告警id設定",
+      "warning_id": "告警ID設定",
+      "upload_warning_file": "上傳錯誤表",
       "backup_file": "備份檔案"
     },
     "restart": {
@@ -338,6 +349,41 @@
     "isStretching": "正在伸出",
     "reset": "歸位"
   },
+
+  "main": {
+    "pad_view": {
+      "sider": {
+        "alert_view": "告警提示",
+        "map_view": "觀看地圖",
+        "mission_view": "任務派發",
+        "info_view": "查看資訊"
+      }
+    },
+    "card_name": {
+      "map_2D_view": "2D 地圖",
+      "map_3D_view": "3D 地圖",
+      "quick_mission": "快速任務",
+      "auto_mission": "循環任務",
+      "new_mission": "新增任務",
+      "input_mission": "輸入任務",
+      "mission_info": "任務資訊",
+      "car_info": "車輛資訊"
+    },
+    "mission_modal": {
+      "dialog_mission": {
+        "task_priority": "任務級別",
+        "mission_type": "任務類型",
+        "priority": {
+          "TRIVIAL": "不重要",
+          "NORMAL": "普通",
+          "PIVOTAL": "優先",
+          "CRITICAL": "緊急"
+        }
+      }
+    }
+  },
+
+  "car_card": {},
 
   "mission": {
     "add_mission": {

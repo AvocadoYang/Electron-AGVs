@@ -43,6 +43,7 @@ export const formList = [
   // ===================
   // === config ===
   { key: 'warning_id' },
+  { key: 'upload_warning_file' },
   { key: 'backup_file' }
 ] as const;
 
