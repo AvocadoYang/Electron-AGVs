@@ -1,0 +1,12 @@
+.change-map-wrap {
+  height: 80vh;
+  width: 90vw;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  border-radius: 3px;
+
+  z-index: 10000;
+  background-color: red;
+}

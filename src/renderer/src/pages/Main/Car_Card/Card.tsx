@@ -14,10 +14,6 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
   const [openFullInfo, setOpenFullInfo] = useState(false);
   const isDark = useAtomValue(darkMode);
 
-  const openFullInfoFn = () => {
-    setOpenFullInfo((pre) => !pre);
-  };
-
   const handleOpenChange = (newOpen: boolean) => {
     setPopoverOpen(newOpen);
   };
@@ -27,7 +23,6 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
       <ConfigProvider
         theme={{
           token: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             colorBgElevated: 'rgba(255, 254, 254, 0.65)'
           },
           components: {
@@ -48,17 +43,18 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
             <DropDown
               color={amrId2Color(id)}
               openFullInfo={openFullInfo}
-              openFullInfoFn={openFullInfoFn}
+              setOpenFullInfo={setOpenFullInfo}
             ></DropDown>
-            <RowOne isDark={isDark}></RowOne>
+            <RowOne isDark={isDark} amrId={id}></RowOne>
             <RowSecond
               setOpenHiddenRow={setOpenHiddenRow}
               openHiddenRow={openHiddenRow}
               isDark={isDark}
+              amrId={id}
             ></RowSecond>
-            <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark}></HiddenRow>
-            <RowThread isDark={isDark}></RowThread>
-            <CarTag openFullInfo={openFullInfo}></CarTag>
+            <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark} amrId={id}></HiddenRow>
+            <RowThread amrId={id} isDark={isDark}></RowThread>
+            <CarTag openFullInfo={openFullInfo} amrId={id}></CarTag>
           </InfoWrap>
         </Popover>
       </ConfigProvider>

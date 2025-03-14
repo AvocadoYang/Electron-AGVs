@@ -23,6 +23,10 @@
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
+    "online": "Online",
+    "offline": "Offline",
+    "num": "Num.",
+    "category": "Category",
     "success": "Success",
     "fail": "Fail",
     "submit": "Submit",
@@ -40,6 +44,22 @@
       "shelve": "Shelf",
       "wait_side": "Waiting Side"
     }
+  },
+
+  "change_map": {
+    "view_maps": "View Maps",
+    "upload_map": "Upload Map",
+    "switch_map": "Switch Map",
+    "no_img_found": "No image found"
+  },
+
+  "mode": {
+    "manual_mode": "manual",
+    "is_mission": "Is working",
+    "is_carry": "is carry",
+    "is_charge": "is charging",
+    "low_power": "low power",
+    "unknown": "unknown"
   },
 
   "locations": {
@@ -122,7 +142,8 @@
       "file_setting": "File Setting",
       "warning_id": "Warning ID Setting",
       "upload_warning_file": "Upload warning id file",
-      "backup_file": "Backup"
+      "backup_file": "Backup",
+      "switch_map": "Switch Map"
     },
     "restart": {
       "restart": "restart system"

@@ -83,5 +83,8 @@ export const isShowEditWarningId = atom<boolean>(false);
 /** 8-2 上傳錯誤表 */
 export const isOpenUploadWarningIDModal = atom<boolean>(false);
 
+/** 8-4 開啟交換地圖 */
+export const isOpenSwitchMap = atom<boolean>(false);
+
 /** 7-2 顯示編輯備份 */
 export const isShowEditBackup = atom<boolean>(false);

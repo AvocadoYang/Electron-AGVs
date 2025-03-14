@@ -75,6 +75,7 @@ const DialogMission = () => {
     const { amrId, titleId, priority } = payload;
     if (!amrId || !titleId || !priority) {
       void messageApi.error('尚未完成選項');
+      return;
     }
     canSubmitMutation.mutate(payload);
   };

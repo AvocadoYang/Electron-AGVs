@@ -5,7 +5,6 @@ import useName from '@renderer/api/useAmrName';
 
 const Cards = () => {
   const { data: name } = useName();
-
   if (!name || !name.length) return;
   return (
     <Flex align="center" justify="center" wrap gap="middle" style={{ width: '95%' }}>
