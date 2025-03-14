@@ -22,38 +22,27 @@ const InputFrom: FC<{ form: FormInstance<unknown> }> = ({ form }) => {
 
   useEffect(() => {
     if (tempFormData !== null && ref.current !== null) {
-      setTimeout(() => {
-        form.setFieldsValue({
-          is_active: tempFormData.is_active,
-          input_cargo_speed: tempFormData.input_cargo_speed,
-          shift_locations: tempFormData.shift_locations
-        });
-        return;
-      }, 500);
+      form.setFieldsValue({
+        is_active: tempFormData.is_active,
+        input_cargo_speed: tempFormData.input_cargo_speed,
+        shift_locations: tempFormData.shift_locations
+      });
+      return;
     }
   }, [tempFormData]);
-  console.log('render input form');
 
   return (
     <>
       <Form ref={ref} form={form} style={{ maxWidth: 600 }}>
-        <Form.Item name="is_active" label={t('utils.active')} rules={[{ required: true }]}>
+        <Form.Item name="is_active" label={t('utils.active')}>
           <Switch checkedChildren={t('utils.active')} unCheckedChildren={t('utils.inactive')} />
         </Form.Item>
 
-        <Form.Item
-          name="input_cargo_speed"
-          label={t('sim.cargo.input.shift_speed')}
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="input_cargo_speed" label={t('sim.cargo.input.shift_speed')}>
           <InputNumber min={0} />
         </Form.Item>
 
-        <Form.Item
-          name="shift_locations"
-          label={t('sim.cargo.input.shift_location')}
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="shift_locations" label={t('sim.cargo.input.shift_location')}>
           <Select options={shelves} />
         </Form.Item>
       </Form>

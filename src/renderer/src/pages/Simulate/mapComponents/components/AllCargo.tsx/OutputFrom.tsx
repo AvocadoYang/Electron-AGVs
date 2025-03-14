@@ -37,40 +37,29 @@ const OutputFrom: FC<{
 
   useEffect(() => {
     if (tempFormData !== null && ref.current !== null) {
-      setTimeout(() => {
-        form.setFieldsValue({
-          is_active: tempFormData.is_active,
-          cargo_number: tempFormData.cargo_number,
-          output_cargo_speed: tempFormData.output_cargo_speed,
-          specify_car: tempFormData.specify_car || [],
-          placement: tempFormData?.placement || []
-        });
-        return;
-      }, 500);
+      form.setFieldsValue({
+        is_active: tempFormData.is_active,
+        cargo_number: tempFormData.cargo_number,
+        output_cargo_speed: tempFormData.output_cargo_speed,
+        specify_car: tempFormData.specify_car || [],
+        placement: tempFormData?.placement || []
+      });
+      return;
     }
   }, [tempFormData]);
-  console.log('render output form');
 
   return (
     <>
       <Form ref={ref} form={form} name="control-hooks" style={{ maxWidth: 600 }}>
-        <Form.Item name="is_active" label={t('utils.active')} rules={[{ required: true }]}>
+        <Form.Item name="is_active" label={t('utils.active')}>
           <Switch checkedChildren={t('utils.active')} unCheckedChildren={t('utils.inactive')} />
         </Form.Item>
 
-        <Form.Item
-          name="cargo_number"
-          label={t('sim.cargo.output.cargo_number')}
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="cargo_number" label={t('sim.cargo.output.cargo_number')}>
           <InputNumber min={1} />
         </Form.Item>
 
-        <Form.Item
-          name="output_cargo_speed"
-          label={t('sim.cargo.output.speed')}
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="output_cargo_speed" label={t('sim.cargo.output.speed')}>
           <InputNumber min={1} />
         </Form.Item>
 
@@ -79,11 +68,7 @@ const OutputFrom: FC<{
         </Form.Item>
 
         <Flex gap="large">
-          <Form.Item
-            name="placement"
-            label={t('sim.cargo.output.placement')}
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="placement" label={t('sim.cargo.output.placement')}>
             <Select mode="multiple" size="large" style={{ width: 200 }} options={shelves} />
           </Form.Item>
           <Button onClick={tempSaveData}>{t('sim.modal.select_locations')}</Button>
