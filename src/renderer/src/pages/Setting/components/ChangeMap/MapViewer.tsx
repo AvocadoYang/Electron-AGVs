@@ -23,6 +23,7 @@ import {
   StyledForm,
   Map_Info
 } from './style';
+import './style.css';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import { ErrorResponse } from '@renderer/utils/globalType';
@@ -86,18 +87,18 @@ const MapViewer: FC = () => {
     form.setFieldValue('mapOriginX', target.mapOriginX);
     form.setFieldValue('mapOriginY', target.mapOriginY);
   }, [form, selectId, data]);
-
   if (!data || data.data.length === 0) return <NoImageFound />;
   return (
     <>
       {contextHolders}
-      <Carousel arrows infinite={false} style={{ marginTop: '25px' }}>
+      <Carousel arrows infinite={false} className="carousel">
         {data?.data.map((v) => {
           return (
             <ShowImageContainer
               url={`https://${location.host.split(':')[0]}:4000/static/images/${v.fileName}`}
+              key={v.fileName}
             >
-              <ShowImageText isEdit={isEdit}>
+              <ShowImageText is_edit={isEdit.toString()}>
                 <Flex gap="middle" align="center" justify="space-evenly">
                   {isEdit ? (
                     <EditOrigin

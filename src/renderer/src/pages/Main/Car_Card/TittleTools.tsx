@@ -22,7 +22,10 @@ const TittleTools = () => {
   const [isDrop, setIsDrop] = useState(false);
   return (
     <>
-      <span className={`card-wrap-title ${isDark ? 'dark-mode-title' : ''}`}>
+      <span
+        className={`card-wrap-title ${isDark ? 'dark-mode-title' : ''}`}
+        onClick={() => setIsDrop(!isDrop)}
+      >
         AMRs
         {isDrop ? (
           <UpOutlined className="drop-icon" onClick={() => setIsDrop(false)} />

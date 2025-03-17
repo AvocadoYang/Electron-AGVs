@@ -30,8 +30,10 @@
 .close-pad-map-button {
   position: fixed;
   z-index: 1000;
-  top: 10.5%;
-  left: 10px;
+  top: 11%;
+  left: 20px;
+  font-size: 1.5em;
+
 }
 
 .zoom-pad-wrap {
@@ -86,3 +88,13 @@ html, body, #root {
   cursor: pointer;
 }
 
+.car-and-mission-wrap {
+  position: relative;
+}
+
+.rollback-icon {
+  position: absolute;
+  top: 1px;
+  right: 20px;
+  font-size: 18px;
+}

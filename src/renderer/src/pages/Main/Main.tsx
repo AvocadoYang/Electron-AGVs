@@ -9,6 +9,7 @@ import PadView from './components/PadViwe/PadView';
 // import MissionWrap from './Mission_Card/MissionWrap'
 import { useAtom } from 'jotai';
 import { viewBtn, ViewBtn } from './global/jotai';
+import useResetSiderSwitch from '../Setting/hooks/useResetSiderSwitch';
 
 const Main: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 767);
@@ -34,6 +35,8 @@ const Main: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useResetSiderSwitch();
 
   return (
     <Layout style={{ height: `${isMobile ? '100dvh' : '100%'}` }}>

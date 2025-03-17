@@ -1,12 +1,8 @@
 import { memo, useState } from 'react';
-import { SearchOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
-import { ConfigProvider, Input, Select, SelectProps } from 'antd';
+import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { SelectProps } from 'antd';
 import { useAtomValue } from 'jotai';
 import { darkMode } from '@renderer/utils/gloable';
-
-const handleChange = (value: string | string[]) => {
-  console.log(`Selected: ${value}`);
-};
 
 const options: SelectProps['options'] = [];
 
@@ -30,38 +26,6 @@ const TitleTools = () => {
           <DownOutlined className="drop-icon" onClick={() => setIsDrop(true)} />
         )}
       </span>
-      {isDrop ? (
-        <ConfigProvider
-          theme={{
-            components: {
-              Input: {
-                activeBorderColor: `${isDark ? '#ff9900' : '#1677ff'}`,
-                hoverBorderColor: `${isDark ? '#ff9900' : '#1677ff'}`
-              },
-              Select: {
-                activeBorderColor: `${isDark ? '#ff9900' : '#1677ff'}`,
-                hoverBorderColor: `${isDark ? '#ff9900' : '#1677ff'}`
-              }
-            }
-          }}
-        >
-          <Select
-            mode="multiple"
-            placeholder="AMR category"
-            onChange={handleChange}
-            style={{ width: '82%' }}
-            options={options}
-          />
-          <Input
-            size="middle"
-            placeholder="Search AMR"
-            suffix={<SearchOutlined />}
-            style={{ width: '82%', margin: '3% 0 3% 0' }}
-          />
-        </ConfigProvider>
-      ) : (
-        []
-      )}
     </>
   );
 };

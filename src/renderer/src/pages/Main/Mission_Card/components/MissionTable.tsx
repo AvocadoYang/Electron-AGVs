@@ -1,12 +1,15 @@
 import { MissionInfo, useMissions } from '../../../../sockets/useMissions';
-import { TableColumnsType, Table, Spin, ConfigProvider } from 'antd';
-import { memo, useState } from 'react';
+import { TableColumnsType, Table, Spin, ConfigProvider, Button } from 'antd';
+import { memo, useEffect, useState } from 'react';
 import '../mission_info.css';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { translate } from '@renderer/i18n';
 import { darkMode } from '@renderer/utils/gloable';
 import { useAtomValue } from 'jotai';
+import client from '@renderer/api/axiosClient';
+import { useMutation } from '@tanstack/react-query';
+import useName from '@renderer/api/useAmrName';
 
 const MISSION_SORT = ['executing', 'assigned', 'pending', 'completed', 'aborting', 'canceled'];
 const TaskInfo = styled.div`
@@ -27,12 +30,41 @@ const SubTitle = styled.h4`
   font-size: 1em;
 `;
 
+type SelectMissionT = {
+  amrId?: string; // 有些選到的任務也許還沒指派到amr
+  taskId?: string;
+  missionId?: string;
+  status?: string;
+};
+
 const MissionTable = () => {
   const { t } = useTranslation();
   const isDark = useAtomValue(darkMode);
+  const { data: name } = useName();
   const [selectionType] = useState<'checkbox' | 'radio'>('checkbox');
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [_selectInfo, setSelectInfo] = useState<MissionInfo[]>([]);
+  const [selectInfo, setSelectInfo] = useState<MissionInfo[]>([]);
+  const { missions } = useMissions();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 767);
+  const [, setWindowHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const updateHeight = () => setWindowHeight(window.innerHeight);
+    window.addEventListener('resize', updateHeight);
+
+    // 確保初始設定正確
+    updateHeight();
+
+    return () => window.removeEventListener('resize', updateHeight);
+  }, [isMobile]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 767);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const columns: TableColumnsType<MissionInfo> = [
     {
@@ -40,18 +72,30 @@ const MissionTable = () => {
       dataIndex: 'amrId',
       key: 'amrId',
       render: (code: string) => (code ? code.replace('amr-0', '#') : '---'),
-      filters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((v) => ({
-        text: `${v}`,
-        value: `amr-0${v < 10 ? `0${v}` : v}`
-      })),
+      filters: (() => {
+        if (!name) return [];
+        return name.map((amrInfo) => ({
+          text: `${amrInfo.id}`,
+          value: `${amrInfo.id}`
+        }));
+      })(),
       onFilter: (value, record) => {
         return record.amrId === value;
-      },
-      width: 20
+      }
     },
     {
       title: t('mission.task_table.status'),
       dataIndex: 'missionStatus',
+      filters: (() => {
+        return MISSION_SORT.map((state) => ({
+          text: `${translate('normal', state)}`,
+          value: `${translate('normal', state)}`
+        }));
+      })(),
+      onFilter: (value, record) => {
+        // console.log(record);
+        return record.missionStatus === value;
+      },
       key: 'missionStatus'
     },
 
@@ -76,7 +120,12 @@ const MissionTable = () => {
       dataIndex: 'totalTime',
       key: 'totalTime'
     }
-  ];
+  ].filter((item) => {
+    console.log(isMobile);
+    console.log(item.key);
+    if (!isMobile) return true;
+    return item.key !== 'taskInfo';
+  });
 
   const rowSelection = {
     selectedRowKeys,
@@ -88,8 +137,39 @@ const MissionTable = () => {
       disabled: record.amrId === 'Disabled User' // Column configuration not to be checked
     })
   };
-  const { missions } = useMissions();
-  if (!missions)
+  const deleteMissionMutation = useMutation({
+    mutationFn: (deleteList: SelectMissionT[]) => {
+      return client.post(
+        '/api/missions/delete-mission',
+        {
+          selectedMission: deleteList
+        },
+        {
+          headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
+        }
+      );
+    },
+    onSuccess: () => {
+      setSelectedRowKeys([]);
+      setSelectInfo([]);
+    }
+  });
+
+  const handleDeleteMission = () => {
+    if (selectInfo.length === 0) return;
+
+    const convertArr = selectInfo
+      .filter((v) => v.missionId !== null)
+      .map((v) => ({
+        amrId: v.amrId,
+        missionId: v.missionId,
+        status: v.missionStatus
+      }));
+
+    deleteMissionMutation.mutate(convertArr);
+  };
+
+  if (!missions || !name)
     return (
       <div
         style={{
@@ -102,7 +182,6 @@ const MissionTable = () => {
         <Spin size="large" />
       </div>
     );
-
   return (
     <ConfigProvider
       theme={{
@@ -113,9 +192,29 @@ const MissionTable = () => {
         }
       }}
     >
+      <div style={{ width: '100%', padding: '0 0 0 10px' }}>
+        <Button
+          onClick={() => {
+            handleDeleteMission();
+          }}
+          disabled={!selectInfo.length}
+          loading={deleteMissionMutation.isLoading}
+          color="danger"
+          variant="filled"
+        >
+          {t('utils.delete')}
+        </Button>
+      </div>
       <Table
         columns={columns}
         style={{ width: '100%' }}
+        expandable={
+          isMobile
+            ? {
+                expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.fullName}</p>
+              }
+            : undefined
+        }
         className={`custom-table ${isDark ? 'custom-table-dark' : ''}`}
         rowSelection={{
           type: selectionType,

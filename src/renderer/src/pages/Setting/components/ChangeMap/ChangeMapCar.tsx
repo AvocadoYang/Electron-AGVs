@@ -1,36 +1,48 @@
-import { Card } from 'antd';
-import React from 'react';
-import { FC, useState } from 'react';
+import { Tabs, TabsProps } from 'antd';
+
+import { FC } from 'react';
 import './style.css';
+import { CloseOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import UploadMap from './UploadMap';
 import MapViewer from './MapViewer';
-
-const contentList: Record<string, React.ReactNode> = {
-  tab1: <MapViewer />,
-  tab2: <UploadMap />
-};
+import { useAtom } from 'jotai';
+import { isOpenSwitchMap } from '@renderer/utils/siderGloble';
 
 const ChangeMapModal: FC<{}> = () => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<string>('tab1');
+  const [openSwitchMap, setOpenSwitchMap] = useAtom(isOpenSwitchMap);
 
-  const tabList = [
+  const onChange = (key: string) => {
+    console.log(key);
+  };
+
+  const items: TabsProps['items'] = [
     {
       key: 'tab1',
-      tab: t('change_map.view_maps')
+      label: t('change_map.view_maps'),
+      children: <MapViewer />
     },
     {
       key: 'tab2',
-      tab: t('change_map.upload_map')
+      label: t('change_map.upload_map'),
+      children: <UploadMap />
     }
   ];
 
-  const onTab1Change = (key: string) => {
-    setActiveTab(key);
-  };
-
-  return <div className="change-map-wrap">123</div>;
+  return (
+    <div className={`change-map-wrap ${openSwitchMap ? 'show' : ''}`}>
+      <div className="info-wrap">
+        <div className="tittle-wrap">
+          <CloseOutlined className="close-icon" onClick={() => setOpenSwitchMap(false)} />
+          <span className="tittle">{t('change_map.switch_map')}</span>
+        </div>
+        <div className="body-wrap">
+          <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ChangeMapModal;

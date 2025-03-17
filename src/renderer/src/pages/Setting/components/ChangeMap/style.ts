@@ -5,7 +5,7 @@ export const ImageContainer = styled.div<{
   url: string;
 }>`
   width: 100%;
-  height: 300px;
+  height: 100%;
   filter: blur(8px);
   overflow: hidden;
   background-image: ${({ url }) => `url(${url})`}; /* Correct interpolation */
@@ -32,8 +32,8 @@ export const ImageText = styled.div`
 export const ShowImageContainer = styled.div<{
   url: string;
 }>`
-  width: 800px;
-  height: 600px;
+  height: 500px;
+  width: 100px;
   overflow: hidden;
   background-image: ${({ url }) => `url(${url})`}; /* Correct interpolation */
   background-position: center center;
@@ -43,9 +43,9 @@ export const ShowImageContainer = styled.div<{
   background-color: #cccccc;
 `;
 
-export const ShowImageText = styled.div<{ isEdit: boolean }>`
+export const ShowImageText = styled.div<{ is_edit: string }>`
   position: absolute;
-  top: ${({ isEdit }) => (isEdit ? '60%' : '75%')};
+  top: ${({ is_edit }) => (is_edit === 'true' ? '60%' : '75%')};
   left: 50%;
   width: auto;
   transform: translate(-50%, -50%);
