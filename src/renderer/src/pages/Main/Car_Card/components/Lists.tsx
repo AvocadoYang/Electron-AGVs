@@ -156,11 +156,16 @@ const CardSpeed: React.FC<{ amrId: string; isDark: boolean }> = memo(({ amrId, i
 const Power: React.FC<{ amrId: string; isDark: boolean }> = memo(({ amrId, isDark }) => {
   const { battery } = useBattery(amrId);
   return (
-    <p className="value">
-      {/* {fleetInfo.data.IO?.battery} */}
-      {`${battery ? battery : '--'}`}
-      <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{`${battery ? '%' : ''}`}</span>
-    </p>
+    <>
+      <ThunderboltOutlined
+        className={`icon power-icon ${isDark ? 'dark-icon power-icon-dark' : ''} ${battery ? (battery < 20 ? 'low-battery' : '') : ''}`}
+      />
+      <p className="value">
+        {/* {fleetInfo.data.IO?.battery} */}
+        {`${battery ? battery : '--'}`}
+        <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{`${battery ? '%' : ''}`}</span>
+      </p>
+    </>
   );
 });
 const Yaw: React.FC<{ amrId: string }> = memo(({ amrId }) => {
@@ -209,9 +214,6 @@ export const RowSecond: React.FC<{
         <CardSpeed amrId={amrId} isDark={isDark}></CardSpeed>
       </Space>
       <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '10%' }}>
-        <ThunderboltOutlined
-          className={`icon power-icon ${isDark ? 'dark-icon power-icon-dark' : ''}`}
-        />
         <Power amrId={amrId} isDark={isDark}></Power>
       </Space>
       <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '10%' }}>
