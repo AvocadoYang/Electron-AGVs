@@ -1,10 +1,12 @@
 import useMap from '@renderer/api/useMap';
 import SubmitButton from '@renderer/utils/SubmitButton';
-import { Form, Input, Modal, Select } from 'antd';
+import { Button, Form, Input, message, Modal, Select } from 'antd';
 import { Dispatch, FC, SetStateAction, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EditFormType } from '../amr';
+import { EditFormType } from './amr';
 import useScriptRobot from '@renderer/api/useScriptRobot';
+import client from '@renderer/api/axiosClient';
+import { useMutation } from '@tanstack/react-query';
 
 const AmrForm: FC<{
   id: string;
@@ -15,7 +17,26 @@ const AmrForm: FC<{
   const { data: map } = useMap();
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const { data: robot } = useScriptRobot();
+  const { data: robot, refetch } = useScriptRobot();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const deleteMutation = useMutation({
+    mutationFn: () => {
+      return client.post('api/simulate/delete-robot', { id });
+    },
+    onSuccess: async () => {
+      refetch();
+      void messageApi.success(t('utils.success'));
+      setIsOpen(false);
+    },
+    onError: () => {
+      void messageApi.error(t('utils.error'));
+    }
+  });
+
+  const deleteHandler = () => {
+    deleteMutation.mutate();
+  };
 
   const handleCancel = () => {
     setIsOpen(false);
@@ -55,12 +76,21 @@ const AmrForm: FC<{
 
   return (
     <>
+      {contextHolder}
       <Modal
         title={t('sim.robot.modal.edit')}
         open={isOpen}
         onCancel={handleCancel}
         footer={() => (
           <>
+            <Button
+              onClick={deleteHandler}
+              loading={deleteMutation.isLoading}
+              color="danger"
+              variant="filled"
+            >
+              {t('utils.delete')}
+            </Button>
             <SubmitButton form={form} onOk={editHandler} isModel />
           </>
         )}

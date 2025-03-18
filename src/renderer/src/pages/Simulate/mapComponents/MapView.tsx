@@ -12,7 +12,7 @@ import { isSelectCargo } from '../utils/status';
 import CreateScriptForm from '../components/CreateScriptForm';
 import { MouseLocationForFrame, RectInfo } from '@renderer/pages/Setting/hooks/hook';
 import useZoneFrame from '../hooks/useZoneFrame';
-import AllInMapAMRs from '../components/AMR/inMapAmr/AllAMRs';
+import AllInMapAMRs from '../components/AMR/AllInMapAMRs';
 
 const MapView: React.FC<{
   scale: number;

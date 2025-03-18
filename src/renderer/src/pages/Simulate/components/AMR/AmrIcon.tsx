@@ -1,15 +1,15 @@
-import { FC, memo, RefObject, useRef, useState } from 'react';
+import { FC, RefObject, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { Button, message, Popover, Spin } from 'antd';
+import { message, Spin, Tooltip } from 'antd';
 import useMap from '@renderer/api/useMap';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import useScriptRobot from '@renderer/api/useScriptRobot';
 import { rvizCoord } from '@renderer/utils/utils';
-import { EditFormType } from '../amr';
+import { EditFormType } from './amr';
 import AmrForm from './AmrForm';
-import { findClosestLocation } from '../../../utils/funcs';
+import { findClosestLocation } from '../../utils/funcs';
 
 const AMR_FORK_WIDTH = 1.4; // meter
 const AMR_FORK_HEIGHT = 2; // meter
@@ -40,6 +40,7 @@ const ColorAmr = styled.div.attrs<{
   background-color: ${(prop) => prop.color};
   transform-origin: x y;
   border-radius: 2px;
+  z-index: 15;
 `;
 
 const Fork = styled.div<{
@@ -63,7 +64,9 @@ const AmrIcon: FC<{
   mapRef: RefObject<HTMLDivElement>;
   mapWrapRef: RefObject<HTMLDivElement>;
   placement: string;
-}> = ({ amrId, color, id, mapRef, mapWrapRef, scale, placement }) => {
+  left: number | null;
+  top: number | null;
+}> = ({ amrId, color, id, mapRef, mapWrapRef, scale, placement, left, top }) => {
   const { data: map } = useMap();
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
@@ -89,14 +92,17 @@ const AmrIcon: FC<{
     }
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: () => {
-      return client.post('api/simulate/delete-robot', { id });
+  const isRegisterMutation = useMutation({
+    mutationFn: async (locationId: string) => {
+      const response = await client.post('api/simulate/is-place-has-robot', { locationId });
+      return response.data as { locationId: string; isRegister: boolean };
     },
-    onSuccess: async () => {
-      refetch();
-      void messageApi.success(t('utils.success'));
-      setIsOpen(false);
+    onSuccess: (result) => {
+      if (result.isRegister) {
+        messageApi.warning(t('sim.robot.no_overlapping'));
+        return;
+      }
+      handlePlacement(result.locationId);
     },
     onError: () => {
       void messageApi.error(t('utils.error'));
@@ -105,10 +111,6 @@ const AmrIcon: FC<{
 
   const handleEditMutation = (payload: EditFormType) => {
     editMutation.mutate(payload);
-  };
-
-  const deleteHandler = () => {
-    deleteMutation.mutate();
   };
 
   const handlePlacement = (locationId: string | null) => {
@@ -141,31 +143,23 @@ const AmrIcon: FC<{
 
     const closestLocationId = findClosestLocation(rx, ry, map);
 
-    handlePlacement(closestLocationId);
+    if (!closestLocationId) {
+      messageApi.warning('edit location first');
+      return;
+    }
+
+    isRegisterMutation.mutate(closestLocationId);
   };
 
   if (!map) return <Spin />;
   return (
     <>
       {contextHolder}
-      <Popover
-        content={
-          <Button
-            onClick={deleteHandler}
-            loading={deleteMutation.isLoading}
-            color="danger"
-            variant="filled"
-          >
-            {t('utils.delete')}
-          </Button>
-        }
-        title={amrId}
-        placement="right"
-      >
+      <Tooltip title={amrId} placement="right">
         <ColorAmr
           placement={placement}
-          left={null}
-          top={null}
+          left={left}
+          top={top}
           onClick={handleSetRobot}
           draggable
           onDragEnd={handleDragEnd}
@@ -178,7 +172,7 @@ const AmrIcon: FC<{
           <Fork direct="left"></Fork>
           <Fork direct="right"></Fork>
         </ColorAmr>
-      </Popover>
+      </Tooltip>
       <AmrForm
         id={id}
         isOpen={isOpen}
@@ -189,4 +183,4 @@ const AmrIcon: FC<{
   );
 };
 
-export default memo(AmrIcon, (prev, next) => prev.color == next.color && prev.amrId == next.amrId);
+export default AmrIcon;

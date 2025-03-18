@@ -1,6 +1,5 @@
 import { FC, memo, RefObject } from 'react';
 import styled from 'styled-components';
-import AmrIcon from './AmrIcon';
 import { amrId2Color } from '@renderer/utils/utils';
 import { Button, message, Tooltip } from 'antd';
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -8,6 +7,7 @@ import useScriptRobot from '@renderer/api/useScriptRobot';
 import { useTranslation } from 'react-i18next';
 import client from '@renderer/api/axiosClient';
 import { useMutation } from '@tanstack/react-query';
+import AmrIcon from './AmrIcon';
 
 const AMRPadWrap = styled.div`
   position: absolute;
@@ -115,6 +115,8 @@ const IdleRobotPanel: FC<{
                       mapRef={mapRef}
                       mapWrapRef={mapWrapRef}
                       scale={scale}
+                      left={null}
+                      top={null}
                       placement={v?.script_placement_location as string}
                     />
                   );

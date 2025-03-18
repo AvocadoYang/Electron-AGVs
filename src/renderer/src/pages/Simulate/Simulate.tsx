@@ -3,15 +3,14 @@ import { Layout } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import Toolbar from './components/Toolbar';
 import MapView from './mapComponents/MapView';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import ZoomPad from './components/ZoomPad';
 import MapTitle from './mapComponents/components/MapTitle';
 import ZoneItemTable from './mapComponents/components/ZoneItemTable';
-import { globalRobots, isSelectCargo } from './utils/status';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { isSelectCargo } from './utils/status';
+import { useAtomValue } from 'jotai';
 import { useIsMobile } from '@renderer/hooks/useIsMoblie';
-import useScriptRobot from '@renderer/api/useScriptRobot';
-import IdleRobotPanel from './components/AMR/idleAmr/IdleRobotPanel';
+import IdleRobotPanel from './components/AMR/IdleRobotPanel';
 
 const Simulate = () => {
   const [scale, setScale] = useState(1);
@@ -19,14 +18,6 @@ const Simulate = () => {
   const mapRef = useRef(null);
   const mapWrapRef = useRef(null);
   const isSelecting = useAtomValue(isSelectCargo);
-  const setRobots = useSetAtom(globalRobots);
-  const { data: robot, isLoading } = useScriptRobot();
-
-  useEffect(() => {
-    if (!robot || isLoading) return;
-
-    setRobots(robot ?? []);
-  }, [robot]);
 
   return (
     <Layout style={{ height: `${isMobile ? '100dvh' : '100%'}` }}>
