@@ -4,7 +4,7 @@ import useMap from '@renderer/api/useMap';
 import { Spin } from 'antd';
 import { LoadingOutlined, RobotOutlined } from '@ant-design/icons';
 
-const MapImage = forwardRef<HTMLImageElement>((_props, ref) => {
+const MapImage = forwardRef<HTMLImageElement>((_, ref) => {
   const { data, isLoading, isError } = useMap();
 
   if (isLoading)
@@ -60,7 +60,6 @@ const MapImage = forwardRef<HTMLImageElement>((_props, ref) => {
       draggable={false}
       style={{ userSelect: 'none' }}
       alt="Map"
-      onDragStart={(e) => e.preventDefault()}
     />
   );
 });

@@ -600,6 +600,43 @@
     "add_car": "Add car",
     "start_sim": "Start simulate",
     "stop_sim": "Stop simulate",
-    "reset_sim": "Reset simulate"
+    "reset_sim": "Reset simulate",
+    "cargo": {
+      "already_exist": "already exist in table",
+      "input": {
+        "input": "Input",
+        "auto_shift_cargo": "Auto Shift Cargo",
+        "shift_location": "Shift location",
+        "shift_speed": "Shift speed"
+      },
+      "output": {
+        "output": "Output",
+        "cargo_number": "Cargo Number",
+        "speed": "Out cargo speed",
+        "specify_car": "Specify car",
+        "placement": "Placement"
+      }
+    },
+    "modal": {
+      "current": "Current Script",
+      "name": "Name",
+      "select_locations": "Map select locations",
+      "edit_info": "Edit Mission Info",
+      "location": "Location",
+      "none": "none",
+      "not_info_yet": "Haven't set default script",
+      "haven't_set_default": "Haven't set default script",
+      "do_you_want_to_create_one": "A default Script mission is required or can not use"
+    },
+    "robot": {
+      "no_add_warn": "The robot has not been added yet. Click the Add button below and drag the robot to the map point.",
+      "unset": "unset",
+      "no_overlapping": "this place already has robot",
+      "modal": {
+        "edit": "Edit config",
+        "full_name": "robot name",
+        "placement": "Placement"
+      }
+    }
   }
 }

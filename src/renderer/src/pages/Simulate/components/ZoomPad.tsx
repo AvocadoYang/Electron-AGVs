@@ -13,7 +13,7 @@ import {
 } from '@renderer/utils/siderGloble';
 
 const ZoomPadWrap = styled.div`
-  position: fixed;
+  position: absolute;
   z-index: 4;
   bottom: 20px;
   left: 50%;
