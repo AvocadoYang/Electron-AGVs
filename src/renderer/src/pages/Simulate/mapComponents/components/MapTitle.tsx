@@ -4,22 +4,25 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
-const FloatTitle = styled.div`
+const FloatTitle = styled.div<{ $isMobile: boolean }>`
   position: fixed;
   left: 2em;
-  top: 6em;
+  top: ${(props) => (props.$isMobile ? 'unset' : '6em')};
+  bottom: ${(props) => (props.$isMobile ? '2em' : 'unset')};
 `;
 
-const MapTitle: FC = () => {
+const MapTitle: FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const { t } = useTranslation();
   const { data } = useSimulateScript();
 
   return (
-    <FloatTitle>
-      <Typography.Text type="secondary">
-        {t('sim.modal.current')}：{data?.name}
-      </Typography.Text>
-    </FloatTitle>
+    <>
+      <FloatTitle $isMobile={isMobile}>
+        <Typography.Text type="secondary">
+          {t('sim.modal.current')}：{data?.name}
+        </Typography.Text>
+      </FloatTitle>
+    </>
   );
 };
 

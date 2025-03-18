@@ -1,7 +1,6 @@
 import Header from '@renderer/components/Header';
 import { Layout } from 'antd';
 import { Content } from 'antd/es/layout/layout';
-import Toolbar from './components/Toolbar';
 import MapView from './mapComponents/MapView';
 import { useRef, useState } from 'react';
 import ZoomPad from './components/ZoomPad';
@@ -11,6 +10,7 @@ import { isSelectCargo } from './utils/status';
 import { useAtomValue } from 'jotai';
 import { useIsMobile } from '@renderer/hooks/useIsMoblie';
 import IdleRobotPanel from './components/AMR/IdleRobotPanel';
+import SelectScript from './components/SelectScript';
 
 const Simulate = () => {
   const [scale, setScale] = useState(1);
@@ -37,11 +37,11 @@ const Simulate = () => {
           </div>
 
           {/* 選取模擬的名稱會漂浮在地圖右上 */}
-          <MapTitle />
+          <MapTitle isMobile />
 
           {/* 選取區域時有包含在內的地點會到這個table  */}
           {isSelecting ? <ZoneItemTable /> : []}
-          <Toolbar />
+          <SelectScript />
           <IdleRobotPanel mapRef={mapRef} mapWrapRef={mapWrapRef} scale={scale} />
           <ZoomPad setScale={setScale}></ZoomPad>
         </Layout>

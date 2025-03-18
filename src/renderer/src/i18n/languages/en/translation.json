@@ -616,6 +616,10 @@
         "full_name": "robot name",
         "placement": "Placement"
       }
+    },
+    "select_script": {
+      "change": "Change Script",
+      "add_or_change": "Add or Change Script"
     }
   }
 }

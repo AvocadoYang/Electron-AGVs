@@ -616,6 +616,10 @@
         "full_name": "機器人名稱",
         "placement": "放置位置"
       }
+    },
+    "select_script": {
+      "change": "選擇其他腳本",
+      "add_or_change": "新增或建立新腳本"
     }
   }
 }
