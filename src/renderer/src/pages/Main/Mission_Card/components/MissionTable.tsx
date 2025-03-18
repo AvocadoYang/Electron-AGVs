@@ -121,8 +121,6 @@ const MissionTable = () => {
       key: 'totalTime'
     }
   ].filter((item) => {
-    console.log(isMobile);
-    console.log(item.key);
     if (!isMobile) return true;
     return item.key !== 'taskInfo';
   });

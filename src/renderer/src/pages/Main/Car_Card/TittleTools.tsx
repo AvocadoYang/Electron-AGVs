@@ -1,12 +1,10 @@
-import { memo, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { SearchOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { ConfigProvider, Input, Select, SelectProps } from 'antd';
 import { useAtomValue } from 'jotai';
 import { darkMode } from '@renderer/utils/gloable';
-
-const handleChange = (value: string | string[]) => {
-  console.log(`Selected: ${value}`);
-};
+import useName from '@renderer/api/useAmrName';
+import { DefaultOptionType } from 'antd/es/select';
 
 const options: SelectProps['options'] = [];
 
@@ -17,9 +15,35 @@ for (let i = 10; i < 36; i++) {
   });
 }
 
-const TittleTools = () => {
+const TittleTools: React.FC<{
+  setSelectedOption: React.Dispatch<SelectProps['options']>;
+}> = ({ setSelectedOption }) => {
   const isDark = useAtomValue(darkMode);
+  const [selectOption, setSelectOption] = useState<SelectProps['options']>([]);
+  const { data: names } = useName();
   const [isDrop, setIsDrop] = useState(false);
+
+  useEffect(() => {
+    if (!names) return;
+    const AMRCategories = new Set<string>();
+    for (let name of names) {
+      const { id } = name;
+      const category = id.split('-').slice(0, 3).join('-');
+      AMRCategories.add(category);
+    }
+    const allAMRCategory = [...AMRCategories].map((amrCategory) => {
+      return { value: amrCategory, label: amrCategory };
+    });
+    setSelectOption(allAMRCategory as unknown as DefaultOptionType[]);
+  }, [names]);
+
+  const handleChange = useCallback(
+    (value: string[]) => {
+      setSelectedOption(value.map((amrCategory) => ({ value: amrCategory, label: amrCategory })));
+    },
+    [setSelectOption]
+  );
+
   return (
     <>
       <span
@@ -52,15 +76,26 @@ const TittleTools = () => {
             mode="multiple"
             placeholder="AMR category"
             onChange={handleChange}
-            style={{ width: '82%' }}
-            options={options}
+            style={{ width: '82%', margin: '3% 0 3% 0' }}
+            options={selectOption}
+            onMouseDown={(e) => e.preventDefault()}
+            onPopupScroll={(e) => {
+              e.stopPropagation();
+            }}
+            onDropdownVisibleChange={(open) => {
+              if (open) {
+                document.body.style.overflow = 'hidden';
+              } else {
+                document.body.style.overflow = 'auto';
+              }
+            }}
           />
-          <Input
+          {/* <Input
             size="middle"
             placeholder="Search AMR"
             suffix={<SearchOutlined />}
             style={{ width: '82%', margin: '3% 0 3% 0' }}
-          />
+          /> */}
         </ConfigProvider>
       ) : (
         []
