@@ -3,14 +3,15 @@ import { Layout } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import Toolbar from './components/Toolbar';
 import MapView from './mapComponents/MapView';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ZoomPad from './components/ZoomPad';
 import MapTitle from './mapComponents/components/MapTitle';
 import ZoneItemTable from './mapComponents/components/ZoneItemTable';
-import { isSelectCargo } from './utils/status';
-import { useAtomValue } from 'jotai';
-import AllAmr from './components/AMR/AllAmr';
+import { globalRobots, isSelectCargo } from './utils/status';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useIsMobile } from '@renderer/hooks/useIsMoblie';
+import useScriptRobot from '@renderer/api/useScriptRobot';
+import IdleRobotPanel from './components/AMR/idleAmr/IdleRobotPanel';
 
 const Simulate = () => {
   const [scale, setScale] = useState(1);
@@ -18,6 +19,14 @@ const Simulate = () => {
   const mapRef = useRef(null);
   const mapWrapRef = useRef(null);
   const isSelecting = useAtomValue(isSelectCargo);
+  const setRobots = useSetAtom(globalRobots);
+  const { data: robot, isLoading } = useScriptRobot();
+
+  useEffect(() => {
+    if (!robot || isLoading) return;
+
+    setRobots(robot ?? []);
+  }, [robot]);
 
   return (
     <Layout style={{ height: `${isMobile ? '100dvh' : '100%'}` }}>
@@ -42,7 +51,7 @@ const Simulate = () => {
           {/* 選取區域時有包含在內的地點會到這個table  */}
           {isSelecting ? <ZoneItemTable /> : []}
           <Toolbar />
-          <AllAmr mapRef={mapRef} mapWrapRef={mapWrapRef} scale={scale} />
+          <IdleRobotPanel mapRef={mapRef} mapWrapRef={mapWrapRef} scale={scale} />
           <ZoomPad setScale={setScale}></ZoomPad>
         </Layout>
       </Content>

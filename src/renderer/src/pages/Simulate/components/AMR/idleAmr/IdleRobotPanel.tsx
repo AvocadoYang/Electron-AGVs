@@ -61,7 +61,7 @@ const AmrIconStyled = styled(AmrIcon)`
   }
 `;
 
-const AllAmr: FC<{
+const IdleRobotPanel: FC<{
   scale: number;
   mapRef: RefObject<HTMLDivElement>;
   mapWrapRef: RefObject<HTMLDivElement>;
@@ -135,4 +135,4 @@ const AllAmr: FC<{
   );
 };
 
-export default memo(AllAmr);
+export default memo(IdleRobotPanel);

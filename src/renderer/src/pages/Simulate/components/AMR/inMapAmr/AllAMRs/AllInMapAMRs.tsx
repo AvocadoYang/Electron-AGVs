@@ -1,6 +1,6 @@
-import { AMR } from './components';
 import { FC, memo, RefObject } from 'react';
 import useScriptRobot from '@renderer/api/useScriptRobot';
+import { AMR } from '../components';
 
 const MemoizedAMR = memo(AMR, (prevProps, nextProps) => {
   return prevProps.placement === nextProps.placement && prevProps.fullname === nextProps.fullname;

@@ -6,9 +6,9 @@ import { Car, Fork, Wrapper } from './styled';
 import { findClosestLocation } from '@renderer/pages/Simulate/utils/funcs';
 import { Button, message, Popover } from 'antd';
 import client from '@renderer/api/axiosClient';
-import { EditFormType } from '../../../amr';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { EditFormType } from '../../amr';
 
 const AMR: FC<{
   id: string;

@@ -3,7 +3,7 @@ import SubmitButton from '@renderer/utils/SubmitButton';
 import { Form, Input, Modal, Select } from 'antd';
 import { Dispatch, FC, SetStateAction, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { EditFormType } from './amr';
+import { EditFormType } from '../amr';
 import useScriptRobot from '@renderer/api/useScriptRobot';
 
 const AmrForm: FC<{

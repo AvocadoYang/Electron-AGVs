@@ -7,14 +7,12 @@ import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import useScriptRobot from '@renderer/api/useScriptRobot';
 import { rvizCoord } from '@renderer/utils/utils';
-import { EditFormType } from './amr';
+import { EditFormType } from '../amr';
 import AmrForm from './AmrForm';
-import { findClosestLocation } from '../../utils/funcs';
+import { findClosestLocation } from '../../../utils/funcs';
 
 const AMR_FORK_WIDTH = 1.4; // meter
 const AMR_FORK_HEIGHT = 2; // meter
-const AGV_WIDTH = 1.2; // meter
-const AGV_HEIGHT = 1; // meter
 
 const ColorAmr = styled.div.attrs<{
   left: number;
@@ -24,14 +22,14 @@ const ColorAmr = styled.div.attrs<{
   color: string;
   $is_agv: boolean;
   placement: string;
-}>(({ left, top, placement }) => ({
+}>(({ left, top }) => ({
   style: {
-    transform:
-      placement === 'unset' ? 'unset' : `translate(${left - 8}px, ${top - 9}px) rotate(${0}deg)`
+    left: `${left !== null ? left : 'auto'}px`,
+    top: `${top !== null ? top : 'auto'}px`
   }
 }))<{
-  left: number;
-  top: number;
+  left: number | null;
+  top: number | null;
 }>`
   width: 1.2em;
   min-height: 1.5em;
@@ -166,27 +164,19 @@ const AmrIcon: FC<{
       >
         <ColorAmr
           placement={placement}
-          left={510}
-          top={150}
+          left={null}
+          top={null}
           onClick={handleSetRobot}
           draggable
           onDragEnd={handleDragEnd}
           ref={ref}
-          width={
-            amrId.includes('SW15')
-              ? AGV_WIDTH / map.mapResolution
-              : AMR_FORK_WIDTH / map.mapResolution
-          }
-          height={
-            amrId.includes('SW15')
-              ? AGV_HEIGHT / map.mapResolution
-              : AMR_FORK_HEIGHT / map.mapResolution
-          }
+          width={AMR_FORK_WIDTH / map.mapResolution}
+          height={AMR_FORK_HEIGHT / map.mapResolution}
           color={color}
           $is_agv={amrId.includes('SW15')}
         >
-          {amrId.includes('anfa') ? <Fork direct="left"></Fork> : null}
-          {amrId.includes('anfa') ? <Fork direct="right"></Fork> : null}
+          <Fork direct="left"></Fork>
+          <Fork direct="right"></Fork>
         </ColorAmr>
       </Popover>
       <AmrForm

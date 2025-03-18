@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 import { InputForm, OutputForm } from '../type/common';
 import { ZoneValue } from './type';
 import { TransferProps } from 'antd';
+import { ScriptRobotType } from '@renderer/api/useScriptRobot';
 
 //**如果使用者在用地圖選取多個地點 */
 export const isSelectCargo = atom<boolean>(false);
@@ -23,3 +24,5 @@ export const targetKeyJotai = atom<TransferProps['targetKeys']>([]);
 
 //**點擊到的地點 */
 export const selectedLocation = atom<string | null>(null);
+
+export const globalRobots = atom<ScriptRobotType>([]);
