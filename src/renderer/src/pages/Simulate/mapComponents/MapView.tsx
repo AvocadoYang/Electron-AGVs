@@ -12,6 +12,7 @@ import { isSelectCargo } from '../utils/status';
 import CreateScriptForm from '../components/CreateScriptForm';
 import { MouseLocationForFrame, RectInfo } from '@renderer/pages/Setting/hooks/hook';
 import useZoneFrame from '../hooks/useZoneFrame';
+import AllInMapAMRs from '../components/AMR/inMapAmr/AllAMRs';
 
 const MapView: React.FC<{
   scale: number;
@@ -63,12 +64,10 @@ const MapView: React.FC<{
       }}
       className="map-view"
       ref={mapRef}
-      draggable={false}
     >
       <MapImage ref={mapImageRef} />
-
       <AllLocation />
-
+      <AllInMapAMRs mapWrapRef={mapWrapRef} mapRef={mapRef} scale={scale} />
       {showRoad ? <AllRoads /> : []}
 
       <AllCargo />

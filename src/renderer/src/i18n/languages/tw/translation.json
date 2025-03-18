@@ -579,6 +579,7 @@
     "start_sim": "開始模擬",
     "stop_sim": "停止模擬",
     "reset_sim": "重新模擬",
+
     "cargo": {
       "already_exist": "已選定在列表",
       "input": {
@@ -605,6 +606,16 @@
       "not_info_yet": "尚未設定此地點屬性",
       "haven't_set_default": "尚未設定任何模擬任務",
       "do_you_want_to_create_one": "必須創建新的任務模擬才能使用"
+    },
+    "robot": {
+      "no_add_warn": "點擊下方新增按鍵後拖移機器人到地圖點位上",
+      "unset": "未配置",
+      "no_overlapping": "此地點已有車輛",
+      "modal": {
+        "edit": "編輯設定參數",
+        "full_name": "機器人名稱",
+        "placement": "放置位置"
+      }
     }
   }
 }

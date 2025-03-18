@@ -1,10 +1,13 @@
-import { FC, memo } from 'react';
+import { FC, memo, RefObject } from 'react';
 import styled from 'styled-components';
 import AmrIcon from './AmrIcon';
-import useName from '@renderer/api/useAmrName';
 import { amrId2Color } from '@renderer/utils/utils';
-import { Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Button, message, Tooltip } from 'antd';
+import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import useScriptRobot from '@renderer/api/useScriptRobot';
+import { useTranslation } from 'react-i18next';
+import client from '@renderer/api/axiosClient';
+import { useMutation } from '@tanstack/react-query';
 
 const AMRPadWrap = styled.div`
   position: absolute;
@@ -58,20 +61,75 @@ const AmrIconStyled = styled(AmrIcon)`
   }
 `;
 
-const AllAmr: FC = () => {
-  const { data: car } = useName();
+const AllAmr: FC<{
+  scale: number;
+  mapRef: RefObject<HTMLDivElement>;
+  mapWrapRef: RefObject<HTMLDivElement>;
+}> = ({ scale, mapRef, mapWrapRef }) => {
+  const { data: robot, refetch } = useScriptRobot();
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
 
-  if (!car || car.length === 0) return null;
+  const addMutation = useMutation({
+    mutationFn: () => {
+      return client.post('api/simulate/add-robot');
+    },
+    onSuccess: () => {
+      refetch();
+      void messageApi.success(t('utils.success'));
+    },
+    onError: () => {
+      void messageApi.error(t('utils.error'));
+    }
+  });
+
+  const handleAdd = () => {
+    addMutation.mutate();
+  };
+
+  function onDrop(event) {
+    const data = event.dataTransfer.getData('text/plain');
+    event.target.textContent = data;
+    event.preventDefault();
+  }
+
   return (
     <>
-      <AMRPadWrap>
+      {contextHolder}
+      <AMRPadWrap onDrop={(e) => onDrop(e)}>
+        <Tooltip placement="right" title={t('sim.robot.no_add_warn')}>
+          <QuestionCircleOutlined />
+        </Tooltip>
+
         <Box>
-          {car.map((v) => {
-            return <AmrIconStyled key={v.id} amrId={v.id} color={amrId2Color(v.id)} />;
-          })}
+          {robot && robot.length !== 0
+            ? robot
+                .filter((r) => r?.script_placement_location === 'unset')
+                .map((v) => {
+                  return (
+                    <AmrIconStyled
+                      key={v?.id}
+                      id={v?.id as string}
+                      amrId={v?.full_name as string}
+                      color={amrId2Color(v?.id as string)}
+                      mapRef={mapRef}
+                      mapWrapRef={mapWrapRef}
+                      scale={scale}
+                      placement={v?.script_placement_location as string}
+                    />
+                  );
+                })
+            : []}
         </Box>
 
-        <Button shape="circle" icon={<PlusOutlined />}></Button>
+        <Tooltip placement="right" title={t('utils.add')}>
+          <Button
+            onClick={() => handleAdd()}
+            loading={addMutation.isLoading}
+            shape="circle"
+            icon={<PlusOutlined />}
+          ></Button>
+        </Tooltip>
       </AMRPadWrap>
     </>
   );

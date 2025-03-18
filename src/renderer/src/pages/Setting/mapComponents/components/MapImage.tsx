@@ -60,6 +60,7 @@ const MapImage = forwardRef<HTMLImageElement>((_props, ref) => {
       draggable={false}
       style={{ userSelect: 'none' }}
       alt="Map"
+      onDragStart={(e) => e.preventDefault()}
     />
   );
 });

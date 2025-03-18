@@ -42,7 +42,7 @@ const Simulate = () => {
           {/* 選取區域時有包含在內的地點會到這個table  */}
           {isSelecting ? <ZoneItemTable /> : []}
           <Toolbar />
-          <AllAmr />
+          <AllAmr mapRef={mapRef} mapWrapRef={mapWrapRef} scale={scale} />
           <ZoomPad setScale={setScale}></ZoomPad>
         </Layout>
       </Content>
