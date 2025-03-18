@@ -12,6 +12,7 @@ import {
   scan,
   share,
   switchMap,
+  tap,
   withLatestFrom
 } from 'rxjs';
 import { io } from './socketConnect';
@@ -602,6 +603,47 @@ export const useAMR = (amrId: string) => {
   };
 };
 
+export const useAmrPose = (amrId: string) => {
+  const [pose, setPose] = useState<Pose>();
+  useEffect(() => {
+    const profile$ = profiles$.pipe(
+      map((p) => p.find((x) => x.amrId === amrId)),
+      filter(isDefined),
+      share()
+    );
+
+    const amrPose$ = profile$
+      .pipe(
+        pluck('pose'),
+        filter(isDefined),
+        filter((msg) => {
+          return msg.x !== undefined;
+        }),
+        map(({ x, y, yaw }) => ({
+          x: Number((x || 0).toFixed(2)),
+          y: Number((y || 0).toFixed(2)),
+          yaw: Number((yaw || 0).toFixed(2))
+        })),
+        regularYaw(),
+        // tap(({ yaw }) => console.log(yaw)),
+        distinctUntilChanged(
+          (prev, cur) => prev.x === cur.x && prev.y === cur.y && prev.yaw === cur.yaw
+        )
+        // throttleTime(1000),
+      )
+      .subscribe(({ x, y, yaw }) => {
+        setPose({ x, y, yaw });
+      });
+
+    return () => {
+      amrPose$.unsubscribe();
+    };
+  }, [amrId]);
+  return {
+    pose
+  };
+};
+
 export const useIsLogIn = (amrId: string) => {
   const [isOnline, setIsOnline] = useState(false);
   useEffect(() => {
@@ -644,7 +686,12 @@ export const useCloseLoc = (amrId: string) => {
         // }),
         distinctUntilChanged()
       )
-      .subscribe((closeLoc) => setCloseLoc(closeLoc));
+      .subscribe((closeLoc) =>
+        setCloseLoc((pre) => {
+          if (!closeLoc) return pre;
+          return closeLoc;
+        })
+      );
 
     return () => {
       closeLoc$.unsubscribe();

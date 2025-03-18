@@ -4,14 +4,15 @@ import './car_info.css';
 import { useState } from 'react';
 import { ConfigProvider, Popover } from 'antd';
 import BtnGroup from './components/BtnGroup';
-import { useAtomValue } from 'jotai';
-import { darkMode } from '@renderer/utils/gloable';
-import { amrId2Color } from '@renderer/utils/utils';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { darkMode, hintAmr } from '@renderer/utils/gloable';
+import { amrId2ColorRainbow } from '@renderer/utils/utils';
 
 const Card: React.FC<{ id: string }> = ({ id }) => {
   const [openHiddenRow, setOpenHiddenRow] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
   const [openFullInfo, setOpenFullInfo] = useState(false);
+  const setHintAmr = useSetAtom(hintAmr);
   const isDark = useAtomValue(darkMode);
 
   const handleOpenChange = (newOpen: boolean) => {
@@ -39,9 +40,18 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
           placement="rightTop"
           onOpenChange={handleOpenChange}
         >
-          <InfoWrap randomcolor={amrId2Color(id)} is_dark={isDark.toString()}>
+          <InfoWrap
+            randomcolor={amrId2ColorRainbow(id)}
+            is_dark={isDark.toString()}
+            onMouseEnter={() => {
+              setHintAmr(id);
+            }}
+            onMouseLeave={() => {
+              setHintAmr('');
+            }}
+          >
             <DropDown
-              color={amrId2Color(id)}
+              color={amrId2ColorRainbow(id)}
               openFullInfo={openFullInfo}
               setOpenFullInfo={setOpenFullInfo}
             ></DropDown>

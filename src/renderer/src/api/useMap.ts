@@ -65,7 +65,6 @@ const schema = object({
 
 const getMap = async () => {
   const { data } = await api.get<unknown>('map');
-
   const parsed = await schema.validate(data, { stripUnknown: true });
   if (parsed.imageUrl) {
     parsed.imageUrl = `${MISSION_CONTROL_URL.replace('localhost', location.host).replace(

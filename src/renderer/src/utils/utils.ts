@@ -83,3 +83,12 @@ export const amrId2Color = (amrId: string) => {
   const color = `#${hsl.hex([h, s, l])}`;
   return color;
 };
+
+export const amrId2ColorRainbow = (amrId: string) => {
+  const seed = parseInt(`0x${MD5(amrId).toString()}`, 16);
+  const h = seed % 360;
+  const s = (seed % 70) + 80;
+  const l = (seed % 60) + 10;
+  const color = `#${hsl.hex([h, s, l])}`;
+  return color;
+};

@@ -1,4 +1,3 @@
- 
 import styled from 'styled-components';
 import { FC, memo } from 'react';
 import { useAtomValue } from 'jotai';
@@ -6,23 +5,23 @@ import { DragLineInfo, showBlockId as ShowBlockId } from '@renderer/utils/gloabl
 import { EditRoadPanelSwitch } from '@renderer/utils/siderGloble';
 
 const PointDiv = styled.div.attrs<{
-  left: number
-  top: number
-  canrotate: string
-  hoverLoc?: boolean
+  left: number;
+  top: number;
+  canrotate: string;
+  hoverLoc?: boolean;
 }>(({ left, top, canrotate, hoverLoc }) => ({
   style: { left, top, canrotate, hoverLoc }
 }))<{
-  left: number
-  top: number
-  canrotate: string
-  hoverLoc?: boolean
+  left: number;
+  top: number;
+  canrotate: string;
+  hoverLoc?: boolean;
 }>`
   position: absolute;
-  width: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
-  height: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
-  background: ${(props) => (props.canrotate === 'true' ? '#f27ef4' : '#1b00ce')};
-  border-radius: ${(props) => (props.canrotate === 'true' ? 0 : '50%')};
+  width: 5px;
+  height: 5px;
+  background: ${(props) => (props.canrotate === 'true' ? '#ebac5b' : '#1b00ce')};
+  border-radius: 50%;
   z-index: 10;
   transition-duration: 200ms;
 
@@ -36,11 +35,11 @@ const PointDiv = styled.div.attrs<{
 export const Point = memo(PointDiv);
 
 const DraggableLineDiv = styled.div.attrs<{
-  left: number
-  top: number
-  deg: number
-  width: number
-  openeditroadpanel: boolean
+  left: number;
+  top: number;
+  deg: number;
+  width: number;
+  openeditroadpanel: boolean;
 }>(({ left, top, deg, width }) => ({
   style: {
     left,

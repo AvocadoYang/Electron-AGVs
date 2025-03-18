@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react';
-import { SearchOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
-import { ConfigProvider, Input, Select, SelectProps } from 'antd';
+import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { ConfigProvider, Select, SelectProps } from 'antd';
 import { useAtomValue } from 'jotai';
 import { darkMode } from '@renderer/utils/gloable';
 import useName from '@renderer/api/useAmrName';

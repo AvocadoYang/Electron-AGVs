@@ -49,3 +49,6 @@ export const chargeStationModelProp = atom<{
 
 export const isEditChargeStation = atom(false);
 export const chargeStationEditData = atom<null | SelectStation>(null);
+
+export const hintAmr = atom('');
+export const AmrFilterCarCard = atom('');
