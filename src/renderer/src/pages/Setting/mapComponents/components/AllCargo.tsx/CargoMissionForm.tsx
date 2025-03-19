@@ -18,9 +18,9 @@ const H1 = styled.h1`
 `;
 
 const CargoMissionForm: FC<{
-  locId: string
-  locName: string | null
-  form: FormInstance<unknown>
+  locId: string;
+  locName: string | null;
+  form: FormInstance<unknown>;
 }> = ({ locId, locName, form }) => {
   const { data: misTitle } = useAllMissionTitles();
   const { data: yaw } = useYaw();
@@ -43,10 +43,6 @@ const CargoMissionForm: FC<{
   useEffect(() => {
     if (!shelf) return;
 
-    const tasks = shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'normal').map((v) => {
-      return v.Title?.id;
-    });
-
     const loadTask = shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'load').map((v) => {
       return v.Title?.id;
     })[0];
@@ -57,7 +53,6 @@ const CargoMissionForm: FC<{
       }
     )[0];
 
-    form.setFieldValue('titleId', tasks);
     form.setFieldValue('load', loadTask);
     form.setFieldValue('offload', offloadTask);
     form.setFieldValue('region', shelf.loc_regions?.id);

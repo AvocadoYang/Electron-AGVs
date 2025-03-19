@@ -605,7 +605,10 @@
       "none": "不指定",
       "not_info_yet": "尚未設定此地點屬性",
       "haven't_set_default": "尚未設定任何模擬任務",
-      "do_you_want_to_create_one": "必須創建新的任務模擬才能使用"
+      "do_you_want_to_create_one": "必須創建新的任務模擬才能使用",
+      "not_mission_set": "尚未設定任務, 請去設定頁面設定",
+      "valid_mission": "任務已設定",
+      "valid_mission_info": "設定取放貨任務才能在任務模擬時執行正確的行為, 如未設定將此地區跳過"
     },
     "robot": {
       "no_add_warn": "點擊下方新增按鍵後拖移機器人到地圖點位上",
@@ -619,7 +622,13 @@
     },
     "select_script": {
       "change": "選擇其他腳本",
-      "add_or_change": "新增或建立新腳本"
+      "add_or_change": "新增或建立新腳本",
+      "info": "可新增或切換不同腳本, 每次切換地點設定與車輛設定會不同,但是地點和路線會是相同的.",
+      "script": "腳本",
+      "status": "狀態",
+      "using": "使用中",
+      "no_using": "-",
+      "using_this": "使用此腳本"
     }
   }
 }

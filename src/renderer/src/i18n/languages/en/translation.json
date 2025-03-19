@@ -605,7 +605,10 @@
       "none": "none",
       "not_info_yet": "Haven't set default script",
       "haven't_set_default": "Haven't set default script",
-      "do_you_want_to_create_one": "A default Script mission is required or can not use"
+      "do_you_want_to_create_one": "A default Script mission is required or can not use",
+      "not_mission_set": "The mission has not been set yet, please go to the settings page to set it",
+      "valid_mission": "mission has set",
+      "valid_mission_info": "Set the pick-up and delivery mission to perform the correct behavior during the mission simulation. If not set, this area will be skipped."
     },
     "robot": {
       "no_add_warn": "The robot has not been added yet. Click the Add button below and drag the robot to the map point.",
@@ -619,7 +622,13 @@
     },
     "select_script": {
       "change": "Change Script",
-      "add_or_change": "Add or Change Script"
+      "add_or_change": "Add or Change Script",
+      "info": "You can add or switch different scripts. The location settings and vehicle settings will be different each time you switch, but the location and route will be the same.",
+      "script": "script",
+      "status": "Status",
+      "using": "using",
+      "no_using": "-",
+      "using_this": "use this script"
     }
   }
 }

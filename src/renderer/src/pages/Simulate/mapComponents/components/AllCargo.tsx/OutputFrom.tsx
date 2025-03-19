@@ -1,10 +1,35 @@
 import useName from '@renderer/api/useAmrName';
 import useMap from '@renderer/api/useMap';
+import useSpecificShelf from '@renderer/api/useSpecificShelf';
 import { outputFormData, selectedLocation } from '@renderer/pages/Simulate/utils/status';
-import { Button, Flex, Form, FormInstance, InputNumber, Select, Switch } from 'antd';
+import {
+  Button,
+  Flex,
+  Form,
+  FormInstance,
+  InputNumber,
+  Select,
+  Switch,
+  Tooltip,
+  Typography
+} from 'antd';
 import { useAtomValue } from 'jotai';
-import { FC, useEffect, useMemo, useRef } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+
+const MissionStatus = styled.div`
+  margin: 0;
+  position: relative;
+  top: 0;
+  right: 0;
+  font-size: 1.2em;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+`;
 
 const OutputFrom: FC<{
   form: FormInstance<unknown>;
@@ -13,6 +38,9 @@ const OutputFrom: FC<{
   const { t } = useTranslation();
   const tempFormData = useAtomValue(outputFormData);
   const selectLocation = useAtomValue(selectedLocation);
+  const { data: shelf } = useSpecificShelf(selectLocation as string);
+  const [isSetMission, setIsSetMission] = useState(false);
+
   const data = useMap();
   const ref = useRef(null);
 
@@ -36,6 +64,15 @@ const OutputFrom: FC<{
 
     return [{ label: t('sim.modal.none'), value: 'none' }, ...result];
   }, [name]);
+
+  useEffect(() => {
+    if (!shelf) return;
+
+    const loadTaskCount =
+      shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'load').length || 0;
+
+    setIsSetMission(loadTaskCount > 0);
+  }, [shelf]);
 
   useEffect(() => {
     if (tempFormData !== null && ref.current !== null) {
@@ -76,6 +113,16 @@ const OutputFrom: FC<{
           <Button onClick={tempSaveData}>{t('sim.modal.select_locations')}</Button>
         </Flex>
       </Form>
+
+      <MissionStatus>
+        <Tooltip placement="top" title={t('sim.modal.valid_mission_info')}>
+          <QuestionCircleOutlined />
+        </Tooltip>
+
+        <Typography.Text type={isSetMission ? 'success' : 'danger'}>
+          {isSetMission ? t('sim.modal.valid_mission') : t('sim.modal.not_mission_set')}
+        </Typography.Text>
+      </MissionStatus>
     </>
   );
 };

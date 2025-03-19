@@ -1,14 +1,14 @@
 import client from '@renderer/api/axiosClient';
-import SubmitButton from '@renderer/utils/SubmitButton';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Flex, Form, Input, message, Modal, Select, Tooltip } from 'antd';
+import { Button, Flex, Form, Input, message, Modal, Table, Tooltip, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { FC, memo, useEffect, useMemo, useState } from 'react';
+import { FC, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { array, boolean, object, string } from 'yup';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 type FieldType = {
   name: string;
@@ -51,12 +51,17 @@ const getAllScript = async () => {
   return result;
 };
 
+type DataType = {
+  id: string;
+  name: string;
+  isUsing: boolean;
+};
+
 const SelectScript: FC = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [formNewScript] = Form.useForm();
   const [messageApi, contextHolders] = message.useMessage();
-  const [formChangeScript] = Form.useForm();
   const queryClient = useQueryClient();
   const { data, refetch } = useQuery(['_'], {
     queryFn: () => {
@@ -84,15 +89,20 @@ const SelectScript: FC = () => {
       refetch();
       queryClient.refetchQueries({ queryKey: ['simulate-script'] });
       queryClient.refetchQueries({ queryKey: ['script-robot'] });
-      setIsOpen(false);
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  const scriptOption = useMemo(
-    () => data?.map((v) => ({ value: v?.id, label: v?.name })) || [],
-    [data]
-  );
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => {
+      return client.post('api/simulate/delete-script', { id });
+    },
+    onSuccess: () => {
+      void messageApi.success(t('utils.success'));
+      refetch();
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  });
 
   const showModal = () => {
     setIsOpen(true);
@@ -106,28 +116,64 @@ const SelectScript: FC = () => {
     setIsOpen(false);
   };
 
-  const onFinishChangeScript = () => {
-    const id = formChangeScript.getFieldValue('scriptId') as string;
-
-    changeScriptMutation.mutate(id);
-  };
-
   const onFinishAddScript = () => {
     const name = formNewScript.getFieldValue('name') as string;
 
     createMutation.mutate({ name });
   };
 
-  useEffect(() => {
-    if (data && isOpen) {
-      const currentUsing = data.find((v) => v?.isUsing);
-      if (currentUsing) {
-        formChangeScript.setFieldValue('scriptId', currentUsing.id);
+  const columns = [
+    {
+      title: t('sim.select_script.script'),
+      dataIndex: 'scriptName',
+      key: 'scriptName',
+      render: (_, record: DataType) => {
+        return <Typography.Text>{record.name}</Typography.Text>;
       }
-    } else if (!isOpen) {
-      return;
+    },
+    {
+      title: t('sim.select_script.status'),
+      dataIndex: 'status',
+      key: 'status',
+      render: (_, record: DataType) => {
+        return record.isUsing ? (
+          <Typography.Text type="success">{t('sim.select_script.using')}</Typography.Text>
+        ) : (
+          <Typography.Text type="secondary">{t('sim.select_script.no_using')}</Typography.Text>
+        );
+      }
+    },
+    {
+      title: '',
+      dataIndex: 'action',
+      key: 'action',
+      render: (_, record: DataType) => {
+        return (
+          <Flex justify="end" gap="large">
+            {record.isUsing ? (
+              []
+            ) : (
+              <Button
+                onClick={() => changeScriptMutation.mutate(record.id)}
+                type="primary"
+                loading={changeScriptMutation.isLoading}
+              >
+                {t('sim.select_script.using_this')}
+              </Button>
+            )}
+            <Button
+              variant="filled"
+              danger
+              onClick={() => deleteMutation.mutate(record.id)}
+              loading={deleteMutation.isLoading}
+            >
+              {t('utils.delete')}
+            </Button>
+          </Flex>
+        );
+      }
     }
-  }, [data, isOpen, formChangeScript]);
+  ];
 
   return (
     <>
@@ -147,9 +193,6 @@ const SelectScript: FC = () => {
           open={isOpen}
           onOk={handleOk}
           onCancel={handleCancel}
-          footer={() => (
-            <SubmitButton isModel form={formChangeScript} onOk={onFinishChangeScript} />
-          )}
         >
           <Form form={formNewScript} onFinish={onFinishAddScript}>
             <Flex gap="large">
@@ -162,20 +205,24 @@ const SelectScript: FC = () => {
               </Form.Item>
 
               <Form.Item>
-                <Button type="primary" htmlType="submit" icon={<PlusOutlined />} />
+                <Tooltip title={t('utils.add')}>
+                  <Button type="primary" htmlType="submit" icon={<PlusOutlined />} />
+                </Tooltip>
               </Form.Item>
             </Flex>
           </Form>
 
-          <Form form={formChangeScript}>
-            <Form.Item
-              label={t('sim.select_script.change')}
-              name="scriptId"
-              rules={[{ required: true, message: t('utils.required') }]}
-            >
-              <Select options={scriptOption} />
-            </Form.Item>
-          </Form>
+          <Flex vertical gap="large">
+            <Tooltip placement="left" title={t('sim.select_script.info')}>
+              <QuestionCircleOutlined />
+            </Tooltip>
+
+            <Table
+              rowKey={(record) => record?.id as string}
+              columns={columns}
+              dataSource={data as []}
+            />
+          </Flex>
         </Modal>
       ) : (
         []
