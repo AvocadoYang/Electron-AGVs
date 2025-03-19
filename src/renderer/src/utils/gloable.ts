@@ -52,5 +52,6 @@ export const isEditChargeStation = atom(false);
 export const chargeStationEditData = atom<null | SelectStation>(null);
 
 export const hintAmr = atom('');
+// export const AmrFilterCarCard = atom<Set<string>>(new Set([]));
 export const AmrFilterCarCard = atom('');
 export const AmrCarSelectFilter = atom<SelectProps['options']>([]);

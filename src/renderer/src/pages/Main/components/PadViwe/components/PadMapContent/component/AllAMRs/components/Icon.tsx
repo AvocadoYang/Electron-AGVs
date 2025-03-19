@@ -1,14 +1,11 @@
 import { FC, memo, useMemo } from 'react';
 import styled from 'styled-components';
 import { AGV_HEIGHT, AGV_WIDTH, AMR_FORK_HEIGHT, AMR_FORK_WIDTH } from '@renderer/configs/config';
-import { ArrowDownOutlined } from '@ant-design/icons';
 import useMap from '@renderer/api/useMap';
-import { Spin, Tooltip } from 'antd';
-import '../style.css';
+
+import { useAtom } from 'jotai';
+import { AmrFilterCarCard } from '@renderer/utils/gloable';
 import { useAmrPose } from '@renderer/sockets/useAMRInfo';
-import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
-import { useAtom, useAtomValue } from 'jotai';
-import { AmrFilterCarCard, hintAmr } from '@renderer/utils/gloable';
 
 const ColorAmr = styled.div.attrs<{
   width: number;
@@ -45,28 +42,6 @@ const ColorAmr = styled.div.attrs<{
   border-radius: 2px;
 `;
 
-const Tip = styled.div.attrs<{
-  left: number;
-  top: number;
-}>(({ left, top }) => ({
-  style: {
-    // transform: `translate(15%, -40%) `,
-    left: `${left + 2}px`,
-    top: `${top - 22}px`,
-    transition: 'x 1s, y 1s'
-  }
-}))<{
-  left: number;
-  top: number;
-}>`
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  top: -150%;
-  left: -200%;
-`;
-
 const Fork = styled.div<{
   direct: string;
 }>`
@@ -80,26 +55,17 @@ const Fork = styled.div<{
   bottom: -53%;
 `;
 
-const agvFormate = (x1: number, y1: number) => {
-  const theta = (3 * Math.PI) / 2;
-  const x = x1 * Math.cos(theta) - y1 * Math.sin(theta);
-  const y = x1 * Math.sin(theta) + y1 * Math.cos(theta);
-
-  return { x, y };
-};
-
 // 此component 不該一直被render
 // 所以把rotate的css屬性移動制上層
 const Icon: FC<{
   amrId: string;
   color: string;
-}> = ({ amrId, color }) => {
+  left: number;
+  top: number;
+}> = ({ amrId, color, left, top }) => {
   const { data: map } = useMap();
-  const hintAmrId = useAtomValue(hintAmr);
-  const [amrFilterCarCard, setAmrFilterCarCard] = useAtom(AmrFilterCarCard);
-
   const { pose } = useAmrPose(amrId);
-
+  const [amrFilterCarCard, setAmrFilterCarCard] = useAtom(AmrFilterCarCard);
   const needOpacity = useMemo(() => {
     if (amrFilterCarCard == '') {
       return false;
@@ -107,28 +73,9 @@ const Icon: FC<{
     return amrFilterCarCard === amrId ? false : true;
   }, [amrFilterCarCard]);
 
-  if (!pose || !map) return null;
-
-  const { x: newX, y: newY } = agvFormate(pose.x, pose.y);
-  const [left, top] = rosCoord2DisplayCoord({
-    x: amrId.includes('SW15') ? newX + 3.5 : pose.x,
-    y: amrId.includes('SW15') ? newY + 0.4 : pose.y,
-    mapResolution: map.mapResolution,
-    mapOriginX: map.mapOriginX,
-    mapOriginY: map.mapOriginY,
-    mapHeight: map.mapHeight
-  });
-
-  if (!map) return <Spin />;
+  if (!map || !pose) return null;
   return (
     <>
-      {hintAmrId === amrId ? (
-        <Tip left={left} top={top}>
-          <ArrowDownOutlined className="hint-icon" />
-        </Tip>
-      ) : (
-        []
-      )}
       <ColorAmr
         className={`${needOpacity ? 'opacity-icon' : ''}`}
         onClick={() => {
@@ -153,8 +100,6 @@ const Icon: FC<{
         {amrId.includes('anfa') ? <Fork direct="left"></Fork> : null}
         {amrId.includes('anfa') ? <Fork direct="right"></Fork> : null}
       </ColorAmr>
-      {/* <Tooltip title={amrId} open={hintAmrId === amrId || amrFilterCarCard === amrId}>
-      </Tooltip> */}
     </>
   );
 };
