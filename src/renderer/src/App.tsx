@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Routes, Route, HashRouter } from 'react-router-dom';
-import { Main, LogIn, Setting, Register } from './pages';
-import Simulate from './pages/Simulate/Simulate';
+import { Main, LogIn, Setting, Register, Simulate } from './pages';
 
 const client = new QueryClient({
   defaultOptions: {

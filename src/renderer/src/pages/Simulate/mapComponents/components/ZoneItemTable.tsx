@@ -16,6 +16,7 @@ import {
   isOpenCargoModal,
   isSelectCargo,
   outputFormData,
+  selectedLocation,
   targetKeyJotai,
   zoneValue
 } from '../../utils/status';
@@ -42,6 +43,7 @@ const ZoneItemTable: FC = () => {
   const [temp, setTemp] = useAtom(outputFormData);
   const setIsSelecting = useSetAtom(isSelectCargo);
   const setOpenModel = useSetAtom(isOpenCargoModal);
+  const selectLocation = useAtomValue(selectedLocation);
   const { t } = useTranslation();
 
   const columns: TableColumnsType<DataType> = [
@@ -56,6 +58,7 @@ const ZoneItemTable: FC = () => {
     return (
       data.data?.locations
         .filter((v) => v.areaType === '存貨區')
+        .filter((v) => v.locationId !== selectLocation)
         .map((v) => ({ locationId: v.locationId, x: v.x, y: v.y })) || []
     );
   }, [data.data?.locations]);
@@ -75,6 +78,7 @@ const ZoneItemTable: FC = () => {
                 shelf.y >= Math.min(zone.startY, zone.endY) &&
                 shelf.y <= Math.max(zone.startY, zone.endY)
             )
+            .filter((v) => v.locationId !== selectLocation)
             .map((shelf) => shelf.locationId);
 
           return of(shelvesInZone);
@@ -125,6 +129,7 @@ const ZoneItemTable: FC = () => {
           <TableTransfer
             dataSource={data.data?.locations
               .filter((v) => v.areaType === '存貨區')
+              .filter((v) => v.locationId !== selectLocation)
               .map((v) => ({ locationId: v.locationId }))}
             titles={['Source', 'Target']}
             targetKeys={targetKeys}

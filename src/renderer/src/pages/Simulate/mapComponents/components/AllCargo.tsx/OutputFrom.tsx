@@ -1,6 +1,6 @@
 import useName from '@renderer/api/useAmrName';
 import useMap from '@renderer/api/useMap';
-import { outputFormData } from '@renderer/pages/Simulate/utils/status';
+import { outputFormData, selectedLocation } from '@renderer/pages/Simulate/utils/status';
 import { Button, Flex, Form, FormInstance, InputNumber, Select, Switch } from 'antd';
 import { useAtomValue } from 'jotai';
 import { FC, useEffect, useMemo, useRef } from 'react';
@@ -12,6 +12,7 @@ const OutputFrom: FC<{
 }> = ({ form, tempSaveData }) => {
   const { t } = useTranslation();
   const tempFormData = useAtomValue(outputFormData);
+  const selectLocation = useAtomValue(selectedLocation);
   const data = useMap();
   const ref = useRef(null);
 
@@ -19,6 +20,7 @@ const OutputFrom: FC<{
     return (
       data.data?.locations
         .filter((v) => v.areaType === '存貨區')
+        .filter((v) => v.locationId !== selectLocation)
         .map((v) => ({ label: v.locationId, value: v.locationId })) || []
     );
   }, [data.data?.locations]);

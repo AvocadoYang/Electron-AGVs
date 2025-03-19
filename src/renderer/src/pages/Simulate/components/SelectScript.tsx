@@ -1,9 +1,9 @@
 import client from '@renderer/api/axiosClient';
 import SubmitButton from '@renderer/utils/SubmitButton';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Flex, Form, Input, message, Modal, Select, Tooltip } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, memo, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { array, boolean, object, string } from 'yup';
@@ -57,6 +57,7 @@ const SelectScript: FC = () => {
   const [formNewScript] = Form.useForm();
   const [messageApi, contextHolders] = message.useMessage();
   const [formChangeScript] = Form.useForm();
+  const queryClient = useQueryClient();
   const { data, refetch } = useQuery(['_'], {
     queryFn: () => {
       return getAllScript();
@@ -81,6 +82,9 @@ const SelectScript: FC = () => {
     onSuccess: () => {
       void messageApi.success(t('utils.success'));
       refetch();
+      queryClient.refetchQueries({ queryKey: ['simulate-script'] });
+      queryClient.refetchQueries({ queryKey: ['script-robot'] });
+      setIsOpen(false);
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -180,4 +184,4 @@ const SelectScript: FC = () => {
   );
 };
 
-export default SelectScript;
+export default memo(SelectScript, () => true);

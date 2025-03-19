@@ -1,5 +1,5 @@
 import useMap from '@renderer/api/useMap';
-import { inputFormData } from '@renderer/pages/Simulate/utils/status';
+import { inputFormData, selectedLocation } from '@renderer/pages/Simulate/utils/status';
 import { Form, FormInstance, InputNumber, Select, Switch } from 'antd';
 import { useAtomValue } from 'jotai';
 import { FC, useEffect, useMemo, useRef } from 'react';
@@ -10,11 +10,13 @@ const InputFrom: FC<{ form: FormInstance<unknown> }> = ({ form }) => {
   const data = useMap();
   const ref = useRef(null);
   const tempFormData = useAtomValue(inputFormData);
+  const selectLocation = useAtomValue(selectedLocation);
 
   const shelves = useMemo(() => {
     const result =
       data.data?.locations
         .filter((v) => v.areaType === '存貨區')
+        .filter((v) => v.locationId !== selectLocation)
         .map((v) => ({ label: v.locationId, value: v.locationId })) || [];
 
     return [{ label: t('sim.modal.none'), value: 'none' }, ...result];

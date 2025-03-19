@@ -46,6 +46,8 @@ const CargoModel: FC = () => {
     },
     onSuccess: () => {
       void messageApi.success(t('utils.success'));
+      setTempOutputFormData(null);
+      setTempInputFormData(null);
       refetchInfo();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
@@ -89,7 +91,7 @@ const CargoModel: FC = () => {
       input: inputData,
       output: outputData
     };
-    console.log(payload);
+
     saveMutation.mutate(payload);
   };
 
@@ -129,29 +131,39 @@ const CargoModel: FC = () => {
   return (
     <>
       {contextHolder}
-      <Modal
-        title={isLocInfoCreated ? t('sim.modal.edit_info') : t('sim.modal.not_info_yet')}
-        open={isOpening}
-        onCancel={handleCancel}
-        footer={
-          isLocInfoCreated ? (
-            <Button onClick={handleOk} variant="filled" color="primary" icon={<SaveOutlined />}>
-              {t('utils.save')}
-            </Button>
+
+      {isOpening ? (
+        <Modal
+          title={isLocInfoCreated ? t('sim.modal.edit_info') : t('sim.modal.not_info_yet')}
+          open={isOpening}
+          onCancel={handleCancel}
+          footer={
+            isLocInfoCreated ? (
+              <Button onClick={handleOk} variant="filled" color="primary" icon={<SaveOutlined />}>
+                {t('utils.save')}
+              </Button>
+            ) : (
+              []
+            )
+          }
+        >
+          {isLocInfoCreated ? (
+            <Tabs defaultActiveKey="1" items={items} />
           ) : (
-            []
-          )
-        }
-      >
-        {isLocInfoCreated ? (
-          <Tabs defaultActiveKey="1" items={items} />
-        ) : (
-          <Button loading={isLoadingCreate} onClick={handleCreate} variant="filled" color="primary">
-            {' '}
-            {t('utils.add')}
-          </Button>
-        )}
-      </Modal>
+            <Button
+              loading={isLoadingCreate}
+              onClick={handleCreate}
+              variant="filled"
+              color="primary"
+            >
+              {' '}
+              {t('utils.add')}
+            </Button>
+          )}
+        </Modal>
+      ) : (
+        []
+      )}
     </>
   );
 };

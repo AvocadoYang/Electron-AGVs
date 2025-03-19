@@ -137,4 +137,4 @@ const IdleRobotPanel: FC<{
   );
 };
 
-export default memo(IdleRobotPanel);
+export default memo(IdleRobotPanel, () => true);

@@ -2,7 +2,7 @@ import Header from '@renderer/components/Header';
 import { Layout } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import MapView from './mapComponents/MapView';
-import { useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import ZoomPad from './components/ZoomPad';
 import MapTitle from './mapComponents/components/MapTitle';
 import ZoneItemTable from './mapComponents/components/ZoneItemTable';
@@ -12,7 +12,7 @@ import { useIsMobile } from '@renderer/hooks/useIsMoblie';
 import IdleRobotPanel from './components/AMR/IdleRobotPanel';
 import SelectScript from './components/SelectScript';
 
-const Simulate = () => {
+const Simulate: FC = () => {
   const [scale, setScale] = useState(1);
   const { isMobile } = useIsMobile();
   const mapRef = useRef(null);
@@ -41,7 +41,11 @@ const Simulate = () => {
 
           {/* 選取區域時有包含在內的地點會到這個table  */}
           {isSelecting ? <ZoneItemTable /> : []}
+
+          {/* 左上圓形 切換腳本  */}
           <SelectScript />
+
+          {/* 左側未放置到地圖的車輛表 */}
           <IdleRobotPanel mapRef={mapRef} mapWrapRef={mapWrapRef} scale={scale} />
           <ZoomPad setScale={setScale}></ZoomPad>
         </Layout>

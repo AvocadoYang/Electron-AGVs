@@ -1,4 +1,4 @@
-import { FC, RefObject, useRef, useState } from 'react';
+import { FC, memo, RefObject, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { message, Spin, Tooltip } from 'antd';
 import useMap from '@renderer/api/useMap';
@@ -6,10 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import useScriptRobot from '@renderer/api/useScriptRobot';
-import { rvizCoord } from '@renderer/utils/utils';
+import { errorHandler, rvizCoord } from '@renderer/utils/utils';
 import { EditFormType } from './amr';
 import AmrForm from './AmrForm';
 import { findClosestLocation } from '../../utils/funcs';
+import { ErrorResponse } from '@renderer/utils/globalType';
 
 const AMR_FORK_WIDTH = 1.4; // meter
 const AMR_FORK_HEIGHT = 2; // meter
@@ -87,9 +88,7 @@ const AmrIcon: FC<{
       void messageApi.success(t('utils.success'));
       setIsOpen(false);
     },
-    onError: () => {
-      void messageApi.error(t('utils.error'));
-    }
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
   const isRegisterMutation = useMutation({
@@ -104,9 +103,7 @@ const AmrIcon: FC<{
       }
       handlePlacement(result.locationId);
     },
-    onError: () => {
-      void messageApi.error(t('utils.error'));
-    }
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
   const handleEditMutation = (payload: EditFormType) => {
@@ -183,4 +180,7 @@ const AmrIcon: FC<{
   );
 };
 
-export default AmrIcon;
+export default memo(
+  AmrIcon,
+  (prev, next) => JSON.stringify(prev.placement) === JSON.stringify(next.placement)
+);

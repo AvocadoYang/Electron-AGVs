@@ -4,10 +4,6 @@ import AmrIcon from './AmrIcon';
 import { amrId2Color, rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import useMap from '@renderer/api/useMap';
 
-const MemoizedAMR = memo(AmrIcon, (prevProps, nextProps) => {
-  return prevProps.placement == nextProps.placement && prevProps.amrId == nextProps.amrId;
-});
-
 const AllInMapAMRs: FC<{
   scale: number;
   mapRef: RefObject<HTMLDivElement>;
@@ -35,7 +31,7 @@ const AllInMapAMRs: FC<{
           });
 
           return (
-            <MemoizedAMR
+            <AmrIcon
               amrId={b?.full_name as string}
               key={b?.id}
               color={amrId2Color(b?.id as string)}
@@ -53,4 +49,4 @@ const AllInMapAMRs: FC<{
   );
 };
 
-export default AllInMapAMRs;
+export default memo(AllInMapAMRs, () => true);

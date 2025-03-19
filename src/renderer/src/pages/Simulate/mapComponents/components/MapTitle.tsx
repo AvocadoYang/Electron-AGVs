@@ -1,6 +1,6 @@
 import useSimulateScript from '@renderer/api/useSimulateScript';
 import { Typography } from 'antd';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -26,4 +26,4 @@ const MapTitle: FC<{ isMobile: boolean }> = ({ isMobile }) => {
   );
 };
 
-export default MapTitle;
+export default memo(MapTitle, (prev, next) => prev !== next);
