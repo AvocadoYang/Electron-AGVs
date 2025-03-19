@@ -3,6 +3,7 @@ import useMap from '@renderer/api/useMap';
 import Icon from './Icon';
 import { MD5 } from 'crypto-js';
 import { hsl } from 'color-convert';
+
 const amrId2Color = (amrId: string) => {
   const seed = parseInt(`0x${MD5(amrId).toString()}`, 16);
   const h = seed % 360;

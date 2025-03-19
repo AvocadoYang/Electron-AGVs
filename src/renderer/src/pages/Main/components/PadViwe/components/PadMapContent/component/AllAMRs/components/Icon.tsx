@@ -1,13 +1,13 @@
-import { FC, memo } from 'react';
+import { FC, memo, useMemo } from 'react';
 import styled from 'styled-components';
 import { AGV_HEIGHT, AGV_WIDTH, AMR_FORK_HEIGHT, AMR_FORK_WIDTH } from '@renderer/configs/config';
 import { ArrowDownOutlined } from '@ant-design/icons';
 import useMap from '@renderer/api/useMap';
-import { Spin } from 'antd';
+import { Spin, Tooltip } from 'antd';
 import '../style.css';
 import { useAmrPose } from '@renderer/sockets/useAMRInfo';
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { AmrFilterCarCard, hintAmr } from '@renderer/utils/gloable';
 
 const ColorAmr = styled.div.attrs<{
@@ -16,26 +16,26 @@ const ColorAmr = styled.div.attrs<{
   color: string;
   left: number;
   top: number;
-  isAgv: boolean;
+  is_agv: string;
   rotate: number;
-}>(({ left, top, isAgv, rotate }) => ({
+}>(({ left, top, is_agv, rotate }) => ({
   style: {
     left,
     top,
-    transform: `${isAgv ? `rotate(${rotate}deg)` : `translate(15%, -40%) rotate(${rotate}deg)`}`,
+    transform: `${is_agv === 'true' ? `rotate(${rotate}deg)` : `translate(15%, -40%) rotate(${rotate}deg)`}`,
     transition: 'x 1s, y 1s'
   }
 }))<{
   width: number;
   height: number;
   color: string;
-  isAgv: boolean;
+  is_agv: string;
   left: number;
   top: number;
   rotate: number;
 }>`
-  width: ${(prop) => (prop.isAgv ? prop.width - 5 : prop.width - 14)}px;
-  height: ${(prop) => (prop.isAgv ? prop.height : prop.height - 23)}px;
+  width: ${(prop) => (prop.is_agv === 'true' ? prop.width - 5 : prop.width - 14)}px;
+  height: ${(prop) => (prop.is_agv === 'true' ? prop.height : prop.height - 23)}px;
   /* transition: all 0.8s ease-out; */
   cursor: pointer;
   position: absolute;
@@ -96,9 +96,16 @@ const Icon: FC<{
 }> = ({ amrId, color }) => {
   const { data: map } = useMap();
   const hintAmrId = useAtomValue(hintAmr);
-  const setAmrFilterCarCard = useSetAtom(AmrFilterCarCard);
+  const [amrFilterCarCard, setAmrFilterCarCard] = useAtom(AmrFilterCarCard);
 
   const { pose } = useAmrPose(amrId);
+
+  const needOpacity = useMemo(() => {
+    if (amrFilterCarCard == '') {
+      return false;
+    }
+    return amrFilterCarCard === amrId ? false : true;
+  }, [amrFilterCarCard]);
 
   if (!pose || !map) return null;
 
@@ -123,6 +130,7 @@ const Icon: FC<{
         []
       )}
       <ColorAmr
+        className={`${needOpacity ? 'opacity-icon' : ''}`}
         onClick={() => {
           setAmrFilterCarCard(amrId);
         }}
@@ -140,11 +148,13 @@ const Icon: FC<{
         top={top}
         color={color}
         rotate={amrId.includes('SW15') ? 90 - pose.yaw + 180 : 90 - pose.yaw}
-        isAgv={amrId.includes('SW15')}
+        is_agv={amrId.includes('SW15').toString()}
       >
         {amrId.includes('anfa') ? <Fork direct="left"></Fork> : null}
         {amrId.includes('anfa') ? <Fork direct="right"></Fork> : null}
       </ColorAmr>
+      {/* <Tooltip title={amrId} open={hintAmrId === amrId || amrFilterCarCard === amrId}>
+      </Tooltip> */}
     </>
   );
 };

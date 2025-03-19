@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 import { LocationType } from './jotai';
 import { mouseLocation } from '@renderer/pages/Setting/hooks/hook';
 import { SelectStation } from '@renderer/api/type/useLocation';
+import { SelectProps } from 'antd';
 
 // record the version of map's points
 export const sameVersion = atom(true);
@@ -52,3 +53,4 @@ export const chargeStationEditData = atom<null | SelectStation>(null);
 
 export const hintAmr = atom('');
 export const AmrFilterCarCard = atom('');
+export const AmrCarSelectFilter = atom<SelectProps['options']>([]);

@@ -1,26 +1,32 @@
 import { memo, useCallback, useEffect, useState } from 'react';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { DownOutlined, UpOutlined, CloseOutlined } from '@ant-design/icons';
 import { ConfigProvider, Select, SelectProps } from 'antd';
-import { useAtomValue } from 'jotai';
-import { darkMode } from '@renderer/utils/gloable';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { AmrCarSelectFilter, AmrFilterCarCard, darkMode } from '@renderer/utils/gloable';
 import useName from '@renderer/api/useAmrName';
 import { DefaultOptionType } from 'antd/es/select';
 
-const options: SelectProps['options'] = [];
+const UpDownIcon: React.FC<{ isDrop: boolean; setIsDrop: React.Dispatch<boolean> }> = memo(
+  ({ isDrop, setIsDrop }) => {
+    return (
+      <>
+        {isDrop ? (
+          <UpOutlined className="drop-icon" onClick={() => setIsDrop(false)} />
+        ) : (
+          <DownOutlined className="drop-icon" onClick={() => setIsDrop(true)} />
+        )}
+      </>
+    );
+  }
+);
 
-for (let i = 10; i < 36; i++) {
-  options.push({
-    value: i.toString(36) + i,
-    label: i.toString(36) + i
-  });
-}
-
-const TittleTools: React.FC<{
-  setSelectedOption: React.Dispatch<SelectProps['options']>;
-}> = ({ setSelectedOption }) => {
+const TittleTools: React.FC<{}> = () => {
   const isDark = useAtomValue(darkMode);
+  const setSelectedOption = useSetAtom(AmrCarSelectFilter);
   const [selectOption, setSelectOption] = useState<SelectProps['options']>([]);
+
   const { data: names } = useName();
+  const [hintAmrId, setHintAmrId] = useAtom(AmrFilterCarCard);
   const [isDrop, setIsDrop] = useState(false);
 
   useEffect(() => {
@@ -41,23 +47,36 @@ const TittleTools: React.FC<{
     (value: string[]) => {
       setSelectedOption(value.map((amrCategory) => ({ value: amrCategory, label: amrCategory })));
     },
-    [setSelectOption]
+    [setSelectedOption]
   );
 
   return (
     <>
       <span
         className={`card-wrap-title ${isDark ? 'dark-mode-title' : ''}`}
-        onClick={() => setIsDrop(!isDrop)}
+        onClick={() => {
+          if (hintAmrId) {
+            setHintAmrId('');
+            setIsDrop(false);
+            return;
+          }
+          setIsDrop(!isDrop);
+        }}
       >
         AMRs
-        {isDrop ? (
-          <UpOutlined className="drop-icon" onClick={() => setIsDrop(false)} />
+        {hintAmrId ? (
+          <CloseOutlined
+            onClick={() => {
+              setHintAmrId('');
+              setIsDrop(false);
+            }}
+            className="drop-icon"
+          />
         ) : (
-          <DownOutlined className="drop-icon" onClick={() => setIsDrop(true)} />
+          <UpDownIcon isDrop={isDrop} setIsDrop={setIsDrop}></UpDownIcon>
         )}
       </span>
-      {isDrop ? (
+      {isDrop && !hintAmrId ? (
         <ConfigProvider
           theme={{
             components: {

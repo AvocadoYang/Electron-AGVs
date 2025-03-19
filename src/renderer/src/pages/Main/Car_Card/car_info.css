@@ -14,6 +14,8 @@
   align-items: center;
   overflow-y: scroll;
 }
+
+
 .card-wrap-2d {
   height: 100%;
   width: 100%;
@@ -40,6 +42,7 @@
 }
 .card-wrap-title {
   font-weight: bold;
+  cursor: pointer;
   font-size: 1.3rem;
 }
 
@@ -252,3 +255,6 @@
   background-color: #262626;
 }
 
+.hide-car-info-wrap {
+  display: none !important;
+}
