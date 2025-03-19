@@ -67,10 +67,10 @@ const Icon: FC<{
   const { pose } = useAmrPose(amrId);
   const [amrFilterCarCard, setAmrFilterCarCard] = useAtom(AmrFilterCarCard);
   const needOpacity = useMemo(() => {
-    if (amrFilterCarCard == '') {
+    if (!amrFilterCarCard.size) {
       return false;
     }
-    return amrFilterCarCard === amrId ? false : true;
+    return amrFilterCarCard.has(amrId) ? false : true;
   }, [amrFilterCarCard]);
 
   if (!map || !pose) return null;
@@ -79,7 +79,15 @@ const Icon: FC<{
       <ColorAmr
         className={`${needOpacity ? 'opacity-icon' : ''}`}
         onClick={() => {
-          setAmrFilterCarCard(amrId);
+          setAmrFilterCarCard((pre) => {
+            if (pre.has(amrId)) {
+              pre.delete(amrId);
+              return new Set([...pre]);
+            } else {
+              pre.add(amrId);
+              return new Set([...pre]);
+            }
+          });
         }}
         width={
           amrId.includes('SW15')

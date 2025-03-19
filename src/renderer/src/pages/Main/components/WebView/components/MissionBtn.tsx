@@ -17,20 +17,25 @@ const MissionBtn = () => {
         {t('main.card_name.input_mission')}
       </Button> */}
 
-        <Button type="primary" size="small" onClick={() => {}} icon={<RedoOutlined />}>
+        <Button color="primary" variant="outlined" onClick={() => {}} icon={<RedoOutlined />}>
           {t('toolbar.mission.cycle_mission')}
         </Button>
 
-        <Button type="primary" size="small" onClick={() => {}} icon={<ThunderboltOutlined />}>
+        <Button
+          color="primary"
+          variant="outlined"
+          onClick={() => {}}
+          icon={<ThunderboltOutlined />}
+        >
           {t('main.card_name.quick_mission')}
         </Button>
 
         <Button
-          type="primary"
+          color="primary"
+          variant="outlined"
           onClick={() => {
             openAssignMission(true);
           }}
-          size="small"
           icon={<CalendarOutlined />}
         >
           {t('main.card_name.new_mission')}

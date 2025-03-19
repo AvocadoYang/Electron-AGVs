@@ -21,8 +21,8 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
   const isDark = useAtomValue(darkMode);
 
   const hide = useMemo(() => {
-    if (hintAmrId) {
-      return hintAmrId !== id;
+    if (hintAmrId.size) {
+      return !hintAmrId.has(id);
     }
     if (!selectedOption) return false;
     if (selectedOption?.length) {

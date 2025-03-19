@@ -22,7 +22,10 @@ const WebMapView: React.FC<{
       onClick={(e) => {
         if (!hintAmrId) return;
         if ((e.target as HTMLElement).tagName === 'IMG') {
-          setHintAmrId('');
+          setHintAmrId((pre) => {
+            pre.clear();
+            return new Set([...pre]);
+          });
         }
       }}
     >

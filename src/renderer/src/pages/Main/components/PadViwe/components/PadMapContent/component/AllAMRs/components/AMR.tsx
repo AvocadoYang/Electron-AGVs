@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import useMap from '@renderer/api/useMap';
 import Icon from './Icon';
 import { MD5 } from 'crypto-js';
@@ -9,7 +9,7 @@ import { useAmrPose } from '@renderer/sockets/useAMRInfo';
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
-import { hintAmr } from '@renderer/utils/gloable';
+import { AmrFilterCarCard, hintAmr } from '@renderer/utils/gloable';
 
 const Tip = styled.div.attrs<{
   left: number;
@@ -74,6 +74,11 @@ const AMR: FC<{
   const { data: map } = useMap();
   const color = amrId2Color(amrId);
   const hintAmrId = useAtomValue(hintAmr);
+  const hintAmrId2 = useAtomValue(AmrFilterCarCard);
+
+  const showTooltip = useMemo(() => {
+    return hintAmrId2.has(amrId) || hintAmrId === amrId;
+  }, [hintAmrId2, hintAmrId]);
   const { pose } = useAmrPose(amrId);
   if (!pose || !map) return null;
 
@@ -90,7 +95,7 @@ const AMR: FC<{
   // 會一直被渲染是正常的 不要包memo
   return (
     <>
-      {hintAmrId == amrId ? (
+      {showTooltip ? (
         <Tip left={left} top={top}>
           <p>{amrId}</p>
           {/* <ArrowDownOutlined className="hint-icon" /> */}

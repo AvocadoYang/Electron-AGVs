@@ -55,8 +55,11 @@ const TittleTools: React.FC<{}> = () => {
       <span
         className={`card-wrap-title ${isDark ? 'dark-mode-title' : ''}`}
         onClick={() => {
-          if (hintAmrId) {
-            setHintAmrId('');
+          if (hintAmrId.size) {
+            setHintAmrId((pre) => {
+              pre.clear();
+              return new Set([...pre]);
+            });
             setIsDrop(false);
             return;
           }
@@ -64,10 +67,13 @@ const TittleTools: React.FC<{}> = () => {
         }}
       >
         AMRs
-        {hintAmrId ? (
+        {hintAmrId.size ? (
           <CloseOutlined
             onClick={() => {
-              setHintAmrId('');
+              setHintAmrId((pre) => {
+                pre.clear();
+                return new Set([...pre]);
+              });
               setIsDrop(false);
             }}
             className="drop-icon"
@@ -76,7 +82,7 @@ const TittleTools: React.FC<{}> = () => {
           <UpDownIcon isDrop={isDrop} setIsDrop={setIsDrop}></UpDownIcon>
         )}
       </span>
-      {isDrop && !hintAmrId ? (
+      {isDrop && !hintAmrId.size ? (
         <ConfigProvider
           theme={{
             components: {
