@@ -1,5 +1,6 @@
 import client from '@renderer/api/axiosClient';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import { isFork, isHumanRobot } from '@renderer/utils/globalFunction';
 import { Err } from '@renderer/utils/responseErr';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Form, message, Modal, Select } from 'antd';
@@ -7,19 +8,20 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type ImportTask = {
-  order: number
-  currentTaskId: string
-  importTaskId: string
-}
+  order: number;
+  currentTaskId: string;
+  importTaskId: string;
+};
 
 const ImportMissionForm: FC<{
-  showImportMission: boolean
-  setShowImportMission: React.Dispatch<React.SetStateAction<boolean>>
+  showImportMission: boolean;
+  selectedMissionCar: string;
+  setShowImportMission: React.Dispatch<React.SetStateAction<boolean>>;
   importConfig: {
-    order: number
-    key: string
-  } | null
-}> = ({ showImportMission, setShowImportMission, importConfig }) => {
+    order: number;
+    key: string;
+  } | null;
+}> = ({ showImportMission, setShowImportMission, importConfig, selectedMissionCar }) => {
   const [formImportMission] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
@@ -69,9 +71,21 @@ const ImportMissionForm: FC<{
     setShowImportMission(false);
   };
 
-  const options = data?.map((v) => {
-    return { value: v.id, label: v.name };
-  });
+  const options = data
+    ?.filter((v) => {
+      if (isFork(selectedMissionCar)) {
+        return isFork(v.Robot_types?.value || '');
+      }
+
+      if (isHumanRobot(selectedMissionCar)) {
+        return isHumanRobot(v.Robot_types?.value || '');
+      }
+
+      return false;
+    })
+    .map((v) => {
+      return { value: v.id, label: v.name };
+    });
 
   return (
     <>

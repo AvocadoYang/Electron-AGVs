@@ -1,4 +1,3 @@
- 
 import { Button, Col, Form, Modal, Row, Input, Select, Flex, message } from 'antd';
 import { FC, useState, useMemo } from 'react';
 import { nanoid } from 'nanoid';
@@ -15,9 +14,9 @@ import MissionForm from './MissionForm';
 import SwitchTable from './SwitchTable';
 
 const EditMissionPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ sortableId, attributes, listeners }) => {
   const [formMission] = Form.useForm();
   const [createMissionForm] = Form.useForm();
@@ -46,7 +45,6 @@ const EditMissionPanel: FC<{
     {
       onSuccess: async () => {
         await queryClient.refetchQueries({ queryKey: ['all-mission-title'] });
-        await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
       }
     }
   );
@@ -64,11 +62,21 @@ const EditMissionPanel: FC<{
 
   const handleAdd = () => {
     const formData = createMissionForm.getFieldsValue(true) as MissionListType;
-    if (!formData.name) return messageApi.warning(t('mission.add_mission.empty_warn'));
-    if (!formData.car_type) return messageApi.warning(t('mission.add_mission.empty_car_warn'));
-    if (allMissionTitle?.some((item) => item.name === formData.name))
-      return messageApi.warning(t('mission.add_mission.duplicate_warn'));
-    amrs?.forEach((item) => item.name === formData.car_type && (formData.car_type = item.id));
+    if (!formData.name) {
+      messageApi.warning(t('mission.add_mission.empty_warn'));
+      return;
+    }
+    if (!formData.robot_type_id) {
+      messageApi.warning(t('mission.add_mission.empty_car_warn'));
+      return;
+    }
+    if (allMissionTitle?.some((item) => item.name === formData.name)) {
+      messageApi.warning(t('mission.add_mission.duplicate_warn'));
+      return;
+    }
+    amrs?.forEach(
+      (item) => item.name === formData.robot_type_id && (formData.robot_type_id = item.id)
+    );
     addMutation.mutate({ ...formData, key: nanoid() });
     createMissionForm.setFieldValue('name', '');
     setOpenWithCreateMission(false);
@@ -82,8 +90,7 @@ const EditMissionPanel: FC<{
       messageApi.warning(t('mission.add_mission.name_warn'));
       return;
     }
-
-    if (!editData.car_type || editData.car_type.trim() === '') {
+    if (!editData.robot_type_id || editData.robot_type_id.trim() === '') {
       messageApi.warning(t('mission.add_mission.car_warn'));
       return;
     }
@@ -94,9 +101,12 @@ const EditMissionPanel: FC<{
 
   const newCarList = amrs?.map((v) => ({ label: v.name, value: v.id }));
   const createMissionBtn = () => {
-    if (!amrs?.[0]?.id) return messageApi.warning(t('mission.add_mission.empty_warn'));
+    if (!amrs?.[0]?.id) {
+      messageApi.warning(t('mission.add_mission.empty_warn'));
+      return;
+    }
     setOpenWithCreateMission(true);
-    createMissionForm.setFieldValue('car_type', amrs[0].name);
+    createMissionForm.setFieldValue('robot_type_id', amrs[0].name);
   };
 
   return (
@@ -164,7 +174,7 @@ const EditMissionPanel: FC<{
           >
             <Input placeholder="請輸入任務名稱" />
           </Form.Item>
-          <Form.Item hasFeedback label={t('mission.add_mission.car')} name="car_type">
+          <Form.Item hasFeedback label={t('mission.add_mission.car')} name="robot_type_id">
             <Select placeholder="請選擇" options={newCarList} />
           </Form.Item>
           <Form.Item label={t('mission.add_mission.tag')} name="category">

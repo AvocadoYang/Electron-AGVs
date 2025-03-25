@@ -7,7 +7,7 @@ import {
   ImportOutlined,
   MenuOutlined
 } from '@ant-design/icons';
-import { Button, Flex, Popconfirm, Table, Tooltip, message } from 'antd';
+import { Button, Flex, Popconfirm, Table, Tag, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
@@ -21,18 +21,12 @@ import { CSS } from '@dnd-kit/utilities';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import useTask from '@renderer/api/useTask';
 import client from '@renderer/api/axiosClient';
 import ImportMissionForm from './ImportMissionForm';
-import { ActionTypes } from './mission';
+import { Robot_Mission_Slice } from './mission';
 import { Err } from '@renderer/utils/responseErr';
 import CarControlTranslate from './CarControlTranslate';
-
-enum YawGenre {
-  CUSTOM,
-  SELECT,
-  CALCULATE_BY_AGV_AND_SHELF_ANGLE
-}
+import useTaskHumanRobot from '@renderer/api/useTaskHumanRobot';
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   'data-row-key': string;
@@ -56,11 +50,6 @@ const Dot = styled.div<DotStyle>`
   width: 7px;
   height: 7px;
   background-color: ${(prop) => (prop.$active ? '#979797' : '#2bea00')};
-`;
-
-const SpanBlock = styled.div`
-  min-width: 5em;
-  letter-spacing: 2px;
 `;
 
 const DataRow = ({ children, ...props }: RowProps) => {
@@ -106,16 +95,12 @@ const DataRow = ({ children, ...props }: RowProps) => {
   );
 };
 
-const TaskTable: FC<{
+const HumanRobotTaskTable: FC<{
   showModal: (key: string) => void;
   selectedMissionKey: string;
-  // selectedMissionCar: string;
-}> = ({
-  showModal,
-  selectedMissionKey
-  // selectedMissionCar,
-}) => {
-  const { data: taskDataSource } = useTask(selectedMissionKey);
+  selectedMissionCar: string;
+}> = ({ showModal, selectedMissionKey, selectedMissionCar }) => {
+  const { data: taskDataSource } = useTaskHumanRobot(selectedMissionKey);
 
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
@@ -128,7 +113,7 @@ const TaskTable: FC<{
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: ['all-relate-task', selectedMissionKey]
+        queryKey: ['all-relate-task-human-robot', selectedMissionKey]
       });
     },
     onError(error: Err) {
@@ -143,7 +128,7 @@ const TaskTable: FC<{
       });
     },
     onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
+      await queryClient.refetchQueries({ queryKey: ['all-relate-task-human-robot'] });
     },
     onError(error: Err) {
       messageApi.error(error.response.data.msg);
@@ -156,7 +141,7 @@ const TaskTable: FC<{
     },
     onSuccess: async () => {
       void messageApi.success(t('utils.success'));
-      await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
+      await queryClient.refetchQueries({ queryKey: ['all-relate-task-human-robot'] });
     },
     onError(error: Err) {
       messageApi.error(error.response.data.msg);
@@ -197,7 +182,7 @@ const TaskTable: FC<{
 
       sortTaskMutation.mutate(keyAndSort);
 
-      queryClient.setQueryData(['all-relate-task', selectedMissionKey], sorData);
+      queryClient.setQueryData(['all-relate-task-human-robot', selectedMissionKey], sorData);
     }
   };
 
@@ -210,7 +195,7 @@ const TaskTable: FC<{
     setImportConfig({ key: selectedMissionKey, order: order + 1 });
   };
 
-  const columns: ColumnsType<ActionTypes> = [
+  const columns: ColumnsType<Robot_Mission_Slice> = [
     {
       title: t('mission.task_table.sort'),
       key: 'sort',
@@ -219,7 +204,10 @@ const TaskTable: FC<{
     {
       title: t('mission.task_table.sort'),
       key: 'order',
-      dataIndex: 'order'
+      dataIndex: 'order',
+      render(_, record) {
+        return record.process_order;
+      }
     },
     {
       title: t('mission.task_table.status'),
@@ -246,130 +234,36 @@ const TaskTable: FC<{
           key: 'genre',
           width: 50,
           render: (_, record) => {
-            if (record.CarControl === null) {
+            if (record.operation.type === null) {
               return <p />;
             }
 
-            return <CarControlTranslate word={record.CarControl.name} />;
+            return <CarControlTranslate word={record.operation.type[0]} />;
           }
         },
 
         {
-          title: t('mission.task_table.wait'),
-          dataIndex: 'wait',
-          key: 'wait'
+          title: 'control',
+          dataIndex: 'control',
+          key: 'control',
+          render: (_, record) => {
+            return record.operation.control.map((v) => <Tag>{v}</Tag>);
+          }
         },
         {
-          title: t('mission.task_table.is_custom_location'),
-          dataIndex: 'is_define_id',
-          key: 'is_define_id',
+          title: 'param',
+          dataIndex: 'param',
+          key: 'param',
           render: (_v, record) => {
-            switch (record.is_define_id) {
-              case 'custom':
-                return t('mission.task_table.custom');
-
-              case 'auto':
-                return t('mission.task_table.auto');
-
-              case 'select':
-                return t('mission.task_table.is_selectable');
-
-              default:
-                return <></>;
-            }
+            return record.operation.param.map((v) => <Tag>{v}</Tag>);
           }
         },
         {
           title: t('mission.task_table.location'),
           dataIndex: 'locationId',
-          key: 'locationId'
-        },
-
-        {
-          title: t('mission.task_table.is_custom_yaw'),
-          dataIndex: 'is_define_yaw',
-          key: 'is_define_yaw',
-          render: (_v, record) => {
-            switch (record.is_define_yaw) {
-              case YawGenre.CUSTOM:
-                return <SpanBlock>{t('mission.task_table.custom')}</SpanBlock>;
-              case YawGenre.SELECT:
-                return <SpanBlock>{t('mission.task_table.by_target_shelf_setting')}</SpanBlock>;
-              case YawGenre.CALCULATE_BY_AGV_AND_SHELF_ANGLE:
-                return (
-                  <SpanBlock>{t('mission.task_table.calculate_by_agv_and_shelf_angle')}</SpanBlock>
-                );
-              default:
-                return '';
-            }
-          }
-        },
-        {
-          title: t('mission.task_table.yaw'),
-          dataIndex: 'yaw',
-          key: 'yaw'
-        },
-        {
-          title: t('mission.task_table.auto_preparatory_point'),
-          dataIndex: 'auto_preparatory_point',
-          key: 'auto_preparatory_point',
-          render: (_v, record) => {
-            return record.auto_preparatory_point ? t('utils.yes') : t('utils.no');
-          }
-        },
-
-        {
-          title: t('mission.task_table.is_define_heigh'),
-          dataIndex: 'is_define_height',
-          key: 'is_define_height',
+          key: 'locationId',
           render: (_, record) => {
-            switch (record.is_define_height) {
-              case 'custom':
-                return t('mission.task_table.custom');
-
-              case 'auto':
-                return t('mission.task_table.auto');
-
-              case 'select':
-                return t('mission.task_table.is_selectable');
-
-              default:
-                return <></>;
-            }
-          }
-        },
-        {
-          title: t('mission.task_table.height'),
-          dataIndex: 'f_height',
-          key: 'f_height'
-        },
-
-        {
-          title: t('mission.task_table.has_cargo_to_process'),
-          dataIndex: 'hasCargoToProcess',
-          key: 'hasCargoToProcess',
-          render: (_, record) => {
-            return record.hasCargoToProcess ? t('utils.yes') : t('utils.no');
-          }
-        },
-
-        {
-          title: t('mission.task_table.amr_list'),
-          dataIndex: 'waitOtherAmr',
-          key: 'waitOtherAmr'
-        },
-        {
-          title: t('mission.task_table.wait_genre'),
-          dataIndex: 'waitGenre',
-          key: 'waitGenre',
-          render: (_, record) => {
-            if (record.waitGenre === 'first') {
-              return t('mission.task_table.execute_first');
-            }
-            if (record.waitGenre === 'second') {
-              return t('mission.task_table.wait_other_finish');
-            }
-            return '';
+            return record.operation.id;
           }
         }
       ]
@@ -403,7 +297,7 @@ const TaskTable: FC<{
             </Button>
 
             <Button
-              onClick={() => showImportMissionModal(record.order)}
+              onClick={() => showImportMissionModal(record.process_order)}
               icon={<ImportOutlined />}
               color="primary"
               variant="filled"
@@ -444,7 +338,6 @@ const TaskTable: FC<{
     }
   ];
 
-  // console.log(taskDataSource);
   if (!taskDataSource) return [];
   return (
     <>
@@ -472,10 +365,11 @@ const TaskTable: FC<{
       <ImportMissionForm
         showImportMission={showImportMission}
         setShowImportMission={setShowImportMission}
+        selectedMissionCar={selectedMissionCar}
         importConfig={importConfig}
       />
     </>
   );
 };
 
-export default TaskTable;
+export default HumanRobotTaskTable;

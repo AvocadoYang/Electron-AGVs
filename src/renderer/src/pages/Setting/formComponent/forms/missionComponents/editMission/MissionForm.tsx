@@ -1,15 +1,16 @@
 import { ASType } from '@renderer/api/useAMRsample';
 import useCategory from '@renderer/api/useCategory';
 import { MTType } from '@renderer/api/useMissionTitle';
+import { isFork, isHumanRobot } from '@renderer/utils/globalFunction';
 import { Form, FormInstance, Input, Select } from 'antd';
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const MissionForm: FC<{
-  missionDataSource: MTType
-  editMissionKey: string
-  carDataSource: ASType
-  formMission: FormInstance<unknown>
+  missionDataSource: MTType;
+  editMissionKey: string;
+  carDataSource: ASType;
+  formMission: FormInstance<unknown>;
 }> = ({ missionDataSource, editMissionKey, formMission, carDataSource }) => {
   const { data: cat } = useCategory();
 
@@ -20,10 +21,22 @@ const MissionForm: FC<{
 
   const missionItem = missionDataSource?.filter((v) => v.id === editMissionKey)[0];
 
-  const newCarList = carDataSource?.map((v) => ({
-    label: v.name,
-    value: v.id
-  }));
+  const newCarList = carDataSource
+    ?.filter((v) => {
+      if (isFork(missionItem?.Robot_types?.value || '')) {
+        return isFork(v.value || '');
+      }
+
+      if (isHumanRobot(missionItem?.Robot_types?.value || '')) {
+        return isHumanRobot(v.value || '');
+      }
+
+      return false;
+    })
+    .map((v) => ({
+      label: v.name,
+      value: v.id
+    }));
 
   const { t } = useTranslation();
   useEffect(() => {
@@ -32,7 +45,7 @@ const MissionForm: FC<{
     const option = missionItem?.MissionTitleBridgeCategory?.map((c) => c.Category?.id) || [];
 
     formMission.setFieldValue('name', missionItem?.name);
-    formMission.setFieldValue('car_type', missionItem?.Car?.id);
+    formMission.setFieldValue('robot_type_id', missionItem?.Robot_types?.id);
     formMission.setFieldValue('category', option);
   }, [formMission, missionItem]);
 
@@ -51,7 +64,7 @@ const MissionForm: FC<{
         hasFeedback
         rules={[{ required: true, message: t('mission.add_mission.car_warn') }]}
         label={t('mission.add_mission.car')}
-        name="car_type"
+        name="robot_type_id"
       >
         <Select options={newCarList} />
       </Form.Item>

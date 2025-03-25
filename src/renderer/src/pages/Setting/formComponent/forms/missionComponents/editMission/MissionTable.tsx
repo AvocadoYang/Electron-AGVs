@@ -3,12 +3,11 @@ import client from '@renderer/api/axiosClient';
 import { MTType } from '@renderer/api/useMissionTitle';
 import { Err } from '@renderer/utils/responseErr';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Flex, message, Popconfirm, Table, Tag } from 'antd';
-import { ColumnsType } from 'antd/es/table';
+import { Button, Flex, message, Popconfirm, Table, TableColumnsType, Tag } from 'antd';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { TitleMission } from './mission';
+import { Mission_Title } from './mission';
 
 const TagWrapper = styled.div`
   display: flex;
@@ -63,9 +62,9 @@ const MissionTable: FC<{
     deleteMutation.mutate(key);
   };
 
-  const handleClick = async (record: TitleMission) => {
-    if (record.Car) {
-      setSelectedMissionCar(record.Car.value);
+  const handleClick = async (record: Mission_Title) => {
+    if (record.Robot_types) {
+      setSelectedMissionCar(record.Robot_types.value);
     }
     setSelectedMissionKey(record.id);
     try {
@@ -81,7 +80,7 @@ const MissionTable: FC<{
     setSelectedMissionKey('');
   };
 
-  const columns: ColumnsType<TitleMission> = [
+  const columns: TableColumnsType<Mission_Title> = [
     {
       title: t('mission.add_mission.name'),
       dataIndex: 'name',
@@ -95,7 +94,7 @@ const MissionTable: FC<{
       dataIndex: 'car_type',
       key: 'car_type',
       render: (_, record) => {
-        return <p>{record.Car?.name}</p>;
+        return <p>{record.Robot_types?.name}</p>;
       },
       sorter: (a, b) => a.name.localeCompare(b.name)
     },
@@ -105,8 +104,8 @@ const MissionTable: FC<{
       key: 'tag',
       render: (_, record) => {
         const tags = record.MissionTitleBridgeCategory?.map((c, idx) => (
-          <Tag key={c.Category.id || idx} color={c.Category.color}>
-            {c.Category.tagName}
+          <Tag key={c.Category?.id || idx} color={c.Category?.color}>
+            {c.Category?.tagName}
           </Tag>
         ));
         return <TagWrapper>{tags || <></>}</TagWrapper>;

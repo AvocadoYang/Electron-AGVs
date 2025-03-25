@@ -1,16 +1,17 @@
- 
 import { Button, Flex, Form, message, Modal, Tooltip } from 'antd';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import client from '@renderer/api/axiosClient';
-import { ActionTypes } from './mission';
-import TaskTable from './TaskTable';
+import { Fork_mission_Slice } from './mission';
+import ForkTaskTable from './ForkTaskTable';
 import TaskForm from './TaskForm';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { CopyOutlined, LeftOutlined, PlusOutlined } from '@ant-design/icons';
+import { isFork, isHumanRobot } from '@renderer/utils/globalFunction';
+import HumanRobotTaskTable from './HumanRobotTaskTable';
 
 const copy = (originKey: string) => {
   const randomId = nanoid();
@@ -21,9 +22,9 @@ const copy = (originKey: string) => {
 };
 
 const MissionList: FC<{
-  selectedMissionKey: string
-  setSelectedMissionKey: Dispatch<SetStateAction<string>>
-  selectedMissionCar: string
+  selectedMissionKey: string;
+  setSelectedMissionKey: Dispatch<SetStateAction<string>>;
+  selectedMissionCar: string;
 }> = ({ selectedMissionKey, setSelectedMissionKey, selectedMissionCar }) => {
   const [open, setOpen] = useState(false);
   const [editTaskKey, setEditTaskKey] = useState('');
@@ -39,10 +40,9 @@ const MissionList: FC<{
         key: selectedMissionKey
       });
     },
-    onSuccess: async (resData) => {
-      await queryClient.refetchQueries({
-        queryKey: ['all-relate-task', resData.data.titleId]
-      });
+    onSuccess: async () => {
+      await queryClient.refetchQueries({ queryKey: ['all-relate-all-relate-task-fork'] });
+      await queryClient.refetchQueries({ queryKey: ['all-relate-task-human-robot'] });
       messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
@@ -52,9 +52,9 @@ const MissionList: FC<{
     mutationFn: () => {
       return client.post('api/setting/copy-task', copy(selectedMissionKey));
     },
-    onSuccess: async (resData) => {
+    onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: ['all-relate-task', resData.data.titleId]
+        queryKey: ['all-mission-title']
       });
       messageApi.success(t('utils.success'));
     },
@@ -62,7 +62,7 @@ const MissionList: FC<{
   });
 
   const editTaskMutation = useMutation({
-    mutationFn: (newData: ActionTypes) => {
+    mutationFn: (newData: Fork_mission_Slice) => {
       return client.post('api/setting/update-task', newData);
     },
     onSuccess: async (resData) => {
@@ -83,7 +83,7 @@ const MissionList: FC<{
   };
 
   const handleOk = () => {
-    const newData = form.getFieldsValue() as ActionTypes;
+    const newData = form.getFieldsValue() as Fork_mission_Slice;
 
     if (
       newData.locationId === null ||
@@ -117,7 +117,7 @@ const MissionList: FC<{
       return;
     }
 
-    const insureData: ActionTypes = {
+    const insureData: Fork_mission_Slice = {
       ...newData,
       id: editTaskKey,
       locationId: Number(newData.locationId)
@@ -136,51 +136,70 @@ const MissionList: FC<{
   };
 
   return (
-    <Flex gap="middle" justify="flex-start" align="start" vertical>
+    <>
       {contextHolder}
-      <Flex gap="middle">
-        <Tooltip title={t('mission.mission_list.previous')}>
+      <Flex gap="middle" justify="flex-start" align="start" vertical>
+        <Flex gap="middle">
+          <Tooltip title={t('mission.mission_list.previous')}>
+            <Button
+              onClick={() => setSelectedMissionKey('')}
+              color="default"
+              variant="filled"
+              icon={<LeftOutlined></LeftOutlined>}
+            />
+          </Tooltip>
+
           <Button
-            onClick={() => setSelectedMissionKey('')}
-            color="default"
+            icon={<PlusOutlined />}
+            color="primary"
             variant="filled"
-            icon={<LeftOutlined></LeftOutlined>}
+            style={{ marginBottom: 16 }}
+            onClick={() => addNewTask()}
+          >
+            {t('mission.mission_list.create_mission')}
+          </Button>
+
+          <Button
+            icon={<CopyOutlined />}
+            color="primary"
+            variant="filled"
+            onClick={() => copyMission()}
+            style={{ marginBottom: 16 }}
+          >
+            {t('mission.mission_list.copy_mission')}
+          </Button>
+        </Flex>
+
+        {isFork(selectedMissionCar) ? (
+          <ForkTaskTable
+            showModal={showModal}
+            selectedMissionKey={selectedMissionKey}
+            selectedMissionCar={selectedMissionCar}
           />
-        </Tooltip>
+        ) : (
+          []
+        )}
+        {isHumanRobot(selectedMissionCar) ? (
+          <HumanRobotTaskTable
+            showModal={showModal}
+            selectedMissionKey={selectedMissionKey}
+            selectedMissionCar={selectedMissionCar}
+          />
+        ) : (
+          []
+        )}
 
-        <Button
-          icon={<PlusOutlined />}
-          color="primary"
-          variant="filled"
-          style={{ marginBottom: 16 }}
-          onClick={() => addNewTask()}
+        <Modal
+          title={t('utils.edit')}
+          open={open}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          width={1350}
         >
-          {t('mission.mission_list.create_mission')}
-        </Button>
-
-        <Button
-          icon={<CopyOutlined />}
-          color="primary"
-          variant="filled"
-          onClick={() => copyMission()}
-          style={{ marginBottom: 16 }}
-        >
-          {t('mission.mission_list.copy_mission')}
-        </Button>
+          <TaskForm form={form} editTaskKey={editTaskKey} selectedMissionCar={selectedMissionCar} />
+        </Modal>
       </Flex>
-
-      <TaskTable showModal={showModal} selectedMissionKey={selectedMissionKey} />
-
-      <Modal
-        title={t('utils.edit')}
-        open={open}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={1350}
-      >
-        <TaskForm form={form} editTaskKey={editTaskKey} selectedMissionCar={selectedMissionCar} />
-      </Modal>
-    </Flex>
+    </>
   );
 };
 
