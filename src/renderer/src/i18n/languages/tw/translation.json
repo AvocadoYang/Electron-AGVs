@@ -447,6 +447,22 @@
       "stop_this_process": "停用次動作",
       "import_mission": "引入任務"
     },
+    "task_table_human_robot": {
+      "sort": "順序",
+      "status": "狀態",
+      "active": "啟動",
+      "inactive": "停用中",
+      "action": "動作類型",
+      "control": "行為控制",
+      "detail": "姿勢詳情",
+      "limit": "限制參數",
+      "limit_error": "limit_error",
+
+      "move": "移動",
+      "load": "取貨",
+      "offload": "放貨",
+      "upper_control": "上肢控制"
+    },
 
     "charge_mission": {
       "charge_mission": "充電任務",
@@ -571,7 +587,8 @@
     "move": "枒杈前後",
     "load": "取貨",
     "offload": "放貨",
-    "charge": "充電"
+    "charge": "充電",
+    "upper_control": "上肢控制"
   },
 
   "sim": {

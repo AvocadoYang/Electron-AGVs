@@ -1,7 +1,7 @@
 import useName from '@renderer/api/useAmrName';
 import useMap from '@renderer/api/useMap';
-import useOneTaskDetail from '@renderer/api/useOneTaskDetail';
-import { Form, FormInstance, Input, InputNumber, Radio, Select, Skeleton } from 'antd';
+import useOneTaskDetail from '../../../../../../api/useOneTaskDetailFork';
+import { Form, Input, InputNumber, Radio, Select, Skeleton } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,11 +11,10 @@ enum YawGenre {
   CALCULATE_BY_AGV_AND_SHELF_ANGLE
 }
 
-const TaskForm: FC<{
+const TaskFormFork: FC<{
   editTaskKey: string;
-  form: FormInstance<unknown>;
   selectedMissionCar: string;
-}> = ({ editTaskKey, form, selectedMissionCar }) => {
+}> = ({ editTaskKey, selectedMissionCar }) => {
   const { data: taskDataSource, isLoading } = useOneTaskDetail(editTaskKey);
 
   // Map CarControl options for the operation select.
@@ -190,4 +189,4 @@ const TaskForm: FC<{
   );
 };
 
-export default TaskForm;
+export default TaskFormFork;

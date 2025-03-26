@@ -6,12 +6,13 @@ import { useTranslation } from 'react-i18next';
 import client from '@renderer/api/axiosClient';
 import { Fork_mission_Slice } from './mission';
 import ForkTaskTable from './ForkTaskTable';
-import TaskForm from './TaskForm';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { CopyOutlined, LeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { isFork, isHumanRobot } from '@renderer/utils/globalFunction';
 import HumanRobotTaskTable from './HumanRobotTaskTable';
+import TaskFormHumanRobot from './humanRobotEditMissionSlice/TaskFormHumanRobot';
+import TaskFormFork from './TaskFormFork';
 
 const copy = (originKey: string) => {
   const randomId = nanoid();
@@ -28,7 +29,6 @@ const MissionList: FC<{
 }> = ({ selectedMissionKey, setSelectedMissionKey, selectedMissionCar }) => {
   const [open, setOpen] = useState(false);
   const [editTaskKey, setEditTaskKey] = useState('');
-  const [form] = Form.useForm();
 
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -61,18 +61,6 @@ const MissionList: FC<{
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  const editTaskMutation = useMutation({
-    mutationFn: (newData: Fork_mission_Slice) => {
-      return client.post('api/setting/update-task', newData);
-    },
-    onSuccess: async (resData) => {
-      await queryClient.refetchQueries({
-        queryKey: ['all-relate-task', resData.data.titleId]
-      });
-      messageApi.success(t('utils.success'));
-    },
-    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  });
   const addNewTask = () => {
     addTaskMutation.mutate();
   };
@@ -80,51 +68,6 @@ const MissionList: FC<{
   const showModal = (key: string) => {
     setEditTaskKey(key);
     setOpen(true);
-  };
-
-  const handleOk = () => {
-    const newData = form.getFieldsValue() as Fork_mission_Slice;
-
-    if (
-      newData.locationId === null ||
-      newData.locationId === undefined ||
-      newData.locationId === 0
-    ) {
-      messageApi.warning(t('mission.mission_list.location_required_warn'));
-      return;
-    }
-
-    if (newData.wait === null) {
-      messageApi.warning(t('mission.mission_list.wait_required_warn'));
-      return;
-    }
-
-    if (newData.yaw === null) {
-      messageApi.warning(t('mission.mission_list.yaw_required_warn'));
-      return;
-    }
-
-    if (newData.f_height === null) {
-      messageApi.warning(t('mission.mission_list.yaw_required_warn'));
-      return;
-    }
-
-    if (
-      newData.hasWaitOther === true &&
-      (newData.waitGenre === null || newData.waitOtherAmr === null)
-    ) {
-      messageApi.warning(t('mission.mission_list.wait_amr_warn'));
-      return;
-    }
-
-    const insureData: Fork_mission_Slice = {
-      ...newData,
-      id: editTaskKey,
-      locationId: Number(newData.locationId)
-    };
-
-    editTaskMutation.mutate(insureData);
-    setOpen(false);
   };
 
   const copyMission = () => {
@@ -189,14 +132,13 @@ const MissionList: FC<{
           []
         )}
 
-        <Modal
-          title={t('utils.edit')}
-          open={open}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          width={1350}
-        >
-          <TaskForm form={form} editTaskKey={editTaskKey} selectedMissionCar={selectedMissionCar} />
+        <Modal title={t('utils.edit')} open={open} onCancel={handleCancel} footer={() => []}>
+          {isFork(selectedMissionCar) ? (
+            <TaskFormFork editTaskKey={editTaskKey} selectedMissionCar={selectedMissionCar} />
+          ) : (
+            []
+          )}
+          {isHumanRobot(selectedMissionCar) ? <TaskFormHumanRobot editTaskKey={editTaskKey} /> : []}
         </Modal>
       </Flex>
     </>

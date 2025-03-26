@@ -7,7 +7,7 @@ import {
   ImportOutlined,
   MenuOutlined
 } from '@ant-design/icons';
-import { Button, Flex, Popconfirm, Table, Tag, Tooltip, message } from 'antd';
+import { Button, Flex, Popconfirm, Table, Tag, Tooltip, Typography, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import client from '@renderer/api/axiosClient';
 import ImportMissionForm from './ImportMissionForm';
-import { Robot_Mission_Slice } from './mission';
+import { Robot_Mission_Slice_Table } from './mission';
 import { Err } from '@renderer/utils/responseErr';
 import CarControlTranslate from './CarControlTranslate';
 import useTaskHumanRobot from '@renderer/api/useTaskHumanRobot';
@@ -195,7 +195,7 @@ const HumanRobotTaskTable: FC<{
     setImportConfig({ key: selectedMissionKey, order: order + 1 });
   };
 
-  const columns: ColumnsType<Robot_Mission_Slice> = [
+  const columns: ColumnsType<Robot_Mission_Slice_Table> = [
     {
       title: t('mission.task_table.sort'),
       key: 'sort',
@@ -232,30 +232,34 @@ const HumanRobotTaskTable: FC<{
           title: t('mission.task_table.action'),
           dataIndex: 'genre',
           key: 'genre',
-          width: 50,
+          width: 100,
           render: (_, record) => {
-            if (record.operation.type === null) {
-              return <p />;
-            }
-
-            return <CarControlTranslate word={record.operation.type[0]} />;
+            return record.operation.type.map((v, i) => {
+              return <Typography key={`${v}-${i}`}>{t(`car_control_translate.${v}`)}</Typography>;
+            });
           }
         },
 
         {
-          title: 'control',
+          title: t('mission.task_table_human_robot.control'),
           dataIndex: 'control',
           key: 'control',
+
           render: (_, record) => {
-            return record.operation.control.map((v) => <Tag>{v}</Tag>);
+            return record.operation.control.map((v, i) => <Tag key={`${v}-${i}`}>{v}</Tag>);
           }
         },
         {
-          title: 'param',
+          title: t('mission.task_table_human_robot.detail'),
           dataIndex: 'param',
           key: 'param',
+          width: 200,
           render: (_v, record) => {
-            return record.operation.param.map((v) => <Tag>{v}</Tag>);
+            return record.operation.param.map((paramObj, i) => {
+              return (
+                <Flex key={`${paramObj.value}-${i}`}>{`${paramObj.joint}: ${paramObj.value}`}</Flex>
+              );
+            });
           }
         },
         {
@@ -263,7 +267,7 @@ const HumanRobotTaskTable: FC<{
           dataIndex: 'locationId',
           key: 'locationId',
           render: (_, record) => {
-            return record.operation.id;
+            return record.operation.locationId;
           }
         }
       ]

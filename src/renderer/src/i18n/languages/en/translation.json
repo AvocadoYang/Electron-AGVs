@@ -449,6 +449,22 @@
       "import_mission": "import mission"
     },
 
+    "task_table_human_robot": {
+      "sort": "Sort",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "action": "Action Type",
+      "control": "Control",
+      "detail": "Detail",
+      "limit": "limit rad",
+      "limit_error": "limit_error",
+      "move": "Move",
+      "load": ":Load",
+      "offload": "offload",
+      "upper_control": "Upper Control"
+    },
+
     "charge_mission": {
       "charge_mission": "Charge mission",
       "executing": "Execution",
@@ -572,7 +588,8 @@
     "move": "move",
     "load": "load",
     "offload": "offload",
-    "charge": "charge"
+    "charge": "charge",
+    "upper_control": "Upper Control"
   },
 
   "sim": {

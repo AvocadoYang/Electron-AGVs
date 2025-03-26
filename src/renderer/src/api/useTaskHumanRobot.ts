@@ -7,17 +7,17 @@ const robotActionSchema = array(
     id: string().required('ID is required'),
     process_order: number().required('Process order is required'),
     disable: boolean().required('Disable flag is required'),
+
     operation: object({
-      id: number().required('Operation ID is required'),
-      type: array(string().required('Operation type must be a string')).required(
-        'Type array is required'
-      ),
-      control: array(string().required('Control must be a string')).required(
-        'Control array is required'
-      ),
-      param: array(string().required('Parameter must be a string')).required(
-        'Parameter array is required'
-      )
+      locationId: number().optional(),
+      type: array(string().required('Operation type must be a string')).optional(),
+      control: array(string().required('Control must be a string')).optional(),
+      param: array(
+        object({
+          joint: string().optional(),
+          value: number().optional()
+        })
+      ).optional()
     }).required('Operation object is required')
   }).optional()
 ).optional();

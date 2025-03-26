@@ -120,10 +120,25 @@ export type Robot_Mission_Slice = {
   process_order: number;
   disable: boolean;
   operation: {
-    id: number;
+    locationId: number;
     type: string[];
     control: string[];
-    param: string[];
+    param: { [key: string]: number }[];
+  };
+};
+
+export type Robot_Mission_Slice_Table = {
+  id: string;
+  process_order: number;
+  disable: boolean;
+  operation: {
+    locationId: number;
+    type: string[];
+    control: string[];
+    param: {
+      joint: string;
+      value: number;
+    }[];
   };
 };
 
