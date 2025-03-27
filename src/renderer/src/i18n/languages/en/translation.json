@@ -446,7 +446,12 @@
       "wait_other_finish": "Execute After Others",
       "in_use": "Use This Action",
       "stop_this_process": "Disable This Action",
-      "import_mission": "import mission"
+      "import_mission": "import mission",
+      "special": "Special",
+      "normal": "Normal",
+      "other_special": "other special movement",
+      "special_movement_info": "Most of the time this function is not needed, it is mainly used to exchange goods between two vehicles.",
+      "spin_warn": "If the action is a rotation, the action type must have S"
     },
 
     "task_table_human_robot": {
@@ -589,7 +594,14 @@
     "load": "load",
     "offload": "offload",
     "charge": "charge",
-    "upper_control": "Upper Control"
+    "load_from_other": "load from other",
+    "offload_from_other": "offload to other",
+    "upper_control": "Upper Control",
+    "F": "forward",
+    "B": "backward",
+    "S": "spin",
+    "H": "fork movement",
+    "W": "wait"
   },
 
   "sim": {

@@ -1,15 +1,15 @@
 export type Err = {
   response: {
     data: {
-      msg: string
-    }
-    status: number
-  }
-}
+      message: string;
+    };
+    status: number;
+  };
+};
 
 export type ErrorOrigin = {
   response: {
-    data: string
-    status: number
-  }
-}
+    data: string;
+    status: number;
+  };
+};

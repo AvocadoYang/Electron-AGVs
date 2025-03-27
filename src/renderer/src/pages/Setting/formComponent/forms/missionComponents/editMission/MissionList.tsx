@@ -12,7 +12,7 @@ import { CopyOutlined, LeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { isFork, isHumanRobot } from '@renderer/utils/globalFunction';
 import HumanRobotTaskTable from './HumanRobotTaskTable';
 import TaskFormHumanRobot from './humanRobotEditMissionSlice/TaskFormHumanRobot';
-import TaskFormFork from './TaskFormFork';
+import TaskFormFork from './forkEditMissionSlice/TaskFormFork';
 
 const copy = (originKey: string) => {
   const randomId = nanoid();
@@ -132,7 +132,13 @@ const MissionList: FC<{
           []
         )}
 
-        <Modal title={t('utils.edit')} open={open} onCancel={handleCancel} footer={() => []}>
+        <Modal
+          width={700}
+          title={t('utils.edit')}
+          open={open}
+          onCancel={handleCancel}
+          footer={() => []}
+        >
           {isFork(selectedMissionCar) ? (
             <TaskFormFork editTaskKey={editTaskKey} selectedMissionCar={selectedMissionCar} />
           ) : (

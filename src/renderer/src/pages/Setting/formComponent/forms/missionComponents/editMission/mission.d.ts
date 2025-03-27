@@ -144,7 +144,7 @@ export type Robot_Mission_Slice_Table = {
 
 export interface DataType {
   order: number;
-  id: string;
+  locationId: string;
   types: string;
   control: (string | undefined)[];
   wait: number;
@@ -194,7 +194,7 @@ export interface AllTitleMissionType {
   };
   actions: {
     is_define_id: string;
-    id: string;
+    locationId: string;
     order: number;
     types: string;
     control: string[];

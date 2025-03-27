@@ -445,7 +445,12 @@
       "wait_other_finish": "後執行",
       "in_use": "使用此動作",
       "stop_this_process": "停用次動作",
-      "import_mission": "引入任務"
+      "import_mission": "引入任務",
+      "special": "特別動作",
+      "normal": "普通動作",
+      "other_special": "特別行為",
+      "special_movement_info": "絕大多數不需要用到此功能, 主要是使用於兩車交換貨物用. ",
+      "spin_warn": "如果動作是自轉, 行動類型一定要有S"
     },
     "task_table_human_robot": {
       "sort": "順序",
@@ -588,7 +593,14 @@
     "load": "取貨",
     "offload": "放貨",
     "charge": "充電",
-    "upper_control": "上肢控制"
+    "load_from_other": "從另一台車身上取貨",
+    "offload_from_other": "放貨至令一台車上",
+    "upper_control": "上肢控制",
+    "F": "前進",
+    "B": "後退",
+    "S": "自轉",
+    "H": "枒杈升降",
+    "W": "等待"
   },
 
   "sim": {

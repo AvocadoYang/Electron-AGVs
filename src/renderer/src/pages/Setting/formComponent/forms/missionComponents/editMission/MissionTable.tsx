@@ -54,7 +54,7 @@ const MissionTable: FC<{
       setSelectedMissionKey('');
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
 

@@ -117,7 +117,7 @@ const HumanRobotTaskTable: FC<{
       });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
   const deleteTaskMutation = useMutation({
@@ -131,7 +131,7 @@ const HumanRobotTaskTable: FC<{
       await queryClient.refetchQueries({ queryKey: ['all-relate-task-human-robot'] });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
 
@@ -144,7 +144,7 @@ const HumanRobotTaskTable: FC<{
       await queryClient.refetchQueries({ queryKey: ['all-relate-task-human-robot'] });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
 

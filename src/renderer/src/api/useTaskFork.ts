@@ -12,7 +12,7 @@ const missionSchema = array(
       control: array(string().required()).required('Control array is required'),
       wait: number().optional(),
       is_define_id: string().required('ID definition is required'),
-      id: number().required('Operation ID is required'),
+      locationId: number().required('Operation ID is required'),
       is_define_yaw: number().required('Yaw definition is required'),
       yaw: number().required('Yaw value is required'),
       tolerance: number().required('Tolerance is required'),
@@ -25,8 +25,8 @@ const missionSchema = array(
       min_forward: number().required('Min forward speed is required'),
       max_backward: number().required('Max backward speed is required'),
       min_backward: number().required('Min backward speed is required'),
-      waitOtherAmr: string().optional(),
-      waitGenre: string().optional(),
+      waitOtherAmr: string().optional().nullable(),
+      waitGenre: string().optional().nullable(),
       auto_preparatory_point: boolean().required('Preparatory point flag is required')
     }).required('Operation object is required'),
     io: object({

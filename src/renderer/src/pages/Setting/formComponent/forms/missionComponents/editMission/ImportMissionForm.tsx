@@ -36,7 +36,7 @@ const ImportMissionForm: FC<{
       await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
 

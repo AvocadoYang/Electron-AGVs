@@ -128,7 +128,7 @@ const ForkTaskTable: FC<{
       });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
   const deleteTaskMutation = useMutation({
@@ -142,7 +142,7 @@ const ForkTaskTable: FC<{
       await queryClient.refetchQueries({ queryKey: ['all-relate-task-fork'] });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
 
@@ -155,7 +155,7 @@ const ForkTaskTable: FC<{
       await queryClient.refetchQueries({ queryKey: ['all-relate-task-fork'] });
     },
     onError(error: Err) {
-      messageApi.error(error.response.data.msg);
+      messageApi.error(error.response.data.message);
     }
   });
 
@@ -251,7 +251,15 @@ const ForkTaskTable: FC<{
             return <CarControlTranslate word={record.operation.type} />;
           }
         },
-
+        {
+          title: t('mission.task_table.action'),
+          dataIndex: 'control',
+          key: 'control',
+          width: 50,
+          render: (_, record) => {
+            return JSON.stringify(record.operation.control);
+          }
+        },
         {
           title: t('mission.task_table.wait'),
           dataIndex: 'wait',
