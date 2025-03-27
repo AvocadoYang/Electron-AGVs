@@ -253,12 +253,12 @@
 
 
 
-.ant-table-wrapper thead > tr > th {
+.custom-table thead > tr > th {
   background-color: #f5f5f5 !important;
 
 }
 
-.ant-table-wrapper tbody > tr {
+.custom-table tbody > tr {
   background-color: #f5f5f5 !important;
 }
 
@@ -279,4 +279,8 @@
 
 .custom-table-dark tbody > tr:hover {
   background-color: #262626 !important;
+}
+
+.custom-table-dark div {
+  color: white !important;
 }

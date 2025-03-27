@@ -1,4 +1,3 @@
- 
 import { Button, Flex } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,10 +6,10 @@ import ShelfDrawer from './ShelfDrawer';
 import FormHr from '../../../../utils/FormHr';
 
 const ShelfPanel: React.FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [openDrawer, setOpenDrawer] = useState(false);
 
@@ -22,7 +21,7 @@ const ShelfPanel: React.FC<{
         {t('edit_shelf_panel.edit_shelf')}
       </h3>
 
-      <FormHr sortableId={sortableId}></FormHr>
+      <FormHr></FormHr>
 
       <Flex vertical align="start" gap="middle">
         <Button

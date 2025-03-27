@@ -21,6 +21,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Road } from './road';
 import client from '@renderer/api/axiosClient';
 import FormHr from '../../utils/FormHr';
+import { formList } from '../../components/siderElement';
 
 // function validateArray(arr: string[]) {
 //   if (arr.includes('*')) {
@@ -43,7 +44,7 @@ const EditRoadPanel: React.FC<{
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
   roadPanelForm: FormInstance<unknown>;
-}> = ({ sortableId, attributes, listeners, roadPanelForm }) => {
+}> = ({ attributes, listeners, roadPanelForm }) => {
   const [chooseAngle, setChooseAngle] = useState<string>('');
   const [messageApi, contextHolders] = message.useMessage();
   const { t } = useTranslation();
@@ -61,6 +62,7 @@ const EditRoadPanel: React.FC<{
   });
 
   const saveRoad = () => {
+    console.log(roadPanelForm.getFieldsValue());
     const payload: Road = {
       spot1Id: (roadPanelForm.getFieldValue('x') as number).toString(),
       spot2Id: (roadPanelForm.getFieldValue('to') as number).toString(),
@@ -79,7 +81,7 @@ const EditRoadPanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.roadPanel')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Form
           initialValues={{ ...initialRoadValue }}
           form={roadPanelForm}
@@ -92,7 +94,7 @@ const EditRoadPanel: React.FC<{
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item name="checkboxGroup" label={t('edit_road_panel.yaw')} required>
+          <Form.Item name="validYawList" label={t('edit_road_panel.yaw')} required>
             <Checkbox.Group>
               <Row>
                 <Col span={8}>

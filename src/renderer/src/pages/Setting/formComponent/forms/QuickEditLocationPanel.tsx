@@ -65,7 +65,7 @@ const QuickEditLocationPanel: React.FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ sortableId, attributes, listeners }) => {
+}> = ({ attributes, listeners }) => {
   const [form] = Form.useForm();
   const { data } = useMap();
   const [FL, setFL] = useState<LocationType[]>([]);
@@ -262,7 +262,7 @@ const QuickEditLocationPanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('quick_edit_location_panel.quick_edit_location_panel')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Form
           form={form}
           title="設定依照車輛回傳的id來做任務"

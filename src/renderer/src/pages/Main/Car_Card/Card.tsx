@@ -1,33 +1,42 @@
 import { InfoWrap } from './components/InfoWrap';
 import { RowOne, RowThread, RowSecond, CarTag, HiddenRow, DropDown } from './components/Lists';
 import './car_info.css';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ConfigProvider, Popover } from 'antd';
 import BtnGroup from './components/BtnGroup';
-import { useAtomValue } from 'jotai';
-import { darkMode } from '@renderer/utils/gloable';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { AmrCarSelectFilter, AmrFilterCarCard, darkMode, hintAmr } from '@renderer/utils/gloable';
 import { amrId2Color } from '@renderer/utils/utils';
 
 const Card: React.FC<{ id: string }> = ({ id }) => {
   const [openHiddenRow, setOpenHiddenRow] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
   const [openFullInfo, setOpenFullInfo] = useState(false);
+  // hover 卡片時地圖AMR的提示
+  const setHintAmr = useSetAtom(hintAmr);
+  // select選單篩選顯示的 AMR 系列
+  const selectedOption = useAtomValue(AmrCarSelectFilter);
+  //點擊地圖AMR時篩選卡片
+  const hintAmrId = useAtomValue(AmrFilterCarCard);
   const isDark = useAtomValue(darkMode);
 
-  const openFullInfoFn = () => {
-    setOpenFullInfo((pre) => !pre);
-  };
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setPopoverOpen(newOpen);
-  };
-
+  const hide = useMemo(() => {
+    if (hintAmrId.size) {
+      return !hintAmrId.has(id);
+    }
+    if (!selectedOption) return false;
+    if (selectedOption?.length) {
+      const filter = new Set(selectedOption.map((item) => item.value));
+      const AMRCategory = id.split('-').slice(0, 3).join('-');
+      return filter.has(AMRCategory) ? false : true;
+    }
+    return false;
+  }, [selectedOption, hintAmrId]);
   return (
     <>
       <ConfigProvider
         theme={{
           token: {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             colorBgElevated: 'rgba(255, 254, 254, 0.65)'
           },
           components: {
@@ -42,23 +51,36 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
           trigger="click"
           open={isPopoverOpen}
           placement="rightTop"
-          onOpenChange={handleOpenChange}
+          onOpenChange={(newOpen) => {
+            setPopoverOpen(newOpen);
+          }}
         >
-          <InfoWrap randomcolor={amrId2Color(id)} is_dark={isDark.toString()}>
+          <InfoWrap
+            className={`${hide ? 'hide-car-info-wrap' : ''}`}
+            randomcolor={amrId2Color(id)}
+            is_dark={isDark.toString()}
+            onMouseEnter={() => {
+              setHintAmr(id);
+            }}
+            onMouseLeave={() => {
+              setHintAmr('');
+            }}
+          >
             <DropDown
               color={amrId2Color(id)}
               openFullInfo={openFullInfo}
-              openFullInfoFn={openFullInfoFn}
+              setOpenFullInfo={setOpenFullInfo}
             ></DropDown>
-            <RowOne isDark={isDark}></RowOne>
+            <RowOne isDark={isDark} amrId={id}></RowOne>
             <RowSecond
               setOpenHiddenRow={setOpenHiddenRow}
               openHiddenRow={openHiddenRow}
               isDark={isDark}
+              amrId={id}
             ></RowSecond>
-            <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark}></HiddenRow>
-            <RowThread isDark={isDark}></RowThread>
-            <CarTag openFullInfo={openFullInfo}></CarTag>
+            <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark} amrId={id}></HiddenRow>
+            <RowThread amrId={id} isDark={isDark}></RowThread>
+            <CarTag openFullInfo={openFullInfo} amrId={id}></CarTag>
           </InfoWrap>
         </Popover>
       </ConfigProvider>

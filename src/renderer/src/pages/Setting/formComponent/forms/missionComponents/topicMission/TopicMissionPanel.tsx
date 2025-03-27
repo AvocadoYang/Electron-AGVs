@@ -6,17 +6,17 @@ import TopicForm from './TopicTaskForm';
 import TopicTaskTable from './TopicTaskTable';
 
 const TopicMissionPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const { t } = useTranslation();
   return (
     <div>
       <h3 className="drop_button_style" {...listeners} {...attributes}>
         {t('mission.topic_mission.topic_mission')}
       </h3>
-      <FormHr sortableId={sortableId} />
+      <FormHr />
       <Flex gap="middle" justify="flex-start" align="start" vertical>
         <TopicForm />
         <TopicTaskTable />

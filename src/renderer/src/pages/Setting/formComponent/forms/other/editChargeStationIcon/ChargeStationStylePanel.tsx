@@ -11,10 +11,10 @@ import SettingChargeStationStyleForm from './SettingChargeStationStyleForm';
 import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable';
 
 const ChargeStationStylePanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const { t } = useTranslation();
   const { data } = useAllChargeStation();
 
@@ -80,7 +80,7 @@ const ChargeStationStylePanel: FC<{
       title: t('other.edit_charge_station_icon_style.edit_position'),
       dataIndex: 'operation',
       key: 'operation',
-       
+
       render: (_v: unknown, record: SingleChargeStation) => {
         return (
           <Button
@@ -101,7 +101,7 @@ const ChargeStationStylePanel: FC<{
       <h3 className="drop_button_style" {...listeners} {...attributes}>
         {t('toolbar.others.edit_charge_station_icon_style')}
       </h3>
-      <FormHr sortableId={sortableId} />
+      <FormHr />
 
       {isEditStation ? (
         <SettingChargeStationStyleForm />

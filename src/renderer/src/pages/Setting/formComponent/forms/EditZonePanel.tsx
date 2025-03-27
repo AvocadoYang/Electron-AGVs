@@ -30,7 +30,7 @@ import useMap from '@renderer/api/useMap';
 import { borderColor } from '../../utils/utils';
 import useAmrName from '@renderer/api/useAmrName';
 
-type TagRender = SelectProps['tagRender']
+type TagRender = SelectProps['tagRender'];
 
 const zoneType: SelectProps['options'] = [
   { value: '減速區' },
@@ -39,23 +39,23 @@ const zoneType: SelectProps['options'] = [
 ];
 
 type Save_Zone = {
-  name: string
-  backgroundColor: string
+  name: string;
+  backgroundColor: string;
   category: {
-    tags: string[] | []
-    forbidden_car: string[] | undefined | string
-    speed_limit: number | undefined
-    hight_limit: number | undefined
-  }
+    tags: string[] | [];
+    forbidden_car: string[] | undefined | string;
+    speed_limit: number | undefined;
+    hight_limit: number | undefined;
+  };
   startPoint: {
-    startX: number
-    startY: number
-  }
+    startX: number;
+    startY: number;
+  };
   endPoint: {
-    endX: number
-    endY: number
-  }
-}
+    endX: number;
+    endY: number;
+  };
+};
 
 const tagRender: TagRender = (props) => {
   const { label, closable, onClose } = props;
@@ -77,11 +77,11 @@ const tagRender: TagRender = (props) => {
 };
 
 const EditZonePanel: React.FC<{
-  zonePanelForm: FormInstance<unknown>
-  tagSettingForm: FormInstance<unknown>
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
+  zonePanelForm: FormInstance<unknown>;
+  tagSettingForm: FormInstance<unknown>;
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ attributes, listeners, sortableId, zonePanelForm, tagSettingForm }) => {
   const { t } = useTranslation();
   const { data } = useMap();
@@ -242,7 +242,7 @@ const EditZonePanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.zonePanel')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Form
           layout="vertical"
           initialValues={initialZoneValue}

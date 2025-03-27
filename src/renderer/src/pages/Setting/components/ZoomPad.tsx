@@ -13,14 +13,14 @@ import {
 } from '@renderer/utils/siderGloble';
 
 const ZoomPadWrap = styled.div`
-  position: fixed;
+  position: absolute;
   z-index: 4;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #f5f5f5;
   border-radius: 20px;
-  padding: 15px 23px;
+  padding: 6px 13px;
   display: flex;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
@@ -52,12 +52,13 @@ const ZoomPadWrap = styled.div`
 `;
 
 const ResponsiveSVG = styled.svg`
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.2em;
+  height: 1.2em;
+  font-size: 0.8em;
 
   @media (max-width: 768px) {
-    width: 1.2em;
-    height: 1.2em;
+    width: 1em;
+    height: 1em;
   }
 
   @media (max-width: 480px) {
@@ -70,13 +71,12 @@ const StyledButton = styled(Button)`
   border: none;
   background-color: transparent;
   color: #151313;
-  padding: 10px 16px;
   margin: 0;
-  border-radius: 24px;
+
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
 
   &:hover {
     background-color: #ddd;
@@ -95,7 +95,6 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
 }) => {
   const { data, isError } = useMap();
   const { t } = useTranslation();
-
   const [showLocationToolTip, setShowLocationTooltip] = useAtom(isShowLocationTooltip);
   const [showRoadToolTip, setShowRoadTooltip] = useAtom(isShowRoadTooltip);
   const [showLocation, setShowLocation] = useAtom(isShowLocation);

@@ -3,13 +3,13 @@ import Card from './Card';
 import { Flex } from 'antd';
 import useName from '@renderer/api/useAmrName';
 
-const Cards = () => {
-  const { data: name } = useName();
+const Cards: React.FC<{}> = () => {
+  const { data: names } = useName();
 
-  if (!name || !name.length) return;
+  if (!names || !names.length) return;
   return (
     <Flex align="center" justify="center" wrap gap="middle" style={{ width: '95%' }}>
-      {name.map((item) => (
+      {names.map((item) => (
         <Card key={item.id} id={item.id}></Card>
       ))}
     </Flex>

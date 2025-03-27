@@ -6,10 +6,10 @@ import ScheduleForm from './ScheduleForm';
 import ScheduleTable from './ScheduleTable';
 
 const SchedulePanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const [selectId, setSelectId] = useState<null | string>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
@@ -21,7 +21,7 @@ const SchedulePanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.schedule_mission.schedule_mission')}
         </h3>
-        <FormHr sortableId={sortableId} />
+        <FormHr />
 
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <ScheduleForm

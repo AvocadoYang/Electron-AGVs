@@ -1,6 +1,7 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import styled from 'styled-components';
 import '../car_info.css';
+
 import {
   EnvironmentOutlined,
   ThunderboltOutlined,
@@ -9,7 +10,17 @@ import {
   CaretUpOutlined,
   CaretDownOutlined
 } from '@ant-design/icons';
-import { Space, Tag, Flex } from 'antd';
+import { Space, Flex } from 'antd';
+import {
+  useAmrStatus,
+  useBattery,
+  useCloseLoc,
+  useIsLogIn,
+  useYaw,
+  useXY
+} from '@renderer/sockets/useAMRInfo';
+import { useTranslation } from 'react-i18next';
+import { CarryTag, ChargingTag, ManualTag, MissionTag, PowerTag } from './Tags';
 
 // ======= DropArrow =================
 const Arrow = styled.div<{ random_color: string }>`
@@ -33,15 +44,15 @@ const Arrow = styled.div<{ random_color: string }>`
 `;
 export const DropDown: React.FC<{
   color: string;
-  openFullInfoFn: () => void;
   openFullInfo: boolean;
-}> = memo(({ color, openFullInfo, openFullInfoFn }) => {
+  setOpenFullInfo: React.Dispatch<boolean>;
+}> = memo(({ color, openFullInfo, setOpenFullInfo }) => {
   return (
     <Arrow
       random_color={color}
       onClick={(e) => {
         e.stopPropagation();
-        openFullInfoFn();
+        setOpenFullInfo(!openFullInfo);
       }}
     >
       {openFullInfo ? (
@@ -89,18 +100,30 @@ export const AmrTitle = styled.h2`
 
   white-space: nowrap;
 `;
-export const RowOne: React.FC<{ isDark: boolean }> = memo(({ isDark }) => {
+export const RowOne: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDark, amrId }) => {
+  const { isOnline } = useIsLogIn(amrId);
+  const { t } = useTranslation();
+
+  const AmrID = useMemo(() => {
+    return {
+      num: amrId.split('-')[amrId.split('-').length - 1],
+      category: amrId.split('-').slice(0, 3).join('-')
+    };
+  }, [amrId]);
+
   return (
     <CarRow1 is_dark={isDark.toString()}>
       <div>
-        <LogInStatus login={'true'}></LogInStatus>
-        <span className={`login-text ${true ? '' : 'offline-text'}`}>{'離線'}</span>
+        <LogInStatus login={`${isOnline ? 'true' : 'false'}`}></LogInStatus>
+        <span
+          className={`login-text ${isOnline ? '' : 'offline-text'}`}
+        >{`${isOnline ? t('utils.online') : t('utils.offline')}`}</span>
       </div>
 
       <AmrTitle>
-        <div style={{ marginBottom: '5px' }}>{'車號: 123'}</div>
+        <div style={{ marginBottom: '5px' }}>{`${t('utils.num')} ${AmrID.num}`}</div>
         <span className={`${isDark ? 'amr-title-category-dark-mode' : 'amr-title-category'}`}>
-          {'型號: anfa-ps14-16'}
+          {`${t('utils.category')}: ${AmrID.category}`}
         </span>
       </AmrTitle>
     </CarRow1>
@@ -108,11 +131,62 @@ export const RowOne: React.FC<{ isDark: boolean }> = memo(({ isDark }) => {
 });
 
 // ======Second row in info card ============
+
+const LocValue: React.FC<{ amrId: string; isDark: boolean }> = memo(({ amrId, isDark }) => {
+  const { closeLoc } = useCloseLoc(amrId);
+  return (
+    <p className={`value location-drawer ${isDark ? 'dark-icon' : ''}`}>
+      {/* {((x: number | undefined, y: number | undefined) => {
+              if (x === undefined || y === undefined)
+                return undefined;
+              return `${x.toFixed(2)}/${y.toFixed(2)}`;
+            })(fleetInfo.originPose?.x, fleetInfo.originPose?.y)} */}
+      {`${closeLoc ? closeLoc : '--'}`}
+    </p>
+  );
+});
+const CardSpeed: React.FC<{ amrId: string; isDark: boolean }> = memo(({ amrId, isDark }) => {
+  return (
+    <p className="value">
+      {`1.5`}
+      <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{'h/s'}</span>
+    </p>
+  );
+});
+const Power: React.FC<{ amrId: string; isDark: boolean }> = memo(({ amrId, isDark }) => {
+  const { battery } = useBattery(amrId);
+  return (
+    <>
+      <ThunderboltOutlined
+        className={`icon power-icon ${isDark ? 'dark-icon power-icon-dark' : ''} ${battery ? (battery < 20 ? 'low-battery' : '') : ''}`}
+      />
+      <p className="value">
+        {/* {fleetInfo.data.IO?.battery} */}
+        {`${battery ? battery : '--'}`}
+        <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{`${battery ? '%' : ''}`}</span>
+      </p>
+    </>
+  );
+});
+const Yaw: React.FC<{ amrId: string }> = memo(({ amrId }) => {
+  const { yaw } = useYaw(amrId);
+  return (
+    <p className="value">
+      {/* {((yaw: number | undefined) => {
+                        if (yaw === undefined) return undefined;
+                        return parseFloat(yaw.toFixed(2));
+                      })(fleetInfo.originPose?.yaw)} */}
+      {`${yaw !== undefined ? yaw : '--'}`}
+    </p>
+  );
+});
+
 export const RowSecond: React.FC<{
   setOpenHiddenRow: React.Dispatch<boolean>;
   openHiddenRow: boolean;
   isDark: boolean;
-}> = memo(({ setOpenHiddenRow, openHiddenRow, isDark }) => {
+  amrId: string;
+}> = memo(({ setOpenHiddenRow, openHiddenRow, isDark, amrId }) => {
   return (
     <Flex
       className={`${isDark ? 'second-row-wrap' : ''}`}
@@ -123,7 +197,7 @@ export const RowSecond: React.FC<{
       <Space
         direction="vertical"
         size={1}
-        style={{ textAlign: 'center' }}
+        style={{ textAlign: 'center', width: '10%' }}
         onClick={(e) => {
           e.stopPropagation();
           setOpenHiddenRow(!openHiddenRow);
@@ -133,48 +207,36 @@ export const RowSecond: React.FC<{
         <EnvironmentOutlined
           className={`icon location-drawer location-icon ${isDark ? 'dark-icon location-icon-dark' : ''}`}
         />
-        <p className={`value location-drawer ${isDark ? 'dark-icon' : ''}`}>
-          {/* {((x: number | undefined, y: number | undefined) => {
-                    if (x === undefined || y === undefined)
-                      return undefined;
-                    return `${x.toFixed(2)}/${y.toFixed(2)}`;
-                  })(fleetInfo.originPose?.x, fleetInfo.originPose?.y)} */}
-          {'9999'}
-        </p>
+        <LocValue amrId={amrId} isDark={isDark}></LocValue>
       </Space>
       <Space direction="vertical" size={1} style={{ textAlign: 'center' }}>
         <CarOutlined className={`icon speed-icon ${isDark ? 'dark-icon' : ''}`} />
-        <p className="value">
-          {`999`}
-          <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{'km/h'}</span>
-        </p>
+        <CardSpeed amrId={amrId} isDark={isDark}></CardSpeed>
       </Space>
-      <Space direction="vertical" size={1} style={{ textAlign: 'center' }}>
-        <ThunderboltOutlined
-          className={`icon power-icon ${isDark ? 'dark-icon power-icon-dark' : ''}`}
-        />
-        <p className="value">
-          {/* {fleetInfo.data.IO?.battery} */}
-          {'90'}
-          <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{'%'}</span>
-        </p>
+      <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '10%' }}>
+        <Power amrId={amrId} isDark={isDark}></Power>
       </Space>
-      <Space direction="vertical" size={1} style={{ textAlign: 'center' }}>
+      <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '10%' }}>
         <CompassOutlined className={`icon yaw-icon ${isDark ? 'dark-icon yaw-icon-dark' : ''}`} />
-
-        <p className="value">
-          {/* {((yaw: number | undefined) => {
-                        if (yaw === undefined) return undefined;
-                        return parseFloat(yaw.toFixed(2));
-                      })(fleetInfo.originPose?.yaw)} */}
-          {'123'}
-        </p>
+        <Yaw amrId={amrId}></Yaw>
       </Space>
     </Flex>
   );
 });
 
 //=======Hidden row ===================
+const LocXY: React.FC<{ amrId: string }> = memo(({ amrId }) => {
+  const { loc } = useXY(amrId);
+  if (!loc)
+    return (
+      <p style={{ marginTop: '5px' }}>{`X:
+      -- / Y: --`}</p>
+    );
+  return (
+    <p style={{ marginTop: '5px' }}>{`X:
+    ${loc.x !== undefined ? loc.x.toFixed(2) : '--'} / Y: ${loc.y !== undefined ? loc.y.toFixed(2) : '--'}`}</p>
+  );
+});
 const HiddenInfo = styled.div.attrs<{ open_hidden_row: string; is_dark: string }>((props) => {
   return { open_hidden_row: props.open_hidden_row, is_dark: props.is_dark };
 })<{ open_hidden_row: string; is_dark: string }>`
@@ -185,18 +247,19 @@ const HiddenInfo = styled.div.attrs<{ open_hidden_row: string; is_dark: string }
   font-size: 90%;
   transition: 0.5s;
 `;
-export const HiddenRow: React.FC<{ openHiddenRow: boolean; isDark: boolean }> = memo(
-  ({ openHiddenRow, isDark }) => {
+export const HiddenRow: React.FC<{ openHiddenRow: boolean; isDark: boolean; amrId: string }> = memo(
+  ({ openHiddenRow, isDark, amrId }) => {
     return (
       <HiddenInfo open_hidden_row={openHiddenRow.toString()} is_dark={isDark.toString()}>
-        <p style={{ marginTop: '5px' }}>{`X: 23.223 / Y: 99.999`}</p>
+        <LocXY amrId={amrId}></LocXY>
       </HiddenInfo>
     );
   }
 );
 
 // ======= Third row in info ===============
-export const CarRow3 = styled.div.attrs<{ is_dark: string }>((props) => {
+
+const CarRow3 = styled.div.attrs<{ is_dark: string }>((props) => {
   return { is_dark: props.is_dark };
 })<{ is_dark: string }>`
   width: 100%;
@@ -208,19 +271,8 @@ export const CarRow3 = styled.div.attrs<{ is_dark: string }>((props) => {
   padding: 5px 5px 5px 8px;
   overflow: hidden;
 `;
-export const RowThread: React.FC<{ isDark: boolean }> = memo(({ isDark }) => {
-  return (
-    <CarRow3 is_dark={isDark.toString()}>
-      <span className={`third-row-span ${isDark ? 'third-row-span-dark' : ''}`}>{'狀態: '}</span>
-      <CarStatus>
-        {false
-          ? 'test test test test123 這是測試 這是測試 這是測試 這是測試 這是測試 這是測試'
-          : '---------------'}
-      </CarStatus>
-    </CarRow3>
-  );
-});
-export const CarStatus = styled.span`
+
+const CarStatus = styled.span`
   font-weight: bold;
   font-size: 75%;
   text-align: center;
@@ -229,33 +281,41 @@ export const CarStatus = styled.span`
   color: red;
   margin-right: 3px;
 `;
+const Statue: React.FC<{ amrId: string }> = memo(({ amrId }) => {
+  const { status } = useAmrStatus(amrId);
 
-// ======= Tag Wrap ==============
-export const CarTag: React.FC<{ openFullInfo: boolean }> = memo(({ openFullInfo }) => {
+  return <CarStatus>{status ? status : '---------------'}</CarStatus>;
+});
+export const RowThread: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDark, amrId }) => {
+  const { t } = useTranslation();
   return (
-    <Flex
-      justify="center"
-      align="center"
-      className={` ${openFullInfo ? 'full-tag-wrap' : 'hide-tag-wrap'}`}
-      wrap
-      gap={'small'}
-    >
-      <Tag color="purple" style={{ margin: 0 }}>
-        {'手動模式'}
-      </Tag>
-      <Tag color="#e3e4e3" style={{ margin: 0 }}>
-        {'任務中'}
-      </Tag>
-      <Tag color="#e3e4e3" style={{ margin: 0 }}>
-        {'攜帶貨物'}
-      </Tag>
-
-      <Tag color="#e3e4e3" style={{ margin: 0 }}>
-        {'充電中'}
-      </Tag>
-      <Tag color="#e3e4e3" style={{ margin: 0 }}>
-        {'低電量'}
-      </Tag>
-    </Flex>
+    <CarRow3 is_dark={isDark.toString()}>
+      <span
+        className={`third-row-span ${isDark ? 'third-row-span-dark' : ''}`}
+      >{`${t('utils.status')}:`}</span>
+      <Statue amrId={amrId}></Statue>
+    </CarRow3>
   );
 });
+
+// ======= Tag Wrap ==============
+
+export const CarTag: React.FC<{ openFullInfo: boolean; amrId: string }> = memo(
+  ({ openFullInfo, amrId }) => {
+    return (
+      <Flex
+        justify="center"
+        align="center"
+        className={` ${openFullInfo ? 'full-tag-wrap' : 'hide-tag-wrap'}`}
+        wrap
+        gap={'small'}
+      >
+        <ManualTag amrId={amrId} />
+        <MissionTag amrId={amrId} />
+        <CarryTag amrId={amrId} />
+        <ChargingTag amrId={amrId} />
+        <PowerTag amrId={amrId} />
+      </Flex>
+    );
+  }
+);

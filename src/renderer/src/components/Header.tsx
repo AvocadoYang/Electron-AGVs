@@ -31,8 +31,8 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   };
 
   const items = [
-    `${t('page_dashboard')}`,
     `${t('page_view')}`,
+    `${t('page_dashboard')}`,
     `${t('page_setting')}`,
     `${t('page_simulate')}`
   ].map((name, index) => ({
@@ -41,12 +41,13 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   }));
 
   const handleMenuClick = (e: { key: string }) => {
+    console.log(e.key);
     switch (e.key) {
       case '1':
-        navigate('/dashboard');
+        navigate('/view');
         break;
       case '2':
-        navigate('/view');
+        navigate('/dashboard');
         break;
       case '3':
         navigate('/setting');
@@ -128,6 +129,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   cursor="pointer"
                   className="shake-icon"
                 >
+                  <title>Alert</title>
                   <path
                     // stroke={true ? '#ff7300' : 'gray'}
                     fill="#ff5e00"
@@ -135,6 +137,15 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   />
                 </svg>
               </Badge>
+              {/* <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={28}
+                viewBox="0 0 24 24"
+                cursor="pointer"
+              >
+                <title>Simulation</title>
+                <path d="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18H20Z" />
+              </svg> */}
               {isDark ? (
                 <SunOutlined className="light-mode-icon" onClick={() => setIsDark(false)} />
               ) : (

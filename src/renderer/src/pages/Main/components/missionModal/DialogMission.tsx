@@ -43,9 +43,11 @@ const DialogMission = () => {
       });
     },
     onSuccess: (resData) => {
+      console.log(resData);
       const errorMessage = resData?.data.message;
-      if (!errorMessage) {
+      if (!errorMessage || errorMessage === 'success') {
         void messageApi.success(t('utils.success'));
+        setOpenDialogMission(false);
         return;
       }
       const splitErrorMessage = errorMessage.split(' ');
@@ -58,7 +60,6 @@ const DialogMission = () => {
       void messageApi.error('無法排除 聯絡FAE工程師');
     }
   });
-
   const misOptions = useMemo(() => {
     if (!data) return [];
     return data?.map((v) => {
@@ -75,6 +76,7 @@ const DialogMission = () => {
     const { amrId, titleId, priority } = payload;
     if (!amrId || !titleId || !priority) {
       void messageApi.error('尚未完成選項');
+      return;
     }
     canSubmitMutation.mutate(payload);
   };
@@ -89,7 +91,13 @@ const DialogMission = () => {
       open={openDialogMission}
       onClose={handleCancel}
       footer={[
-        <Button key="submit" color="primary" variant="filled" onClick={submit}>
+        <Button
+          key="submit"
+          color="primary"
+          variant="filled"
+          onClick={submit}
+          loading={canSubmitMutation.isLoading}
+        >
           {t('utils.submit')}
         </Button>
       ]}

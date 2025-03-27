@@ -14,6 +14,8 @@
   align-items: center;
   overflow-y: scroll;
 }
+
+
 .card-wrap-2d {
   height: 100%;
   width: 100%;
@@ -40,6 +42,7 @@
 }
 .card-wrap-title {
   font-weight: bold;
+  cursor: pointer;
   font-size: 1.3rem;
 }
 
@@ -135,6 +138,43 @@
   fill: rgb(253, 228, 5)
 }
 
+@keyframes blink {
+  0% {
+    fill: rgb(240, 132, 9); /* 橘色 */
+  }
+  50% {
+
+    fill: red; /* 紅色 */
+  }
+  100% {
+    fill: rgb(240, 132, 9); /* 橘色 */
+  }
+}
+
+@keyframes blink-dark {
+  0% {
+    fill: rgb(253, 228, 5); /* 橘色 */
+  }
+  50% {
+
+    fill: red; /* 紅色 */
+  }
+  100% {
+    fill: rgb(253, 228, 5); /* 橘色 */
+  }
+}
+
+/* 低電量時 (電量 < 20%)，啟動動畫 */
+.low-battery svg {
+
+  animation: blink 1s infinite;
+}
+
+.low-battery .power-icon-dark svg {
+  animation: blink-dark 1s infinite;
+}
+
+
 .yaw-icon svg {
   fill: rgb(4, 110, 4)
 }
@@ -215,3 +255,6 @@
   background-color: #262626;
 }
 
+.hide-car-info-wrap {
+  display: none !important;
+}

@@ -1,8 +1,9 @@
-import { RefObject } from 'react'
-import { MapImage } from '@renderer/pages/Setting/mapComponents/components'
-import AllLocation from './AllLocation'
-import AllRoads from '@renderer/pages/Setting/mapComponents/components/AllRoads/AllRoads'
-import { AllZones } from '@renderer/pages/Setting/mapComponents/components'
+import { RefObject } from 'react';
+import { MapImage } from '@renderer/pages/Setting/mapComponents/components';
+import AllLocation from './AllLocation';
+import AllRoads from '@renderer/pages/Setting/mapComponents/components/AllRoads/AllRoads';
+import { AllZones } from '@renderer/pages/Setting/mapComponents/components';
+import AllAMRs from './AllAMRs/AllAMRs';
 const PadMapView: React.FC<{ scale: number; mapRef: RefObject<HTMLDivElement> }> = ({
   scale,
   mapRef
@@ -21,9 +22,10 @@ const PadMapView: React.FC<{ scale: number; mapRef: RefObject<HTMLDivElement> }>
       <MapImage></MapImage>
       <AllLocation></AllLocation>
       <AllZones scale={scale}></AllZones>
+      <AllAMRs></AllAMRs>
       <AllRoads></AllRoads>
     </div>
-  )
-}
+  );
+};
 
-export default PadMapView
+export default PadMapView;

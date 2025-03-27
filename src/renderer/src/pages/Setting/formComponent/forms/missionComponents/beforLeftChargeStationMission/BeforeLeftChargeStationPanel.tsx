@@ -5,10 +5,10 @@ import BeforeLeftChargeStationTable from './BeforeLeftChargeStationTable';
 import BeforeLeftChargeStationForm from './BeforeLeftChargeStationForm';
 
 const BeforeLeftChargeStationPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const { t } = useTranslation();
   return (
     <>
@@ -16,7 +16,7 @@ const BeforeLeftChargeStationPanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.before_left_charge_station_mission.before_left_charge_station_mission')}
         </h3>
-        <FormHr sortableId={sortableId} />
+        <FormHr />
         <BeforeLeftChargeStationForm />
         <BeforeLeftChargeStationTable />
       </div>

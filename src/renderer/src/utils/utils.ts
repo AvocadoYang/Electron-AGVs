@@ -77,6 +77,15 @@ export const errorHandler = (e: ErrorResponse, messageApi: MessageInstance) => {
 
 export const amrId2Color = (amrId: string) => {
   const seed = parseInt(`0x${MD5(amrId).toString()}`, 16);
+  const h = (seed % 60) + 200;
+  const s = (seed % 20) + 40;
+  const l = (seed % 20) + 30;
+  const color = `#${hsl.hex([h, s, l])}`;
+  return color;
+};
+
+export const amrId2ColorRainbow = (amrId: string) => {
+  const seed = parseInt(`0x${MD5(amrId).toString()}`, 16);
   const h = seed % 360;
   const s = (seed % 70) + 80;
   const l = (seed % 60) + 10;

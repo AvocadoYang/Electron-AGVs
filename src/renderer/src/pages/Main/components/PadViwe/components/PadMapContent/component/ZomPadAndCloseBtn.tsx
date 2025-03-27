@@ -1,13 +1,13 @@
-import { Open2DMap } from '@renderer/pages/Main/global/jotai'
-import { Button, Space } from 'antd'
-import { useSetAtom } from 'jotai'
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons'
-import { useTranslation } from 'react-i18next'
+import { Open2DMap } from '@renderer/pages/Main/global/jotai';
+import { Button, Space } from 'antd';
+import { useSetAtom } from 'jotai';
+import { PlusOutlined, MinusOutlined, RollbackOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 export const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>> }> = ({
   setScale
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <div className="zoom-pad-wrap">
       <Space.Compact>
@@ -17,7 +17,7 @@ export const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<n
         <Button
           onClick={() =>
             setScale((pre) => {
-              return pre - 0.035
+              return pre - 0.035;
             })
           }
           icon={<MinusOutlined />}
@@ -26,22 +26,17 @@ export const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<n
         </Button>
       </Space.Compact>
     </div>
-  )
-}
+  );
+};
 
 export const CloseBtn = () => {
-  const { t } = useTranslation()
-  const open2DMap = useSetAtom(Open2DMap)
+  const open2DMap = useSetAtom(Open2DMap);
   return (
-    <Button
+    <RollbackOutlined
       className="close-pad-map-button"
-      color="danger"
-      variant="filled"
       onClick={() => {
-        open2DMap(false)
+        open2DMap(false);
       }}
-    >
-      {t('utils.close')}
-    </Button>
-  )
-}
+    />
+  );
+};

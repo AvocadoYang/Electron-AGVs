@@ -9,6 +9,7 @@ import CarCardWrap from '../../Car_Card/CardWrap';
 import { darkMode } from '@renderer/utils/gloable';
 import MissionWrap from '../../Mission_Card/MissionWrap';
 import MissionBtn from './components/MissionBtn';
+
 const { Content } = Layout;
 const WebView = () => {
   const mapRef = useRef(null);

@@ -28,7 +28,8 @@ import {
   isShowEditChargeStationPosition,
   isShowEditWarningId,
   isShowEditBackup,
-  isOpenUploadWarningIDModal
+  isOpenUploadWarningIDModal,
+  isOpenSwitchMap
 } from '@renderer/utils/siderGloble';
 import {
   AimOutlined,
@@ -37,7 +38,9 @@ import {
   GoldOutlined,
   DeploymentUnitOutlined,
   ScheduleOutlined,
-  FileOutlined
+  FileOutlined,
+  DeliveredProcedureOutlined,
+  RedoOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import type { MenuProps } from 'antd';
@@ -47,6 +50,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
+import ChangeMapModal from './ChangeMap/ChangeMapCar';
 
 export type MenuItem = Required<MenuProps>['items'][number];
 
@@ -113,6 +117,8 @@ const Sider: React.FC<{
     isOpenUploadWarningIDModal
   ); //7-2
   const [openBackup, setOpenBackup] = useAtom(isShowEditBackup); // 7-3
+
+  const setOpenSwitchMap = useSetAtom(isOpenSwitchMap); // 8-4
 
   const setShowLocationToolTip = useSetAtom(isShowLocationTooltip); //地點tooltip
   const [collapsed, setCollapsed] = useState(true);
@@ -499,7 +505,8 @@ const Sider: React.FC<{
           onChange={(checked) => handleShowPanel(checked, 'backup_file')}
         />
       ),
-      getItem(t('toolbar.restart.restart'), '8-4')
+      getItem(t('toolbar.file_setting.switch_map'), '8-4', <DeliveredProcedureOutlined />),
+      getItem(t('toolbar.restart.restart'), '8-5', <RedoOutlined />)
     ])
   ];
 
@@ -516,12 +523,21 @@ const Sider: React.FC<{
   });
 
   const handleRestart = (keyPath: Array<string>) => {
-    if (JSON.stringify(keyPath) !== '["8-3","8"]') return;
-    restartMutate.mutate();
-
-    setTimeout(() => {
-      window.location.reload();
-    }, 6000);
+    const key = keyPath[0];
+    switch (key) {
+      case '8-5':
+        restartMutate.mutate();
+        setTimeout(() => {
+          window.location.reload();
+        }, 6000);
+        return;
+      case '8-4':
+        setOpenSwitchMap(true);
+        console.log('open');
+        break;
+      default:
+        break;
+    }
   };
   return (
     <>
@@ -545,6 +561,7 @@ const Sider: React.FC<{
       {/**  -------- 錯誤表 --------  */}
 
       <UploadWarningModal></UploadWarningModal>
+      <ChangeMapModal></ChangeMapModal>
     </>
   );
 };

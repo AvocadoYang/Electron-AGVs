@@ -70,7 +70,7 @@ const ChargePanel: FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ sortableId, attributes, listeners }) => {
+}> = ({ attributes, listeners }) => {
   const { data, refetch } = useCharge();
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -323,7 +323,7 @@ const ChargePanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.charge_mission.charge_mission')}
         </h3>
-        <FormHr sortableId={sortableId} />
+        <FormHr />
 
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <BtnBox onClick={() => handleAdd()}>

@@ -1,5 +1,4 @@
- 
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   EditLocationPanelSwitch,
   EditLocationListTableSwitch,
@@ -7,7 +6,8 @@ import {
   QuickEditLocationPanelSwitch,
   EditRoadPanelSwitch,
   EditZoneSwitch,
-  showAllZonesSwitch
+  showAllZonesSwitch,
+  isOpenSwitchMap
 } from '@renderer/utils/siderGloble';
 import { useEffect } from 'react';
 import { showBlockId } from '@renderer/utils/gloable';
@@ -19,6 +19,7 @@ const useResetSiderSwitch = () => {
   const [, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch);
   const [, setShowAllLocationListTable] = useAtom(EditLocationListTableSwitch);
   const [, setOpenEditZone] = useAtom(EditZoneSwitch);
+  const setOpenSwitchMap = useSetAtom(isOpenSwitchMap);
   const [, setShowAllZonesSwitch] = useAtom(showAllZonesSwitch);
   const [, setShowBlockId] = useAtom(showBlockId);
   useEffect(() => {
@@ -29,6 +30,7 @@ const useResetSiderSwitch = () => {
     setQuickEditLocationPanel(false);
     setOpenEditZone(false);
     setShowAllZonesSwitch(true);
+    setOpenSwitchMap(false);
     setShowBlockId('');
   }, []);
 };

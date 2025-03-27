@@ -23,6 +23,10 @@
     "save": "儲存",
     "delete": "刪除",
     "edit": "編輯",
+    "online": "上線",
+    "offline": "離線",
+    "num": "車號",
+    "category": "型號",
     "success": "成功",
     "fail": "失敗",
     "submit": "送出",
@@ -40,6 +44,22 @@
       "shelve": "貨區",
       "wait_side": "待命區"
     }
+  },
+
+  "change_map": {
+    "view_maps": "查看現有地圖",
+    "upload_map": "上傳地圖",
+    "switch_map": "變更地圖",
+    "no_img_found": "尚未存地圖"
+  },
+
+  "mode": {
+    "manual_mode": "手動模式",
+    "is_mission": "任務中",
+    "is_carry": "攜貨",
+    "is_charge": "充電中",
+    "low_power": "低電量",
+    "unknown": "未知"
   },
   "locations": {
     "none": "無",
@@ -120,7 +140,8 @@
       "file_setting": "檔案設定",
       "warning_id": "告警ID設定",
       "upload_warning_file": "上傳錯誤表",
-      "backup_file": "備份檔案"
+      "backup_file": "備份檔案",
+      "switch_map": "變更地圖"
     },
     "restart": {
       "restart": "重起系統"

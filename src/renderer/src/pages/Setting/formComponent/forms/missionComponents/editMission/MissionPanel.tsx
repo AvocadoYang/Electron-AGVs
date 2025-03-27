@@ -17,7 +17,7 @@ const EditMissionPanel: FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ sortableId, attributes, listeners }) => {
+}> = ({ attributes, listeners }) => {
   const [formMission] = Form.useForm();
   const [createMissionForm] = Form.useForm();
   const [search, setSearch] = useState('');
@@ -116,7 +116,7 @@ const EditMissionPanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.add_mission.title')}
         </h3>
-        <FormHr sortableId={sortableId} />
+        <FormHr />
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <SwitchTable
             selectedMissionKey={selectedMissionKey}
