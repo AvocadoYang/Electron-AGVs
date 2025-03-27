@@ -3,13 +3,15 @@ import '../webview.css';
 import { Button, Flex } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { DialogMission } from '../../missionModal';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { OpenAssignMission } from '@renderer/pages/Main/global/jotai';
 import { useSetAtom } from 'jotai';
+import QuickMissionWebView from '../../missionModal/QuickMissionWebView';
 
 const MissionBtn = () => {
   const { t } = useTranslation();
   const openAssignMission = useSetAtom(OpenAssignMission);
+  const [showQuickMission, setShowQuickMission] = useState(false);
   return (
     <>
       <Flex gap="small" wrap="wrap" align="center" justify="end" className="mission-btn-wrap">
@@ -24,7 +26,9 @@ const MissionBtn = () => {
         <Button
           color="primary"
           variant="outlined"
-          onClick={() => {}}
+          onClick={() => {
+            setShowQuickMission(!showQuickMission);
+          }}
           icon={<ThunderboltOutlined />}
         >
           {t('main.card_name.quick_mission')}
@@ -42,6 +46,10 @@ const MissionBtn = () => {
         </Button>
       </Flex>
       <DialogMission></DialogMission>
+      <QuickMissionWebView
+        showQuickMission={showQuickMission}
+        setShowQuickMission={setShowQuickMission}
+      ></QuickMissionWebView>
     </>
   );
 };

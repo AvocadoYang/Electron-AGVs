@@ -225,7 +225,7 @@ const RoadList: React.FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ sortableId, attributes, listeners }) => {
+}> = ({ attributes, listeners }) => {
   const { data: currentMap } = useMap();
   const searchInput = useRef<InputRef>(null);
   const [messageApi, contextHolders] = message.useMessage();
@@ -541,7 +541,7 @@ const RoadList: React.FC<{
       <h3 className="drop_button_style" {...listeners} {...attributes}>
         {t('edit_road_panel.road_table')}
       </h3>
-      <FormHr sortableId={sortableId}></FormHr>
+      <FormHr></FormHr>
       <Flex
         gap="middle"
         justify="flex-start"

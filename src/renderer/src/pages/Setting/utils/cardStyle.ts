@@ -1,5 +1,4 @@
 import { CSS, Transform } from '@dnd-kit/utilities';
-import { borderColor } from './utils';
 
 /**
  * Returns the style object for a Card component.
@@ -11,12 +10,12 @@ import { borderColor } from './utils';
 export default (
   transform: Transform | null,
   transition: string | undefined,
-  sortableId: string
+  _sortableId?: string
 ) => {
   return {
     transform: CSS.Transform.toString(transform),
     transition,
     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
-    borderTop: `5px solid ${borderColor(sortableId)}`
+    borderTop: `5px solid #315E7D`
   };
 };

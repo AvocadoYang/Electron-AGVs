@@ -8,6 +8,7 @@ import { AmrFilterCarCard, Scale } from '@renderer/utils/gloable';
 
 import AllRoads from '@renderer/pages/Setting/mapComponents/components/AllRoads/AllRoads';
 import AllAMRs from '../../PadViwe/components/PadMapContent/component/AllAMRs/AllAMRs';
+import AllCargo from '../../PadViwe/components/PadMapContent/AllCargo.tsx/AllCargo';
 const WebMapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>;
 }> = ({ mapRef }) => {
@@ -20,7 +21,9 @@ const WebMapView: React.FC<{
       draggable={false}
       ref={mapRef}
       onClick={(e) => {
-        if (!hintAmrId) return;
+        if (!hintAmrId.size) {
+          return;
+        }
         if ((e.target as HTMLElement).tagName === 'IMG') {
           setHintAmrId((pre) => {
             pre.clear();
@@ -31,6 +34,7 @@ const WebMapView: React.FC<{
     >
       <MapImage></MapImage>
       <AllAMRs></AllAMRs>
+      <AllCargo></AllCargo>
       <AllLocation></AllLocation>
       <AllRoads></AllRoads>
       <AllZones scale={scale}></AllZones>

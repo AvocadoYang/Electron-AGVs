@@ -43,7 +43,7 @@ const EditRoadPanel: React.FC<{
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
   roadPanelForm: FormInstance<unknown>;
-}> = ({ sortableId, attributes, listeners, roadPanelForm }) => {
+}> = ({ attributes, listeners, roadPanelForm }) => {
   const [chooseAngle, setChooseAngle] = useState<string>('');
   const [messageApi, contextHolders] = message.useMessage();
   const { t } = useTranslation();
@@ -79,7 +79,7 @@ const EditRoadPanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.roadPanel')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Form
           initialValues={{ ...initialRoadValue }}
           form={roadPanelForm}

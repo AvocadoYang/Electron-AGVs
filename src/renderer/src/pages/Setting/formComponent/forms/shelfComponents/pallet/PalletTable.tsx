@@ -98,7 +98,7 @@ const PalletTable: React.FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ sortableId, attributes, listeners }) => {
+}> = ({ attributes, listeners }) => {
   const { t } = useTranslation();
   const { data: pallet, refetch } = usePallet();
   const [form] = Form.useForm();
@@ -280,7 +280,7 @@ const PalletTable: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('edit_pallet.edit_pallet')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <Button
             icon={<PlusOutlined />}

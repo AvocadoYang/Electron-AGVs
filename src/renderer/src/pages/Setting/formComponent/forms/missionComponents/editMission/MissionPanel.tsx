@@ -1,4 +1,3 @@
- 
 import { Button, Col, Form, Modal, Row, Input, Select, Flex, message } from 'antd';
 import { FC, useState, useMemo } from 'react';
 import { nanoid } from 'nanoid';
@@ -15,10 +14,10 @@ import MissionForm from './MissionForm';
 import SwitchTable from './SwitchTable';
 
 const EditMissionPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const [formMission] = Form.useForm();
   const [createMissionForm] = Form.useForm();
   const [search, setSearch] = useState('');
@@ -106,7 +105,7 @@ const EditMissionPanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.add_mission.title')}
         </h3>
-        <FormHr sortableId={sortableId} />
+        <FormHr />
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <SwitchTable
             selectedMissionKey={selectedMissionKey}

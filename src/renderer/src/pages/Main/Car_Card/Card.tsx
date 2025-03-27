@@ -32,11 +32,6 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
     }
     return false;
   }, [selectedOption, hintAmrId]);
-
-  const handleOpenChange = (newOpen: boolean) => {
-    setPopoverOpen(newOpen);
-  };
-
   return (
     <>
       <ConfigProvider
@@ -56,7 +51,9 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
           trigger="click"
           open={isPopoverOpen}
           placement="rightTop"
-          onOpenChange={handleOpenChange}
+          onOpenChange={(newOpen) => {
+            setPopoverOpen(newOpen);
+          }}
         >
           <InfoWrap
             className={`${hide ? 'hide-car-info-wrap' : ''}`}

@@ -190,7 +190,7 @@ const ZoneTable: React.FC<{
       <h3 className="drop_button_style" {...listeners} {...attributes}>
         {!editingKey ? t('sider_output_form_name.zoneTable') : t('edit_zone_panel.edit_zone')}
       </h3>
-      <FormHr sortableId={sortableId}></FormHr>
+      <FormHr></FormHr>
       {!editingKey ? (
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <Popconfirm

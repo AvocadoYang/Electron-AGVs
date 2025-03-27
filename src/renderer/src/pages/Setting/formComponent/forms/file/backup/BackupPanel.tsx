@@ -21,7 +21,7 @@ const BackupPanel: FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ sortableId, attributes, listeners }) => {
+}> = ({ attributes, listeners }) => {
   const { data: backup, refetch } = useVersion();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
@@ -131,7 +131,7 @@ const BackupPanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('file.warning_list.warning_table')}
         </h3>
-        <FormHr sortableId={sortableId} />
+        <FormHr />
 
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <Flex gap="middle" justify="flex-start" align="start" vertical>

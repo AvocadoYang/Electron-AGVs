@@ -678,12 +678,6 @@ export const useCloseLoc = (amrId: string) => {
     const closeLoc$ = profile$
       .pipe(
         map((info) => info.pose?.closeLoc),
-        // tap((data) => {
-        //   if (amrId === 'anfa-cb15-40-003') {
-        //     console.log(data);
-        //     return;
-        //   }
-        // }),
         distinctUntilChanged()
       )
       .subscribe((closeLoc) =>

@@ -12,14 +12,14 @@ import FormHr from '../../../../utils/FormHr';
 import { PlusOutlined } from '@ant-design/icons';
 import SubmitButton from '@renderer/utils/SubmitButton';
 type FieldType = {
-  yaw?: string
-}
+  yaw?: string;
+};
 
 const YawPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const [openYawModel, setOpenYawModel] = useState(false);
   const [openNewYawModal, setOpenNewYawModal] = useState(false);
   const [selectYawId, setSelectYawId] = useState('');
@@ -91,7 +91,7 @@ const YawPanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('edit_yaw.edit_yaw')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Row gutter={16}>
           <Col span={16}>
             {' '}

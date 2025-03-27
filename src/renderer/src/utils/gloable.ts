@@ -55,3 +55,5 @@ export const hintAmr = atom('');
 export const AmrFilterCarCard = atom<Set<string>>(new Set([]));
 // export const AmrFilterCarCard = atom('');
 export const AmrCarSelectFilter = atom<SelectProps['options']>([]);
+
+export const QuickMissionSelectParam = atom<string>('');

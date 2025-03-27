@@ -1,4 +1,3 @@
- 
 import './form.css';
 import {
   InputNumber,
@@ -80,7 +79,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       inputNode = <Select options={canRotateOption} />;
       break;
     default:
-      ;<InputNumber />;
+      <InputNumber />;
   }
 
   return (
@@ -107,20 +106,20 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 export type LocationSubmit = {
-  oldLocationId: string
-  newLocationId: string
-  x: number
-  y: number
-  areaType: string
-  rotation: number
-  canRotate: boolean
-}
+  oldLocationId: string;
+  newLocationId: string;
+  x: number;
+  y: number;
+  areaType: string;
+  rotation: number;
+  canRotate: boolean;
+};
 
 const AllLocationTable: React.FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ listeners, attributes, sortableId }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ listeners, attributes }) => {
   const [locationPanelForm] = Form.useForm();
   const searchInput = useRef<InputRef>(null);
   const [editingKey, setEditingKey] = useState<string | null>(null);
@@ -454,7 +453,7 @@ const AllLocationTable: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.locationList')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Flex
           gap="middle"
           justify="flex-start"

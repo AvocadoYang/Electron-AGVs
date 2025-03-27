@@ -1,4 +1,3 @@
- 
 import { Button, Flex, Popconfirm, Table, TableProps, message } from 'antd';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -77,18 +76,18 @@ const MinWid = styled.div`
 `;
 
 type CM = {
-  isActive: boolean
-  amrId?: string
-  missionName: string
-  cycle_relate_id: string
-  mission_id: string
-}
+  isActive: boolean;
+  amrId?: string;
+  missionName: string;
+  cycle_relate_id: string;
+  mission_id: string;
+};
 
 const CycleMissionPanel: FC<{
-  sortableId: string
-  attributes: import('@dnd-kit/core').DraggableAttributes
-  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined
-}> = ({ sortableId, attributes, listeners }) => {
+  sortableId: string;
+  attributes: import('@dnd-kit/core').DraggableAttributes;
+  listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
+}> = ({ attributes, listeners }) => {
   const { t } = useTranslation();
   const data = useCycleMission();
   const [messageApi, contextHolder] = message.useMessage();
@@ -207,7 +206,7 @@ const CycleMissionPanel: FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.cycle_mission.cycle_mission')}
         </h3>
-        <FormHr sortableId={sortableId} />
+        <FormHr />
 
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <CycleForm />

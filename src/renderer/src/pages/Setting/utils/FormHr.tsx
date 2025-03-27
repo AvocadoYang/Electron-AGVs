@@ -1,13 +1,12 @@
 import { FC, memo } from 'react';
-import { borderColor } from './utils';
 
-const FormHr: FC<{ sortableId: string }> = ({ sortableId }) => {
+const FormHr: FC = () => {
   return (
     <hr
       style={{
         marginTop: '1px',
         marginBottom: '10px',
-        border: `3px solid ${borderColor(sortableId)}`,
+        border: `2px solid  #315E7D`,
         borderRadius: '5px'
       }}
     ></hr>

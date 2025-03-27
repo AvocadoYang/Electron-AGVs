@@ -17,7 +17,7 @@ const EditLocationPanel: React.FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ locationPanelForm, sortableId, attributes, listeners }) => {
+}> = ({ locationPanelForm, attributes, listeners }) => {
   const queryClient = useQueryClient();
   const [messageApi, contextHolders] = message.useMessage();
   const { t } = useTranslation();
@@ -75,7 +75,7 @@ const EditLocationPanel: React.FC<{
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('sider_output_form_name.locationPanel')}
         </h3>
-        <FormHr sortableId={sortableId}></FormHr>
+        <FormHr></FormHr>
         <Form
           layout="vertical"
           initialValues={initialLocationFormValue}

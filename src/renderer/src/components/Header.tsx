@@ -31,8 +31,8 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   };
 
   const items = [
-    `${t('page_dashboard')}`,
     `${t('page_view')}`,
+    `${t('page_dashboard')}`,
     `${t('page_setting')}`,
     `${t('page_simulate')}`
   ].map((name, index) => ({
@@ -41,12 +41,13 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   }));
 
   const handleMenuClick = (e: { key: string }) => {
+    console.log(e.key);
     switch (e.key) {
       case '1':
-        navigate('/dashboard');
+        navigate('/view');
         break;
       case '2':
-        navigate('/view');
+        navigate('/dashboard');
         break;
       case '3':
         navigate('/setting');
