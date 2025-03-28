@@ -14,21 +14,10 @@ const { Header: AntdHeader } = Layout;
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [isDark, setIsDark] = useAtom(darkMode);
+  const [isDark] = useAtom(darkMode);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSimulateOpen, setIsSimulateOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const items = [
     `${t('page_view')}`,
@@ -116,8 +105,8 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               onClick={handleMenuClick}
               className="custom-menu"
             />
-            <Flex gap="middle" align="start" style={{ marginRight: '10px' }}>
-              <Badge count={3} className={`alert-icon`} onClick={showModal}>
+            <Flex gap="middle" align="center" justify="center" style={{ marginRight: '10px' }}>
+              <Badge count={3} className={`alert-icon`} onClick={() => setIsModalOpen(true)}>
                 <svg
                   onClick={() => {
                     // setOpenErrorWrap(!openErrorWrap);
@@ -137,20 +126,22 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   />
                 </svg>
               </Badge>
-              {/* <svg
+              <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width={28}
+                width={30}
                 viewBox="0 0 24 24"
                 cursor="pointer"
+                onClick={() => setIsSimulateOpen(true)}
+                // style={{ padding: '50%' }}
               >
                 <title>Simulation</title>
                 <path d="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18H20Z" />
-              </svg> */}
-              {isDark ? (
+              </svg>
+              {/* {isDark ? (
                 <SunOutlined className="light-mode-icon" onClick={() => setIsDark(false)} />
               ) : (
                 <MoonOutlined className="dark-mode-icon" onClick={() => setIsDark(true)} />
-              )}
+              )} */}
               <Select
                 defaultValue="ch.tw"
                 style={{ width: 120 }}
@@ -173,8 +164,20 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         mask={false}
         title="告警提示"
         open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+      >
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+
+      <Modal
+        mask={false}
+        title="啟動模擬"
+        open={isSimulateOpen}
+        onOk={() => setIsSimulateOpen(false)}
+        onCancel={() => setIsSimulateOpen(false)}
       >
         <p>Some contents...</p>
         <p>Some contents...</p>

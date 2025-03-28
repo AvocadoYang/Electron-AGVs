@@ -95,3 +95,25 @@
 .dark-mode-map::-webkit-scrollbar-corner {
   background-color: #262626;
 }
+
+.start-button svg{
+  fill: rgb(23, 213, 23);
+  font-size: 2em;
+}
+
+.pause-button svg{
+  fill: red;
+  font-size: 1.5em;
+}
+
+.hide svg {
+  font-size: 2em;
+  opacity: 1;
+  fill: grey;
+}
+
+.hide-pause svg {
+  font-size: 1.5em;
+  opacity: 1;
+  fill: grey;
+}

@@ -1,4 +1,10 @@
-import { ThunderboltOutlined, RedoOutlined, CalendarOutlined } from '@ant-design/icons';
+import {
+  ThunderboltOutlined,
+  RedoOutlined,
+  CalendarOutlined,
+  CaretRightOutlined,
+  PauseOutlined
+} from '@ant-design/icons';
 import '../webview.css';
 import { Button, Flex } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -12,13 +18,10 @@ const MissionBtn = () => {
   const { t } = useTranslation();
   const openAssignMission = useSetAtom(OpenAssignMission);
   const [showQuickMission, setShowQuickMission] = useState(false);
+  const [isStart, setIsStart] = useState(true);
   return (
     <>
       <Flex gap="small" wrap="wrap" align="center" justify="end" className="mission-btn-wrap">
-        {/* <Button type="primary" size="small" onClick={() => {}} icon={<SignatureOutlined />}>
-        {t('main.card_name.input_mission')}
-      </Button> */}
-
         <Button color="primary" variant="outlined" onClick={() => {}} icon={<RedoOutlined />}>
           {t('toolbar.mission.cycle_mission')}
         </Button>
@@ -50,6 +53,16 @@ const MissionBtn = () => {
         showQuickMission={showQuickMission}
         setShowQuickMission={setShowQuickMission}
       ></QuickMissionWebView>
+      {/* <Flex gap={'meddle'} wrap="wrap" align="center" justify="end" className="mission-btn-wrap">
+        <CaretRightOutlined
+          className={`${isStart ? 'hide' : 'start-button'}`}
+          onClick={() => setIsStart(true)}
+        />
+        <PauseOutlined
+          className={`${isStart ? 'pause-button' : 'hide-pause'}`}
+          onClick={() => setIsStart(false)}
+        />
+      </Flex> */}
     </>
   );
 };
