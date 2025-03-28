@@ -7,6 +7,6 @@ export const isHumanRobot = (robotId: string): boolean =>
 export const isFork = (robotId: string): boolean => {
   const list = robotId.split('-').map((v) => v.toLowerCase());
   return (
-    list.includes('cb') || list.includes('ps14') || list.includes('sw15') || list.includes('pm')
+    list.includes('cb15') || list.includes('ps14') || list.includes('sw15') || list.includes('pm')
   );
 };

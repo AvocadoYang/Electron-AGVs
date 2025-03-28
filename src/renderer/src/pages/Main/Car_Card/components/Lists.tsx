@@ -176,7 +176,7 @@ const Yaw: React.FC<{ amrId: string }> = memo(({ amrId }) => {
                         if (yaw === undefined) return undefined;
                         return parseFloat(yaw.toFixed(2));
                       })(fleetInfo.originPose?.yaw)} */}
-      {`${yaw !== undefined ? yaw : '--'}`}
+      {`${yaw !== undefined ? yaw.toFixed(2) : '--'}`}
     </p>
   );
 });
@@ -197,7 +197,7 @@ export const RowSecond: React.FC<{
       <Space
         direction="vertical"
         size={1}
-        style={{ textAlign: 'center', width: '10%' }}
+        style={{ textAlign: 'center', width: '18%' }}
         onClick={(e) => {
           e.stopPropagation();
           setOpenHiddenRow(!openHiddenRow);
@@ -209,14 +209,14 @@ export const RowSecond: React.FC<{
         />
         <LocValue amrId={amrId} isDark={isDark}></LocValue>
       </Space>
-      <Space direction="vertical" size={1} style={{ textAlign: 'center' }}>
+      <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '18%' }}>
         <CarOutlined className={`icon speed-icon ${isDark ? 'dark-icon' : ''}`} />
         <CardSpeed amrId={amrId} isDark={isDark}></CardSpeed>
       </Space>
-      <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '10%' }}>
+      <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '18%' }}>
         <Power amrId={amrId} isDark={isDark}></Power>
       </Space>
-      <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '10%' }}>
+      <Space direction="vertical" size={1} style={{ textAlign: 'center', width: '18%' }}>
         <CompassOutlined className={`icon yaw-icon ${isDark ? 'dark-icon yaw-icon-dark' : ''}`} />
         <Yaw amrId={amrId}></Yaw>
       </Space>
