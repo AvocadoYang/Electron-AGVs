@@ -1,15 +1,40 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Layout, Menu, Flex, Button, Drawer, Badge, Modal } from 'antd';
+import {
+  Layout,
+  Menu,
+  Flex,
+  Button,
+  Drawer,
+  Badge,
+  Modal,
+  Divider,
+  Typography,
+  List,
+  Space,
+  Tag,
+  message
+} from 'antd';
 import '../components/component.css';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import { memo, useState } from 'react';
-import { MenuOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons';
+import {
+  CarOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  MenuOutlined
+} from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { UserOutlined } from '@ant-design/icons';
 import { useAtom } from 'jotai';
 import { darkMode } from '@renderer/utils/gloable';
+import useMockRobot from '@renderer/api/useMockRobot';
+import { useMutation } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
+import { errorHandler } from '@renderer/utils/utils';
+import { ErrorResponse } from '@renderer/utils/globalType';
 const { Header: AntdHeader } = Layout;
+const { Title, Text } = Typography;
 
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const { t } = useTranslation();
@@ -18,6 +43,24 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSimulateOpen, setIsSimulateOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { data: script, refetch } = useMockRobot();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const simMutation = useMutation({
+    mutationFn: (isSimulate: boolean) => {
+      return client.post('api/simulate/simulate', { isSimulate });
+    },
+    onSuccess: () => {
+      messageApi.success(t('utils.success'));
+      refetch();
+      setIsSimulateOpen(false);
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  });
+
+  const handleSim = () => {
+    simMutation.mutate(true);
+  };
 
   const items = [
     `${t('page_view')}`,
@@ -51,6 +94,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
 
   return (
     <>
+      {contextHolder}
       <AntdHeader
         style={{
           display: 'flex',
@@ -169,19 +213,99 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       >
         <p>Some contents...</p>
         <p>Some contents...</p>
-        <p>Some contents...</p>
       </Modal>
 
       <Modal
-        mask={false}
-        title="啟動模擬"
         open={isSimulateOpen}
-        onOk={() => setIsSimulateOpen(false)}
         onCancel={() => setIsSimulateOpen(false)}
+        footer={null} // Custom footer for better control
+        width={450}
+        centered
+        style={{
+          padding: '24px',
+          borderRadius: '8px',
+          background: '#fff',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+        }}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        {/* Header Section */}
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <Title level={4} style={{ margin: 0, color: '#1d39c4' }}>
+            <CarOutlined style={{ marginRight: '8px', color: '#1d39c4' }} />
+            {t('header.active_sim')}
+          </Title>
+          <Text type="secondary">{t('header.please_confirm_info')}</Text>
+        </div>
+
+        {/* Script Details Section */}
+        <div style={{ marginBottom: '24px' }}>
+          <Text strong style={{ display: 'block', marginBottom: '8px' }}>
+            {t('header.sim_script')}
+          </Text>
+          <Tag color="blue" style={{ fontSize: '14px', padding: '4px 12px' }}>
+            {script?.scriptName || t('header.no_script_select')}
+          </Tag>
+        </div>
+
+        {/* Car List Section */}
+        <div style={{ marginBottom: '24px' }}>
+          <Text strong style={{ display: 'block', marginBottom: '8px' }}>
+            {t('header.in_use_robot')}
+          </Text>
+          {script?.robot && script.robot.length > 0 ? (
+            <List
+              size="small"
+              dataSource={script.robot}
+              renderItem={(robot) => (
+                <List.Item style={{ padding: '8px 0', borderBottom: 'none' }}>
+                  <Text>
+                    <CarOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
+                    {robot.id}
+                  </Text>
+                </List.Item>
+              )}
+              style={{
+                maxHeight: '150px',
+                overflowY: 'auto',
+                padding: '8px',
+                background: '#f9f9f9',
+                borderRadius: '4px'
+              }}
+            />
+          ) : (
+            <Text type="secondary"> {t('header.no_robot_select')}</Text>
+          )}
+        </div>
+
+        {/* Divider */}
+        <Divider style={{ margin: '16px 0' }} />
+
+        {/* Action Buttons */}
+        <Space style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            type="primary"
+            icon={<CheckCircleOutlined />}
+            onClick={() => handleSim()}
+            style={{
+              background: '#1d39c4',
+              borderColor: '#1d39c4',
+              borderRadius: '4px',
+              padding: '0 24px'
+            }}
+          >
+            {t('header.active')}
+          </Button>
+          <Button
+            icon={<CloseCircleOutlined />}
+            onClick={() => setIsSimulateOpen(false)}
+            style={{
+              borderRadius: '4px',
+              padding: '0 24px'
+            }}
+          >
+            {t('header.cancel')}
+          </Button>
+        </Space>
       </Modal>
     </>
   );
