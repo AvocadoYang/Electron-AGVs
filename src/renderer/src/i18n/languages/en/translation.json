@@ -86,6 +86,17 @@
   "page_setting": "Setting",
   "page_dashboard": "Dashboard",
   "page_simulate": "Simulate",
+  "header": {
+    "inactive_sim": "Stop simulate",
+    "active_sim": "Start simulation",
+    "please_confirm_info": "Please confirm the following simulation details",
+    "sim_script": "Simulation script:",
+    "no_script_select": "No script selected",
+    "in_use_robot": "Vehicle/Robot used:",
+    "no_robot_select": "No vehicle/robot selected",
+    "active": "Confirm to start",
+    "cancel": "Cancel"
+  },
   "toolbar": {
     "location": {
       "locations": "Locations",

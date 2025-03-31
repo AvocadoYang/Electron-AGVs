@@ -85,6 +85,18 @@
   "page_setting": "點位設定",
   "page_dashboard": "控制中心",
   "page_simulate": "模擬任務",
+  "header": {
+    "inactive_sim": "中止模擬",
+    "active_sim": "啟動模擬",
+    "please_confirm_info": "請確認以下模擬詳情",
+    "sim_script": "模擬腳本：",
+    "no_script_select": "未指定腳本",
+    "in_use_robot": "使用的車輛/機器人：",
+    "no_robot_select": "未指定車輛/機器人",
+    "active": "確認啟動",
+    "cancel": "取消"
+  },
+
   "toolbar": {
     "location": {
       "locations": "點位",
@@ -610,7 +622,7 @@
 
   "car_control_translate": {
     "cargo_limit": "貨架高度鎖定",
-    "move": "枒杈前後",
+    "move": "移動",
     "load": "取貨",
     "offload": "放貨",
     "charge": "充電",

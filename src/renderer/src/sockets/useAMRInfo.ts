@@ -12,7 +12,6 @@ import {
   scan,
   share,
   switchMap,
-  tap,
   withLatestFrom
 } from 'rxjs';
 import { io } from './socketConnect';
@@ -457,7 +456,7 @@ const schema = () =>
       doingTask: boolean().optional(),
       rosStatus: string().optional(),
       machineStatus: string().optional(),
-      arriveInit: boolean().required(),
+      arriveInit: boolean().optional().default(false),
       smStatus: string().optional(),
       hasCargo: boolean().optional(),
       maintenanceLevel: string().optional()
