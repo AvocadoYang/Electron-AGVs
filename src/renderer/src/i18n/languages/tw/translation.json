@@ -86,6 +86,7 @@
   "page_dashboard": "控制中心",
   "page_simulate": "模擬任務",
   "header": {
+    "inactive_sim": "中止模擬",
     "active_sim": "啟動模擬",
     "please_confirm_info": "請確認以下模擬詳情",
     "sim_script": "模擬腳本：",

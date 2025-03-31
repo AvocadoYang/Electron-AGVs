@@ -12,7 +12,8 @@ import {
   List,
   Space,
   Tag,
-  message
+  message,
+  Tooltip
 } from 'antd';
 import '../components/component.css';
 import { useNavigate } from 'react-router-dom';
@@ -60,6 +61,10 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
 
   const handleSim = () => {
     simMutation.mutate(true);
+  };
+
+  const handleAbortSim = () => {
+    simMutation.mutate(false);
   };
 
   const items = [
@@ -170,17 +175,36 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   />
                 </svg>
               </Badge>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width={30}
-                viewBox="0 0 24 24"
-                cursor="pointer"
-                onClick={() => setIsSimulateOpen(true)}
-                // style={{ padding: '50%' }}
-              >
-                <title>Simulation</title>
-                <path d="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18H20Z" />
-              </svg>
+
+              {script?.isSimulate ? (
+                <Tooltip title={t('header.inactive_sim')}>
+                  <svg
+                    onClick={() => handleAbortSim()}
+                    width={30}
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="#ff0000"
+                      d="M15.73,3L21,8.27V15.73L15.73,21H8.27L3,15.73V8.27L8.27,3H15.73M15,16V8H13V16H15M11,16V8H9V16H11Z"
+                    />
+                  </svg>
+                </Tooltip>
+              ) : (
+                <Tooltip title={t('page_simulate')}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={30}
+                    viewBox="0 0 24 24"
+                    cursor="pointer"
+                    onClick={() => setIsSimulateOpen(true)}
+                    // style={{ padding: '50%' }}
+                  >
+                    <path d="M4,6H20V16H4M20,18A2,2 0 0,0 22,16V6C22,4.89 21.1,4 20,4H4C2.89,4 2,4.89 2,6V16A2,2 0 0,0 4,18H0V20H24V18H20Z" />
+                  </svg>
+                </Tooltip>
+              )}
+
               {/* {isDark ? (
                 <SunOutlined className="light-mode-icon" onClick={() => setIsDark(false)} />
               ) : (

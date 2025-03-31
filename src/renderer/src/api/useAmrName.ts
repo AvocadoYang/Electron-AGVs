@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { array, object, string } from 'yup';
+import { array, boolean, object, string } from 'yup';
 import client from './axiosClient';
 
 const getName = async () => {
@@ -9,7 +9,8 @@ const getName = async () => {
     array(
       object({
         id: string().required(),
-        serialNumber: string().required()
+        serialNumber: string().required(),
+        isReal: boolean().required()
       }).required()
     ).required();
 

@@ -87,6 +87,7 @@
   "page_dashboard": "Dashboard",
   "page_simulate": "Simulate",
   "header": {
+    "inactive_sim": "Stop simulate",
     "active_sim": "Start simulation",
     "please_confirm_info": "Please confirm the following simulation details",
     "sim_script": "Simulation script:",
