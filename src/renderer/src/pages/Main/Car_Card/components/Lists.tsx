@@ -197,7 +197,7 @@ export const RowSecond: React.FC<{
       <Space
         direction="vertical"
         size={1}
-        style={{ textAlign: 'center', width: '18%' }}
+        style={{ textAlign: 'center', width: '18%', cursor: 'pointer' }}
         onClick={(e) => {
           e.stopPropagation();
           setOpenHiddenRow(!openHiddenRow);

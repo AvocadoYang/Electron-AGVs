@@ -11,7 +11,7 @@ import { amrId2Color } from '@renderer/utils/utils';
 const Card: React.FC<{ id: string }> = ({ id }) => {
   const [openHiddenRow, setOpenHiddenRow] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
-  const [openFullInfo, setOpenFullInfo] = useState(false);
+  const [openFullInfo, setOpenFullInfo] = useState(true);
   // hover 卡片時地圖AMR的提示
   const setHintAmr = useSetAtom(hintAmr);
   // select選單篩選顯示的 AMR 系列

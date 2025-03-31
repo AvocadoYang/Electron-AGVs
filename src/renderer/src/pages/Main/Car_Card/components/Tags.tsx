@@ -5,17 +5,41 @@ import {
   useIsManual,
   useIsWorking
 } from '@renderer/sockets/useAMRInfo';
-import { Tag } from 'antd';
+import { errorHandler } from '@renderer/utils/utils';
+import { useMutation } from '@tanstack/react-query';
+import { Tag, message } from 'antd';
+import client from '@renderer/api/axiosClient';
 import { memo } from 'react';
+import { ErrorResponse } from '@renderer/utils/globalType';
 import { useTranslation } from 'react-i18next';
 
 export const ManualTag: React.FC<{ amrId }> = memo(({ amrId }) => {
   const { isManual } = useIsManual(amrId);
   const { t } = useTranslation();
+  const [messageApi, contextHolders] = message.useMessage();
+  const changeManualMode = useMutation({
+    mutationFn: (payload: { manual_mode: boolean }) => {
+      return client.post('api/amr/set-simulate-isManual', payload);
+    },
+    onSuccess: () => {
+      void messageApi.success(t('utils.success'));
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  });
   return (
-    <Tag color={`${isManual ? '#e3e4e3' : 'blue'}`} style={{ margin: 0 }}>
-      {`${t('mode.manual_mode')}`}
-    </Tag>
+    <>
+      {contextHolders}
+      <Tag
+        color={`${!isManual ? '#e3e4e3' : 'blue'}`}
+        style={{ margin: 0, cursor: 'pointer' }}
+        onClick={(e) => {
+          e.stopPropagation();
+          changeManualMode.mutate({ manual_mode: isManual as boolean });
+        }}
+      >
+        {`${t('mode.manual_mode')}`}
+      </Tag>
+    </>
   );
 });
 

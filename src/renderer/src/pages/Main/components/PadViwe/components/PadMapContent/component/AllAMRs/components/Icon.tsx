@@ -15,11 +15,13 @@ const ColorAmr = styled.div.attrs<{
   top: number;
   is_agv: string;
   rotate: number;
-}>(({ left, top, is_agv, rotate }) => ({
+}>(({ left, top, is_agv, rotate, width, height }) => ({
   style: {
+    width: `${is_agv === 'true' ? width - 5 : width - 14}px`,
+    height: `${is_agv === 'true' ? height : height - 23}px`,
     left,
     top,
-    transform: `${is_agv === 'true' ? `rotate(${rotate}deg)` : `translate(15%, -40%) rotate(${rotate}deg)`}`,
+    transform: `${is_agv === 'true' ? `rotate(${rotate}deg)` : `translate(-40%, -50%) rotate(${rotate}deg) `}`,
     transition: 'x 1s, y 1s'
   }
 }))<{

@@ -17,5 +17,4 @@ export const InfoWrap = styled.div.attrs<{
   border-top: ${(props) => `0.4em solid ${props.randomcolor}`};
   background-color: ${(props) => `${props.is_dark === 'true' ? '#3a3939' : '#ffffff'}`};
   // #262626
-  cursor: pointer;
 `;
