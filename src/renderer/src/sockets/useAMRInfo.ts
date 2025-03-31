@@ -865,7 +865,7 @@ export const useIsCarry = (amrId: string) => {
     );
     const isCarry$ = profile$
       .pipe(
-        map((info) => info.IO?.manual_mode),
+        map((info) => info.hasCargo),
         distinctUntilChanged()
       )
       .subscribe((isWorking) => setIsCarry(isWorking));
