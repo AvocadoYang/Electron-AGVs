@@ -38,9 +38,6 @@ const schema = () =>
       object({
         amrId: string().optional(),
         missionId: string().required(),
-        // relateId: string().required(),
-        cargoName: string().optional().nullable(),
-        fullName: string(),
         missionType: mixed<keyof typeof missionTypeMap>()
           .oneOf(objectKeys(missionTypeMap))
           .required(),
@@ -54,13 +51,8 @@ const schema = () =>
         createdAt: date().required(),
         assignedAt: date().optional(),
         startedAt: date().optional(),
-        forkStartAt: date().optional(),
-        forkEndAt: date().optional(),
         completedAt: date().optional(),
-        isCharge: boolean().required(),
-        startShelfColumn: string().optional().nullable(),
-        endShelfColumn: string().optional().nullable(),
-        message: string().optional(),
+        info: string().optional().nullable(),
         order: number().required(),
         priority: number().required()
       }).required()
@@ -143,23 +135,26 @@ export type MissionInfo = {
   missionId: string;
   missionType: string;
   missionStatus: string;
-  fullName?: string;
   manualMode?: boolean | string;
   emergencyBtn?: boolean | string;
   recoveryBtn?: boolean | string;
   warningIdList?: Array<undefined | number>;
-  // emergencyBtn?: boolean | string;
   createdAt?: Date;
   assignedAt?: Date;
   startedAt?: Date;
   forkStartAt?: Date;
   forkEndAt?: Date;
   completedAt?: Date;
-  startShelfColumn?: string | null;
-  endShelfColumn?: string | null;
-  message?: string;
+  info?: string | null;
   priority?: number;
   order: number;
+};
+
+export type Additional_Mission_Info = {
+  loadLocationId?: string;
+  offloadLocationId?: string;
+  forkStartAt?: Date;
+  forkEndAt?: Date;
 };
 
 export const useMission = (missionId: string) => {
