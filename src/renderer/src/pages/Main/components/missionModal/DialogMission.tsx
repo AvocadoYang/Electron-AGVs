@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { OpenAssignMission } from '../../global/jotai';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useName from '@renderer/api/useAmrName';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
@@ -31,8 +31,8 @@ const DialogMission = () => {
   const [openDialogMission, setOpenDialogMission] = useAtom(OpenAssignMission);
   const [, setAmrGenre] = useState<string | null>(null);
   const AmrOption: { value: null | string; label: string }[] | undefined = name?.map((v) => ({
-    value: v.id,
-    label: v.id
+    value: v.amrId,
+    label: v.amrId
   }));
   AmrOption?.push({ value: null, label: t('utils.random') });
 
@@ -84,6 +84,11 @@ const DialogMission = () => {
   const handleCancel = () => {
     setOpenDialogMission(false);
   };
+
+  useEffect(() => {
+    missionForm.setFieldValue('priority', MissionPriority.PIVOTAL);
+  }, []);
+
   if (!data) return [];
   return (
     <Modal
