@@ -8,7 +8,7 @@ const getName = async () => {
   const schema = () =>
     array(
       object({
-        id: string().required(),
+        amrId: string().required(),
         serialNumber: string().required(),
         isReal: boolean().required()
       }).required()

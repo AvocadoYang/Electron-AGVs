@@ -10,7 +10,8 @@ const getName = async () => {
       robot: array(
         object({
           id: string().required(),
-          serialNum: string().required()
+          serialNum: string().required(),
+          script_placement_location: string().required()
         })
       ).optional(),
       isSimulate: boolean().required(),
