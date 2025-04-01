@@ -27,13 +27,14 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { UserOutlined } from '@ant-design/icons';
-import { useAtom } from 'jotai';
-import { darkMode } from '@renderer/utils/gloable';
+import { useAtom, useSetAtom } from 'jotai';
+import { AmrCarSelectFilter, AmrFilterCarCard, darkMode } from '@renderer/utils/gloable';
 import useMockRobot from '@renderer/api/useMockRobot';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import { errorHandler } from '@renderer/utils/utils';
 import { ErrorResponse } from '@renderer/utils/globalType';
+import useName from '@renderer/api/useAmrName';
 const { Header: AntdHeader } = Layout;
 const { Title, Text } = Typography;
 
@@ -44,7 +45,10 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSimulateOpen, setIsSimulateOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [hintAmrId, setHintAmrId] = useAtom(AmrFilterCarCard);
+  //點擊地圖AMR時篩選卡片
   const { data: script, refetch } = useMockRobot();
+  const { refetch: amrNameRefetch } = useName();
   const [messageApi, contextHolder] = message.useMessage();
 
   const simMutation = useMutation({
@@ -54,7 +58,15 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     onSuccess: () => {
       messageApi.success(t('utils.success'));
       refetch();
+      amrNameRefetch();
       setIsSimulateOpen(false);
+      if (!hintAmrId.size) {
+        return;
+      }
+      setHintAmrId((pre) => {
+        pre.clear();
+        return new Set([...pre]);
+      });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });

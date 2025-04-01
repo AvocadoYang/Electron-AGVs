@@ -6,7 +6,7 @@ import { ConfigProvider, Popover } from 'antd';
 import BtnGroup from './components/BtnGroup';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { AmrCarSelectFilter, AmrFilterCarCard, darkMode, hintAmr } from '@renderer/utils/gloable';
-import { amrId2Color } from '@renderer/utils/utils';
+import { amrId2ColorRainbow } from '@renderer/utils/utils';
 
 const Card: React.FC<{ id: string }> = ({ id }) => {
   const [openHiddenRow, setOpenHiddenRow] = useState(false);
@@ -18,6 +18,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
   const selectedOption = useAtomValue(AmrCarSelectFilter);
   //點擊地圖AMR時篩選卡片
   const hintAmrId = useAtomValue(AmrFilterCarCard);
+
   const isDark = useAtomValue(darkMode);
 
   const hide = useMemo(() => {
@@ -57,7 +58,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
         >
           <InfoWrap
             className={`${hide ? 'hide-car-info-wrap' : ''}`}
-            randomcolor={amrId2Color(id)}
+            randomcolor={amrId2ColorRainbow(id)}
             is_dark={isDark.toString()}
             onMouseEnter={() => {
               setHintAmr(id);
@@ -67,7 +68,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
             }}
           >
             <DropDown
-              color={amrId2Color(id)}
+              color={amrId2ColorRainbow(id)}
               openFullInfo={openFullInfo}
               setOpenFullInfo={setOpenFullInfo}
             ></DropDown>

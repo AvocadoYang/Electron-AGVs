@@ -1,14 +1,13 @@
 import { FC, useMemo } from 'react';
 import useMap from '@renderer/api/useMap';
 import Icon from './Icon';
-import { MD5 } from 'crypto-js';
 
-import { hsl } from 'color-convert';
 import '../style.css';
 import { useAmrPose } from '@renderer/sockets/useAMRInfo';
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
+import { amrId2ColorRainbow } from '@renderer/utils/utils';
 import { AmrFilterCarCard, hintAmr } from '@renderer/utils/gloable';
 
 const Tip = styled.div.attrs<{
@@ -60,19 +59,11 @@ const agvFormate = (x1: number, y1: number) => {
   return { x, y };
 };
 
-const amrId2Color = (amrId: string) => {
-  const seed = parseInt(`0x${MD5(amrId).toString()}`, 16);
-  const h = seed % 360;
-  const s = (seed % 70) + 80;
-  const l = (seed % 60) + 10;
-  const color = `#${hsl.hex([h, s, l])}`;
-  return color;
-};
 const AMR: FC<{
   amrId: string;
 }> = ({ amrId }) => {
   const { data: map } = useMap();
-  const color = amrId2Color(amrId);
+  const color = amrId2ColorRainbow(amrId);
   const hintAmrId = useAtomValue(hintAmr);
   const hintAmrId2 = useAtomValue(AmrFilterCarCard);
 

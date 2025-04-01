@@ -695,7 +695,7 @@ export const useCloseLoc = (amrId: string) => {
 };
 
 export const useBattery = (amrId: string) => {
-  const [battery, setBattery] = useState<number | undefined>(0);
+  const [battery, setBattery] = useState<number | undefined>(undefined);
   useEffect(() => {
     const profile$ = profiles$.pipe(
       map((p) => p.find((x) => x.amrId === amrId)),
