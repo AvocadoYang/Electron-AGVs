@@ -12,17 +12,21 @@ const Cards: React.FC<{}> = () => {
   if (mockRobot && mockRobot.isSimulate) {
     return (
       <Flex align="center" justify="center" wrap gap="middle" style={{ width: '95%' }}>
-        {mockRobot.robot?.map((v) => {
-          return <Card key={v.id} id={v.id as string} />;
-        })}
+        {mockRobot?.robot
+          ?.filter((v) => v.script_placement_location !== 'unset')
+          .map((v) => {
+            return <Card key={v.id} id={v.id as string} />;
+          })}
       </Flex>
     );
   }
   return (
     <Flex align="center" justify="center" wrap gap="middle" style={{ width: '95%' }}>
-      {names.map((item) => (
-        <Card key={item.id} id={item.id}></Card>
-      ))}
+      {names
+        .filter((v) => v.isReal)
+        .map((item) => (
+          <Card key={item.amrId} id={item.amrId}></Card>
+        ))}
     </Flex>
   );
 };

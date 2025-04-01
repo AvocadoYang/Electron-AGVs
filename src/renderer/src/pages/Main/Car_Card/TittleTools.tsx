@@ -33,8 +33,8 @@ const TittleTools: React.FC<{}> = () => {
     if (!names) return;
     const AMRCategories = new Set<string>();
     for (let name of names) {
-      const { id } = name;
-      const category = id.split('-').slice(0, 3).join('-');
+      const { amrId } = name;
+      const category = amrId.split('-').slice(0, 3).join('-');
       AMRCategories.add(category);
     }
     const allAMRCategory = [...AMRCategories].map((amrCategory) => {
