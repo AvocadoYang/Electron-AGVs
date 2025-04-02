@@ -12,13 +12,15 @@ import client from '@renderer/api/axiosClient';
 import { memo } from 'react';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { useTranslation } from 'react-i18next';
+import useMockRobot from '@renderer/api/useMockRobot';
 
 export const ManualTag: React.FC<{ amrId }> = memo(({ amrId }) => {
   const { isManual } = useIsManual(amrId);
   const { t } = useTranslation();
+  const { data: mockRobot } = useMockRobot();
   const [messageApi, contextHolders] = message.useMessage();
   const changeManualMode = useMutation({
-    mutationFn: (payload: { manual_mode: boolean }) => {
+    mutationFn: (payload: { manual_mode: boolean; amrId: string }) => {
       return client.post('api/amr/set-simulate-isManual', payload);
     },
     onSuccess: () => {
@@ -33,8 +35,9 @@ export const ManualTag: React.FC<{ amrId }> = memo(({ amrId }) => {
         color={`${!isManual ? '#e3e4e3' : 'blue'}`}
         style={{ margin: 0, cursor: 'pointer' }}
         onClick={(e) => {
+          if (!mockRobot?.isSimulate) return;
           e.stopPropagation();
-          changeManualMode.mutate({ manual_mode: isManual as boolean });
+          changeManualMode.mutate({ manual_mode: isManual as boolean, amrId });
         }}
       >
         {`${t('mode.manual_mode')}`}

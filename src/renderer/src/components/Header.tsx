@@ -27,8 +27,8 @@ import {
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { UserOutlined } from '@ant-design/icons';
-import { useAtom, useSetAtom } from 'jotai';
-import { AmrCarSelectFilter, AmrFilterCarCard, darkMode } from '@renderer/utils/gloable';
+import { useAtom } from 'jotai';
+import { AmrFilterCarCard, darkMode } from '@renderer/utils/gloable';
 import useMockRobot from '@renderer/api/useMockRobot';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
@@ -90,7 +90,6 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   }));
 
   const handleMenuClick = (e: { key: string }) => {
-    console.log(e.key);
     switch (e.key) {
       case '1':
         navigate('/view');
