@@ -658,6 +658,8 @@
       }
     },
     "modal": {
+      "mini": "mini",
+      "expand": "expand",
       "current": "Current Script",
       "name": "Name",
       "select_locations": "Map select locations",
