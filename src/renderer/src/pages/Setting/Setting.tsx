@@ -78,7 +78,7 @@ const Setting: React.FC = () => {
             <Sider setHasOpenTool={setHasOpenTool} />
             <Content
               style={{
-                backgroundColor: 'white'
+                backgroundColor: '#f5f5f5'
               }}
             >
               <Splitter onResize={updateSize}>
@@ -90,7 +90,10 @@ const Setting: React.FC = () => {
                 >
                   {dndContextMemo}
                 </Splitter.Panel>
-                <Splitter.Panel size={splitterSize[1]} style={{ overflow: 'hidden' }}>
+                <Splitter.Panel
+                  size={splitterSize[1]}
+                  style={{ overflow: 'hidden', backgroundColor: '#f5f5f5' }}
+                >
                   <div
                     style={{
                       height: '100%',

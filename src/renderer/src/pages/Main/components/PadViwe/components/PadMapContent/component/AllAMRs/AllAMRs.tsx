@@ -9,7 +9,6 @@ const MemoizedAMR = memo(AMR, (prevProps, nextProps) => {
 const AllAMRs = () => {
   const { data } = useName();
 
-  console.log(data);
   if (!data) return null;
   return (
     <>

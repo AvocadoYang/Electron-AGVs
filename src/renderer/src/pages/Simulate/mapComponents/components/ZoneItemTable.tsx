@@ -11,7 +11,7 @@ import {
   type TransferProps
 } from 'antd';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import {
   isOpenCargoModal,
   isSelectCargo,
@@ -26,10 +26,11 @@ import _ from 'lodash';
 import GlobalLoading from '@renderer/utils/GlobalLoading';
 import { useTranslation } from 'react-i18next';
 
-const FloatBox = styled.div`
+const FloatBox = styled.div<{ $shrink: boolean }>`
   position: fixed;
   left: 5em;
-  bottom: 5em;
+  bottom: ${(props) => `${props.$shrink ? '-50em' : '5em'}`};
+  transition: bottom 0.3s ease-in-out; /* Add smooth animation */
 `;
 
 type DataType = {
@@ -39,6 +40,7 @@ type DataType = {
 const ZoneItemTable: FC = () => {
   const [targetKeys, setTargetKeys] = useAtom(targetKeyJotai);
   const data = useMap();
+  const [isShrink, setIsShrink] = useState(false);
   const value = useAtomValue(zoneValue);
   const [temp, setTemp] = useAtom(outputFormData);
   const setIsSelecting = useSetAtom(isSelectCargo);
@@ -123,7 +125,15 @@ const ZoneItemTable: FC = () => {
 
   if (!data || !data.data) return <GlobalLoading />;
   return (
-    <FloatBox>
+    <FloatBox $shrink={isShrink}>
+      <Button
+        type={isShrink ? 'primary' : 'default'}
+        onClick={() => {
+          setIsShrink(!isShrink);
+        }}
+      >
+        {isShrink === false ? t('sim.modal.mini') : t('sim.modal.expand')}
+      </Button>
       <Card style={{ width: '50em' }}>
         <Flex align="center" vertical gap="large">
           <TableTransfer

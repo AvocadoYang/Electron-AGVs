@@ -6,7 +6,7 @@ import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import useScriptRobot from '@renderer/api/useScriptRobot';
 import { useTranslation } from 'react-i18next';
 import client from '@renderer/api/axiosClient';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import AmrIcon from './AmrIcon';
 
 const AMRPadWrap = styled.div`
@@ -69,13 +69,14 @@ const IdleRobotPanel: FC<{
   const { data: robot, refetch } = useScriptRobot();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const queryClient = useQueryClient();
   const addMutation = useMutation({
     mutationFn: () => {
       return client.post('api/simulate/add-robot');
     },
     onSuccess: () => {
       refetch();
+      queryClient.refetchQueries({ queryKey: ['mock-robot'] });
       void messageApi.success(t('utils.success'));
     },
     onError: () => {

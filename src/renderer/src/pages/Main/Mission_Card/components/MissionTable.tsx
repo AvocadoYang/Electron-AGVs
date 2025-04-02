@@ -1,4 +1,4 @@
-import { MissionInfo, useMissions } from '../../../../sockets/useMissions';
+import { Additional_Mission_Info, MissionInfo, useMissions } from '../../../../sockets/useMissions';
 import { TableColumnsType, Table, Spin, ConfigProvider, Button } from 'antd';
 import { memo, useEffect, useState } from 'react';
 import '../mission_info.css';
@@ -75,8 +75,8 @@ const MissionTable = () => {
       filters: (() => {
         if (!name) return [];
         return name.map((amrInfo) => ({
-          text: `${amrInfo.id}`,
-          value: `${amrInfo.id}`
+          text: `${amrInfo.amrId}`,
+          value: `${amrInfo.amrId}`
         }));
       })(),
       onFilter: (value, record) => {
@@ -103,16 +103,22 @@ const MissionTable = () => {
       title: t('toolbar.mission.mission'),
       dataIndex: 'taskInfo',
       key: 'taskInfo',
-      render(_value, record) {
-        const from = record.startShelfColumn === null ? '' : record.startShelfColumn;
-        const to = record.endShelfColumn === null ? '' : record.endShelfColumn;
+      render(_value, record: MissionInfo) {
+        if (typeof record.info === 'string') {
+          const parseData = JSON.parse(record.info) as Additional_Mission_Info;
 
-        return (
-          <TaskInfo>
-            <TaskTitle>{record.fullName}</TaskTitle>
-            <SubTitle>{`${from} -> ${to}`}</SubTitle>
-          </TaskInfo>
-        );
+          const from = parseData.loadLocationId === null ? '' : parseData.loadLocationId;
+          const to = parseData.offloadLocationId === null ? '' : parseData.offloadLocationId;
+
+          return (
+            <TaskInfo>
+              <TaskTitle>{123}</TaskTitle>
+              <SubTitle>{`${from} -> ${to}`}</SubTitle>
+            </TaskInfo>
+          );
+        }
+
+        return <>-</>;
       }
     },
     {
@@ -206,13 +212,6 @@ const MissionTable = () => {
       <Table
         columns={columns}
         style={{ width: '100%' }}
-        expandable={
-          isMobile
-            ? {
-                expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.fullName}</p>
-              }
-            : undefined
-        }
         className={`custom-table ${isDark ? 'custom-table-dark' : ''}`}
         rowSelection={{
           type: selectionType,
@@ -243,14 +242,6 @@ const MissionTable = () => {
             manualMode: m.manualMode ? t('utils.yes') : t('utils.no'),
             emergencyBtn: m.emergencyBtn ? t('utils.yes') : t('utils.no'),
             recoveryBtn: m.recoveryBtn ? t('utils.yes') : t('utils.no'),
-
-            // completedTime: m.startedAt
-            //   ? diffMinute(m.startedAt, m.completedAt || new Date())
-            //   : '',
-            completedTime:
-              m.forkStartAt && m.forkEndAt
-                ? Math.round((m.forkEndAt.getTime() - m.forkStartAt.getTime()) / 6000) / 10
-                : '',
 
             totalTime:
               m.completedAt && m.createdAt

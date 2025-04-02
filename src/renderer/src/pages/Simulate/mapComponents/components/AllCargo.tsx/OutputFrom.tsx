@@ -1,4 +1,3 @@
-import useName from '@renderer/api/useAmrName';
 import useMap from '@renderer/api/useMap';
 import useSpecificShelf from '@renderer/api/useSpecificShelf';
 import { outputFormData, selectedLocation } from '@renderer/pages/Simulate/utils/status';
@@ -18,6 +17,7 @@ import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import useMockRobot from '@renderer/api/useMockRobot';
 
 const MissionStatus = styled.div`
   margin: 0;
@@ -53,14 +53,16 @@ const OutputFrom: FC<{
     );
   }, [data.data?.locations]);
 
-  const { data: name, isLoading: loadingCar } = useName();
+  const { data: name, isLoading: loadingCar } = useMockRobot();
 
   const AmrOption = useMemo(() => {
     const result =
-      name?.map((v) => ({
-        value: v.id,
-        label: v.id
-      })) || [];
+      name?.robot
+        ?.filter((v) => v.script_placement_location !== 'unset')
+        .map((v) => ({
+          value: v.id,
+          label: v.id
+        })) || [];
 
     return [{ label: t('sim.modal.none'), value: 'none' }, ...result];
   }, [name]);

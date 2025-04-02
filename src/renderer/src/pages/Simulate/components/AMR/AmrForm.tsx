@@ -68,10 +68,7 @@ const AmrForm: FC<{
     const info = robot?.find((v) => v?.id === id);
 
     form.setFieldValue('full_name', info?.full_name);
-    form.setFieldValue('script_placement_location', {
-      value: info?.script_placement_location,
-      label: info?.script_placement_location
-    });
+    form.setFieldValue('script_placement_location', info?.script_placement_location);
   }, [isOpen]);
 
   return (

@@ -659,6 +659,8 @@
       }
     },
     "modal": {
+      "mini": "縮小",
+      "expand": "展開",
       "current": "使用腳本名稱",
       "name": "名稱",
       "select_locations": "地圖選取地點",
