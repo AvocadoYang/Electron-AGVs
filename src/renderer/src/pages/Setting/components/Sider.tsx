@@ -547,12 +547,13 @@ const Sider: React.FC<{
         width={230}
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
+        style={{ backgroundColor: '#f5f5f5' }}
         className="setting-sider"
       >
         <Menu
           onClick={(e) => handleRestart(e.keyPath)}
           mode="inline"
-          style={{ height: '100%', borderRight: 0 }}
+          style={{ height: '100%', borderRight: 0, backgroundColor: '#f5f5f5' }}
           items={toolItem}
           className="setting-sider-menu"
         />
