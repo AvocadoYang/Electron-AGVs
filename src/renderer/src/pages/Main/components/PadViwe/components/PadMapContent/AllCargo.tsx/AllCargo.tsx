@@ -2,12 +2,13 @@ import useMap from '@renderer/api/useMap';
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import { memo } from 'react';
 import Cargo from './Cargo';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { isShowLocation } from '@renderer/utils/siderGloble';
 import { nanoid } from 'nanoid';
 import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 import useCargoInfo from '@renderer/sockets/useCargoInfo';
 import styled from 'styled-components';
+import { tooltipProp } from '@renderer/utils/gloable';
 
 const PointDiv = styled.div.attrs<{
   left: number;
@@ -39,7 +40,19 @@ const AllCargo: React.FC = () => {
   const shelfInfo = useCargoInfo();
   const showLocation = useAtomValue(isShowLocation);
   const { data } = useMap();
+  const setTooltip = useSetAtom(tooltipProp);
 
+  const handleEnter = (locationId: string, x: number, y: number) => {
+    setTooltip({
+      x,
+      y,
+      locationId
+    });
+  };
+
+  const handleLeave = () => {
+    setTooltip(null);
+  };
   const { data: locInfo } = useLoc(undefined);
 
   if (!data || !showLocation) return;
@@ -78,6 +91,8 @@ const AllCargo: React.FC = () => {
                 left={displayX}
                 top={displayY}
                 key={nanoid()}
+                onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
+                onMouseLeave={() => handleLeave()}
               >
                 <Cargo
                   locId={loc.locationId}

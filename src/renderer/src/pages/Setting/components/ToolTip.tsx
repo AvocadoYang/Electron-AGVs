@@ -6,13 +6,13 @@ import { FC } from 'react';
 import styled from 'styled-components';
 
 const TooltipWrapper = styled.div.attrs<{
-  left: number
-  top: number
+  left: number;
+  top: number;
 }>(({ left, top }) => ({
-  style: { left, top }
+  style: { left: left + 12, top }
 }))<{
-  left: number
-  top: number
+  left: number;
+  top: number;
 }>`
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
@@ -45,12 +45,7 @@ const ToolTip: FC = () => {
     mapResolution: data.mapResolution
   });
   return (
-    <TooltipWrapper
-      left={displayX}
-      top={displayY}
-      className={'show'}
-      style={{ top: -25, left: 10 }}
-    >
+    <TooltipWrapper left={displayX} top={displayY} className={'show'}>
       {' '}
       {toolTipProps.locationId}
     </TooltipWrapper>

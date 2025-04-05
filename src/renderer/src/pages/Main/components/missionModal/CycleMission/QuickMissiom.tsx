@@ -1,13 +1,13 @@
-import { Button, Form, message, Modal, Radio, Select } from 'antd'
-import { useAtom } from 'jotai'
-import { useTranslation } from 'react-i18next'
-import { OpenQuickMission } from '../../../global/jotai'
-import useName from '@renderer/api/useAmrName'
-import { useEffect, useMemo, useState } from 'react'
-import useShelvesInfo from '@renderer/api/useShelvesInfo'
-import { useMutation } from '@tanstack/react-query'
-import { ErrorResponse } from 'react-router-dom'
-import client from '@renderer/api/axiosClient'
+import { Button, Form, message, Modal, Radio, Select } from 'antd';
+import { useAtom } from 'jotai';
+import { useTranslation } from 'react-i18next';
+import { OpenQuickMission } from '../../../global/jotai';
+import useName from '@renderer/api/useAmrName';
+import { useEffect, useMemo, useState } from 'react';
+import useShelvesInfo from '@renderer/api/useShelvesInfo';
+import { useMutation } from '@tanstack/react-query';
+import { ErrorResponse } from 'react-router-dom';
+import client from '@renderer/api/axiosClient';
 
 enum MissionPriority {
   TRIVIAL, //沒差最後再做
@@ -16,123 +16,123 @@ enum MissionPriority {
   CRITICAL // 緊急
 }
 type AssignPayload = {
-  missionType: 'normal' | 'load' | 'offload'
-  columnName: string
-  locationId: string
-  level: number
-}
+  missionType: 'normal' | 'load' | 'offload';
+  columnName: string;
+  locationId: string;
+  level: number;
+};
 
 type QuickMissionType = {
-  amrId: string
-  priority: number
-  task: AssignPayload[]
-}
+  amrId: string;
+  priority: number;
+  task: AssignPayload[];
+};
 
 const QuickMission = () => {
-  const { t } = useTranslation()
-  const [messageApi, contextHolder] = message.useMessage()
-  const [loadShelf, setLoadShelf] = useState<{ label: string; value: string }[]>([])
-  const [offLoadShelf, setOffLoadShelf] = useState<{ label: string; value: string }[]>([])
-  const [form] = Form.useForm()
-  const { data: name } = useName()
-  const [, setAmrGenre] = useState<string | null>(null)
-  const { data: shelves } = useShelvesInfo()
-  const [openQuickMission, setOpenQuickMission] = useAtom(OpenQuickMission)
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [loadShelf, setLoadShelf] = useState<{ label: string; value: string }[]>([]);
+  const [offLoadShelf, setOffLoadShelf] = useState<{ label: string; value: string }[]>([]);
+  const [form] = Form.useForm();
+  const { data: name } = useName();
+  const [, setAmrGenre] = useState<string | null>(null);
+  const { data: shelves } = useShelvesInfo();
+  const [openQuickMission, setOpenQuickMission] = useAtom(OpenQuickMission);
 
   useEffect(() => {
     if (!shelves || !shelves.length) {
-      return
+      return;
     }
 
     const loadShelves = shelves
       .filter((shelf) => shelf.hasCargo)
       .map((shelf) => {
-        const columnName = shelf.columnName || 'X'
-        const label = `${columnName}-${shelf.locationId}-${shelf.level}`
+        const columnName = shelf.columnName || 'X';
+        const label = `${columnName}-${shelf.locationId}-${shelf.level}`;
         return {
           value: label,
           label
-        }
-      })
+        };
+      });
 
-    setLoadShelf(loadShelves)
+    setLoadShelf(loadShelves);
     const offLoadShelves = shelves
       .filter((shelf) => !shelf.hasCargo)
       .map((shelf) => {
-        const columnName = shelf.columnName || 'X'
-        const label = `${columnName}-${shelf.locationId}-${shelf.level}`
+        const columnName = shelf.columnName || 'X';
+        const label = `${columnName}-${shelf.locationId}-${shelf.level}`;
         return {
           value: label,
           label
-        }
-      })
+        };
+      });
 
-    setOffLoadShelf(offLoadShelves)
-  }, [shelves])
+    setOffLoadShelf(offLoadShelves);
+  }, [shelves]);
 
   const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
-    if (!name) return []
+    if (!name) return [];
     const options = name.map((v) => ({
-      value: v.id,
-      label: v.id
-    }))
+      value: v.amrId,
+      label: v.amrId
+    }));
 
-    options.unshift({ value: '*', label: t('utils.random') })
+    options.unshift({ value: '*', label: t('utils.random') });
 
-    return options
-  }, [name])
+    return options;
+  }, [name]);
 
   const submitMutation = useMutation({
     mutationFn: (data: QuickMissionType) => {
       return client.post('api/missions/fast-mission', data, {
         headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
-      })
+      });
     },
     onSuccess: () => {
-      form.resetFields()
+      form.resetFields();
       void messageApi.open({
         type: 'success',
         content: t('utils.success')
-      })
+      });
     },
     onError: (e: ErrorResponse) => {
-      void messageApi.error(e.statusText)
+      void messageApi.error(e.statusText);
     }
-  })
+  });
 
   const handleCancel = () => {
-    setOpenQuickMission(false)
-  }
+    setOpenQuickMission(false);
+  };
 
   const submit = () => {
-    const { load, offload, amrId, priority } = form.getFieldsValue()
+    const { load, offload, amrId, priority } = form.getFieldsValue();
     if (!load || !offload || !amrId || !priority) {
-      void messageApi.warning('欄位尚未填寫完整')
-      return
+      void messageApi.warning('欄位尚未填寫完整');
+      return;
     }
-    const loadInfo = (load as string).split('-')
+    const loadInfo = (load as string).split('-');
     const loadShelf = {
       missionType: 'load',
       columnName: loadInfo[0] == 'X' ? '' : loadInfo[0],
       locationId: loadInfo[1],
       level: Number(loadInfo[2])
-    }
+    };
 
-    const offloadInfo = (offload as string).split('-')
+    const offloadInfo = (offload as string).split('-');
     const offloadShelf = {
       missionType: 'offload',
       columnName: offloadInfo[0] == 'X' ? '' : offloadInfo[0],
       locationId: offloadInfo[1],
       level: Number(offloadInfo[2])
-    }
+    };
 
     const quickMission = {
       amrId,
       priority,
       task: [loadShelf, offloadShelf] as AssignPayload[]
-    }
-    submitMutation.mutate(quickMission)
-  }
+    };
+    submitMutation.mutate(quickMission);
+  };
 
   return (
     <>
@@ -157,13 +157,13 @@ const QuickMission = () => {
               placeholder={'Select an AMR'}
               onMouseDown={(e) => e.preventDefault()}
               onPopupScroll={(e) => {
-                e.stopPropagation()
+                e.stopPropagation();
               }}
               onDropdownVisibleChange={(open) => {
                 if (open) {
-                  document.body.style.overflow = 'hidden'
+                  document.body.style.overflow = 'hidden';
                 } else {
-                  document.body.style.overflow = 'auto'
+                  document.body.style.overflow = 'auto';
                 }
               }}
             />
@@ -197,13 +197,13 @@ const QuickMission = () => {
               onMouseDown={(e) => e.preventDefault()}
               onDropdownVisibleChange={(open) => {
                 if (open) {
-                  document.body.style.overflow = 'hidden'
+                  document.body.style.overflow = 'hidden';
                 } else {
-                  document.body.style.overflow = 'auto'
+                  document.body.style.overflow = 'auto';
                 }
               }}
               onPopupScroll={(e) => {
-                e.stopPropagation()
+                e.stopPropagation();
               }}
             />
           </Form.Item>
@@ -216,20 +216,20 @@ const QuickMission = () => {
               onMouseDown={(e) => e.preventDefault()}
               onDropdownVisibleChange={(open) => {
                 if (open) {
-                  document.body.style.overflow = 'hidden'
+                  document.body.style.overflow = 'hidden';
                 } else {
-                  document.body.style.overflow = 'auto'
+                  document.body.style.overflow = 'auto';
                 }
               }}
               onPopupScroll={(e) => {
-                e.stopPropagation()
+                e.stopPropagation();
               }}
             />
           </Form.Item>
         </Form>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default QuickMission
+export default QuickMission;

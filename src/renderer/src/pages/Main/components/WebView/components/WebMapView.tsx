@@ -9,11 +9,14 @@ import { AmrFilterCarCard, Scale } from '@renderer/utils/gloable';
 import AllRoads from '@renderer/pages/Setting/mapComponents/components/AllRoads/AllRoads';
 import AllAMRs from '../../PadViwe/components/PadMapContent/component/AllAMRs/AllAMRs';
 import AllCargo from '../../PadViwe/components/PadMapContent/AllCargo.tsx/AllCargo';
+import ToolTip from '@renderer/pages/Setting/components/ToolTip';
+import { isShowLocationTooltip } from '@renderer/utils/siderGloble';
 const WebMapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>;
 }> = ({ mapRef }) => {
   const scale = useAtomValue(Scale);
   const [hintAmrId, setHintAmrId] = useAtom(AmrFilterCarCard);
+  const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   return (
     <div
       className="map-view"
@@ -37,6 +40,7 @@ const WebMapView: React.FC<{
       <AllCargo></AllCargo>
       <AllLocation></AllLocation>
       <AllRoads></AllRoads>
+      {showLocationToolTip ? <ToolTip /> : []}
       <AllZones scale={scale}></AllZones>
     </div>
   );

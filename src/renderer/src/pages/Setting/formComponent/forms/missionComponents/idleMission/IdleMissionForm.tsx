@@ -11,11 +11,11 @@ import { array, object, string } from 'yup';
 import SubmitButton from '@renderer/utils/SubmitButton';
 
 type SubmitPayload = {
-  amrId: string[]
-  missionId: string
-  preventLocation: string[] | null
-  idle_min: number
-}
+  amrId: string[];
+  missionId: string;
+  preventLocation: string[] | null;
+  idle_min: number;
+};
 
 const getIdleSelect = async () => {
   const { data } = await client.get<unknown>('api/setting/idle-task-loc-selection');
@@ -40,7 +40,7 @@ const IdleMissionForm: FC = () => {
   const { data: idleLocSelect, isLoading } = useQuery(['idle-task-selection'], getIdleSelect);
   const queryClient = useQueryClient();
 
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
+  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
 
   const missionOptions = missionTitle?.map((v) => {
     return {

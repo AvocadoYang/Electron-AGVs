@@ -28,8 +28,8 @@ const QuickMissionWebView: React.FC<{
   const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
     if (!names) return [];
     const options = names.map((v) => ({
-      value: v.id,
-      label: v.id
+      value: v.amrId,
+      label: v.amrId
     }));
 
     options.unshift({ value: '*', label: t('utils.random') });
