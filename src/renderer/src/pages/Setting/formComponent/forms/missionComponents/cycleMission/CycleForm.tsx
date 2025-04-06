@@ -16,8 +16,8 @@ const CycleForm: FC = () => {
   const { t } = useTranslation();
   const { data: name } = useName();
   const AmrOption: { value: string; label: string }[] | undefined = name?.map((v) => ({
-    value: v.id,
-    label: v.id
+    value: v.amrId,
+    label: v.amrId
   }));
   // Use an empty string instead of null
   AmrOption?.push({ value: '', label: t('mission.cycle_mission.random') });
@@ -44,8 +44,8 @@ const CycleForm: FC = () => {
 
   const submit = () => {
     const data = formRegionSample.getFieldsValue() as {
-      amrId: string
-      missionId: string
+      amrId: string;
+      missionId: string;
     };
 
     if (!data.missionId) {

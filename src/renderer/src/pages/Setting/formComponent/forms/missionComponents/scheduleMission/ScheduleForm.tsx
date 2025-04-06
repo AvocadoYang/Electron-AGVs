@@ -1,5 +1,3 @@
- 
-
 import dayjs from 'dayjs';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Checkbox, Form, FormInstance, Modal, Select, TimePicker, message } from 'antd';
@@ -13,24 +11,24 @@ import { ErrorResponse } from '@renderer/utils/globalType';
 import SubmitButton from '@renderer/utils/SubmitButton';
 
 interface DataType {
-  id: string
-  active: boolean
-  amrId?: string[]
-  schedule: string
-  missionId?: string
-  missionName: string
-  day?: number[]
+  id: string;
+  active: boolean;
+  amrId?: string[];
+  schedule: string;
+  missionId?: string;
+  missionName: string;
+  day?: number[];
   time?: {
-    $m: string
-    $H: string
-  }
+    $m: string;
+    $H: string;
+  };
 }
 
 interface SubmitValue {
-  id: string
-  schedule: string
-  missionId: string
-  amrId: string[]
+  id: string;
+  schedule: string;
+  missionId: string;
+  amrId: string[];
 }
 
 const format = 'HH:mm';
@@ -47,18 +45,18 @@ function convertCommaSeparatedToString(commaSeparated: string): string {
 }
 
 const ScheduleForm: FC<{
-  form: FormInstance<unknown>
-  isModalOpen: boolean
-  setIsModalOpen: Dispatch<SetStateAction<boolean>>
-  selectId: string | null
-  setSelectId: Dispatch<SetStateAction<string | null>>
+  form: FormInstance<unknown>;
+  isModalOpen: boolean;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  selectId: string | null;
+  setSelectId: Dispatch<SetStateAction<string | null>>;
 }> = ({ form, isModalOpen, setIsModalOpen, selectId, setSelectId }) => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const { data: missionTitle } = useAllMissionTitles();
   const queryClient = useQueryClient();
   const { data: name } = useName();
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
+  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
 
   const handleCancel = () => {
     setIsModalOpen(false);

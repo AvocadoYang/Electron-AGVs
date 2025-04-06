@@ -11,10 +11,10 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type SubmitPayload = {
-  amrId: string[]
-  missionId: string
-  topicId: number
-}
+  amrId: string[];
+  missionId: string;
+  topicId: number;
+};
 
 const TopicForm: FC = () => {
   const [form] = Form.useForm();
@@ -24,7 +24,7 @@ const TopicForm: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const { data: topicData, refetch } = useTopicMission();
 
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
+  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
 
   const missionOptions = missionTitle?.map((v) => {
     return {

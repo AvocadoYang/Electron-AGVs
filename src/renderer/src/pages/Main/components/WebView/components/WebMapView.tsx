@@ -11,6 +11,8 @@ import AllAMRs from '../../PadViwe/components/PadMapContent/component/AllAMRs/Al
 import AllCargo from '../../PadViwe/components/PadMapContent/AllCargo.tsx/AllCargo';
 import ToolTip from '@renderer/pages/Setting/components/ToolTip';
 import { isShowLocationTooltip } from '@renderer/utils/siderGloble';
+import { AllChargeStation } from './AllChargeStation';
+
 const WebMapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>;
 }> = ({ mapRef }) => {
@@ -42,6 +44,7 @@ const WebMapView: React.FC<{
       <AllRoads></AllRoads>
       {showLocationToolTip ? <ToolTip /> : []}
       <AllZones scale={scale}></AllZones>
+      <AllChargeStation />
     </div>
   );
 };

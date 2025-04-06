@@ -43,7 +43,7 @@ const ChargeForm: FC<{ form: FormInstance<unknown>; selectKey: string }> = ({
   const { t } = useTranslation();
 
   const { data: name } = useName();
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
+  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
 
   const taskOption = missionTitle?.map((v) => {
     return { value: v.id, label: v.name };
