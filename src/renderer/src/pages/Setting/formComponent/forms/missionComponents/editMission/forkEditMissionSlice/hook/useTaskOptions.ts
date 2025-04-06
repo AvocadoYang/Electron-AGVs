@@ -57,9 +57,9 @@ const useTaskOptions = () => {
 
   const robotOption = useMemo(() => {
     return (
-      robots?.map(({ id }) => ({
-        label: id,
-        value: id
+      robots?.map(({ amrId }) => ({
+        label: amrId,
+        value: amrId
       })) || []
     );
   }, [robots]);

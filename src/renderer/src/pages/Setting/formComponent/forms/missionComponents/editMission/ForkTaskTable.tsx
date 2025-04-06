@@ -282,6 +282,8 @@ const ForkTaskTable: FC<{
 
               case 'select':
                 return t('mission.task_table.is_selectable');
+              case 'available_charge_station':
+                return t('mission.task_table.available_charge_station');
 
               default:
                 return <></>;

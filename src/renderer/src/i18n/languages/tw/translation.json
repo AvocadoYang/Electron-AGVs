@@ -460,6 +460,7 @@
       "custom": "自定",
       "auto": "自動",
       "is_selectable": "快速指派時選擇",
+      "available_charge_station": "閒置充電站",
       "location": "地點",
       "is_custom_yaw": "轉角選項",
       "yaw": "轉角",

@@ -11,7 +11,7 @@ import {
 } from './types';
 import { controlList } from './params';
 import SubmitButton from '@renderer/utils/SubmitButton';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import { Err } from '@renderer/utils/responseErr';
 import useOneTaskDetailFork from '@renderer/api/useOneTaskDetailFork';

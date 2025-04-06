@@ -21,13 +21,9 @@ export const controlList = {
   offload_from_other: ['F', 'H', 'S', 'B', 'W']
 } as const;
 
-export const selectLocationOption = [
-  'custom',
-  'select',
-  'calculate by agv and shelf angle'
-] as const;
+export const selectLocationOption = ['custom', 'select', 'available_charge_station'] as const;
 
-export const yawOption = ['custom', 'select', 'calculate by agv and shelf angle'] as const;
+export const yawOption = ['custom', 'select', 'calculate_by_agv_and_shelf_angle'] as const;
 
 export const forkHeightOption = ['default', 'custom', 'select'] as const;
 

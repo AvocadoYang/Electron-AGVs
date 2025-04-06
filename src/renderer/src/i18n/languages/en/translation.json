@@ -460,6 +460,7 @@
       "custom": "Custom",
       "auto": "Automatic",
       "is_selectable": "Selectable for Quick Assignment",
+      "available_charge_station": "available charge station",
       "location": "Location",
       "is_custom_yaw": "Yaw Option",
       "yaw": "Yaw",
