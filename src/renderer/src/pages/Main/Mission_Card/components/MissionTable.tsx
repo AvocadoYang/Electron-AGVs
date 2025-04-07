@@ -71,7 +71,8 @@ const MissionTable = () => {
       title: 'AMR',
       dataIndex: 'amrId',
       key: 'amrId',
-      render: (code: string) => (code ? code.replace('amr-0', '#') : '---'),
+      render: (code: string) =>
+        code ? code.replace('amr-0', '#') : t('main_task_list.wait_suitable'),
       filters: (() => {
         if (!name) return [];
         return name.map((amrInfo) => ({
@@ -107,12 +108,13 @@ const MissionTable = () => {
         if (typeof record.info === 'string') {
           const parseData = JSON.parse(record.info) as Additional_Mission_Info;
 
+          const fullName = parseData.missionFullName === null ? '-' : parseData.missionFullName;
           const from = parseData.loadLocationId === null ? '' : parseData.loadLocationId;
           const to = parseData.offloadLocationId === null ? '' : parseData.offloadLocationId;
 
           return (
             <TaskInfo>
-              <TaskTitle>{123}</TaskTitle>
+              <TaskTitle>{typeof fullName === 'string' ? '-' : fullName?.join('-')}</TaskTitle>
               <SubTitle>{`${from} -> ${to}`}</SubTitle>
             </TaskInfo>
           );

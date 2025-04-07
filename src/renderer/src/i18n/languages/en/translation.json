@@ -97,6 +97,11 @@
     "active": "Confirm to start",
     "cancel": "Cancel"
   },
+
+  "main_task_list": {
+    "wait_suitable": "wait suitable"
+  },
+
   "toolbar": {
     "location": {
       "locations": "Locations",

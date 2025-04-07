@@ -89,6 +89,7 @@ const SelectScript: FC = () => {
       refetch();
       queryClient.refetchQueries({ queryKey: ['simulate-script'] });
       queryClient.refetchQueries({ queryKey: ['script-robot'] });
+      queryClient.refetchQueries({ queryKey: ['mock-robot'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });

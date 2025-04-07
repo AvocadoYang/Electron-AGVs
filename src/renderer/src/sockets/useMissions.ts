@@ -151,6 +151,7 @@ export type MissionInfo = {
 };
 
 export type Additional_Mission_Info = {
+  missionFullName?: string[];
   loadLocationId?: string;
   offloadLocationId?: string;
   forkStartAt?: Date;

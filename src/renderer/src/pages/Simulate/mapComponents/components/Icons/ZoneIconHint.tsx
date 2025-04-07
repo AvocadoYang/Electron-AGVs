@@ -96,6 +96,10 @@ const ZoneIconHint: FC<{
     };
   }, [isDragging, scale]);
 
+  useEffect(() => {
+    setMouseMoveLocationForFrame({ displayX: -1000, displayY: -1000 });
+  }, []);
+
   const { displayX: x, displayY: y } = mouseMoveLocationForFrame;
   const { data } = useMap();
   if (!data) return null;

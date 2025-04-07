@@ -96,6 +96,9 @@
     "active": "確認啟動",
     "cancel": "取消"
   },
+  "main_task_list": {
+    "wait_suitable": "等待適合"
+  },
 
   "toolbar": {
     "location": {
