@@ -88,11 +88,11 @@ const ShelfTable: FC<{
       dataIndex: 'yaw',
       key: 'yaw',
       render: (_v, recorder) => {
-        if (!yaw) return 'not found';
+        if (!yaw) return '-';
 
         const yawIndex = yaw?.findIndex((s) => s.id === recorder.Loc.dirId);
 
-        if (yawIndex === -1) return 'not found';
+        if (yawIndex === -1) return '-';
 
         return yaw[yawIndex].yaw;
       }

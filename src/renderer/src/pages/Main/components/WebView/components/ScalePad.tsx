@@ -106,6 +106,7 @@ const ScalePad = () => {
           <StyledButton
             className={`${scale === 1 ? 'select ' : ''}`}
             onClick={() => {
+              if (scale === 1) return;
               sendSetScale.mutate(1);
             }}
           >
@@ -114,6 +115,7 @@ const ScalePad = () => {
           <StyledButton
             className={`${scale === 1.5 ? 'select ' : ''}`}
             onClick={() => {
+              if (scale === 1.5) return;
               sendSetScale.mutate(1.5);
             }}
           >
@@ -122,6 +124,7 @@ const ScalePad = () => {
           <StyledButton
             className={`${scale === 2 ? 'select ' : ''}`}
             onClick={() => {
+              if (scale === 2) return;
               sendSetScale.mutate(2);
             }}
           >
@@ -130,6 +133,7 @@ const ScalePad = () => {
           <StyledButton
             className={`${scale === 2.5 ? 'select' : ''}`}
             onClick={() => {
+              if (scale === 2.5) return;
               sendSetScale.mutate(2.5);
             }}
           >
