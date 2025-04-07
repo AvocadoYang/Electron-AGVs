@@ -3,6 +3,7 @@ import { memo, useRef } from 'react';
 import { Layout } from 'antd';
 import './webview.css';
 import ZoomPad from './components/ZoomPad';
+import ScalePad from './components/ScalePad';
 import WebMapView from './components/WebMapView';
 import { useAtomValue } from 'jotai';
 import CarCardWrap from '../../Car_Card/CardWrap';
@@ -46,6 +47,7 @@ const WebView = () => {
               <WebMapView mapRef={mapRef}></WebMapView>
             </Content>
             <ZoomPad></ZoomPad>
+            <ScalePad></ScalePad>
             <MissionBtn></MissionBtn>
           </Splitter.Panel>
           <Splitter.Panel

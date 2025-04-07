@@ -117,3 +117,11 @@
   opacity: 1;
   fill: grey;
 }
+
+.select {
+  background-color: #5eb6ff !important;
+}
+
+.select:hover {
+  color: white !important;
+}
