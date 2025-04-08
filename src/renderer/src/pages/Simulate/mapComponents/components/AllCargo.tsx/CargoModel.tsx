@@ -149,6 +149,7 @@ const CargoModel: FC = () => {
     const inputData = formInput.getFieldsValue();
     const outputData = formOutput.getFieldsValue();
     const payload = {
+      locationId: selectLocation,
       inputId: locInfo?.input?.id,
       outputId: locInfo?.output?.id,
       input: inputData,

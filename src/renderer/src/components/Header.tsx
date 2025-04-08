@@ -39,7 +39,7 @@ const { Header: AntdHeader } = Layout;
 const { Title, Text } = Typography;
 
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isDark] = useAtom(darkMode);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,6 +108,16 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     }
   };
 
+  const handleChineseItemClick = (value: string) => {
+    // eslint-disable-next-line no-void
+
+    if (value === 'en') {
+      void i18n.changeLanguage('en');
+    } else {
+      void i18n.changeLanguage('tw');
+    }
+  };
+
   return (
     <>
       {contextHolder}
@@ -129,7 +139,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               <Select
                 defaultValue="ch.tw"
                 style={{ width: 120 }}
-                onChange={() => console.log(123)}
+                onChange={(e) => console.log(e)}
                 options={[
                   { value: 'en', label: 'English' },
                   { value: 'ch.tw', label: 'Chinese' }
@@ -224,7 +234,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               <Select
                 defaultValue="ch.tw"
                 style={{ width: 120 }}
-                onChange={() => console.log(123)}
+                onChange={(e) => handleChineseItemClick(e)}
                 options={[
                   { value: 'en', label: 'English' },
                   { value: 'ch.tw', label: 'Chinese' }
