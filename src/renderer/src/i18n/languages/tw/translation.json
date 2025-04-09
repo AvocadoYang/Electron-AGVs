@@ -453,6 +453,7 @@
       "location_required_warn": "地點為必填"
     },
     "task_table": {
+      "expand": "展開",
       "sort": "順序",
       "status": "狀態",
       "active": "啟動",
@@ -461,7 +462,8 @@
       "wait": "等待秒數",
       "is_custom_location": "是否自定義地點",
       "custom": "自定",
-      "auto": "自動",
+      "select": "自動",
+      "default": "預設",
       "is_selectable": "快速指派時選擇",
       "available_charge_station": "閒置充電站",
       "location": "地點",
@@ -487,7 +489,8 @@
       "normal": "普通動作",
       "other_special": "特別行為",
       "special_movement_info": "絕大多數不需要用到此功能, 主要是使用於兩車交換貨物用. ",
-      "spin_warn": "如果動作是自轉, 行動類型一定要有S"
+      "spin_warn": "如果動作是自轉, 行動類型一定要有S",
+      "control_warn": "行動類型為必填"
     },
     "task_table_human_robot": {
       "sort": "順序",
@@ -516,7 +519,8 @@
       "full_warn": "滿電為必填",
       "full_less_than_aggressive": "滿電不可小於強制充電",
       "available_warn": "可接任務為必填",
-      "available_less_than_aggressive": "可接任務不可小於強制充電"
+      "available_less_than_aggressive": "可接任務不可小於強制充電",
+      "haventSetChargeMission": "尚未設定充電任務"
     },
 
     "cycle_mission": {

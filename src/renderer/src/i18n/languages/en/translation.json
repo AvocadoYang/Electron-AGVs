@@ -455,6 +455,7 @@
       "location_required_warn": "location is required"
     },
     "task_table": {
+      "expand": "expand",
       "sort": "Order",
       "status": "Status",
       "active": "Active",
@@ -463,7 +464,8 @@
       "wait": "Wait Time (seconds)",
       "is_custom_location": "Custom Location?",
       "custom": "Custom",
-      "auto": "Automatic",
+      "select": "Auto",
+      "default": "Default",
       "is_selectable": "Selectable for Quick Assignment",
       "available_charge_station": "available charge station",
       "location": "Location",
@@ -489,7 +491,8 @@
       "normal": "Normal",
       "other_special": "other special movement",
       "special_movement_info": "Most of the time this function is not needed, it is mainly used to exchange goods between two vehicles.",
-      "spin_warn": "If the action is a rotation, the action type must have S"
+      "spin_warn": "If the action is a rotation, the action type must have S",
+      "control_warn": "control at least select one "
     },
 
     "task_table_human_robot": {
@@ -518,7 +521,8 @@
       "full_warn": "full battery rate is required",
       "full_less_than_aggressive": "full rate can not less than aggressive",
       "available_warn": "some field is not insert yet, please check again",
-      "available_less_than_aggressive": "available get mission can not less than aggressive"
+      "available_less_than_aggressive": "available get mission can not less than aggressive",
+      "haventSetChargeMission": "haven't set charge mission"
     },
 
     "cycle_mission": {
