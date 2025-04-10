@@ -305,7 +305,10 @@ const Sider: React.FC<{
       getItem(
         t('toolbar.location.quick_edit_locations'),
         '1-2',
-        <Switch onChange={(checked) => handleShowPanel(checked, 'quick_location_panel')} />
+        <Switch
+          onChange={(checked) => handleShowPanel(checked, 'quick_location_panel')}
+          checked={quickEditLocationPanel}
+        />
       ),
       getItem(
         t('toolbar.location.show_locations_table'),
@@ -338,13 +341,16 @@ const Sider: React.FC<{
       getItem(
         t('toolbar.zone.zones.edit_zone'),
         '3-1',
-        <Switch onChange={(checked) => handleShowPanel(checked, 'edit_zone')} />
+        <Switch
+          value={openEditZone}
+          onChange={(checked) => handleShowPanel(checked, 'edit_zone')}
+        />
       ),
       getItem(
         t('toolbar.zone.zones.show_zone_list'),
         '3-2',
         <Switch
-          defaultChecked={showAllZones}
+          value={showAllZones}
           onChange={(checked) => handleShowPanel(checked, 'show_zone_list')}
         />
       ),
@@ -352,7 +358,7 @@ const Sider: React.FC<{
         t('toolbar.zone.zones.show_zone_table'),
         '3-3',
         <Switch
-          defaultChecked={showZonesTable}
+          value={showZonesTable}
           onChange={(checked) => handleShowPanel(checked, 'show_zone_table')}
         />
       )

@@ -231,7 +231,7 @@ const ForkTaskTable: FC<{
         {record.operation.is_define_id === 'custom'
           ? t('mission.task_table.custom')
           : record.operation.is_define_id === 'auto'
-            ? t('mission.task_table.auto')
+            ? t('mission.task_table.select')
             : record.operation.is_define_id === 'select'
               ? t('mission.task_table.is_selectable')
               : record.operation.is_define_id === 'available_charge_station'
@@ -257,7 +257,7 @@ const ForkTaskTable: FC<{
         {record.io.fork.is_define_height === 'custom'
           ? t('mission.task_table.custom')
           : record.io.fork.is_define_height === 'auto'
-            ? t('mission.task_table.auto')
+            ? t('mission.task_table.select')
             : record.io.fork.is_define_height === 'select'
               ? t('mission.task_table.is_selectable')
               : '-'}
