@@ -31,6 +31,7 @@
     "fail": "失敗",
     "submit": "送出",
     "add": "新增",
+    "select": "請選擇",
     "error": "錯誤",
     "active": "啟動",
     "inactive": "停止",
@@ -274,6 +275,8 @@
   "shelf": {
     "shelf": "貨架",
     "cargo_mission": {
+      "default_title": "任務相關參數設定",
+      "enter_name": "輸入地名",
       "location_name": "地名",
       "region_name": "區域名稱",
       "load_mission": "取貨任務",
@@ -281,6 +284,8 @@
       "yaw": "轉角"
     },
     "layer_form": {
+      "layers": "個別樓層設定",
+      "enter_level_name": "輸入庫格名稱",
       "mission": "任務",
       "level": "貨架層數",
       "column_name": "庫格名稱",

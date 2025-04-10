@@ -1,24 +1,10 @@
-import { Form, FormInstance, Input, Switch } from 'antd';
+import { Form, FormInstance, Input, Switch, Typography } from 'antd';
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 import { nanoid } from 'nanoid';
 import { LayerType } from '@renderer/sockets/useCargoInfo';
 
-const Wrapper = styled.div`
-  border: 1px solid #8b8b8b;
-  width: 100%;
-  max-height: 70vh;
-  overflow-y: scroll;
-`;
-
-const Box = styled.div`
-  padding: 1em;
-`;
-
-const defaultValue = {
-  isEdit: false
-};
+const { Title } = Typography;
 
 const LayerForm: FC<{
   locId: string;
@@ -29,8 +15,7 @@ const LayerForm: FC<{
   const { t } = useTranslation();
 
   const clearCargoField = (index: number) => {
-    const level = index;
-    form.setFieldValue(`cargoName${level}`, null);
+    form.setFieldValue(`cargoName${index}`, null);
   };
 
   const userHasChangeData = () => {
@@ -40,56 +25,79 @@ const LayerForm: FC<{
   useEffect(() => {
     if (!layer) return;
     layer.forEach((L, i) => {
-      const level = i;
-      form.setFieldValue(`hasCargo${level}`, L[level].cargo?.hasCargo);
-      form.setFieldValue(`levelName${level}`, L[level]?.levelName || null);
-
-      form.setFieldValue(`disable${level}`, L[level]?.disable || false);
-      form.setFieldValue(`cargo_limit${level}`, L[level]?.cargo_limit || 0);
+      form.setFieldsValue({
+        [`hasCargo${i}`]: L[i].cargo?.hasCargo,
+        [`levelName${i}`]: L[i]?.levelName || null,
+        [`disable${i}`]: L[i]?.disable || false,
+        [`cargo_limit${i}`]: L[i]?.cargo_limit || 0
+      });
     });
   }, [form, layer]);
 
   return (
-    <Wrapper>
+    <div
+      style={{
+        width: '50%',
+        background: '#fff',
+        padding: '24px',
+        borderRadius: 8,
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        maxHeight: '70vh',
+        overflowY: 'auto'
+      }}
+    >
       <Form
         form={form}
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
+        layout="vertical"
         size="large"
-        onValuesChange={() => userHasChangeData()}
-        title={` ${locId}${t('shelf.layer_form.mission')} `}
-        initialValues={defaultValue}
+        onValuesChange={userHasChangeData}
+        initialValues={{ isEdit: false }}
       >
-        {layer.map((_L, i) => {
-          const level = i;
-          return (
-            <Box key={nanoid()}>
-              <h2>{`${t('shelf.layer_form.level')}: ${level + 1}`}</h2>
-              <Form.Item label={`${t('shelf.layer_form.column_name')}`} name={`levelName${level}`}>
-                <Input />
-              </Form.Item>
-
-              <Form.Item label={t('shelf.layer_form.disable')} name={`disable${level}`}>
-                <Switch />
-              </Form.Item>
-
-              <Form.Item label={t('shelf.layer_form.has_cargo')} name={`hasCargo${level}`}>
-                <Switch
-                  onChange={(v) => (v === false ? clearCargoField(i) : [])}
-                  checkedChildren={t('shelf.layer_form.has_cargo')}
-                  unCheckedChildren={t('shelf.layer_form.no_cargo')}
-                />
-              </Form.Item>
-
-              <Form.Item label={t('edit_road_panel.limit')} name={`cargo_limit${level}`}>
-                <Input />
-              </Form.Item>
-            </Box>
-          );
-        })}
+        <Title level={3} style={{ marginBottom: '24px', color: '#1890ff' }}>
+          {t('shelf.layer_form.layers')}
+        </Title>
+        {layer.map((_, i) => (
+          <div
+            key={nanoid()}
+            style={{
+              marginBottom: '24px',
+              padding: '16px',
+              background: '#f5f5f5',
+              borderRadius: 6
+            }}
+          >
+            <Title
+              level={4}
+              style={{ marginBottom: '16px' }}
+            >{`${t('shelf.layer_form.level')} ${i + 1}`}</Title>
+            <Form.Item label={t('shelf.layer_form.column_name')} name={`levelName${i}`}>
+              <Input placeholder={t('shelf.layer_form.enter_level_name')} />
+            </Form.Item>
+            <Form.Item
+              label={t('shelf.layer_form.disable')}
+              name={`disable${i}`}
+              valuePropName="checked"
+            >
+              <Switch checkedChildren="On" unCheckedChildren="Off" />
+            </Form.Item>
+            <Form.Item
+              label={t('shelf.layer_form.has_cargo')}
+              name={`hasCargo${i}`}
+              valuePropName="checked"
+            >
+              <Switch
+                onChange={(v) => !v && clearCargoField(i)}
+                checkedChildren={t('shelf.layer_form.has_cargo')}
+                unCheckedChildren={t('shelf.layer_form.no_cargo')}
+              />
+            </Form.Item>
+            <Form.Item label={t('edit_road_panel.limit')} name={`cargo_limit${i}`}>
+              <Input type="number" min={0} placeholder="0" />
+            </Form.Item>
+          </div>
+        ))}
       </Form>
-    </Wrapper>
+    </div>
   );
 };
 

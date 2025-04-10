@@ -31,6 +31,7 @@
     "fail": "Fail",
     "submit": "Submit",
     "add": "Add",
+    "select": "please select",
     "error": "Error",
     "active": "Active",
     "inactive": "Inactive",
@@ -279,6 +280,8 @@
   "shelf": {
     "shelf": "Shelf",
     "cargo_mission": {
+      "default_title": "Task related parameter settings",
+      "enter_name": "Enter a place name",
       "location_name": "Location Name",
       "region_name": "Region Name",
       "load_mission": "Load Mission",
@@ -286,6 +289,8 @@
       "yaw": "Yaw"
     },
     "layer_form": {
+      "layers": "Individual floor settings",
+      "enter_level_name": "Enter the level name",
       "mission": "Mission",
       "level": "Level",
       "column_name": "Column Name",

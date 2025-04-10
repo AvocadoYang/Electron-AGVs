@@ -1,21 +1,12 @@
-import { Form, Select, Input, FormInstance, Skeleton } from 'antd';
+import { Form, Select, Input, FormInstance, Skeleton, Typography } from 'antd';
 import { FC, useEffect } from 'react';
-import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import useYaw from '@renderer/api/useYaw';
 import useRegionName from '@renderer/api/useLocRegionName';
 import useSpecificShelf from '@renderer/api/useSpecificShelf';
 
-const Wrapper = styled.div`
-  width: 100%;
-`;
-
-const H1 = styled.h1`
-  margin: 0;
-  font-weight: bolder;
-  text-align: center;
-`;
+const { Title } = Typography;
 
 const CargoMissionForm: FC<{
   locId: string;
@@ -28,71 +19,75 @@ const CargoMissionForm: FC<{
   const { data: shelf } = useSpecificShelf(locId);
   const { t } = useTranslation();
 
-  const taskOption = misTitle?.map((v) => {
-    return { value: v.id, label: v.name };
-  });
-
-  const dirOption = yaw?.map((v) => {
-    return { value: v.id, label: v.yaw };
-  });
-
-  const regionOption = region?.map((v) => {
-    return { value: v?.id, label: v?.name };
-  });
+  const taskOption = misTitle?.map((v) => ({ value: v.id, label: v.name }));
+  const dirOption = yaw?.map((v) => ({ value: v.id, label: v.yaw }));
+  const regionOption = region?.map((v) => ({ value: v?.id, label: v?.name }));
 
   useEffect(() => {
     if (!shelf) return;
 
-    const loadTask = shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'load').map((v) => {
-      return v.Title?.id;
-    })[0];
+    const loadTask = shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'load')[0]?.Title?.id;
+    const offloadTask = shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'offload')[0]?.Title
+      ?.id;
 
-    const offloadTask = shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'offload').map(
-      (v) => {
-        return v.Title?.id;
-      }
-    )[0];
-
-    form.setFieldValue('load', loadTask);
-    form.setFieldValue('offload', offloadTask);
-    form.setFieldValue('region', shelf.loc_regions?.id);
-    form.setFieldValue('yaw', shelf.Dir?.id);
+    form.setFieldsValue({
+      load: loadTask,
+      offload: offloadTask,
+      region: shelf.loc_regions?.id,
+      yaw: shelf.Dir?.id
+    });
   }, [form, shelf]);
 
-  if (!shelf) return <Skeleton active />;
-  return (
-    <Wrapper>
-      <Form
-        form={form}
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 14 }}
-        layout="horizontal"
-        size="large"
-        title={` ${locId}的任務設定 `}
-      >
-        <H1>{locName || ''}</H1>
+  if (!shelf) return <Skeleton active paragraph={{ rows: 5 }} />;
 
-        <Form.Item label={t('shelf.cargo_mission.load_mission')} name="load">
-          <Select options={taskOption} />
+  return (
+    <div
+      style={{
+        width: '50%',
+        background: '#fff',
+        padding: '24px',
+        borderRadius: 8,
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+      }}
+    >
+      <Form form={form} layout="vertical" size="large" initialValues={{ name: locName }}>
+        <Title level={3} style={{ textAlign: 'center', marginBottom: '24px', color: '#1890ff' }}>
+          {locName || t('shelf.cargo_mission.default_title')}
+        </Title>
+
+        <Form.Item
+          label={t('shelf.cargo_mission.load_mission')}
+          name="load"
+          rules={[{ required: true }]}
+        >
+          <Select options={taskOption} placeholder={t('utils.select')} showSearch />
         </Form.Item>
 
-        <Form.Item label={t('shelf.cargo_mission.offload_mission')} name="offload">
-          <Select options={taskOption} />
+        <Form.Item
+          label={t('shelf.cargo_mission.offload_mission')}
+          name="offload"
+          rules={[{ required: true }]}
+        >
+          <Select options={taskOption} placeholder={t('utils.select')} showSearch />
         </Form.Item>
 
         <Form.Item label={t('shelf.cargo_mission.location_name')} name="name">
-          <Input />
+          <Input placeholder={t('shelf.cargo_mission.enter_name')} />
         </Form.Item>
 
-        <Form.Item label={t('shelf.cargo_mission.region_name')} name="region">
-          <Select options={regionOption} />
+        <Form.Item
+          label={t('shelf.cargo_mission.region_name')}
+          name="region"
+          rules={[{ required: true }]}
+        >
+          <Select options={regionOption} placeholder={t('utils.select')} showSearch />
         </Form.Item>
 
-        <Form.Item label={t('shelf.cargo_mission.yaw')} name="yaw">
-          <Select options={dirOption} />
+        <Form.Item label={t('shelf.cargo_mission.yaw')} name="yaw" rules={[{ required: true }]}>
+          <Select options={dirOption} placeholder={t('utils.select')} showSearch />
         </Form.Item>
       </Form>
-    </Wrapper>
+    </div>
   );
 };
 
