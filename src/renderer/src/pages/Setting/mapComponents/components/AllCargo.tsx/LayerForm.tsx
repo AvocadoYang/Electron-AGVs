@@ -1,10 +1,9 @@
-import { Form, FormInstance, Input, Select, Switch } from 'antd';
+import { Form, FormInstance, Input, Switch } from 'antd';
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { nanoid } from 'nanoid';
 import { LayerType } from '@renderer/sockets/useCargoInfo';
-import usePallet from '@renderer/api/usePallet';
 
 const Wrapper = styled.div`
   border: 1px solid #8b8b8b;
@@ -22,26 +21,16 @@ const defaultValue = {
 };
 
 const LayerForm: FC<{
-  locId: string
-  form: FormInstance<unknown>
-  layer: LayerType[]
-  setIsEditLayer: Dispatch<SetStateAction<boolean>>
+  locId: string;
+  form: FormInstance<unknown>;
+  layer: LayerType[];
+  setIsEditLayer: Dispatch<SetStateAction<boolean>>;
 }> = ({ form, locId, layer, setIsEditLayer }) => {
   const { t } = useTranslation();
-  const { data: pallet } = usePallet();
-
-  // 如果以後要限制有貨時有沒有棧版之類的就需要它 之後有需求在設定
-  // const [fState, setFState] = useState<{ [key: string]: unknown }>({});
-
-  const palletOption = pallet?.map((v) => ({
-    value: v.id,
-    label: v.name
-  }));
 
   const clearCargoField = (index: number) => {
     const level = index;
     form.setFieldValue(`cargoName${level}`, null);
-    // form.setFieldValue(`pallet${level}`, null);
   };
 
   const userHasChangeData = () => {
@@ -54,8 +43,6 @@ const LayerForm: FC<{
       const level = i;
       form.setFieldValue(`hasCargo${level}`, L[level].cargo?.hasCargo);
       form.setFieldValue(`levelName${level}`, L[level]?.levelName || null);
-      form.setFieldValue(`pallet${level}`, L[level]?.pallet.id || null);
-      form.setFieldValue(`cargoName${level}`, L[level]?.cargo?.name || null);
 
       form.setFieldValue(`disable${level}`, L[level]?.disable || false);
       form.setFieldValue(`cargo_limit${level}`, L[level]?.cargo_limit || 0);
@@ -95,21 +82,8 @@ const LayerForm: FC<{
                 />
               </Form.Item>
 
-              <Form.Item label={t('shelf.layer_form.cargo_name')} name={`cargoName${level}`}>
-                <Input
-                // disabled={fState[`cargoName${level}`] as boolean}
-                />
-              </Form.Item>
-
               <Form.Item label={t('edit_road_panel.limit')} name={`cargo_limit${level}`}>
                 <Input />
-              </Form.Item>
-
-              <Form.Item label={t('shelf.layer_form.pallet')} name={`pallet${level}`}>
-                <Select
-                  options={palletOption}
-                  // disabled={fState[`pallet${level}`] as boolean}
-                />
               </Form.Item>
             </Box>
           );

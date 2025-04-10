@@ -14,7 +14,6 @@ import {
   EditShelfPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfYawPanelSwitch,
-  EditPalletSwitch,
   isShowEditMission,
   isShowEditChargeMission,
   isShowEditCycleMission,
@@ -44,7 +43,6 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
   const setOpenEditShelf = useSetAtom(EditShelfPanelSwitch); //4-1
   const setOpenEditShelfCategory = useSetAtom(EditShelfCategoryPanelSwitch); //4-2
   const setOpenYawTable = useSetAtom(EditShelfYawPanelSwitch); //4-3
-  const setOpenPalletTable = useSetAtom(EditPalletSwitch); //4-4
 
   const setOpenMissionPanel = useSetAtom(isShowEditMission); // 5-1
   const setOpenChargeMissionPanel = useSetAtom(isShowEditChargeMission); // 5-2
@@ -94,9 +92,7 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
       case 'edit_yaw':
         setOpenYawTable(false);
         break;
-      case 'edit_pallet':
-        setOpenPalletTable(false);
-        break;
+
       case 'edit_mission':
         setOpenMissionPanel(false);
         break;

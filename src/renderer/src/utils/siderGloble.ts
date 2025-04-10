@@ -34,7 +34,7 @@ export const EditShelfCategoryPanelSwitch = atom<boolean>(false);
 export const EditShelfYawPanelSwitch = atom<boolean>(false);
 
 /** 4-4 顯示 編輯棧版 */
-export const EditPalletSwitch = atom<boolean>(false);
+// export const EditPalletSwitch = atom<boolean>(false);
 
 export const SideSwitchToShowForm = atom<boolean>(false);
 

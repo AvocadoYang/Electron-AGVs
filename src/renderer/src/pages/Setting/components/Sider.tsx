@@ -14,7 +14,6 @@ import {
   EditShelfPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfYawPanelSwitch,
-  EditPalletSwitch,
   showAllZonesSwitch,
   showZonesTableSwitch,
   isShowEditMission,
@@ -94,7 +93,6 @@ const Sider: React.FC<{
   const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch); //4-1
   const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch); //4-2
   const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch); //4-3
-  const [openPalletTable, setOpenPalletTable] = useAtom(EditPalletSwitch); //4-4
 
   const [openMissionPanel, setOpenMissionPanel] = useAtom(isShowEditMission); // 5-1
   const [openChargeMissionPanel, setOpenChargeMissionPanel] = useAtom(isShowEditChargeMission); // 5-2
@@ -135,7 +133,6 @@ const Sider: React.FC<{
       openEditShelfPanel,
       openEditShelfCategory,
       openYawTable,
-      openPalletTable,
       openMissionPanel,
       openChargeMissionPanel,
       openCycleMissionPanel,
@@ -161,7 +158,6 @@ const Sider: React.FC<{
     openEditShelfPanel,
     openEditShelfCategory,
     openYawTable,
-    openPalletTable,
     openMissionPanel,
     openChargeMissionPanel,
     openCycleMissionPanel,
@@ -226,10 +222,6 @@ const Sider: React.FC<{
       case 'edit_yaw':
         await queryClient.refetchQueries({ queryKey: ['yaw'] });
         setOpenYawTable(check);
-        break;
-
-      case 'edit_pallet':
-        setOpenPalletTable(check);
         break;
 
       // ===================
@@ -391,15 +383,15 @@ const Sider: React.FC<{
             checked={openYawTable}
             onChange={(checked) => handleShowPanel(checked, 'edit_yaw')}
           />
-        ),
-        getItem(
-          t('toolbar.shelve.shelves.edit_pallet'),
-          '4-4',
-          <Switch
-            checked={openPalletTable}
-            onChange={(checked) => handleShowPanel(checked, 'edit_pallet')}
-          />
         )
+        // getItem(
+        //   t('toolbar.shelve.shelves.edit_pallet'),
+        //   '4-4',
+        //   <Switch
+        //     checked={openPalletTable}
+        //     onChange={(checked) => handleShowPanel(checked, 'edit_pallet')}
+        //   />
+        // )
       ]
     ),
     getItem(t('toolbar.mission.mission'), '6', <ScheduleOutlined />, [

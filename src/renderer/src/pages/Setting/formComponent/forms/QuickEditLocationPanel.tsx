@@ -315,7 +315,7 @@ const QuickEditLocationPanel: React.FC<{
               </Form.Item>
             </Flex>
             <Form.Item label={t('quick_edit_location_panel.dir_x')} name="dirX">
-              <Select options={selectDirX} defaultValue={'right'} />
+              <Select options={selectDirX} />
             </Form.Item>
             <Form.Item label={t('quick_edit_location_panel.dir_y')} name="dirY">
               <Select options={selectDirY} />

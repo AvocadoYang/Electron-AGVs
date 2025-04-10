@@ -19,7 +19,6 @@ export const formList = [
   { key: 'edit_shelve' },
   { key: 'edit_shelve_type' },
   { key: 'edit_yaw' },
-  { key: 'edit_pallet' },
   // ===================
   // === amr config ===
   { key: 'edit_amr_config' },
@@ -49,6 +48,6 @@ export const formList = [
 
 export const toolbarState = formList.map((item) => ({ ...item }));
 
-export type formListType = typeof formList
-export type ToolBarItemType = (typeof formList)[number]['key']
-export type ToolBarType = typeof toolbarState
+export type formListType = typeof formList;
+export type ToolBarItemType = (typeof formList)[number]['key'];
+export type ToolBarType = typeof toolbarState;

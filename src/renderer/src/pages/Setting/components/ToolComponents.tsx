@@ -12,7 +12,6 @@ import { Card, FormInstance } from 'antd';
 import {
   EditLocationListTableSwitch,
   EditLocationPanelSwitch,
-  EditPalletSwitch,
   EditRoadPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfPanelSwitch,
@@ -40,7 +39,6 @@ import cardStyle from '../utils/cardStyle';
 import { ShelfPanel } from '../formComponent/forms/shelfComponents/editShelf';
 import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/category';
 import { YawPanel } from '../formComponent/forms/shelfComponents/yaw';
-import { PalletTable } from '../formComponent/forms/shelfComponents/pallet';
 import FormCloseBtn from '../utils/FormCloseBtn';
 import EditMissionPanel from '../formComponent/forms/missionComponents/editMission/MissionPanel';
 import { ChargePanel } from '../formComponent/forms/missionComponents/chargeMission';
@@ -182,18 +180,7 @@ const SortableWrap: FC<{
                 <YawPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             );
-          // 4-4 顯示編輯類型
-          case 'edit_pallet':
-            return (
-              <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} panelName="edit_pallet" />
-                <PalletTable
-                  sortableId={sortableId}
-                  attributes={attributes}
-                  listeners={listeners}
-                />
-              </Card>
-            );
+
           // 5-1 顯示編輯任務
           case 'edit_mission':
             return (
@@ -351,7 +338,6 @@ const ToolComponents: FC<{
   const openEditShelf = useAtomValue(EditShelfPanelSwitch);
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch);
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch);
-  const openEditPalletTable = useAtomValue(EditPalletSwitch);
   const openMissionPanel = useAtomValue(isShowEditMission);
   const openChargePanel = useAtomValue(isShowEditChargeMission);
   const openCyclePanel = useAtomValue(isShowEditCycleMission);
@@ -436,10 +422,6 @@ const ToolComponents: FC<{
     }
 
     if (formKey === 'edit_yaw' && openEditShelfYaw) {
-      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
-    }
-
-    if (formKey === 'edit_pallet' && openEditPalletTable) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 
