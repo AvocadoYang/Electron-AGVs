@@ -40,7 +40,8 @@ type Form_Value = {
 const TaskFormFork: FC<{
   editTaskKey: string;
   selectedMissionCar: string;
-}> = ({ editTaskKey, selectedMissionCar }) => {
+  selectedMissionKey: string;
+}> = ({ editTaskKey, selectedMissionCar, selectedMissionKey }) => {
   const {
     robotOption,
     locationsOption,
@@ -109,7 +110,8 @@ const TaskFormFork: FC<{
       ...payload,
       action_type: actionState,
       control: controlClickOrder,
-      id: editTaskKey
+      id: editTaskKey,
+      missionTitleId: selectedMissionKey
     };
 
     if (controlClickOrder.length === 0) {

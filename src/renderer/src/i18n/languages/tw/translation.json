@@ -136,6 +136,11 @@
         "edit_pallet": "編輯棧板"
       }
     },
+    "amr_setting": {
+      "robot": "車輛 ＆＆ 機器人",
+      "register_amr": "註冊車輛",
+      "amr_config": "車輛參數設定"
+    },
     "mission": {
       "mission": "任務",
       "edit_mission": "編輯任務",
@@ -344,6 +349,9 @@
     "type": "棧版類型",
     "color": "顏色",
     "name_warn": "名稱不可為空"
+  },
+  "setting_amr": {
+    "amr_name": "車輛名稱"
   },
 
   "charge": {

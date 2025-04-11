@@ -85,8 +85,8 @@ const ForkTaskTable: FC<{
   const [showImportMission, setShowImportMission] = useState(false);
 
   const sortTaskMutation = useMutation({
-    mutationFn: (keyAndSort: { key: string; order: number }[]) =>
-      client.post('api/setting/update-task-order', keyAndSort),
+    mutationFn: (data: { keyAndSort: { key: string; order: number }[]; missionTitleId: string }) =>
+      client.post('api/setting/update-task-order', data),
     onSuccess: () =>
       queryClient.refetchQueries({ queryKey: ['all-relate-task-fork', selectedMissionKey] }),
     onError: (error: Err) => messageApi.error(error.response.data.message)
@@ -95,6 +95,7 @@ const ForkTaskTable: FC<{
   const deleteTaskMutation = useMutation({
     mutationFn: (payload: { key: string; keyAndOrder: { key: string; order: number }[] }) =>
       client.post('api/setting/delete-task', {
+        missionTitleId: selectedMissionKey,
         targetKey: payload.key,
         newOrder: payload.keyAndOrder
       }),
@@ -103,7 +104,7 @@ const ForkTaskTable: FC<{
   });
 
   const disableMutation = useMutation({
-    mutationFn: (payload: { id: string; disable: boolean }) =>
+    mutationFn: (payload: { id: string; disable: boolean; missionTitleId: string }) =>
       client.post('api/setting/disable-task', payload),
     onSuccess: async () => {
       messageApi.success(t('utils.success'));
@@ -125,11 +126,15 @@ const ForkTaskTable: FC<{
     const overIndex = taskDataSource.findIndex((i) => i?.id === over?.id);
     const newData = arrayMove(taskDataSource, activeIndex, overIndex);
     const keyAndSort = newData.map((v, i) => ({ key: v?.id as string, order: i }));
-    sortTaskMutation.mutate(keyAndSort);
+    sortTaskMutation.mutate({
+      keyAndSort,
+      missionTitleId: selectedMissionKey
+    });
     queryClient.setQueryData(['all-relate-task-fork', selectedMissionKey], newData);
   };
 
-  const disableTask = (id: string, disable: boolean) => disableMutation.mutate({ id, disable });
+  const disableTask = (id: string, disable: boolean) =>
+    disableMutation.mutate({ id, disable, missionTitleId: selectedMissionKey });
 
   const showImportMissionModal = (order: number) => {
     setShowImportMission(true);

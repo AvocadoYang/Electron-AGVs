@@ -92,17 +92,6 @@ const QuickEditLocationPanel: React.FC<{
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  // const saveRoadMutation = useMutation({
-  //   mutationFn: (payload: Road[]) => {
-  //     return client.post('api/setting/save-edit-road-fastShelve', payload);
-  //   },
-  //   onSuccess: () => {
-  //     void messageApi.success('success');
-  //     queryClient.refetchQueries({ queryKey: ['map'] });
-  //   },
-  //   onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  // });
-
   const savePose = () => {
     if (!data) return false;
     if (!FL.length) return false;

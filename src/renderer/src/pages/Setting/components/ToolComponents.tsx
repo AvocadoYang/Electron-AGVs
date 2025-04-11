@@ -17,6 +17,7 @@ import {
   EditShelfPanelSwitch,
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
+  isShowAMRConfig,
   isShowEditBackup,
   isShowEditBeforeLeftChargeStationMission,
   isShowEditChargeMission,
@@ -28,6 +29,7 @@ import {
   isShowEditScheduleMission,
   isShowEditTopicMission,
   isShowEditWarningId,
+  isShowRegisterAMR,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch,
   showZonesTableSwitch
@@ -51,6 +53,8 @@ import { EditTagPanel } from '../formComponent/forms/other/editTag';
 import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon';
 import { EditWarningListPanel } from '../formComponent/forms/file/warningId';
 import { BackupPanel } from '../formComponent/forms/file/backup';
+import { RegisterAmrPanel } from '../formComponent/forms/amrSetting/registerAmr';
+import AmrConfigPanel from '../formComponent/forms/amrSetting/amrConfig/AmrConfigPanel';
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType;
@@ -181,7 +185,31 @@ const SortableWrap: FC<{
               </Card>
             );
 
-          // 5-1 顯示編輯任務
+          // 5-1 顯示編輯註冊車輛
+          case 'edit_register_amr':
+            return (
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <RegisterAmrPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            );
+
+          // 5-2 顯示編輯類型
+          case 'edit_amr_config':
+            return (
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <AmrConfigPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            );
+
+          // 6-1 顯示編輯任務
           case 'edit_mission':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -193,7 +221,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 5-2 顯示充電任務
+          // 6-2 顯示充電任務
           case 'charge_mission':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -205,7 +233,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 5-3 顯示循環任務
+          // 6-3 顯示循環任務
           case 'cycle_mission':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -217,7 +245,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 5-4 顯示離開充電站前任務
+          // 6-4 顯示離開充電站前任務
           case 'before_left_charge_station_task':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -229,7 +257,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 5-5 顯示定時任務
+          // 6-5 顯示定時任務
           case 'schedule_mission':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -241,7 +269,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 5-6 顯示閒置任務
+          // 6-6 顯示閒置任務
           case 'idle_mission':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -253,7 +281,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 5-7 顯示主題任務
+          // 6-7 顯示主題任務
           case 'topic_mission':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -265,7 +293,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 6-1 顯示編輯標籤
+          // 7-1 顯示編輯標籤
           case 'edit_tag':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -277,7 +305,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 6-2 顯示編輯充電站圖標樣式
+          // 7-2 顯示編輯充電站圖標樣式
           case 'edit_charge_station_icon_style':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -289,7 +317,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 7-1 顯示編輯warning id
+          // 8-1 顯示編輯warning id
           case 'warning_id':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -301,7 +329,7 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          // 7-2 顯示編輯備份檔案
+          // 8-2 顯示編輯備份檔案
           case 'backup_file':
             return (
               <Card style={styles} ref={setNodeRef}>
@@ -338,6 +366,10 @@ const ToolComponents: FC<{
   const openEditShelf = useAtomValue(EditShelfPanelSwitch);
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch);
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch);
+
+  const openRegisterAmrPanel = useAtomValue(isShowRegisterAMR);
+  const openAMRConfigPanel = useAtomValue(isShowAMRConfig);
+
   const openMissionPanel = useAtomValue(isShowEditMission);
   const openChargePanel = useAtomValue(isShowEditChargeMission);
   const openCyclePanel = useAtomValue(isShowEditCycleMission);
@@ -422,6 +454,13 @@ const ToolComponents: FC<{
     }
 
     if (formKey === 'edit_yaw' && openEditShelfYaw) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
+    }
+
+    if (formKey === 'edit_register_amr' && openRegisterAmrPanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
+    }
+    if (formKey === 'edit_amr_config' && openAMRConfigPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 

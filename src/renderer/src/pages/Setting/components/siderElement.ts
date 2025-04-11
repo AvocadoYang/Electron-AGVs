@@ -22,7 +22,7 @@ export const formList = [
   // ===================
   // === amr config ===
   { key: 'edit_amr_config' },
-  { key: 'edit_amr_cargo_info' },
+  { key: 'edit_register_amr' },
   // ===================
   // === mission ===
   { key: 'edit_mission' },

@@ -53,7 +53,7 @@ const MissionList: FC<{
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: ['all-mission-title']
+        queryKey: ['all-mission-title-detail']
       });
       messageApi.success(t('utils.success'));
     },
@@ -139,11 +139,19 @@ const MissionList: FC<{
           footer={() => []}
         >
           {isFork(selectedMissionCar) ? (
-            <TaskFormFork editTaskKey={editTaskKey} selectedMissionCar={selectedMissionCar} />
+            <TaskFormFork
+              editTaskKey={editTaskKey}
+              selectedMissionCar={selectedMissionCar}
+              selectedMissionKey={selectedMissionKey}
+            />
           ) : (
             []
           )}
-          {isHumanRobot(selectedMissionCar) ? <TaskFormHumanRobot editTaskKey={editTaskKey} /> : []}
+          {isHumanRobot(selectedMissionCar) ? (
+            <TaskFormHumanRobot editTaskKey={editTaskKey} selectedMissionKey={selectedMissionKey} />
+          ) : (
+            []
+          )}
         </Modal>
       </Flex>
     </>

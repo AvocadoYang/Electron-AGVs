@@ -33,10 +33,52 @@ export const EditShelfCategoryPanelSwitch = atom<boolean>(false);
 /** 4-3 顯示 編輯YAW */
 export const EditShelfYawPanelSwitch = atom<boolean>(false);
 
-/** 4-4 顯示 編輯棧版 */
-// export const EditPalletSwitch = atom<boolean>(false);
-
 export const SideSwitchToShowForm = atom<boolean>(false);
+
+/** 5-1 顯示編輯註冊車輛 */
+export const isShowRegisterAMR = atom<boolean>(false);
+
+/** 5-2 顯示編輯車輛細節參數 */
+export const isShowAMRConfig = atom<boolean>(false);
+
+/** 6-1 顯示編輯任務 */
+export const isShowEditMission = atom<boolean>(false);
+
+/** 6-2 顯示編輯充電任務 */
+export const isShowEditChargeMission = atom<boolean>(false);
+
+/** 6-3 顯示循環任務 */
+export const isShowEditCycleMission = atom<boolean>(false);
+
+/** 6-4 顯示編輯離開充電站強制任務 */
+export const isShowEditBeforeLeftChargeStationMission = atom<boolean>(false);
+
+/** 6-5 顯示定時任務 */
+export const isShowEditScheduleMission = atom<boolean>(false);
+
+/** 6-6 顯示閒置任務 */
+export const isShowEditIdleMission = atom<boolean>(false);
+
+/** 6-7 顯示topic任務 */
+export const isShowEditTopicMission = atom<boolean>(false);
+
+/** 7-1 顯示編輯標籤 */
+export const isShowEditMissionTag = atom<boolean>(false);
+
+/** 7-2 顯示編輯充電站icon位置 */
+export const isShowEditChargeStationPosition = atom<boolean>(false);
+
+/** 9-1 顯示編輯warning id */
+export const isShowEditWarningId = atom<boolean>(false);
+
+/** 9-2 上傳錯誤表 */
+export const isOpenUploadWarningIDModal = atom<boolean>(false);
+
+/** 9-4 開啟交換地圖 */
+export const isOpenSwitchMap = atom<boolean>(false);
+
+/** 9-2 顯示編輯備份 */
+export const isShowEditBackup = atom<boolean>(false);
 
 /** 地點tooltip */
 export const isShowLocationTooltip = atom<boolean>(false);
@@ -49,42 +91,3 @@ export const isShowLocation = atom<boolean>(true);
 
 /** 顯示目前路徑 */
 export const isShowRoad = atom<boolean>(true);
-
-/** 5-1 顯示編輯任務 */
-export const isShowEditMission = atom<boolean>(false);
-
-/** 5-2 顯示編輯充電任務 */
-export const isShowEditChargeMission = atom<boolean>(false);
-
-/** 5-3 顯示循環任務 */
-export const isShowEditCycleMission = atom<boolean>(false);
-
-/** 5-4 顯示編輯離開充電站強制任務 */
-export const isShowEditBeforeLeftChargeStationMission = atom<boolean>(false);
-
-/** 5-5 顯示定時任務 */
-export const isShowEditScheduleMission = atom<boolean>(false);
-
-/** 5-6 顯示閒置任務 */
-export const isShowEditIdleMission = atom<boolean>(false);
-
-/** 5-7 顯示topic任務 */
-export const isShowEditTopicMission = atom<boolean>(false);
-
-/** 6-1 顯示編輯標籤 */
-export const isShowEditMissionTag = atom<boolean>(false);
-
-/** 6-2 顯示編輯充電站icon位置 */
-export const isShowEditChargeStationPosition = atom<boolean>(false);
-
-/** 8-1 顯示編輯warning id */
-export const isShowEditWarningId = atom<boolean>(false);
-
-/** 8-2 上傳錯誤表 */
-export const isOpenUploadWarningIDModal = atom<boolean>(false);
-
-/** 8-4 開啟交換地圖 */
-export const isOpenSwitchMap = atom<boolean>(false);
-
-/** 7-2 顯示編輯備份 */
-export const isShowEditBackup = atom<boolean>(false);

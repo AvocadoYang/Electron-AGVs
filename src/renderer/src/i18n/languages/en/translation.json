@@ -139,6 +139,11 @@
         "edit_pallet": "Edit Pallet"
       }
     },
+    "amr_setting": {
+      "robot": "robot",
+      "register_amr": "Register Robot",
+      "amr_config": "Robot Config"
+    },
     "mission": {
       "mission": "Mission",
       "edit_mission": "Edit mission",
@@ -349,6 +354,9 @@
     "type": "Type",
     "color": "Color",
     "name_warn": "name is required"
+  },
+  "setting_amr": {
+    "amr_name": "amr name"
   },
 
   "charge": {
