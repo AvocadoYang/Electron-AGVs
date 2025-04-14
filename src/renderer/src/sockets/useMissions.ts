@@ -36,7 +36,7 @@ const schema = () =>
   object({
     missions: array(
       object({
-        amrId: string().optional(),
+        amrId: string().optional().nullable(),
         missionId: string().required(),
         missionType: mixed<keyof typeof missionTypeMap>()
           .oneOf(objectKeys(missionTypeMap))

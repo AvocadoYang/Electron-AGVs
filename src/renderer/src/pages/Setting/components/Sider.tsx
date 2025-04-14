@@ -498,7 +498,7 @@ const Sider: React.FC<{
     getItem(t('toolbar.others.others'), '7', <DeploymentUnitOutlined />, [
       getItem(
         t('toolbar.others.edit_tag'),
-        '6-1',
+        '7-1',
         <Switch
           checked={openTagMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'edit_tag')}
@@ -506,7 +506,7 @@ const Sider: React.FC<{
       ),
       getItem(
         t('toolbar.others.edit_charge_station_icon_style'),
-        '6-2',
+        '7-2',
         <Switch
           checked={openEditChargeStationIconPanel}
           onChange={(checked) => handleShowPanel(checked, 'edit_charge_station_icon_style')}

@@ -356,7 +356,15 @@
     "name_warn": "name is required"
   },
   "setting_amr": {
-    "amr_name": "amr name"
+    "register_amr": {
+      "title_name": "Register AMR",
+      "amr_name": "amr name",
+      "type": "type",
+      "serial_number": " MAC address",
+      "invalid_serial_number": "invalid serial number",
+      "executing": "using",
+      "stale": "not in use"
+    }
   },
 
   "charge": {

@@ -68,7 +68,9 @@ const CargoModal: FC<{
         onOk={handleEditOk}
         onCancel={handleEditCancel}
         width={1530}
-        bodyStyle={{ padding: '24px', background: '#fafafa' }}
+        styles={{
+          body: { padding: '24px', background: '#fafafa' }
+        }}
         okButtonProps={{
           size: 'large',
           type: 'primary',

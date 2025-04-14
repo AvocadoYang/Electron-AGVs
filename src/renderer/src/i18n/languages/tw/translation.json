@@ -351,7 +351,15 @@
     "name_warn": "名稱不可為空"
   },
   "setting_amr": {
-    "amr_name": "車輛名稱"
+    "register_amr": {
+      "title_name": "註冊車輛",
+      "amr_name": "車輛名稱",
+      "type": "類型",
+      "serial_number": "連線 MAC address",
+      "invalid_serial_number": " serial number 格式不正確",
+      "executing": "啟用中",
+      "stale": "已停用"
+    }
   },
 
   "charge": {
