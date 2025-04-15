@@ -1,4 +1,3 @@
- 
 import client from '@renderer/api/axiosClient';
 import useName from '@renderer/api/useAmrName';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
@@ -10,7 +9,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 
-type DataType = { amrId: string[]; missionId: string }
+type DataType = { amrId: string[]; missionId: string };
 
 const BeforeLeftChargeStationForm: FC = () => {
   const [form] = Form.useForm();
@@ -19,7 +18,7 @@ const BeforeLeftChargeStationForm: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
   const { data: name } = useName();
-  const AmrOption = name?.map((v) => ({ value: v.id, label: v.id }));
+  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
 
   const addMutation = useMutation({
     mutationFn: (payload: DataType) => {

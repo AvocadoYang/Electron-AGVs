@@ -1,12 +1,11 @@
 import { t } from 'i18next';
-import { YawGenre } from '../../mission';
+
 import {
   activeWaitRobot,
   actonList,
   forkHeightOption,
   selectLocationOption,
-  waitRobotOption,
-  yawOption
+  waitRobotOption
 } from '../params';
 import {
   Action_Type,
@@ -18,7 +17,11 @@ import {
 import useMap from '@renderer/api/useMap';
 import useName from '@renderer/api/useAmrName';
 import { useMemo } from 'react';
-
+enum YawGenre {
+  CUSTOM,
+  SELECT,
+  CALCULATE_BY_AGV_AND_SHELF_ANGLE
+}
 const useTaskOptions = () => {
   const { data: mapData } = useMap();
   const { data: robots } = useName();
@@ -88,23 +91,81 @@ const useTaskOptions = () => {
     }));
 
   const SelectLocationOptions: { label: string; value: Select_Location_Type }[] =
-    selectLocationOption.map((type) => ({
-      label: type,
-      value: type
-    }));
+    selectLocationOption.map((type) => {
+      switch (type) {
+        case 'custom':
+          return {
+            label: t('mission.task_table.custom'),
+            value: type
+          };
+        case 'select':
+          return {
+            label: t('mission.task_table.select'),
+            value: type
+          };
+        case 'available_charge_station':
+          return {
+            label: t('mission.task_table.available_charge_station'),
+            value: type
+          };
+        default:
+          return {
+            label: type,
+            value: type
+          };
+      }
+    });
 
-  const SelectYawOptions: { label: string; value: YawGenre }[] = [0, 1, 2].map(
-    (type: YawGenre) => ({
-      label: yawOption[type],
-      value: type
-    })
-  );
+  const SelectYawOptions: { label: string; value: YawGenre }[] = [0, 1, 2].map((type: YawGenre) => {
+    switch (type) {
+      case YawGenre.CUSTOM:
+        return {
+          label: t('mission.task_table.custom'),
+          value: type
+        };
+      case YawGenre.SELECT:
+        return {
+          label: t('mission.task_table.select'),
+          value: type
+        };
+      case YawGenre.CALCULATE_BY_AGV_AND_SHELF_ANGLE:
+        return {
+          label: t('mission.task_table.calculate_by_agv_and_shelf_angle'),
+          value: type
+        };
+      default:
+        return {
+          label: type,
+          value: type
+        };
+    }
+  });
 
   const SelectForkHeightOptions: { label: string; value: Select_Fork_Height_Type }[] =
-    forkHeightOption.map((type) => ({
-      label: type,
-      value: type
-    }));
+    forkHeightOption.map((type) => {
+      switch (type) {
+        case 'custom':
+          return {
+            label: t('mission.task_table.custom'),
+            value: type
+          };
+        case 'select':
+          return {
+            label: t('mission.task_table.select'),
+            value: type
+          };
+        case 'default':
+          return {
+            label: t('mission.task_table.default'),
+            value: type
+          };
+        default:
+          return {
+            label: type,
+            value: type
+          };
+      }
+    });
 
   const SelectActiveWaitRobotOptions: { label: string; value: Select_Active_Robot_Type }[] =
     activeWaitRobot.map((type) => ({

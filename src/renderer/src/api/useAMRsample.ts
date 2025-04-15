@@ -11,7 +11,7 @@ const schema = array(
 );
 
 const getAmrs = async () => {
-  const { data } = await client.get<unknown>('api/setting/all-car');
+  const { data } = await client.get<unknown>('api/setting/all-robot-type');
   const result = await schema.validate(data, { stripUnknown: true });
   return result;
 };
@@ -19,5 +19,5 @@ const getAmrs = async () => {
 const useAMRsample = () => {
   return useQuery(['amr-sample'], getAmrs);
 };
-export type ASType = InferType<typeof schema>
+export type ASType = InferType<typeof schema>;
 export default useAMRsample;

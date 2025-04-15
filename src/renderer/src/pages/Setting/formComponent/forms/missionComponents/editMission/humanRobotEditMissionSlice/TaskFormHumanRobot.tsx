@@ -20,7 +20,8 @@ function isWithinLimits(jointName: string, angle: number): boolean {
 
 const TaskFormHumanRobot: FC<{
   editTaskKey: string;
-}> = ({ editTaskKey }) => {
+  selectedMissionKey: string;
+}> = ({ editTaskKey, selectedMissionKey }) => {
   const [actionState, setActionStatus] = useState<Robot_Type>();
   const { data: originFormData } = useOneTaskDetailHumanRobot(editTaskKey);
   const prevActionStateRef = useRef<Robot_Type | undefined>(actionState);
@@ -105,6 +106,7 @@ const TaskFormHumanRobot: FC<{
     }
 
     const payload = {
+      missionTitleId: selectedMissionKey,
       id: editTaskKey,
       action_type: [values.action_type],
       control: values.control || [],

@@ -12,12 +12,12 @@ import { Card, FormInstance } from 'antd';
 import {
   EditLocationListTableSwitch,
   EditLocationPanelSwitch,
-  EditPalletSwitch,
   EditRoadPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfPanelSwitch,
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
+  isShowAMRConfig,
   isShowEditBackup,
   isShowEditBeforeLeftChargeStationMission,
   isShowEditChargeMission,
@@ -29,6 +29,7 @@ import {
   isShowEditScheduleMission,
   isShowEditTopicMission,
   isShowEditWarningId,
+  isShowRegisterAMR,
   QuickEditLocationPanelSwitch,
   RoadListTableSwitch,
   showZonesTableSwitch
@@ -40,7 +41,6 @@ import cardStyle from '../utils/cardStyle';
 import { ShelfPanel } from '../formComponent/forms/shelfComponents/editShelf';
 import { ShelfCategoryPanel } from '../formComponent/forms/shelfComponents/category';
 import { YawPanel } from '../formComponent/forms/shelfComponents/yaw';
-import { PalletTable } from '../formComponent/forms/shelfComponents/pallet';
 import FormCloseBtn from '../utils/FormCloseBtn';
 import EditMissionPanel from '../formComponent/forms/missionComponents/editMission/MissionPanel';
 import { ChargePanel } from '../formComponent/forms/missionComponents/chargeMission';
@@ -53,13 +53,15 @@ import { EditTagPanel } from '../formComponent/forms/other/editTag';
 import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon';
 import { EditWarningListPanel } from '../formComponent/forms/file/warningId';
 import { BackupPanel } from '../formComponent/forms/file/backup';
+import { RegisterAmrPanel } from '../formComponent/forms/amrSetting/registerAmr';
+import AmrConfigPanel from '../formComponent/forms/amrSetting/amrConfig/AmrConfigPanel';
 
 const SortableWrap: FC<{
-  sortableId: ToolBarItemType
-  locationPanelForm?: FormInstance<unknown>
-  roadPanelForm?: FormInstance<unknown>
-  zonePanelForm?: FormInstance<unknown>
-  tagSettingForm?: FormInstance<unknown>
+  sortableId: ToolBarItemType;
+  locationPanelForm?: FormInstance<unknown>;
+  roadPanelForm?: FormInstance<unknown>;
+  zonePanelForm?: FormInstance<unknown>;
+  tagSettingForm?: FormInstance<unknown>;
 }> = ({ sortableId, locationPanelForm, roadPanelForm, zonePanelForm, tagSettingForm }) => {
   const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
@@ -77,7 +79,7 @@ const SortableWrap: FC<{
           case 'location_panel':
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
+                <FormCloseBtn sortableId={sortableId} panelName="location_panel" />
                 <EditLocationPanel
                   sortableId={sortableId}
                   locationPanelForm={locationPanelForm as FormInstance<unknown>}
@@ -87,10 +89,10 @@ const SortableWrap: FC<{
               </Card>
             );
           // 1-2 快速編輯點位的彈跳視窗
-          case 'location_list':
+          case 'quick_location_panel':
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
+                <FormCloseBtn sortableId={sortableId} panelName="quick_location_panel" />
                 <QuickEditLocationPanel
                   sortableId={sortableId}
                   locationPanelForm={locationPanelForm as FormInstance<unknown>}
@@ -99,23 +101,23 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-          case 'quick_location_panel':
-            // 1-3 顯示地點列表
+          // 1-3 顯示地點列表
+          case 'location_list':
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
+                <FormCloseBtn sortableId={sortableId} panelName="location_list" />
                 <AllLocationTable
                   sortableId={sortableId}
                   attributes={attributes}
                   listeners={listeners}
-                ></AllLocationTable>
+                />
               </Card>
             );
+          // 2-1 編輯路徑
           case 'road_panel':
-            // 2-1 編輯路徑
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
+                <FormCloseBtn sortableId={sortableId} panelName="road_panel" />
                 <EditRoadPanel
                   roadPanelForm={roadPanelForm as FormInstance<unknown>}
                   sortableId={sortableId}
@@ -124,19 +126,19 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
+          // 2-2 顯示路徑列表
           case 'show_roads_table':
-            // 2-2 顯示路徑列表
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
+                <FormCloseBtn sortableId={sortableId} panelName="show_roads_table" />
                 <RoadList sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             );
+          // 3-1 編輯區域
           case 'edit_zone':
-            // 3-1 編輯區域
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
+                <FormCloseBtn sortableId={sortableId} panelName="edit_zone" />
                 <EditZonePanel
                   zonePanelForm={zonePanelForm as FormInstance<unknown>}
                   tagSettingForm={tagSettingForm as FormInstance<unknown>}
@@ -146,30 +148,27 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
+          // 3-3 顯示區域表
           case 'show_zone_table':
-            // 3-3 顯示區域表
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
-                <ZoneTable
-                  sortableId={sortableId}
-                  attributes={attributes}
-                  listeners={listeners}
-                ></ZoneTable>
+                <FormCloseBtn sortableId={sortableId} panelName="show_zone_table" />
+                <ZoneTable sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             );
+          // 4-1 顯示編輯貨架
           case 'edit_shelve':
-            // 4-1 顯示編輯貨架
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <FormCloseBtn sortableId={sortableId} />
+                <FormCloseBtn sortableId={sortableId} panelName="edit_shelve" />
                 <ShelfPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             );
+          // 4-2 顯示編輯類型
           case 'edit_shelve_type':
-            // 4-2 顯示編輯類型
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <FormCloseBtn sortableId={sortableId} panelName="edit_shelve_type" />
                 <ShelfCategoryPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -177,18 +176,20 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
+          // 4-3 顯示編輯類型
           case 'edit_yaw':
-            // 4-3 顯示編輯類型
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <FormCloseBtn sortableId={sortableId} panelName="edit_yaw" />
                 <YawPanel sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             );
-          case 'edit_pallet':
-            // 4-4 顯示編輯類型
+
+          // 5-1 顯示編輯註冊車輛
+          case 'edit_register_amr':
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
-                <PalletTable
+                <RegisterAmrPanel
                   sortableId={sortableId}
                   attributes={attributes}
                   listeners={listeners}
@@ -196,10 +197,23 @@ const SortableWrap: FC<{
               </Card>
             );
 
+          // 5-2 顯示編輯類型
+          case 'edit_amr_config':
+            return (
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <AmrConfigPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            );
+
+          // 6-1 顯示編輯任務
           case 'edit_mission':
-            // 5-1 顯示編輯任務
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="edit_mission" />
                 <EditMissionPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -207,11 +221,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 6-2 顯示充電任務
           case 'charge_mission':
-            // 5-2 顯示充電任務
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="charge_mission" />
                 <ChargePanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -219,11 +233,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 6-3 顯示循環任務
           case 'cycle_mission':
-            // 5-2 顯示充電任務
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="cycle_mission" />
                 <CycleMIssionPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -231,11 +245,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 6-4 顯示離開充電站前任務
           case 'before_left_charge_station_task':
-            // 5-3 顯示充電任務
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="before_left_charge_station_task" />
                 <BeforeLeftChargeStationPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -243,11 +257,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 6-5 顯示定時任務
           case 'schedule_mission':
-            // 5-4 顯示定時任務
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="schedule_mission" />
                 <SchedulePanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -255,11 +269,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 6-6 顯示閒置任務
           case 'idle_mission':
-            // 5-5 顯示定時任務
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="idle_mission" />
                 <IdleMissionPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -267,11 +281,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 6-7 顯示主題任務
           case 'topic_mission':
-            // 5-6 顯示定時任務
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="topic_mission" />
                 <TopicMissionPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -279,11 +293,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 7-1 顯示編輯標籤
           case 'edit_tag':
-            // 6-1 顯示編輯標籤
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="edit_tag" />
                 <EditTagPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -291,11 +305,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 7-2 顯示編輯充電站圖標樣式
           case 'edit_charge_station_icon_style':
-            // 6-2 顯示編輯標籤
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="edit_charge_station_icon_style" />
                 <ChargeStationStylePanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -303,10 +317,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
+          // 8-1 顯示編輯warning id
           case 'warning_id':
-            // 7-1 顯示編輯warning id
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="warning_id" />
                 <EditWarningListPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -314,11 +329,11 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
+          // 8-2 顯示編輯備份檔案
           case 'backup_file':
-            // 7-2 顯示編輯back up
             return (
               <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="backup_file" />
                 <BackupPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -326,7 +341,6 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
-
           default:
             return null;
         }
@@ -336,11 +350,11 @@ const SortableWrap: FC<{
 };
 
 const ToolComponents: FC<{
-  locationPanelForm: FormInstance<unknown>
-  roadPanelForm: FormInstance<unknown>
-  zonePanelForm: FormInstance<unknown>
-  tagSettingForm: FormInstance<unknown>
-  dataList: ToolBarType
+  locationPanelForm: FormInstance<unknown>;
+  roadPanelForm: FormInstance<unknown>;
+  zonePanelForm: FormInstance<unknown>;
+  tagSettingForm: FormInstance<unknown>;
+  dataList: ToolBarType;
 }> = ({ locationPanelForm, dataList, roadPanelForm, zonePanelForm, tagSettingForm }) => {
   const showEditLocationPanel = useAtomValue(EditLocationPanelSwitch);
   const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch);
@@ -352,7 +366,10 @@ const ToolComponents: FC<{
   const openEditShelf = useAtomValue(EditShelfPanelSwitch);
   const openEditShelfCategory = useAtomValue(EditShelfCategoryPanelSwitch);
   const openEditShelfYaw = useAtomValue(EditShelfYawPanelSwitch);
-  const openEditPalletTable = useAtomValue(EditPalletSwitch);
+
+  const openRegisterAmrPanel = useAtomValue(isShowRegisterAMR);
+  const openAMRConfigPanel = useAtomValue(isShowAMRConfig);
+
   const openMissionPanel = useAtomValue(isShowEditMission);
   const openChargePanel = useAtomValue(isShowEditChargeMission);
   const openCyclePanel = useAtomValue(isShowEditCycleMission);
@@ -377,7 +394,7 @@ const ToolComponents: FC<{
         ></SortableWrap>
       );
     }
-    if (formKey === 'location_list' && showQuickEditLocationPanel) {
+    if (formKey === 'location_list' && showAllLocationListTable) {
       return (
         <SortableWrap
           sortableId={formKey}
@@ -386,7 +403,7 @@ const ToolComponents: FC<{
         ></SortableWrap>
       );
     }
-    if (formKey === 'quick_location_panel' && showAllLocationListTable) {
+    if (formKey === 'quick_location_panel' && showQuickEditLocationPanel) {
       return (
         <SortableWrap
           sortableId={formKey}
@@ -440,7 +457,10 @@ const ToolComponents: FC<{
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 
-    if (formKey === 'edit_pallet' && openEditPalletTable) {
+    if (formKey === 'edit_register_amr' && openRegisterAmrPanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
+    }
+    if (formKey === 'edit_amr_config' && openAMRConfigPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
 

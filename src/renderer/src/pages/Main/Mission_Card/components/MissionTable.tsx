@@ -12,22 +12,35 @@ import { useMutation } from '@tanstack/react-query';
 import useName from '@renderer/api/useAmrName';
 
 const MISSION_SORT = ['executing', 'assigned', 'pending', 'completed', 'aborting', 'canceled'];
+
 const TaskInfo = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  transition: background 0.3s ease;
+`;
+
+const TaskTitle = styled.div`
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #1f2a44;
+  margin-bottom: 4px;
+`;
+
+const SubTitle = styled.div`
+  font-size: 0.9em;
+  color: #595959;
+  display: flex;
   align-items: center;
-`;
-
-const TaskTitle = styled.h3`
-  margin: 0;
-  padding: 0;
-  font-size: 1.2em;
-`;
-
-const SubTitle = styled.h4`
-  margin: 0;
-  padding: 0;
-  font-size: 1em;
+  gap: 6px;
+  &::before {
+    content: '→';
+    color: #1890ff;
+    font-weight: bold;
+  }
 `;
 
 type SelectMissionT = {
@@ -104,23 +117,23 @@ const MissionTable = () => {
       title: t('toolbar.mission.mission'),
       dataIndex: 'taskInfo',
       key: 'taskInfo',
-      render(_value, record: MissionInfo) {
+      render: (_value, record: MissionInfo) => {
         if (typeof record.info === 'string') {
           const parseData = JSON.parse(record.info) as Additional_Mission_Info;
-
           const fullName = parseData.missionFullName === null ? '-' : parseData.missionFullName;
           const from = parseData.loadLocationId === null ? '' : parseData.loadLocationId;
           const to = parseData.offloadLocationId === null ? '' : parseData.offloadLocationId;
 
           return (
             <TaskInfo>
-              <TaskTitle>{typeof fullName === 'string' ? '-' : fullName?.join('-')}</TaskTitle>
-              <SubTitle>{`${from} -> ${to}`}</SubTitle>
+              <TaskTitle>
+                {typeof fullName === 'string' ? '-' : fullName?.join(' - ') || '-'}
+              </TaskTitle>
+              <SubTitle>{from && to ? `${from} -> ${to}` : '-'}</SubTitle>
             </TaskInfo>
           );
         }
-
-        return <>-</>;
+        return <span>-</span>;
       }
     },
     {

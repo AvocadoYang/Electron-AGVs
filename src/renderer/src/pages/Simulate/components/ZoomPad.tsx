@@ -4,13 +4,14 @@ import { useTranslation } from 'react-i18next';
 import useMap from '@renderer/api/useMap';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { memo } from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import {
   isShowLocation,
   isShowLocationTooltip,
   isShowRoad,
   isShowRoadTooltip
 } from '@renderer/utils/siderGloble';
+import { globalScale } from '../utils/mapStatus';
 
 const ZoomPadWrap = styled.div`
   position: absolute;
@@ -90,9 +91,7 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>> }> = ({
-  setScale
-}) => {
+const ZoomPad: React.FC = () => {
   const { data, isError } = useMap();
   const { t } = useTranslation();
 
@@ -100,18 +99,22 @@ const ZoomPad: React.FC<{ setScale: React.Dispatch<React.SetStateAction<number>>
   const [showRoadToolTip, setShowRoadTooltip] = useAtom(isShowRoadTooltip);
   const [showLocation, setShowLocation] = useAtom(isShowLocation);
   const [showRoad, setShowRoad] = useAtom(isShowRoad);
+  const setScaleGlobal = useSetAtom(globalScale);
 
   if (isError || !data) return;
   return (
     <ZoomPadWrap>
       <Tooltip title={t('map_tool.zoom_in')}>
-        <StyledButton onClick={() => setScale((pre) => pre + 0.035)} icon={<PlusOutlined />} />
+        <StyledButton
+          onClick={() => setScaleGlobal((pre) => pre + 0.035)}
+          icon={<PlusOutlined />}
+        />
       </Tooltip>
 
       <Tooltip title={t('map_tool.zoom_out')}>
         <StyledButton
           onClick={() =>
-            setScale((pre) => {
+            setScaleGlobal((pre) => {
               return pre - 0.035;
             })
           }

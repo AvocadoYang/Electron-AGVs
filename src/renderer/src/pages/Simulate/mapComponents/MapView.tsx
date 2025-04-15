@@ -13,17 +13,17 @@ import CreateScriptForm from '../components/CreateScriptForm';
 import { MouseLocationForFrame, RectInfo } from '@renderer/pages/Setting/hooks/hook';
 import useZoneFrame from '../hooks/useZoneFrame';
 import AllInMapAMRs from '../components/AMR/AllInMapAMRs';
+import { globalScale } from '../utils/mapStatus';
 
 const MapView: React.FC<{
-  scale: number;
   mapRef: RefObject<HTMLDivElement>;
   mapWrapRef: RefObject<HTMLDivElement>;
-}> = ({ scale, mapRef, mapWrapRef }) => {
+}> = ({ mapRef, mapWrapRef }) => {
   const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   const showRoad = useAtomValue(isShowRoad);
   const mapImageRef = useRef<HTMLImageElement>(null);
   const openEditZone = useAtomValue(isSelectCargo);
-
+  const scale = useAtomValue(globalScale);
   /** 拖曳區域相關參數 */
   const [isDragging, setIsDragging] = useState(false);
   const [, setInitPointRecord] = useState({
@@ -67,7 +67,7 @@ const MapView: React.FC<{
     >
       <MapImage ref={mapImageRef} />
       <AllLocation />
-      <AllInMapAMRs mapWrapRef={mapWrapRef} mapRef={mapRef} scale={scale} />
+      <AllInMapAMRs mapWrapRef={mapWrapRef} mapRef={mapRef} />
       {showRoad ? <AllRoads /> : []}
 
       <AllCargo />

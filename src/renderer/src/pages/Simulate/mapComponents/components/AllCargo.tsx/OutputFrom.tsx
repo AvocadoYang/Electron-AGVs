@@ -29,18 +29,6 @@ const MissionStatus = styled.div<{ $isValid: boolean }>`
   font-weight: 500;
 `;
 
-const StyledButton = styled(Button)`
-  background: #1890ff;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 16px;
-  transition: all 0.3s ease;
-  &:hover {
-    background: #40a9ff;
-    transform: translateY(-1px);
-  }
-`;
-
 const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
   form,
   tempSaveData
@@ -102,7 +90,7 @@ const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
       </Form.Item>
 
       <Form.Item name="output_cargo_speed" label={t('sim.cargo.output.speed')}>
-        <InputNumber min={1} style={{ width: '100%' }} placeholder="Enter speed" />
+        <InputNumber min={1000} style={{ width: '100%' }} placeholder="Enter speed" />
       </Form.Item>
 
       <Form.Item name="specify_car" label={t('sim.cargo.output.specify_car')}>
@@ -118,7 +106,7 @@ const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
         <Form.Item name="placement" label={t('sim.cargo.output.placement')} style={{ flex: 1 }}>
           <Select mode="multiple" options={shelves} placeholder="Select locations" />
         </Form.Item>
-        <StyledButton onClick={tempSaveData}>{t('sim.modal.select_locations')}</StyledButton>
+        <Button onClick={tempSaveData}>{t('sim.modal.select_locations')}</Button>
       </Flex>
 
       <MissionStatus $isValid={isSetMission}>

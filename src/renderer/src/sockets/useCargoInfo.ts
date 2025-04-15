@@ -9,11 +9,6 @@ export type LayerType = {
     booked: boolean;
     cargo_limit: number;
     disable: boolean;
-    pallet: {
-      id: string | null;
-      name: string | null;
-      color: string | null;
-    };
     cargo: {
       hasCargo: boolean;
       name: string | null;

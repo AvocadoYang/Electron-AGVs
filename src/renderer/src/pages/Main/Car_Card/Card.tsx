@@ -48,7 +48,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
         }}
       >
         <Popover
-          content={<BtnGroup />}
+          content={<BtnGroup amrId={id} />}
           trigger="click"
           open={isPopoverOpen}
           placement="rightTop"

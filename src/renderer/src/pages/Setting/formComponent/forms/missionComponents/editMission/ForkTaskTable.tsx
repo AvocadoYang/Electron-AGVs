@@ -7,10 +7,9 @@ import {
   ImportOutlined,
   MenuOutlined
 } from '@ant-design/icons';
-import { Button, Flex, Popconfirm, Table, Tooltip, message } from 'antd';
+import { Button, Flex, Popconfirm, Table, Tooltip, message, Descriptions } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import type { DragEndEvent } from '@dnd-kit/core';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
@@ -20,48 +19,17 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
-import useTaskFork from '../../../../../../api/useTaskFork';
 import client from '@renderer/api/axiosClient';
+import useTaskFork from '../../../../../../api/useTaskFork';
 import ImportMissionForm from './ImportMissionForm';
+import CarControlTranslate from './CarControlTranslate';
 import { Fork_mission_Slice } from './mission';
 import { Err } from '@renderer/utils/responseErr';
-import CarControlTranslate from './CarControlTranslate';
-
-enum YawGenre {
-  CUSTOM,
-  SELECT,
-  CALCULATE_BY_AGV_AND_SHELF_ANGLE
-}
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   'data-row-key': string;
   'children': React.ReactNode;
 }
-
-const ActiveBox = styled.div`
-  min-width: 4em;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-`;
-
-type DotStyle = {
-  $active: boolean;
-};
-
-const Dot = styled.div<DotStyle>`
-  border-radius: 99%;
-  width: 7px;
-  height: 7px;
-  background-color: ${(prop) => (prop.$active ? '#979797' : '#2bea00')};
-`;
-
-const SpanBlock = styled.div`
-  min-width: 5em;
-  letter-spacing: 2px;
-`;
 
 const DataRow = ({ children, ...props }: RowProps) => {
   const {
@@ -72,9 +40,7 @@ const DataRow = ({ children, ...props }: RowProps) => {
     transform,
     transition,
     isDragging
-  } = useSortable({
-    id: props['data-row-key']
-  });
+  } = useSortable({ id: props['data-row-key'] });
 
   const style: React.CSSProperties = {
     ...props.style,
@@ -112,93 +78,63 @@ const ForkTaskTable: FC<{
   selectedMissionCar: string;
 }> = ({ showModal, selectedMissionKey, selectedMissionCar }) => {
   const { data: taskDataSource } = useTaskFork(selectedMissionKey);
-
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [importConfig, setImportConfig] = useState<{ order: number; key: string } | null>(null);
   const [showImportMission, setShowImportMission] = useState(false);
+
   const sortTaskMutation = useMutation({
-    mutationFn: (keyAndSort: { key: string; order: number }[]) => {
-      return client.post('api/setting/update-task-order', keyAndSort);
-    },
-    onSuccess: async () => {
-      await queryClient.refetchQueries({
-        queryKey: ['all-relate-task-fork', selectedMissionKey]
-      });
-    },
-    onError(error: Err) {
-      messageApi.error(error.response.data.message);
-    }
+    mutationFn: (data: { keyAndSort: { key: string; order: number }[]; missionTitleId: string }) =>
+      client.post('api/setting/update-task-order', data),
+    onSuccess: () =>
+      queryClient.refetchQueries({ queryKey: ['all-relate-task-fork', selectedMissionKey] }),
+    onError: (error: Err) => messageApi.error(error.response.data.message)
   });
+
   const deleteTaskMutation = useMutation({
-    mutationFn: (payload: { key: string; keyAndOrder: { key: string; order: number }[] }) => {
-      return client.post('api/setting/delete-task', {
+    mutationFn: (payload: { key: string; keyAndOrder: { key: string; order: number }[] }) =>
+      client.post('api/setting/delete-task', {
+        missionTitleId: selectedMissionKey,
         targetKey: payload.key,
         newOrder: payload.keyAndOrder
-      });
-    },
-    onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['all-relate-task-fork'] });
-    },
-    onError(error: Err) {
-      messageApi.error(error.response.data.message);
-    }
+      }),
+    onSuccess: () => queryClient.refetchQueries({ queryKey: ['all-relate-task-fork'] }),
+    onError: (error: Err) => messageApi.error(error.response.data.message)
   });
 
   const disableMutation = useMutation({
-    mutationFn: (payload: { id: string; disable: boolean }) => {
-      return client.post('api/setting/disable-task', payload);
-    },
+    mutationFn: (payload: { id: string; disable: boolean; missionTitleId: string }) =>
+      client.post('api/setting/disable-task', payload),
     onSuccess: async () => {
-      void messageApi.success(t('utils.success'));
+      messageApi.success(t('utils.success'));
       await queryClient.refetchQueries({ queryKey: ['all-relate-task-fork'] });
     },
-    onError(error: Err) {
-      messageApi.error(error.response.data.message);
-    }
+    onError: (error: Err) => messageApi.error(error.response.data.message)
   });
 
   const deleteTask = (key: string) => {
     if (!taskDataSource) return;
-    const targetIndex = taskDataSource.findIndex((v) => v?.id === key);
-    if (targetIndex === -1) return;
     const updatedDataSource = taskDataSource.filter((v) => v?.id !== key);
-    const updatedDataSourceWithOrder = updatedDataSource.map((item, index) => ({
-      ...item,
-      order: index
-    }));
-    const keyAndOrder = updatedDataSourceWithOrder.map((v) => ({
-      key: v.id as string,
-      order: v.order
-    }));
-
+    const keyAndOrder = updatedDataSource.map((v, i) => ({ key: v?.id as string, order: i }));
     deleteTaskMutation.mutate({ key, keyAndOrder });
   };
 
   const onDragEnd = ({ active, over }: DragEndEvent) => {
-    if (!taskDataSource) return;
-    if (active.id !== over?.id) {
-      const activeIndex = taskDataSource.findIndex((i) => i?.id === active.id);
-      const overIndex = taskDataSource.findIndex((i) => i?.id === over?.id);
-      const newData = arrayMove(taskDataSource, activeIndex, overIndex);
-
-      const sorData = newData.map((v, i) => ({
-        ...v,
-        order: i
-      }));
-
-      const keyAndSort = sorData.map((v) => ({ key: v.id as string, order: v.order }));
-
-      sortTaskMutation.mutate(keyAndSort);
-
-      queryClient.setQueryData(['all-relate-task-fork', selectedMissionKey], sorData);
-    }
+    if (!taskDataSource || active.id === over?.id) return;
+    const activeIndex = taskDataSource.findIndex((i) => i?.id === active.id);
+    const overIndex = taskDataSource.findIndex((i) => i?.id === over?.id);
+    const newData = arrayMove(taskDataSource, activeIndex, overIndex);
+    const keyAndSort = newData.map((v, i) => ({ key: v?.id as string, order: i }));
+    sortTaskMutation.mutate({
+      keyAndSort,
+      missionTitleId: selectedMissionKey
+    });
+    queryClient.setQueryData(['all-relate-task-fork', selectedMissionKey], newData);
   };
 
-  const disableTask = (id: string, disable: boolean) => {
-    disableMutation.mutate({ id, disable });
-  };
+  const disableTask = (id: string, disable: boolean) =>
+    disableMutation.mutate({ id, disable, missionTitleId: selectedMissionKey });
 
   const showImportMissionModal = (order: number) => {
     setShowImportMission(true);
@@ -207,282 +143,165 @@ const ForkTaskTable: FC<{
 
   const columns: ColumnsType<Fork_mission_Slice> = [
     {
-      title: t('mission.task_table.sort'),
+      title: t('mission.task_table.expand'),
       key: 'sort',
-      width: 100
+      width: 50,
+      render: () => <MenuOutlined style={{ cursor: 'move' }} />
     },
     {
       title: t('mission.task_table.sort'),
-      key: 'order',
-      dataIndex: 'order',
-      render(_, record) {
-        return record.process_order;
-      }
+      dataIndex: 'process_order',
+      width: 80
     },
     {
       title: t('mission.task_table.status'),
-      key: 'status',
-      dataIndex: 'status',
+      dataIndex: 'disable',
       width: 100,
-      render: (_v, record) => {
-        return (
-          <ActiveBox>
-            <Dot $active={record.disable as boolean} />{' '}
-            <>
-              {record.disable ? t('mission.task_table.inactive') : t('mission.task_table.active')}
-            </>
-          </ActiveBox>
-        );
-      }
+      render: (disable: boolean) => (
+        <Flex align="center" gap="small">
+          <div
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              backgroundColor: disable ? '#979797' : '#2bea00'
+            }}
+          />
+          {disable ? t('mission.task_table.inactive') : t('mission.task_table.active')}
+        </Flex>
+      )
     },
     {
       title: t('mission.task_table.action'),
-      children: [
-        {
-          title: t('mission.task_table.action'),
-          dataIndex: 'genre',
-          key: 'genre',
-          width: 50,
-          render: (_, record) => {
-            if (record.operation.type === null) {
-              return <p />;
-            }
-
-            return <CarControlTranslate word={record.operation.type} />;
-          }
-        },
-        {
-          title: t('mission.task_table.action'),
-          dataIndex: 'control',
-          key: 'control',
-          width: 50,
-          render: (_, record) => {
-            return JSON.stringify(record.operation.control);
-          }
-        },
-        {
-          title: t('mission.task_table.wait'),
-          dataIndex: 'wait',
-          key: 'wait',
-          render: (_, record) => {
-            return record.operation.wait;
-          }
-        },
-        {
-          title: t('mission.task_table.is_custom_location'),
-          dataIndex: 'is_define_id',
-          key: 'is_define_id',
-          render: (_v, record) => {
-            switch (record.operation.is_define_id) {
-              case 'custom':
-                return t('mission.task_table.custom');
-
-              case 'auto':
-                return t('mission.task_table.auto');
-
-              case 'select':
-                return t('mission.task_table.is_selectable');
-              case 'available_charge_station':
-                return t('mission.task_table.available_charge_station');
-
-              default:
-                return <></>;
-            }
-          }
-        },
-        {
-          title: t('mission.task_table.location'),
-          dataIndex: 'locationId',
-          key: 'locationId',
-          render: (_, record) => {
-            return record.operation.id;
-          }
-        },
-
-        {
-          title: t('mission.task_table.is_custom_yaw'),
-          dataIndex: 'is_define_yaw',
-          key: 'is_define_yaw',
-          render: (_v, record) => {
-            switch (record.operation.is_define_yaw) {
-              case YawGenre.CUSTOM:
-                return <SpanBlock>{t('mission.task_table.custom')}</SpanBlock>;
-              case YawGenre.SELECT:
-                return <SpanBlock>{t('mission.task_table.by_target_shelf_setting')}</SpanBlock>;
-              case YawGenre.CALCULATE_BY_AGV_AND_SHELF_ANGLE:
-                return (
-                  <SpanBlock>{t('mission.task_table.calculate_by_agv_and_shelf_angle')}</SpanBlock>
-                );
-              default:
-                return '';
-            }
-          }
-        },
-        {
-          title: t('mission.task_table.yaw'),
-          dataIndex: 'yaw',
-          key: 'yaw',
-          render: (_, record) => {
-            return record.operation.yaw;
-          }
-        },
-        {
-          title: t('mission.task_table.auto_preparatory_point'),
-          dataIndex: 'auto_preparatory_point',
-          key: 'auto_preparatory_point',
-          render: (_v, record) => {
-            return record.operation.auto_preparatory_point ? t('utils.yes') : t('utils.no');
-          }
-        },
-
-        {
-          title: t('mission.task_table.is_define_heigh'),
-          dataIndex: 'is_define_height',
-          key: 'is_define_height',
-          render: (_, record) => {
-            switch (record.io.fork.is_define_height) {
-              case 'custom':
-                return t('mission.task_table.custom');
-
-              case 'auto':
-                return t('mission.task_table.auto');
-
-              case 'select':
-                return t('mission.task_table.is_selectable');
-
-              default:
-                return <></>;
-            }
-          }
-        },
-        {
-          title: t('mission.task_table.height'),
-          dataIndex: 'f_height',
-          key: 'f_height',
-          render: (_, record) => {
-            return record.io.fork.height;
-          }
-        },
-
-        {
-          title: t('mission.task_table.has_cargo_to_process'),
-          dataIndex: 'hasCargoToProcess',
-          key: 'hasCargoToProcess',
-          render: (_, record) => {
-            return record.operation.hasCargoToProcess ? t('utils.yes') : t('utils.no');
-          }
-        },
-
-        {
-          title: t('mission.task_table.amr_list'),
-          dataIndex: 'waitOtherAmr',
-          key: 'waitOtherAmr'
-        },
-        {
-          title: t('mission.task_table.wait_genre'),
-          dataIndex: 'waitGenre',
-          key: 'waitGenre',
-          render: (_, record) => {
-            if (record.operation.waitGenre === 'first') {
-              return t('mission.task_table.execute_first');
-            }
-            if (record.operation.waitGenre === 'second') {
-              return t('mission.task_table.wait_other_finish');
-            }
-            return '';
-          }
-        }
-      ]
+      dataIndex: 'operation',
+      width: 150,
+      render: (operation) => (operation.type ? <CarControlTranslate word={operation.type} /> : '-')
+    },
+    {
+      title: t('mission.task_table.location'),
+      dataIndex: ['operation', 'id'],
+      width: 120,
+      render: (_, record) => {
+        return record.operation.locationId;
+      }
     },
     {
       title: '',
-      dataIndex: '',
-      width: 150,
-      render: (_v, record) => {
-        return (
-          <Flex gap="small">
-            <Popconfirm title="Sure to delete?" onConfirm={() => deleteTask(record.id)}>
-              <Button
-                icon={<DeleteTwoTone twoToneColor="#f30303" />}
-                color="danger"
-                variant="filled"
-                type="link"
-              >
-                {t('utils.delete')}
-              </Button>
-            </Popconfirm>
-
-            <Button
-              onClick={() => showModal(record.id)}
-              icon={<EditOutlined />}
-              color="primary"
-              variant="filled"
-              type="link"
-            >
-              {t('utils.edit')}
+      key: 'actions',
+      width: 200,
+      render: (_, record) => (
+        <Flex gap="small" wrap="wrap">
+          <Popconfirm title={t('utils.delete_warn')} onConfirm={() => deleteTask(record.id)}>
+            <Button type="link" danger icon={<DeleteTwoTone twoToneColor="#f30303" />}>
+              {t('utils.delete')}
             </Button>
-
+          </Popconfirm>
+          <Button type="link" icon={<EditOutlined />} onClick={() => showModal(record.id)}>
+            {t('utils.edit')}
+          </Button>
+          <Button
+            type="link"
+            icon={<ImportOutlined />}
+            onClick={() => showImportMissionModal(record.process_order)}
+          >
+            {t('mission.task_table.import_mission')}
+          </Button>
+          <Tooltip
+            title={
+              record.disable
+                ? t('mission.task_table.in_use')
+                : t('mission.task_table.stop_this_process')
+            }
+          >
             <Button
-              onClick={() => showImportMissionModal(record.process_order)}
-              icon={<ImportOutlined />}
-              color="primary"
-              variant="filled"
               type="link"
-            >
-              {t('mission.task_table.import_mission')}
-            </Button>
-
-            <Tooltip
-              placement="right"
-              title={
-                record.disable
-                  ? t('mission.task_table.in_use')
-                  : t('mission.task_table.stop_this_process')
-              }
-            >
-              {record.disable ? (
-                <Button
-                  onClick={() => disableTask(record.id, false)}
-                  icon={<EyeInvisibleOutlined />}
-                  color="primary"
-                  variant="filled"
-                  type="link"
-                ></Button>
-              ) : (
-                <Button
-                  onClick={() => disableTask(record.id, true)}
-                  icon={<EyeOutlined />}
-                  color="primary"
-                  variant="filled"
-                  type="link"
-                ></Button>
-              )}
-            </Tooltip>
-          </Flex>
-        );
-      }
+              icon={record.disable ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+              onClick={() => disableTask(record.id, !record.disable)}
+            />
+          </Tooltip>
+        </Flex>
+      )
     }
   ];
 
-  if (!taskDataSource) return [];
+  const expandedRowRender = (record: Fork_mission_Slice) => (
+    <Descriptions bordered column={2} size="small">
+      <Descriptions.Item label={t('mission.task_table.action')}>
+        {JSON.stringify(record.operation.control) || '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.wait')}>
+        {record.operation.wait ?? '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.is_custom_location')}>
+        {record.operation.is_define_id === 'custom'
+          ? t('mission.task_table.custom')
+          : record.operation.is_define_id === 'auto'
+            ? t('mission.task_table.select')
+            : record.operation.is_define_id === 'select'
+              ? t('mission.task_table.is_selectable')
+              : record.operation.is_define_id === 'available_charge_station'
+                ? t('mission.task_table.available_charge_station')
+                : '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.is_custom_yaw')}>
+        {record.operation.is_define_yaw === 0
+          ? t('mission.task_table.custom')
+          : record.operation.is_define_yaw === 1
+            ? t('mission.task_table.by_target_shelf_setting')
+            : record.operation.is_define_yaw === 2
+              ? t('mission.task_table.calculate_by_agv_and_shelf_angle')
+              : '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.yaw')}>
+        {record.operation.yaw ?? '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.auto_preparatory_point')}>
+        {record.operation.auto_preparatory_point ? t('utils.yes') : t('utils.no')}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.is_define_heigh')}>
+        {record.io.fork.is_define_height === 'custom'
+          ? t('mission.task_table.custom')
+          : record.io.fork.is_define_height === 'auto'
+            ? t('mission.task_table.select')
+            : record.io.fork.is_define_height === 'select'
+              ? t('mission.task_table.is_selectable')
+              : '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.height')}>
+        {record.io.fork.height ?? '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.has_cargo_to_process')}>
+        {record.operation.hasCargoToProcess ? t('utils.yes') : t('utils.no')}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.amr_list')}>
+        {record.operation.waitOtherAmr || '-'}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('mission.task_table.wait_genre')}>
+        {record.operation.waitGenre === 'first'
+          ? t('mission.task_table.execute_first')
+          : record.operation.waitGenre === 'second'
+            ? t('mission.task_table.wait_other_finish')
+            : '-'}
+      </Descriptions.Item>
+    </Descriptions>
+  );
+
+  if (!taskDataSource) return null;
+
   return (
     <>
       {contextHolder}
-
       <DndContext onDragEnd={onDragEnd}>
         <SortableContext
           items={taskDataSource.map((i) => i?.id || '')}
           strategy={verticalListSortingStrategy}
         >
           <Table
-            components={{
-              body: {
-                row: DataRow
-              }
-            }}
-            rowKey={(record) => record?.id as string}
-            columns={columns as []}
-            dataSource={taskDataSource}
+            components={{ body: { row: DataRow } }}
+            rowKey="id"
+            columns={columns}
+            dataSource={taskDataSource as []}
+            expandable={{ expandedRowRender }}
             bordered
             pagination={{ pageSize: 50 }}
           />

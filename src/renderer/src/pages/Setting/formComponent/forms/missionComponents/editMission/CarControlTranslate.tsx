@@ -1,19 +1,28 @@
 import { useTranslation } from 'react-i18next';
+import { Action_Type } from './forkEditMissionSlice/types';
 
-const CarControlTranslate = ({ word }: { word: string | undefined }) => {
+const CarControlTranslate = ({ word }: { word: Action_Type }) => {
   const { t } = useTranslation();
 
   switch (word) {
-    case '移動':
+    case 'move':
       return <>{t('car_control_translate.move')}</>;
-    case '取貨':
+    case 'load':
       return <>{t('car_control_translate.load')}</>;
-    case '放貨':
+    case 'offload':
       return <>{t('car_control_translate.offload')}</>;
-    case '充電':
+    case 'spin':
+      return t('car_control_translate.S');
+    case 'charge':
       return <>{t('car_control_translate.charge')}</>;
-    case '貨高限制':
+    case 'cargo_limit':
       return <>{t('car_control_translate.cargo_limit')}</>;
+    case 'load_from_other':
+      return t('car_control_translate.load_from_other');
+
+    case 'offload_from_other':
+      return t('car_control_translate.offload_from_other');
+
     default:
       return <>{word}</>;
   }

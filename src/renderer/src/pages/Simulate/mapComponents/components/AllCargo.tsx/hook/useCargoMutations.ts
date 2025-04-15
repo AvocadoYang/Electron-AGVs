@@ -11,14 +11,13 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
     mutationFn: (editValue: CargoMissionEdit) => client.post('api/setting/edit-loc', editValue),
     onSuccess: async () => {
       await Promise.all([
-        queryClient.refetchQueries({ queryKey: ['all-pallet'] }),
         queryClient.refetchQueries({ queryKey: ['cargoLoc-mission'] }),
         queryClient.refetchQueries({ queryKey: ['locations'] }),
         queryClient.refetchQueries({ queryKey: ['shelf'] })
       ]);
     },
     onError: (error: Err) => {
-      void messageApi.error(error.response?.data?.msg || 'Edit failed');
+      void messageApi.error(error.response?.data?.message || 'Edit failed');
     }
   });
 
@@ -34,7 +33,7 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
       ]);
     },
     onError: (error: Err) => {
-      void messageApi.error(error.response?.data?.msg || 'Edit column failed');
+      void messageApi.error(error.response?.data?.message || 'Edit column failed');
     }
   });
 

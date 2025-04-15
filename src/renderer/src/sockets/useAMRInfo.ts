@@ -533,7 +533,7 @@ export const useAMR = (amrId: string) => {
   const [pose, setPose] = useState<Pose>();
   const [originPose, setOriginPose] = useState<Pose>();
   const [data, setData] = useState<FleetInfoData>(initialValue);
-  // const [palletErrorCount, setPalletErrorCount] = useState(0);
+
   useEffect(() => {
     const profile$ = profiles$.pipe(
       map((p) => p.find((x) => x.amrId === amrId)),

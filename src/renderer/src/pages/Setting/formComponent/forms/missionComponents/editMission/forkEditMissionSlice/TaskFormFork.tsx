@@ -10,7 +10,6 @@ import {
   Select_Location_Type
 } from './types';
 import { controlList } from './params';
-import SubmitButton from '@renderer/utils/SubmitButton';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import { Err } from '@renderer/utils/responseErr';
@@ -23,10 +22,26 @@ enum YawGenre {
   CALCULATE_BY_AGV_AND_SHELF_ANGLE
 }
 
+type Form_Value = {
+  action_type: string;
+  control: string[];
+  wait: number;
+  is_define_id: 'custom' | 'select';
+  locationId: string;
+  is_define_yaw: YawGenre;
+  yaw: number;
+  fork_height_select: 'custom' | 'select';
+  height: number;
+  active_wait_amr: 'enable' | 'disable';
+  waitOtherAmr: string;
+  wait_genre: string;
+};
+
 const TaskFormFork: FC<{
   editTaskKey: string;
   selectedMissionCar: string;
-}> = ({ editTaskKey, selectedMissionCar }) => {
+  selectedMissionKey: string;
+}> = ({ editTaskKey, selectedMissionCar, selectedMissionKey }) => {
   const {
     robotOption,
     locationsOption,
@@ -48,10 +63,10 @@ const TaskFormFork: FC<{
   const [selectForkHeight, setSelectForkHeight] = useState<Select_Fork_Height_Type>();
   const [otherSpecial, setOtherSpecial] = useState(false);
   const [selectActiveWaitRobot, setSelectActiveWaitRobot] = useState<Select_Active_Robot_Type>();
-
+  const [submittable, setSubmittable] = useState<boolean>(false);
   const { t } = useTranslation();
   const [form] = Form.useForm();
-
+  const values = Form.useWatch([], form);
   const isIncludeSpin = controlClickOrder.map((v) => v.split('-')[0]).includes('S');
   const isIncludeH = controlClickOrder.map((v) => v.split('-')[0]).includes('H');
 
@@ -95,8 +110,14 @@ const TaskFormFork: FC<{
       ...payload,
       action_type: actionState,
       control: controlClickOrder,
-      id: editTaskKey
+      id: editTaskKey,
+      missionTitleId: selectedMissionKey
     };
+
+    if (controlClickOrder.length === 0) {
+      messageApi.warning(t('mission.task_table.control_warn'));
+      return;
+    }
     // console.log(newPayload);
     editMutation.mutate(newPayload);
   };
@@ -145,10 +166,41 @@ const TaskFormFork: FC<{
     }
   }, [otherSpecial]);
 
+  useEffect(() => {
+    const value = form.getFieldsValue() as Form_Value;
+
+    if (controlClickOrder.length === 0) {
+      setSubmittable(false);
+      return;
+    }
+
+    if (controlClickOrder.includes('W')) {
+      if (value.wait <= 0) {
+        setSubmittable(false);
+        return;
+      }
+    }
+
+    if (value.is_define_id === 'custom' && value.locationId === '0') {
+      setSubmittable(false);
+      return;
+    }
+
+    // 等車demo
+    if (value?.active_wait_amr && value.active_wait_amr === 'enable') {
+      if (!value.waitOtherAmr || !value.wait_genre) {
+        setSubmittable(false);
+        return;
+      }
+    }
+
+    setSubmittable(true);
+  }, [form, values]);
+
   return (
     <>
       {contextHolder}
-      <Form form={form} autoComplete="off" size="small" variant="underlined">
+      <Form form={form} autoComplete="off" size="large" variant="underlined" onFinish={onFinish}>
         <Flex gap="large" justify="space-between">
           <Form.Item label={t('mission.task_table_human_robot.action')} name="action_type">
             <Segmented
@@ -250,7 +302,11 @@ const TaskFormFork: FC<{
         )}
 
         {selectLocationType === 'custom' && actionState !== 'spin' ? (
-          <Form.Item label={t('mission.task_table.location')} name="locationId">
+          <Form.Item
+            label={t('mission.task_table.location')}
+            name="locationId"
+            rules={[{ required: false }]}
+          >
             <Select style={{ width: 210 }} options={locationsOption} />
           </Form.Item>
         ) : (
@@ -267,7 +323,7 @@ const TaskFormFork: FC<{
 
         {selectYaw === YawGenre.CUSTOM && isIncludeSpin ? (
           <Form.Item label={t('mission.task_table.yaw')} name="yaw">
-            <InputNumber min={1} placeholder="1" />
+            <InputNumber />
           </Form.Item>
         ) : (
           []
@@ -332,7 +388,11 @@ const TaskFormFork: FC<{
         )}
 
         <Flex align="center" justify="center">
-          <SubmitButton onOk={onFinish} isModel={false} form={form} text="save" />
+          <Form.Item>
+            <Button disabled={!submittable} variant="text" htmlType="submit">
+              {t('utils.save')}
+            </Button>
+          </Form.Item>
         </Flex>
       </Form>
     </>

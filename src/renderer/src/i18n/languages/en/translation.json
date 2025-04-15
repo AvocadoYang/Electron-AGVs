@@ -31,6 +31,7 @@
     "fail": "Fail",
     "submit": "Submit",
     "add": "Add",
+    "select": "please select",
     "error": "Error",
     "active": "Active",
     "inactive": "Inactive",
@@ -137,6 +138,11 @@
         "edit_yaw": "Shelves Yaw",
         "edit_pallet": "Edit Pallet"
       }
+    },
+    "amr_setting": {
+      "robot": "robot",
+      "register_amr": "Register Robot",
+      "amr_config": "Robot Config"
     },
     "mission": {
       "mission": "Mission",
@@ -279,6 +285,8 @@
   "shelf": {
     "shelf": "Shelf",
     "cargo_mission": {
+      "default_title": "Task related parameter settings",
+      "enter_name": "Enter a place name",
       "location_name": "Location Name",
       "region_name": "Region Name",
       "load_mission": "Load Mission",
@@ -286,6 +294,8 @@
       "yaw": "Yaw"
     },
     "layer_form": {
+      "layers": "Individual floor settings",
+      "enter_level_name": "Enter the level name",
       "mission": "Mission",
       "level": "Level",
       "column_name": "Column Name",
@@ -344,6 +354,17 @@
     "type": "Type",
     "color": "Color",
     "name_warn": "name is required"
+  },
+  "setting_amr": {
+    "register_amr": {
+      "title_name": "Register AMR",
+      "amr_name": "amr name",
+      "type": "type",
+      "serial_number": " MAC address",
+      "invalid_serial_number": "invalid serial number",
+      "executing": "using",
+      "stale": "not in use"
+    }
   },
 
   "charge": {
@@ -455,6 +476,7 @@
       "location_required_warn": "location is required"
     },
     "task_table": {
+      "expand": "expand",
       "sort": "Order",
       "status": "Status",
       "active": "Active",
@@ -463,7 +485,8 @@
       "wait": "Wait Time (seconds)",
       "is_custom_location": "Custom Location?",
       "custom": "Custom",
-      "auto": "Automatic",
+      "select": "Auto",
+      "default": "Default",
       "is_selectable": "Selectable for Quick Assignment",
       "available_charge_station": "available charge station",
       "location": "Location",
@@ -489,7 +512,8 @@
       "normal": "Normal",
       "other_special": "other special movement",
       "special_movement_info": "Most of the time this function is not needed, it is mainly used to exchange goods between two vehicles.",
-      "spin_warn": "If the action is a rotation, the action type must have S"
+      "spin_warn": "If the action is a rotation, the action type must have S",
+      "control_warn": "control at least select one "
     },
 
     "task_table_human_robot": {
@@ -518,7 +542,8 @@
       "full_warn": "full battery rate is required",
       "full_less_than_aggressive": "full rate can not less than aggressive",
       "available_warn": "some field is not insert yet, please check again",
-      "available_less_than_aggressive": "available get mission can not less than aggressive"
+      "available_less_than_aggressive": "available get mission can not less than aggressive",
+      "haventSetChargeMission": "haven't set charge mission"
     },
 
     "cycle_mission": {
@@ -653,12 +678,12 @@
         "input": "Input",
         "auto_shift_cargo": "Auto Shift Cargo",
         "shift_location": "Shift location",
-        "shift_speed": "Shift speed"
+        "shift_speed": "Shift speed (millisecond)"
       },
       "output": {
         "output": "Output",
         "cargo_number": "Cargo Number",
-        "speed": "Out cargo speed",
+        "speed": "Out cargo speed (millisecond)",
         "specify_car": "Specify car",
         "placement": "Placement"
       }
@@ -668,6 +693,8 @@
       "expand": "expand",
       "current": "Current Script",
       "name": "Name",
+      "source": "Source",
+      "target": "Target",
       "select_locations": "Map select locations",
       "edit_info": "Edit Mission Info",
       "location": "Location",

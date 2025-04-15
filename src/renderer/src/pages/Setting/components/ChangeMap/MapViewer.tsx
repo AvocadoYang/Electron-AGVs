@@ -78,7 +78,7 @@ const MapViewer: FC = () => {
   useEffect(() => {
     if (!data || !selectId) return;
 
-    const target = data.data.find((v) => v.id === selectId);
+    const target = data.find((v) => v.id === selectId);
 
     if (!target) return;
 
@@ -87,12 +87,12 @@ const MapViewer: FC = () => {
     form.setFieldValue('mapOriginX', target.mapOriginX);
     form.setFieldValue('mapOriginY', target.mapOriginY);
   }, [form, selectId, data]);
-  if (!data || data.data.length === 0) return <NoImageFound />;
+  if (!data || data.length === 0) return <NoImageFound />;
   return (
     <>
       {contextHolders}
       <Carousel arrows infinite={false} className="carousel">
-        {data?.data.map((v) => {
+        {data.map((v) => {
           return (
             <ShowImageContainer
               url={`https://${location.host.split(':')[0]}:4000/static/images/${v.fileName}`}

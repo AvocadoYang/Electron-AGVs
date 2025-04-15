@@ -5,7 +5,6 @@ import {
   Flex,
   Button,
   Drawer,
-  Badge,
   Modal,
   Divider,
   Typography,
@@ -18,7 +17,7 @@ import {
 import '../components/component.css';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
   CarOutlined,
   CheckCircleOutlined,
@@ -39,10 +38,11 @@ const { Header: AntdHeader } = Layout;
 const { Title, Text } = Typography;
 
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isDark] = useAtom(darkMode);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [canSim, setCanSim] = useState(false);
   const [isSimulateOpen, setIsSimulateOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hintAmrId, setHintAmrId] = useAtom(AmrFilterCarCard);
@@ -108,6 +108,28 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     }
   };
 
+  const handleChineseItemClick = (value: string) => {
+    // eslint-disable-next-line no-void
+
+    if (value === 'en') {
+      void i18n.changeLanguage('en');
+    } else {
+      void i18n.changeLanguage('tw');
+    }
+  };
+
+  useEffect(() => {
+    if (!script) return;
+    const inUseAmr = script.robot?.filter((v) => v.script_placement_location !== 'unset');
+
+    if (inUseAmr?.length !== 0) {
+      setCanSim(true);
+      return;
+    }
+
+    setCanSim(false);
+  }, [script]);
+
   return (
     <>
       {contextHolder}
@@ -129,7 +151,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               <Select
                 defaultValue="ch.tw"
                 style={{ width: 120 }}
-                onChange={() => console.log(123)}
+                onChange={(e) => console.log(e)}
                 options={[
                   { value: 'en', label: 'English' },
                   { value: 'ch.tw', label: 'Chinese' }
@@ -166,7 +188,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               className="custom-menu"
             />
             <Flex gap="middle" align="center" justify="center" style={{ marginRight: '10px' }}>
-              <Badge count={3} className={`alert-icon`} onClick={() => setIsModalOpen(true)}>
+              {/* <Badge count={3} className={`alert-icon`} onClick={() => setIsModalOpen(true)}>
                 <svg
                   onClick={() => {
                     // setOpenErrorWrap(!openErrorWrap);
@@ -185,7 +207,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                     d="M6,4V11H4C2.89,11 2,11.89 2,13V17A3,3 0 0,0 5,20A3,3 0 0,0 8,17H10A3,3 0 0,0 13,20A3,3 0 0,0 16,17V13L12,4H6M17,5V19H22V17.5H18.5V5H17M7.5,5.5H11.2L14.5,13H7.5V5.5M5,15.5A1.5,1.5 0 0,1 6.5,17A1.5,1.5 0 0,1 5,18.5A1.5,1.5 0 0,1 3.5,17A1.5,1.5 0 0,1 5,15.5M13,15.5A1.5,1.5 0 0,1 14.5,17A1.5,1.5 0 0,1 13,18.5A1.5,1.5 0 0,1 11.5,17A1.5,1.5 0 0,1 13,15.5Z"
                   />
                 </svg>
-              </Badge>
+              </Badge> */}
 
               {script?.isSimulate ? (
                 <Tooltip title={t('header.inactive_sim')}>
@@ -224,7 +246,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               <Select
                 defaultValue="ch.tw"
                 style={{ width: 120 }}
-                onChange={() => console.log(123)}
+                onChange={(e) => handleChineseItemClick(e)}
                 options={[
                   { value: 'en', label: 'English' },
                   { value: 'ch.tw', label: 'Chinese' }
@@ -287,10 +309,11 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <Text strong style={{ display: 'block', marginBottom: '8px' }}>
             {t('header.in_use_robot')}
           </Text>
-          {script?.robot && script.robot.length > 0 ? (
+          {script?.robot &&
+          script.robot.filter((v) => v.script_placement_location !== 'unset').length > 0 ? (
             <List
               size="small"
-              dataSource={script.robot}
+              dataSource={script.robot.filter((r) => r.script_placement_location !== 'unset')}
               renderItem={(robot) => (
                 <List.Item style={{ padding: '8px 0', borderBottom: 'none' }}>
                   <Text>
@@ -318,11 +341,12 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         {/* Action Buttons */}
         <Space style={{ display: 'flex', justifyContent: 'center' }}>
           <Button
+            disabled={!canSim}
             type="primary"
             icon={<CheckCircleOutlined />}
             onClick={() => handleSim()}
             style={{
-              background: '#1d39c4',
+              background: canSim ? '#1d39c4' : '#fff',
               borderColor: '#1d39c4',
               borderRadius: '4px',
               padding: '0 24px'

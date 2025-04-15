@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { message, Spin, Tooltip } from 'antd';
 import useMap from '@renderer/api/useMap';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import useScriptRobot from '@renderer/api/useScriptRobot';
 import { errorHandler, rvizCoord } from '@renderer/utils/utils';
@@ -11,6 +11,8 @@ import { EditFormType } from './amr';
 import AmrForm from './AmrForm';
 import { findClosestLocation } from '../../utils/funcs';
 import { ErrorResponse } from '@renderer/utils/globalType';
+import { useAtomValue } from 'jotai';
+import { globalScale } from '../../utils/mapStatus';
 
 const AMR_FORK_WIDTH = 1.4; // meter
 const AMR_FORK_HEIGHT = 2; // meter
@@ -61,20 +63,20 @@ const AmrIcon: FC<{
   id: string;
   amrId: string;
   color: string;
-  scale: number;
   mapRef: RefObject<HTMLDivElement>;
   mapWrapRef: RefObject<HTMLDivElement>;
   placement: string;
   left: number | null;
   top: number | null;
-}> = ({ amrId, color, id, mapRef, mapWrapRef, scale, placement, left, top }) => {
+}> = ({ amrId, color, id, mapRef, mapWrapRef, placement, left, top }) => {
   const { data: map } = useMap();
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const { data: robot, refetch } = useScriptRobot();
   const ref = useRef<HTMLDivElement | null>(null);
-
+  const scale = useAtomValue(globalScale);
+  const queryClient = useQueryClient();
   const handleSetRobot = () => {
     setIsOpen(true);
   };
@@ -87,6 +89,7 @@ const AmrIcon: FC<{
       refetch();
       void messageApi.success(t('utils.success'));
       setIsOpen(false);
+      queryClient.refetchQueries({ queryKey: ['mock-robot'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -102,6 +105,7 @@ const AmrIcon: FC<{
         return;
       }
       handlePlacement(result.locationId);
+      queryClient.refetchQueries({ queryKey: ['mock-robot'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -123,10 +127,18 @@ const AmrIcon: FC<{
     if (!map || !mapRef.current || !mapWrapRef.current) return;
 
     const { clientX, clientY } = event;
-    const mapRect = mapRef.current.getBoundingClientRect();
+    const Left = mapWrapRef.current.scrollLeft;
+    const Top = mapWrapRef.current.scrollTop;
 
-    const adjustX = clientX - mapRect.left;
-    const adjustY = clientY - mapRect.top;
+    const adjustX = clientX - mapRef.current.offsetLeft + Left;
+    const adjustY = clientY - mapRef.current.offsetTop + Top;
+
+    // console.log(`
+    //   mapref offleft: ${mapRef.current.offsetLeft} \n
+    //   mapRef offTop: ${mapRef.current.offsetTop} \n
+    //   wrap left: ${Left} \n
+    //   wrap top: ${Top}
+    // `);
 
     const [rx, ry] = rvizCoord({
       displayX: adjustX / scale,
@@ -137,6 +149,8 @@ const AmrIcon: FC<{
       mapHeight: map.mapHeight,
       scaleSize: scale
     });
+
+    // console.log(rx, ry);
 
     const closestLocationId = findClosestLocation(rx, ry, map);
 

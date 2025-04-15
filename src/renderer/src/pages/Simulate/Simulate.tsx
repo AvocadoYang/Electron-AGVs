@@ -2,7 +2,7 @@ import Header from '@renderer/components/Header';
 import { Layout } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import MapView from './mapComponents/MapView';
-import { FC, useRef, useState } from 'react';
+import { FC, useRef } from 'react';
 import ZoomPad from './components/ZoomPad';
 import MapTitle from './mapComponents/components/MapTitle';
 import ZoneItemTable from './mapComponents/components/ZoneItemTable';
@@ -13,7 +13,6 @@ import IdleRobotPanel from './components/AMR/IdleRobotPanel';
 import SelectScript from './components/SelectScript';
 
 const Simulate: FC = () => {
-  const [scale, setScale] = useState(1);
   const { isMobile } = useIsMobile();
   const mapRef = useRef(null);
   const mapWrapRef = useRef(null);
@@ -33,7 +32,7 @@ const Simulate: FC = () => {
             draggable={false}
             ref={mapWrapRef}
           >
-            <MapView mapRef={mapRef} mapWrapRef={mapWrapRef} scale={scale} />
+            <MapView mapRef={mapRef} mapWrapRef={mapWrapRef} />
           </div>
 
           {/* 選取模擬的名稱會漂浮在地圖右上 */}
@@ -46,8 +45,8 @@ const Simulate: FC = () => {
           <SelectScript />
 
           {/* 左側未放置到地圖的車輛表 */}
-          <IdleRobotPanel mapRef={mapRef} mapWrapRef={mapWrapRef} scale={scale} />
-          <ZoomPad setScale={setScale}></ZoomPad>
+          <IdleRobotPanel mapRef={mapRef} mapWrapRef={mapWrapRef} />
+          <ZoomPad></ZoomPad>
         </Layout>
       </Content>
     </Layout>

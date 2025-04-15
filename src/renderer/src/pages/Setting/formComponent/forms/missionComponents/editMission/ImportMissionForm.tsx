@@ -1,5 +1,5 @@
 import client from '@renderer/api/axiosClient';
-import useAllMissionTitles from '@renderer/api/useMissionTitle';
+import useAllMissionTitlesDetail from '@renderer/api/useMissionTitleDetail';
 import { isFork, isHumanRobot } from '@renderer/utils/globalFunction';
 import { Err } from '@renderer/utils/responseErr';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -25,7 +25,7 @@ const ImportMissionForm: FC<{
   const [formImportMission] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
-  const { data } = useAllMissionTitles();
+  const { data } = useAllMissionTitlesDetail();
   const { t } = useTranslation();
   const importMutation = useMutation({
     mutationFn: (payload: ImportTask) => {

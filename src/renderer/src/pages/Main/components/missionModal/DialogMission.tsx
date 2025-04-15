@@ -73,8 +73,8 @@ const DialogMission = () => {
   const submit = () => {
     if (!data) return;
     const payload = missionForm.getFieldsValue() as MissionFrom;
-    const { amrId, titleId, priority } = payload;
-    if (!amrId || !titleId || !priority) {
+    const { titleId, priority } = payload;
+    if (!titleId || !priority) {
       void messageApi.error('尚未完成選項');
       return;
     }

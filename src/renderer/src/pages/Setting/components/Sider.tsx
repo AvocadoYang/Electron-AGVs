@@ -14,7 +14,6 @@ import {
   EditShelfPanelSwitch,
   EditShelfCategoryPanelSwitch,
   EditShelfYawPanelSwitch,
-  EditPalletSwitch,
   showAllZonesSwitch,
   showZonesTableSwitch,
   isShowEditMission,
@@ -29,7 +28,9 @@ import {
   isShowEditWarningId,
   isShowEditBackup,
   isOpenUploadWarningIDModal,
-  isOpenSwitchMap
+  isOpenSwitchMap,
+  isShowRegisterAMR,
+  isShowAMRConfig
 } from '@renderer/utils/siderGloble';
 import {
   AimOutlined,
@@ -40,7 +41,8 @@ import {
   ScheduleOutlined,
   FileOutlined,
   DeliveredProcedureOutlined,
-  RedoOutlined
+  RedoOutlined,
+  CarOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import type { MenuProps } from 'antd';
@@ -78,49 +80,51 @@ const Sider: React.FC<{
   const { data } = useMap();
   const queryClient = useQueryClient();
 
-  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch); // 1-1
-  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch); // 1-2
+  const [openEditLocationPanel, setOpenEditLocationPanel] = useAtom(EditLocationPanelSwitch);
+  const [quickEditLocationPanel, setQuickEditLocationPanel] = useAtom(QuickEditLocationPanelSwitch);
   const [showAllLocationListTable, setShowAllLocationListTable] = useAtom(
     EditLocationListTableSwitch
-  ); // 1-4
+  );
 
-  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch); // 2-1
-  const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch); // 2-2
+  const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch);
+  const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch);
 
-  const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch); // 3-1
-  const [showAllZones, setShowAllZones] = useAtom(showAllZonesSwitch); // 3-2
-  const [showZonesTable, setShowZonesTable] = useAtom(showZonesTableSwitch); // 3-3
+  const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch);
+  const [showAllZones, setShowAllZones] = useAtom(showAllZonesSwitch);
+  const [showZonesTable, setShowZonesTable] = useAtom(showZonesTableSwitch);
 
-  const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch); //4-1
-  const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch); //4-2
-  const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch); //4-3
-  const [openPalletTable, setOpenPalletTable] = useAtom(EditPalletSwitch); //4-4
+  const [openEditShelfPanel, setOpenEditShelf] = useAtom(EditShelfPanelSwitch);
+  const [openEditShelfCategory, setOpenEditShelfCategory] = useAtom(EditShelfCategoryPanelSwitch);
+  const [openYawTable, setOpenYawTable] = useAtom(EditShelfYawPanelSwitch);
 
-  const [openMissionPanel, setOpenMissionPanel] = useAtom(isShowEditMission); // 5-1
-  const [openChargeMissionPanel, setOpenChargeMissionPanel] = useAtom(isShowEditChargeMission); // 5-2
-  const [openCycleMissionPanel, setOpenCycleMissionPanel] = useAtom(isShowEditCycleMission); // 5-3
+  const [openMissionPanel, setOpenMissionPanel] = useAtom(isShowEditMission);
+  const [openChargeMissionPanel, setOpenChargeMissionPanel] = useAtom(isShowEditChargeMission);
+  const [openCycleMissionPanel, setOpenCycleMissionPanel] = useAtom(isShowEditCycleMission);
   const [openBeforeLeftStationMissionPanel, setOpenBeforeLeftStationMissionPanel] = useAtom(
     isShowEditBeforeLeftChargeStationMission
-  ); // 5-4
+  );
   const [openScheduleMissionPanel, setOpenScheduleMissionPanel] =
-    useAtom(isShowEditScheduleMission); // 5-5
-  const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission); // 5-6
-  const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission); // 5-7
+    useAtom(isShowEditScheduleMission);
+  const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission);
+  const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission);
 
-  const [openTagMissionPanel, setOpenTagMissionPanel] = useAtom(isShowEditMissionTag); // 6-1
+  const [openRegisterAMR, setOpenRegisterAMR] = useAtom(isShowRegisterAMR);
+  const [openAMRConfig, setOpenAMRConfig] = useAtom(isShowAMRConfig);
+
+  const [openTagMissionPanel, setOpenTagMissionPanel] = useAtom(isShowEditMissionTag);
   const [openEditChargeStationIconPanel, setOpenEditChargeStationIconPanel] = useAtom(
     isShowEditChargeStationPosition
-  ); // 6-2
+  );
 
-  const [openWarningId, setOpenWarningId] = useAtom(isShowEditWarningId); // 7-1
+  const [openWarningId, setOpenWarningId] = useAtom(isShowEditWarningId);
   const [OpenUploadWarningIDModal, setOpenUploadWarningIDModal] = useAtom(
     isOpenUploadWarningIDModal
-  ); //7-2
-  const [openBackup, setOpenBackup] = useAtom(isShowEditBackup); // 7-3
+  );
+  const [openBackup, setOpenBackup] = useAtom(isShowEditBackup);
 
-  const setOpenSwitchMap = useSetAtom(isOpenSwitchMap); // 8-4
+  const setOpenSwitchMap = useSetAtom(isOpenSwitchMap);
 
-  const setShowLocationToolTip = useSetAtom(isShowLocationTooltip); //地點tooltip
+  const setShowLocationToolTip = useSetAtom(isShowLocationTooltip);
   const [collapsed, setCollapsed] = useState(true);
   const { t } = useTranslation();
   useEffect(() => {
@@ -135,7 +139,6 @@ const Sider: React.FC<{
       openEditShelfPanel,
       openEditShelfCategory,
       openYawTable,
-      openPalletTable,
       openMissionPanel,
       openChargeMissionPanel,
       openCycleMissionPanel,
@@ -145,6 +148,8 @@ const Sider: React.FC<{
       openTopicMissionPanel,
       openTagMissionPanel,
       openEditChargeStationIconPanel,
+      openRegisterAMR,
+      openAMRConfig,
       openWarningId,
       openBackup
     ].some((item) => item);
@@ -161,7 +166,6 @@ const Sider: React.FC<{
     openEditShelfPanel,
     openEditShelfCategory,
     openYawTable,
-    openPalletTable,
     openMissionPanel,
     openChargeMissionPanel,
     openCycleMissionPanel,
@@ -171,6 +175,8 @@ const Sider: React.FC<{
     openTopicMissionPanel,
     openTagMissionPanel,
     openEditChargeStationIconPanel,
+    openRegisterAMR,
+    openAMRConfig,
     openWarningId,
     openBackup
   ]);
@@ -228,10 +234,6 @@ const Sider: React.FC<{
         setOpenYawTable(check);
         break;
 
-      case 'edit_pallet':
-        setOpenPalletTable(check);
-        break;
-
       // ===================
 
       // ===================
@@ -265,7 +267,15 @@ const Sider: React.FC<{
         setOpenTopicMissionPanel(check);
         break;
       // ===================
+      // ===================
+      // === amr robot ===
 
+      case 'edit_register_amr':
+        setOpenRegisterAMR(check);
+        break;
+      case 'edit_amr_config':
+        setOpenAMRConfig(check);
+        break;
       // ===================
       // === others ===
       // case 'edit_gauge':
@@ -305,7 +315,10 @@ const Sider: React.FC<{
       getItem(
         t('toolbar.location.quick_edit_locations'),
         '1-2',
-        <Switch onChange={(checked) => handleShowPanel(checked, 'quick_location_panel')} />
+        <Switch
+          onChange={(checked) => handleShowPanel(checked, 'quick_location_panel')}
+          checked={quickEditLocationPanel}
+        />
       ),
       getItem(
         t('toolbar.location.show_locations_table'),
@@ -338,13 +351,16 @@ const Sider: React.FC<{
       getItem(
         t('toolbar.zone.zones.edit_zone'),
         '3-1',
-        <Switch onChange={(checked) => handleShowPanel(checked, 'edit_zone')} />
+        <Switch
+          value={openEditZone}
+          onChange={(checked) => handleShowPanel(checked, 'edit_zone')}
+        />
       ),
       getItem(
         t('toolbar.zone.zones.show_zone_list'),
         '3-2',
         <Switch
-          defaultChecked={showAllZones}
+          value={showAllZones}
           onChange={(checked) => handleShowPanel(checked, 'show_zone_list')}
         />
       ),
@@ -352,7 +368,7 @@ const Sider: React.FC<{
         t('toolbar.zone.zones.show_zone_table'),
         '3-3',
         <Switch
-          defaultChecked={showZonesTable}
+          value={showZonesTable}
           onChange={(checked) => handleShowPanel(checked, 'show_zone_table')}
         />
       )
@@ -385,21 +401,39 @@ const Sider: React.FC<{
             checked={openYawTable}
             onChange={(checked) => handleShowPanel(checked, 'edit_yaw')}
           />
-        ),
-        getItem(
-          t('toolbar.shelve.shelves.edit_pallet'),
-          '4-4',
-          <Switch
-            checked={openPalletTable}
-            onChange={(checked) => handleShowPanel(checked, 'edit_pallet')}
-          />
         )
+        // getItem(
+        //   t('toolbar.shelve.shelves.edit_pallet'),
+        //   '4-4',
+        //   <Switch
+        //     checked={openPalletTable}
+        //     onChange={(checked) => handleShowPanel(checked, 'edit_pallet')}
+        //   />
+        // )
       ]
     ),
+    getItem(t('toolbar.amr_setting.robot'), '5', <CarOutlined />, [
+      getItem(
+        t('toolbar.amr_setting.register_amr'),
+        '5-1',
+        <Switch
+          checked={openRegisterAMR}
+          onChange={(checked) => handleShowPanel(checked, 'edit_register_amr')}
+        />
+      )
+      // getItem(
+      //   t('toolbar.amr_setting.amr_config'),
+      //   '5-2',
+      //   <Switch
+      //     checked={openAMRConfig}
+      //     onChange={(checked) => handleShowPanel(checked, 'edit_amr_config')}
+      //   />
+      // )
+    ]),
     getItem(t('toolbar.mission.mission'), '6', <ScheduleOutlined />, [
       getItem(
         t('toolbar.mission.edit_mission'),
-        '5-1',
+        '6-1',
         <Switch
           checked={openMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'edit_mission')}
@@ -408,7 +442,7 @@ const Sider: React.FC<{
 
       getItem(
         t('toolbar.mission.charge_mission'),
-        '5-2',
+        '6-2',
         <Switch
           checked={openChargeMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'charge_mission')}
@@ -417,7 +451,7 @@ const Sider: React.FC<{
 
       getItem(
         t('toolbar.mission.cycle_mission'),
-        '5-3',
+        '6-3',
         <Switch
           onChange={(checked) => handleShowPanel(checked, 'cycle_mission')}
           checked={openCycleMissionPanel}
@@ -426,7 +460,7 @@ const Sider: React.FC<{
 
       getItem(
         t('toolbar.mission.before_left_charge_station_mission'),
-        '5-4',
+        '6-4',
         <Switch
           onChange={(checked) => handleShowPanel(checked, 'before_left_charge_station_task')}
           checked={openBeforeLeftStationMissionPanel}
@@ -435,7 +469,7 @@ const Sider: React.FC<{
 
       getItem(
         t('toolbar.mission.schedule_mission'),
-        '5-5',
+        '6-5',
         <Switch
           defaultChecked={false}
           onChange={(checked) => handleShowPanel(checked, 'schedule_mission')}
@@ -445,7 +479,7 @@ const Sider: React.FC<{
 
       getItem(
         t('toolbar.mission.idle_mission'),
-        '5-6',
+        '6-6',
         <Switch
           checked={openIdleMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'idle_mission')}
@@ -454,7 +488,7 @@ const Sider: React.FC<{
 
       getItem(
         t('toolbar.mission.topic_mission'),
-        '5-7',
+        '6-7',
         <Switch
           checked={openTopicMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'topic_mission')}
@@ -464,7 +498,7 @@ const Sider: React.FC<{
     getItem(t('toolbar.others.others'), '7', <DeploymentUnitOutlined />, [
       getItem(
         t('toolbar.others.edit_tag'),
-        '6-1',
+        '7-1',
         <Switch
           checked={openTagMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'edit_tag')}
@@ -472,14 +506,13 @@ const Sider: React.FC<{
       ),
       getItem(
         t('toolbar.others.edit_charge_station_icon_style'),
-        '6-2',
+        '7-2',
         <Switch
           checked={openEditChargeStationIconPanel}
           onChange={(checked) => handleShowPanel(checked, 'edit_charge_station_icon_style')}
         />
       )
     ]),
-
     getItem(t('toolbar.file_setting.file_setting'), '8', <FileOutlined />, [
       getItem(
         t('toolbar.file_setting.warning_id'),

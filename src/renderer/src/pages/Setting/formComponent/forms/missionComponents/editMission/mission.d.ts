@@ -72,7 +72,7 @@ export interface Fork_mission_Slice {
     control: string[];
     wait: number;
     is_define_id: string;
-    id: number;
+    locationId: number;
     is_define_yaw: number;
     yaw: number;
     tolerance: number;

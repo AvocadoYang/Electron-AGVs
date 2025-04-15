@@ -25,7 +25,6 @@ import client from '@renderer/api/axiosClient';
 import ImportMissionForm from './ImportMissionForm';
 import { Robot_Mission_Slice_Table } from './mission';
 import { Err } from '@renderer/utils/responseErr';
-import CarControlTranslate from './CarControlTranslate';
 import useTaskHumanRobot from '@renderer/api/useTaskHumanRobot';
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
@@ -108,8 +107,11 @@ const HumanRobotTaskTable: FC<{
   const [importConfig, setImportConfig] = useState<{ order: number; key: string } | null>(null);
   const [showImportMission, setShowImportMission] = useState(false);
   const sortTaskMutation = useMutation({
-    mutationFn: (keyAndSort: { key: string; order: number }[]) => {
-      return client.post('api/setting/update-task-order', keyAndSort);
+    mutationFn: (data: {
+      keyAndSort: { key: string; order: number }[];
+      missionTitleId: string;
+    }) => {
+      return client.post('api/setting/update-task-order', data);
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
@@ -123,6 +125,7 @@ const HumanRobotTaskTable: FC<{
   const deleteTaskMutation = useMutation({
     mutationFn: (payload: { key: string; keyAndOrder: { key: string; order: number }[] }) => {
       return client.post('api/setting/delete-task', {
+        missionTitleId: selectedMissionKey,
         targetKey: payload.key,
         newOrder: payload.keyAndOrder
       });
@@ -180,7 +183,10 @@ const HumanRobotTaskTable: FC<{
 
       const keyAndSort = sorData.map((v) => ({ key: v.id as string, order: v.order }));
 
-      sortTaskMutation.mutate(keyAndSort);
+      sortTaskMutation.mutate({
+        keyAndSort,
+        missionTitleId: selectedMissionKey
+      });
 
       queryClient.setQueryData(['all-relate-task-human-robot', selectedMissionKey], sorData);
     }

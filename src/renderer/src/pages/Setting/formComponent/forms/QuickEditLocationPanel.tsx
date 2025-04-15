@@ -92,17 +92,6 @@ const QuickEditLocationPanel: React.FC<{
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  // const saveRoadMutation = useMutation({
-  //   mutationFn: (payload: Road[]) => {
-  //     return client.post('api/setting/save-edit-road-fastShelve', payload);
-  //   },
-  //   onSuccess: () => {
-  //     void messageApi.success('success');
-  //     queryClient.refetchQueries({ queryKey: ['map'] });
-  //   },
-  //   onError: (e: ErrorResponse) => errorHandler(e, messageApi)
-  // });
-
   const savePose = () => {
     if (!data) return false;
     if (!FL.length) return false;
@@ -315,7 +304,7 @@ const QuickEditLocationPanel: React.FC<{
               </Form.Item>
             </Flex>
             <Form.Item label={t('quick_edit_location_panel.dir_x')} name="dirX">
-              <Select options={selectDirX} defaultValue={'right'} />
+              <Select options={selectDirX} />
             </Form.Item>
             <Form.Item label={t('quick_edit_location_panel.dir_y')} name="dirY">
               <Select options={selectDirY} />

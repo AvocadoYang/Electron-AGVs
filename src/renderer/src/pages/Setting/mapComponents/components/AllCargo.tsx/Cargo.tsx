@@ -1,4 +1,3 @@
- 
 import { Form, message } from 'antd';
 import { FC, memo, useCallback, useState } from 'react';
 
@@ -37,12 +36,12 @@ const MemoizedCargo = memo(CargoDisplay, (prevProps, nextProps) => {
 });
 
 const Cargo: FC<{
-  locId: string
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
-  shelfInfo: Info | undefined
+  locId: string;
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
+  shelfInfo: Info | undefined;
 }> = ({ locId, translateX, translateY, rotate, scale, shelfInfo }) => {
   const [settingForm] = Form.useForm();
   const [layerForm] = Form.useForm();
@@ -81,9 +80,7 @@ const Cargo: FC<{
           const level = index;
           const nameLevel = cargo[level]?.levelName || '';
           const cargoValue = cargo[level]?.cargo.hasCargo || false;
-          const borderColor = (
-            cargo[level]?.pallet?.color !== null ? cargo[level]?.pallet?.color : '#c7c7c7'
-          ) as string;
+          const borderColor = '#c7c7c7';
 
           const isDisable = cargo[level]?.disable;
 

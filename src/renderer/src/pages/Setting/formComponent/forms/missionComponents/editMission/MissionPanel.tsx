@@ -6,12 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import useAMRsample from '@renderer/api/useAMRsample';
 import useCategory from '@renderer/api/useCategory';
-import useAllMissionTitles, { MTType } from '@renderer/api/useMissionTitle';
+import { MTType } from '@renderer/api/useMissionTitle';
 import client from '@renderer/api/axiosClient';
 import { MissionListType } from './mission';
 import FormHr from '@renderer/pages/Setting/utils/FormHr';
 import MissionForm from './MissionForm';
 import SwitchTable from './SwitchTable';
+import useAllMissionTitlesDetail from '@renderer/api/useMissionTitleDetail';
 
 const EditMissionPanel: FC<{
   sortableId: string;
@@ -28,7 +29,7 @@ const EditMissionPanel: FC<{
   const [editMissionKey, setEditMissionKey] = useState('');
   const [loadingTitle, setLoadingTitle] = useState(false);
   const { data: amrs } = useAMRsample();
-  const { data: allMissionTitle, refetch } = useAllMissionTitles();
+  const { data: allMissionTitle, refetch } = useAllMissionTitlesDetail();
   const { data: cat } = useCategory();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -44,7 +45,7 @@ const EditMissionPanel: FC<{
     (newMission: MissionListType) => client.post('api/setting/add-mission-title', newMission),
     {
       onSuccess: async () => {
-        await queryClient.refetchQueries({ queryKey: ['all-mission-title'] });
+        await queryClient.refetchQueries({ queryKey: ['all-mission-title-detail'] });
       }
     }
   );

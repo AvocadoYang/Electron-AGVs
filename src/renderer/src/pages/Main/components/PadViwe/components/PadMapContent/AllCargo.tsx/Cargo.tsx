@@ -61,9 +61,7 @@ const Cargo: FC<{
           const level = index;
           const nameLevel = cargo[level]?.levelName || '';
           const cargoValue = cargo[level]?.cargo.hasCargo || false;
-          const borderColor = (
-            cargo[level]?.pallet?.color !== null ? cargo[level]?.pallet?.color : '#c7c7c7'
-          ) as string;
+          const borderColor = '#c7c7c7';
 
           const isDisable = cargo[level]?.disable;
 

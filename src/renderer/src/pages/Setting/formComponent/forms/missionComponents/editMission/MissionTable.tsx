@@ -45,7 +45,7 @@ const MissionTable: FC<{
     },
     onSuccess: async () => {
       await queryClient.refetchQueries({
-        queryKey: ['all-mission-title']
+        queryKey: ['all-mission-title-detail']
       });
       await queryClient.refetchQueries({
         queryKey: ['all-relate-task']
