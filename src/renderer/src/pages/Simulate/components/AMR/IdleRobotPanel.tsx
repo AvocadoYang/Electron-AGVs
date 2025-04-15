@@ -62,10 +62,9 @@ const AmrIconStyled = styled(AmrIcon)`
 `;
 
 const IdleRobotPanel: FC<{
-  scale: number;
   mapRef: RefObject<HTMLDivElement>;
   mapWrapRef: RefObject<HTMLDivElement>;
-}> = ({ scale, mapRef, mapWrapRef }) => {
+}> = ({ mapRef, mapWrapRef }) => {
   const { data: robot, refetch } = useScriptRobot();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
@@ -115,7 +114,6 @@ const IdleRobotPanel: FC<{
                       color={amrId2Color(v?.id as string)}
                       mapRef={mapRef}
                       mapWrapRef={mapWrapRef}
-                      scale={scale}
                       left={null}
                       top={null}
                       placement={v?.script_placement_location as string}

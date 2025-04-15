@@ -420,15 +420,15 @@ const Sider: React.FC<{
           checked={openRegisterAMR}
           onChange={(checked) => handleShowPanel(checked, 'edit_register_amr')}
         />
-      ),
-      getItem(
-        t('toolbar.amr_setting.amr_config'),
-        '5-2',
-        <Switch
-          checked={openAMRConfig}
-          onChange={(checked) => handleShowPanel(checked, 'edit_amr_config')}
-        />
       )
+      // getItem(
+      //   t('toolbar.amr_setting.amr_config'),
+      //   '5-2',
+      //   <Switch
+      //     checked={openAMRConfig}
+      //     onChange={(checked) => handleShowPanel(checked, 'edit_amr_config')}
+      //   />
+      // )
     ]),
     getItem(t('toolbar.mission.mission'), '6', <ScheduleOutlined />, [
       getItem(

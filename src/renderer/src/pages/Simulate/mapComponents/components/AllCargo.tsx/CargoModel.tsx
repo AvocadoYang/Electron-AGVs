@@ -1,4 +1,4 @@
-import { Button, Form, message, Modal, Tabs, TabsProps } from 'antd';
+import { Button, Form, message, Modal, Popconfirm, Tabs, TabsProps } from 'antd';
 import { useTranslation } from 'react-i18next';
 import OutputFrom from './OutputFrom';
 import InputFrom from './InputFrom';
@@ -61,19 +61,6 @@ const StyledTabs = styled(Tabs)`
   }
 `;
 
-const SaveButton = styled(Button)`
-  background: #1890ff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 20px;
-  transition: all 0.3s ease;
-  &:hover {
-    background: #40a9ff;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
-  }
-`;
-
 const CreateButton = styled(Button)`
   background: #52c41a;
   border: none;
@@ -109,6 +96,18 @@ const CargoModel: FC = () => {
   const createMutation = useMutation({
     mutationFn: (payload: { locationId: string | null }) =>
       client.post('api/simulate/create-location-info', payload),
+    onSuccess: () => {
+      void messageApi.success(t('utils.success'));
+      setTempOutputFormData(null);
+      setTempInputFormData(null);
+      refetchInfo();
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (payload: { locationId: string | null }) =>
+      client.post('api/simulate/delete-location-info', payload),
     onSuccess: () => {
       void messageApi.success(t('utils.success'));
       setTempOutputFormData(null);
@@ -170,6 +169,10 @@ const CargoModel: FC = () => {
     createMutation.mutate({ locationId: selectLocation });
   };
 
+  const handleDelete = () => {
+    deleteMutation.mutate({ locationId: selectLocation });
+  };
+
   const items: TabsProps['items'] = [
     {
       key: '1',
@@ -199,9 +202,21 @@ const CargoModel: FC = () => {
         onCancel={handleCancel}
         footer={
           isLocInfoCreated ? (
-            <SaveButton onClick={handleOk} icon={<SaveOutlined />}>
-              {t('utils.save')}
-            </SaveButton>
+            <>
+              <Popconfirm
+                title={t('utils.delete')}
+                description={t('utils.delete_warn')}
+                onConfirm={() => handleDelete()}
+                okText={t('utils.yes')}
+                cancelText={t('utils.no')}
+              >
+                <Button danger>{t('utils.delete')}</Button>
+              </Popconfirm>
+
+              <Button type="primary" onClick={handleOk} icon={<SaveOutlined />}>
+                {t('utils.save')}
+              </Button>
+            </>
           ) : null
         }
         transitionName="ant-fade"

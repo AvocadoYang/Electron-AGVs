@@ -5,7 +5,6 @@ import {
   Flex,
   Button,
   Drawer,
-  Badge,
   Modal,
   Divider,
   Typography,
@@ -18,7 +17,7 @@ import {
 import '../components/component.css';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
   CarOutlined,
   CheckCircleOutlined,
@@ -43,6 +42,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const navigate = useNavigate();
   const [isDark] = useAtom(darkMode);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [canSim, setCanSim] = useState(false);
   const [isSimulateOpen, setIsSimulateOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hintAmrId, setHintAmrId] = useAtom(AmrFilterCarCard);
@@ -117,6 +117,18 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       void i18n.changeLanguage('tw');
     }
   };
+
+  useEffect(() => {
+    if (!script) return;
+    const inUseAmr = script.robot?.filter((v) => v.script_placement_location !== 'unset');
+
+    if (inUseAmr?.length !== 0) {
+      setCanSim(true);
+      return;
+    }
+
+    setCanSim(false);
+  }, [script]);
 
   return (
     <>
@@ -297,10 +309,11 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
           <Text strong style={{ display: 'block', marginBottom: '8px' }}>
             {t('header.in_use_robot')}
           </Text>
-          {script?.robot && script.robot.length > 0 ? (
+          {script?.robot &&
+          script.robot.filter((v) => v.script_placement_location !== 'unset').length > 0 ? (
             <List
               size="small"
-              dataSource={script.robot}
+              dataSource={script.robot.filter((r) => r.script_placement_location !== 'unset')}
               renderItem={(robot) => (
                 <List.Item style={{ padding: '8px 0', borderBottom: 'none' }}>
                   <Text>
@@ -328,11 +341,12 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         {/* Action Buttons */}
         <Space style={{ display: 'flex', justifyContent: 'center' }}>
           <Button
+            disabled={!canSim}
             type="primary"
             icon={<CheckCircleOutlined />}
             onClick={() => handleSim()}
             style={{
-              background: '#1d39c4',
+              background: canSim ? '#1d39c4' : '#fff',
               borderColor: '#1d39c4',
               borderRadius: '4px',
               padding: '0 24px'

@@ -167,7 +167,7 @@ const RegisterForm: FC<{
         <Form.Item>
           <Flex gap="middle">
             {isEdit ? (
-              <Button onClick={handleCancel} disabled={submittable} type="default">
+              <Button onClick={handleCancel} type="default">
                 {t('utils.cancel')}
               </Button>
             ) : (

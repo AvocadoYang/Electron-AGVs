@@ -678,12 +678,12 @@
         "input": "Input",
         "auto_shift_cargo": "Auto Shift Cargo",
         "shift_location": "Shift location",
-        "shift_speed": "Shift speed"
+        "shift_speed": "Shift speed (millisecond)"
       },
       "output": {
         "output": "Output",
         "cargo_number": "Cargo Number",
-        "speed": "Out cargo speed",
+        "speed": "Out cargo speed (millisecond)",
         "specify_car": "Specify car",
         "placement": "Placement"
       }
@@ -693,6 +693,8 @@
       "expand": "expand",
       "current": "Current Script",
       "name": "Name",
+      "source": "Source",
+      "target": "Target",
       "select_locations": "Map select locations",
       "edit_info": "Edit Mission Info",
       "location": "Location",

@@ -677,12 +677,12 @@
         "input": "入貨",
         "auto_shift_cargo": "自動轉出貨",
         "shift_location": "轉出位置",
-        "shift_speed": "轉出速度"
+        "shift_speed": "轉出速度 (毫秒 millisecond)"
       },
       "output": {
         "output": "出貨",
         "cargo_number": "貨物數量",
-        "speed": "出貨速度",
+        "speed": "出貨速度 (毫秒 millisecond)",
         "specify_car": "指定車輛",
         "placement": "放置位置"
       }
@@ -696,6 +696,8 @@
       "edit_info": "編輯任務資料",
       "location": "地點",
       "none": "不指定",
+      "source": "未指定點位",
+      "target": "已指定點位",
       "not_info_yet": "尚未設定此地點屬性",
       "haven't_set_default": "尚未設定任何模擬任務",
       "do_you_want_to_create_one": "必須創建新的任務模擬才能使用",

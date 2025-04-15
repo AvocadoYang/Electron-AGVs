@@ -5,10 +5,9 @@ import { amrId2Color, rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import useMap from '@renderer/api/useMap';
 
 const AllInMapAMRs: FC<{
-  scale: number;
   mapRef: RefObject<HTMLDivElement>;
   mapWrapRef: RefObject<HTMLDivElement>;
-}> = ({ mapRef, mapWrapRef, scale }) => {
+}> = ({ mapRef, mapWrapRef }) => {
   const { data: robot } = useScriptRobot();
   const { data: map } = useMap();
   if (!map) return null;
@@ -38,7 +37,6 @@ const AllInMapAMRs: FC<{
               id={b?.id as string}
               mapRef={mapRef}
               mapWrapRef={mapWrapRef}
-              scale={scale}
               left={left - 6}
               top={top - 5}
               placement={b?.script_placement_location as string}

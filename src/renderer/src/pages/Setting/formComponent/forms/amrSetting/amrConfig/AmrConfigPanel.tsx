@@ -19,7 +19,7 @@ const AmrConfigPanel: FC<{
         <FormHr />
 
         <Flex gap="middle" justify="flex-start" align="start" vertical>
-          <></>
+          <>暫時可能先不做此功能 以後在搞</>
         </Flex>
       </div>
     </>
