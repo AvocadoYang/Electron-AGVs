@@ -127,19 +127,10 @@ const AmrIcon: FC<{
     if (!map || !mapRef.current || !mapWrapRef.current) return;
 
     const { clientX, clientY } = event;
-    const Left = mapWrapRef.current.scrollLeft;
-    const Top = mapWrapRef.current.scrollTop;
+    const mapRect = mapRef.current.getBoundingClientRect();
 
-    const adjustX = clientX - mapRef.current.offsetLeft + Left;
-    const adjustY = clientY - mapRef.current.offsetTop + Top;
-
-    // console.log(`
-    //   mapref offleft: ${mapRef.current.offsetLeft} \n
-    //   mapRef offTop: ${mapRef.current.offsetTop} \n
-    //   wrap left: ${Left} \n
-    //   wrap top: ${Top}
-    // `);
-
+    const adjustX = clientX - mapRect.left;
+    const adjustY = clientY - mapRect.top;
     const [rx, ry] = rvizCoord({
       displayX: adjustX / scale,
       displayY: adjustY / scale,
