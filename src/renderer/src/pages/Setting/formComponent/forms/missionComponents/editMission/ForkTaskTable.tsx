@@ -83,7 +83,7 @@ const ForkTaskTable: FC<{
   const { t } = useTranslation();
   const [importConfig, setImportConfig] = useState<{ order: number; key: string } | null>(null);
   const [showImportMission, setShowImportMission] = useState(false);
-
+  console.log(taskDataSource);
   const sortTaskMutation = useMutation({
     mutationFn: (data: { keyAndSort: { key: string; order: number }[]; missionTitleId: string }) =>
       client.post('api/setting/update-task-order', data),
@@ -226,12 +226,22 @@ const ForkTaskTable: FC<{
 
   const expandedRowRender = (record: Fork_mission_Slice) => (
     <Descriptions bordered column={2} size="small">
+      {/* control */}
       <Descriptions.Item label={t('mission.task_table.action')}>
         {JSON.stringify(record.operation.control) || '-'}
       </Descriptions.Item>
+
+      {/* control */}
+      <Descriptions.Item label={t('mission.task_table.location')}>
+        {JSON.stringify(record.operation.locationId) || '-'}
+      </Descriptions.Item>
+
+      {/* 等待 wait */}
       <Descriptions.Item label={t('mission.task_table.wait')}>
         {record.operation.wait ?? '-'}
       </Descriptions.Item>
+
+      {/* 位置選擇模式 is define id */}
       <Descriptions.Item label={t('mission.task_table.is_custom_location')}>
         {record.operation.is_define_id === 'custom'
           ? t('mission.task_table.custom')
@@ -243,6 +253,11 @@ const ForkTaskTable: FC<{
                 ? t('mission.task_table.available_charge_station')
                 : '-'}
       </Descriptions.Item>
+
+      <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
+      <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
+
+      {/* 轉角選擇	 is defined yaw*/}
       <Descriptions.Item label={t('mission.task_table.is_custom_yaw')}>
         {record.operation.is_define_yaw === 0
           ? t('mission.task_table.custom')
@@ -252,12 +267,18 @@ const ForkTaskTable: FC<{
               ? t('mission.task_table.calculate_by_agv_and_shelf_angle')
               : '-'}
       </Descriptions.Item>
+
+      {/* yaw 轉角值	 */}
       <Descriptions.Item label={t('mission.task_table.yaw')}>
         {record.operation.yaw ?? '-'}
       </Descriptions.Item>
-      <Descriptions.Item label={t('mission.task_table.auto_preparatory_point')}>
+
+      {/* 小車專用	 */}
+      {/* <Descriptions.Item label={t('mission.task_table.auto_preparatory_point')}>
         {record.operation.auto_preparatory_point ? t('utils.yes') : t('utils.no')}
-      </Descriptions.Item>
+      </Descriptions.Item> */}
+
+      {/* is defined height 貨架高設定	 */}
       <Descriptions.Item label={t('mission.task_table.is_define_heigh')}>
         {record.io.fork.is_define_height === 'custom'
           ? t('mission.task_table.custom')
@@ -267,21 +288,42 @@ const ForkTaskTable: FC<{
               ? t('mission.task_table.is_selectable')
               : '-'}
       </Descriptions.Item>
+
+      {/* height 枒杈高	 */}
       <Descriptions.Item label={t('mission.task_table.height')}>
         {record.io.fork.height ?? '-'}
       </Descriptions.Item>
-      <Descriptions.Item label={t('mission.task_table.has_cargo_to_process')}>
+
+      {/* is defined height 貨架高設定	 */}
+      {/* <Descriptions.Item label={t('mission.task_table.has_cargo_to_process')}>
         {record.operation.hasCargoToProcess ? t('utils.yes') : t('utils.no')}
-      </Descriptions.Item>
+      </Descriptions.Item> */}
+
+      {/* 等待其他車 wait other	 */}
       <Descriptions.Item label={t('mission.task_table.amr_list')}>
         {record.operation.waitOtherAmr || '-'}
       </Descriptions.Item>
+
+      {/* 先等或是後等 wait genre	 */}
       <Descriptions.Item label={t('mission.task_table.wait_genre')}>
         {record.operation.waitGenre === 'first'
           ? t('mission.task_table.execute_first')
           : record.operation.waitGenre === 'second'
             ? t('mission.task_table.wait_other_finish')
             : '-'}
+      </Descriptions.Item>
+
+      <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
+      <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
+
+      {/* camera config 不知道這是啥問捷克 */}
+      <Descriptions.Item label={'camera config'}>
+        {record.io.camera.config || '-'}
+      </Descriptions.Item>
+
+      {/* camera modify_dis 不知道這是啥問捷克	 */}
+      <Descriptions.Item label={'camera modify dis'}>
+        {record.io.camera.modify_dis || '-'}
       </Descriptions.Item>
     </Descriptions>
   );

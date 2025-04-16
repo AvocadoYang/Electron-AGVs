@@ -1,4 +1,16 @@
-import { Button, Checkbox, Col, Flex, Form, message, Radio, Row, Space, Switch } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Col,
+  Flex,
+  Form,
+  message,
+  Radio,
+  Row,
+  Space,
+  Switch,
+  Typography
+} from 'antd';
 import { useTranslation } from 'react-i18next';
 import FormHr from '../utils/FormHr';
 import { useState } from 'react';
@@ -35,25 +47,32 @@ const QuickEditRoadPanel: React.FC<{
       return client.post('api/setting/save-quick-edit-road', payload);
     },
     onSuccess: () => {
-      void messageApi.success('success');
+      void messageApi.success(t('utils.success'));
       queryClient.refetchQueries({ queryKey: ['map'] });
       setQuickRoadArr([]);
       setQuickRoad(false);
+      form.resetFields();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
   const handleEditing = () => {
     setQuickRoad(!quickRoad);
+    if (quickRoad) {
+      setQuickRoadArr([]);
+    }
   };
 
   const submit = (formData: RoadFormData) => {
-    console.log(formData);
+    if (quickRoadArr.length < 2) {
+      void messageApi.error(t('quick_edit_road_panel.error_min_spots'));
+      return;
+    }
 
     const payload: RoadFormData = {
       ...formData,
-      disabled: formData.disabled === undefined ? false : true,
-      limit: formData.limit === undefined ? false : true,
+      disabled: formData.disabled ?? false,
+      limit: formData.limit ?? false,
       roadArr: quickRoadArr
     };
 
@@ -63,125 +82,140 @@ const QuickEditRoadPanel: React.FC<{
   return (
     <>
       {contextHolder}
-      <div style={{ width: '23em' }}>
-        <h3 className="drop_button_style" {...listeners} {...attributes}>
+      <div
+        style={{
+          width: '23em',
+          padding: '16px',
+          background: '#fff',
+          borderRadius: '8px',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        <h3
+          className="drop_button_style"
+          {...listeners}
+          {...attributes}
+          style={{
+            margin: 0,
+            padding: '8px 0',
+            cursor: 'grab',
+            fontSize: '16px',
+            color: '#1f1f1f'
+          }}
+        >
           {t('quick_edit_road_panel.title')}
         </h3>
-        <FormHr></FormHr>
-        <Form onFinish={submit} form={form} style={{ fontWeight: 'bold' }}>
-          <Form.Item label={t('edit_road_panel.road')} name="roadType" shouldUpdate>
+        <FormHr />
+        <Form
+          form={form}
+          onFinish={submit}
+          layout="vertical"
+          style={{ fontWeight: 'bold' }}
+          initialValues={{ roadType: 'oneWayRoad', disabled: false, limit: false }}
+        >
+          <Form.Item
+            name="roadType"
+            label={<Space>{t('edit_road_panel.road')}</Space>}
+            rules={[{ required: true, message: t('utils.required') }]}
+          >
             <Radio.Group buttonStyle="solid">
               <Radio.Button value="oneWayRoad">{t('edit_road_panel.single_road')}</Radio.Button>
               <Radio.Button value="twoWayRoad">{t('edit_road_panel.two_way_road')}</Radio.Button>
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item name="validYawList" label={t('edit_road_panel.yaw')} required>
-            <Checkbox.Group>
-              <Row>
-                <Col span={8}>
-                  <Checkbox
-                    value="*"
-                    disabled={
-                      chooseAngle === '0' ||
-                      chooseAngle === '90' ||
-                      chooseAngle === '180' ||
-                      chooseAngle === '270'
-                    }
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('*');
-                      } else {
-                        setChooseAngle('');
+          <Form.Item
+            name="validYawList"
+            label={<Space>{t('edit_road_panel.yaw')}</Space>}
+            rules={[{ required: true, message: t('utils.required') }]}
+          >
+            <Checkbox.Group style={{ width: '100%' }}>
+              <Row gutter={[8, 8]}>
+                {['*', '0', '90', '180', '270'].map((angle) => (
+                  <Col span={8} key={angle}>
+                    <Checkbox
+                      value={angle}
+                      disabled={
+                        (angle === '*' && ['0', '90', '180', '270'].includes(chooseAngle)) ||
+                        (angle !== '*' &&
+                          (chooseAngle === '*' ||
+                            (angle === '0' && ['270', '90'].includes(chooseAngle)) ||
+                            (angle === '90' && ['0', '180'].includes(chooseAngle)) ||
+                            (angle === '180' && ['90', '270'].includes(chooseAngle)) ||
+                            (angle === '270' && ['0', '180'].includes(chooseAngle))))
                       }
-                    }}
-                  >
-                    *
-                  </Checkbox>
-                </Col>
-                <Col span={8}>
-                  <Checkbox
-                    value="0"
-                    disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('0');
-                      } else {
-                        setChooseAngle('');
-                      }
-                    }}
-                  >
-                    0
-                  </Checkbox>
-                </Col>
-                <Col span={8}>
-                  <Checkbox
-                    value="90"
-                    disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('90');
-                      } else {
-                        setChooseAngle('');
-                      }
-                    }}
-                  >
-                    90
-                  </Checkbox>
-                </Col>
-                <Col span={13}>
-                  <Checkbox
-                    value="180"
-                    disabled={chooseAngle === '*' || chooseAngle === '270' || chooseAngle === '90'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('180');
-                      } else {
-                        setChooseAngle('');
-                      }
-                    }}
-                  >
-                    180
-                  </Checkbox>
-                </Col>
-                <Col span={8}>
-                  <Checkbox
-                    value="270"
-                    disabled={chooseAngle === '*' || chooseAngle === '0' || chooseAngle === '180'}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setChooseAngle('270');
-                      } else {
-                        setChooseAngle('');
-                      }
-                    }}
-                  >
-                    270
-                  </Checkbox>
-                </Col>
+                      onChange={(e) => {
+                        setChooseAngle(e.target.checked ? angle : '');
+                      }}
+                    >
+                      {angle}
+                    </Checkbox>
+                  </Col>
+                ))}
               </Row>
             </Checkbox.Group>
           </Form.Item>
 
-          <Space size={'large'} style={{ marginBottom: '15px', overflow: 'hidden' }}>
-            <Form.Item name="disabled" label={t('edit_road_panel.disabled')} shouldUpdate>
+          <Space size="large" style={{ marginBottom: '16px', width: '100%' }}>
+            <Form.Item
+              name="disabled"
+              label={t('edit_road_panel.disabled')}
+              valuePropName="checked"
+              tooltip={t('quick_edit_road_panel.disabled_tooltip')}
+            >
               <Switch />
             </Form.Item>
-
-            <Form.Item name="limit" label={t('edit_road_panel.limit')}>
+            <Form.Item
+              name="limit"
+              label={t('edit_road_panel.limit')}
+              valuePropName="checked"
+              tooltip={t('quick_edit_road_panel.limit_tooltip')}
+            >
               <Switch />
             </Form.Item>
           </Space>
 
           <Flex vertical gap="middle">
-            <Button onClick={() => handleEditing()}>start editing</Button>
-            {quickRoad ? 'please start click points to connect ' : []}
+            <Button
+              type={quickRoad ? 'default' : 'primary'}
+              onClick={handleEditing}
+              style={{ width: '100%' }}
+            >
+              {quickRoad
+                ? t('quick_edit_road_panel.stop_editing')
+                : t('quick_edit_road_panel.start_editing')}
+            </Button>
+            {quickRoad && (
+              <Typography.Text type="secondary">
+                {t('quick_edit_road_panel.click_points_prompt')}
+              </Typography.Text>
+            )}
+            {quickRoadArr.length > 0 && (
+              <Typography.Text>
+                {t('quick_edit_road_panel.selected_points')}: {quickRoadArr.join(' → ')}
+              </Typography.Text>
+            )}
+            {quickRoadArr.length > 0 && (
+              <Button
+                onClick={() => setQuickRoadArr([])}
+                style={{ width: '100%', marginTop: '8px' }}
+              >
+                {t('quick_edit_road_panel.clear_points')}
+              </Button>
+            )}
           </Flex>
 
-          {quickRoadArr.toString()}
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
+          <Form.Item style={{ marginTop: '16px' }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={saveRoadMutation.isLoading}
+              disabled={quickRoadArr.length < 2}
+              style={{ width: '100%' }}
+            >
+              {t('utils.submit')}
+            </Button>
+          </Form.Item>
         </Form>
       </div>
     </>

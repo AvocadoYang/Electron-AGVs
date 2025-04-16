@@ -199,7 +199,15 @@
   },
 
   "quick_edit_road_panel": {
-    "title": "Quick edit Road"
+    "title": "Quick Edit Path",
+    "disabled_tooltip": "After selecting, the vehicle cannot travel this path",
+    "limit_tooltip": "After a vehicle passes through, other vehicles can only take this path after the same vehicle has passed through it once",
+    "stop_editing": "Stop editing",
+    "start_editing": "Start editing",
+    "selected_points": "Selected points",
+    "click_points_prompt": "Click points on the map to connect them.",
+    "clear_points": "Reselect",
+    "error_min_spots": "at least two point"
   },
 
   "edit_location_panel": {
@@ -488,14 +496,14 @@
       "inactive": "Inactive",
       "action": "Action Type",
       "wait": "Wait Time (seconds)",
-      "is_custom_location": "Custom Location?",
+
       "custom": "Custom",
       "select": "Auto",
       "default": "Default",
       "is_selectable": "Selectable for Quick Assignment",
       "available_charge_station": "available charge station",
       "location": "Location",
-      "is_custom_yaw": "Yaw Option",
+
       "yaw": "Yaw",
       "auto_preparatory_point": "Automatic Preparatory Point",
       "is_define_heigh": "Fork Height Option",
@@ -518,7 +526,38 @@
       "other_special": "other special movement",
       "special_movement_info": "Most of the time this function is not needed, it is mainly used to exchange goods between two vehicles.",
       "spin_warn": "If the action is a rotation, the action type must have S",
-      "control_warn": "control at least select one "
+      "control_warn": "control at least select one ",
+      "is_define_height": "Forklift height mode",
+      "fork_height_tooltip": "Choose how to set the forklift height: 'Custom' allows you to enter a specific height, 'Auto' uses the shelf height in the quick task, 'Default' sets the height to 350mm.",
+      "fork_height_custom": "Custom (enter height)",
+      "fork_height_custom_desc": "Manually enter the forklift height in mm.",
+      "fork_height_select": "Automatic (use quick task's or mission control auto assign fork height)",
+      "fork_height_select_desc": "Automatically set forklift height to shelf height when using quick tasks.",
+      "fork_height_default": "Default (350 mm)",
+      "fork_height_default_desc": "Set forklift height to a fixed 350mm.",
+      "height_required": "Please enter the forklift height.",
+      "location_required": "Please select a location.",
+      "wait_other_amr_required": "Please select a robot to wait for.",
+      "wait_genre_required": "Please select a wait genre.",
+
+      "is_custom_location": "Location Selection Mode",
+      "location_tooltip": "Choose how to set the location: 'Custom' lets you enter a specific location ID, 'Auto' uses the location from a fast-mission, and 'Auto (Idle Charge Station)' finds an available charging station.",
+      "location_custom": "Custom (Enter Location ID)",
+      "location_custom_desc": "Manually select a location ID from the available options.",
+      "location_select": "Auto (Fast-Mission Location)",
+      "location_select_desc": "Automatically sets the location based on the fast-mission.",
+      "location_charge_station": "Auto (Idle Charge Station)",
+      "location_charge_station_desc": "Automatically finds an available charging station.",
+      "is_custom_yaw": "Yaw Selection Mode",
+      "yaw_tooltip": "Choose how to set the yaw: 'Custom' lets you enter a specific degree, 'Auto' uses the shelf direction from a fast-mission, and 'Auto (Calculate at Shelf)' calculates the yaw when the AMR reaches the shelf.",
+      "yaw_custom": "Custom (Enter Yaw Degree)",
+      "yaw_custom_desc": "Manually enter the yaw angle in degrees (0–360).",
+      "yaw_select": "Auto (Fast-Mission Shelf Direction)",
+      "yaw_select_desc": "Automatically sets the yaw to the target shelf's direction in a fast-mission.",
+      "yaw_calculate": "Auto (Calculate at Shelf)",
+      "yaw_calculate_desc": "Calculates the yaw when the AMR reaches the front of the target shelf.",
+      "yaw_required": "Please enter the yaw angle.",
+      "yaw_range": "Yaw must be between 0 and 360 degrees."
     },
 
     "task_table_human_robot": {

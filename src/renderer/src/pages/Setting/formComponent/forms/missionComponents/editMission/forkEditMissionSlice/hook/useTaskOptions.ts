@@ -1,5 +1,4 @@
 import { t } from 'i18next';
-
 import {
   activeWaitRobot,
   actonList,
@@ -17,14 +16,17 @@ import {
 import useMap from '@renderer/api/useMap';
 import useName from '@renderer/api/useAmrName';
 import { useMemo } from 'react';
+
 enum YawGenre {
   CUSTOM,
   SELECT,
   CALCULATE_BY_AGV_AND_SHELF_ANGLE
 }
+
 const useTaskOptions = () => {
   const { data: mapData } = useMap();
   const { data: robots } = useName();
+
   const actionTranslate = (type: Action_Type) => {
     let text = '';
     switch (type) {
@@ -95,17 +97,17 @@ const useTaskOptions = () => {
       switch (type) {
         case 'custom':
           return {
-            label: t('mission.task_table.custom'),
+            label: t('mission.task_table.location_custom'), // "Custom (Enter Location ID)"
             value: type
           };
         case 'select':
           return {
-            label: t('mission.task_table.select'),
+            label: t('mission.task_table.location_select'), // "Auto (Fast-Mission Location)"
             value: type
           };
         case 'available_charge_station':
           return {
-            label: t('mission.task_table.available_charge_station'),
+            label: t('mission.task_table.location_charge_station'), // "Auto (Idle Charge Station)"
             value: type
           };
         default:
@@ -120,17 +122,17 @@ const useTaskOptions = () => {
     switch (type) {
       case YawGenre.CUSTOM:
         return {
-          label: t('mission.task_table.custom'),
+          label: t('mission.task_table.yaw_custom'), // "Custom (Enter Yaw Degree)"
           value: type
         };
       case YawGenre.SELECT:
         return {
-          label: t('mission.task_table.select'),
+          label: t('mission.task_table.yaw_select'), // "Auto (Fast-Mission Shelf Direction)"
           value: type
         };
       case YawGenre.CALCULATE_BY_AGV_AND_SHELF_ANGLE:
         return {
-          label: t('mission.task_table.calculate_by_agv_and_shelf_angle'),
+          label: t('mission.task_table.yaw_calculate'), // "Auto (Calculate at Shelf)"
           value: type
         };
       default:
@@ -146,17 +148,17 @@ const useTaskOptions = () => {
       switch (type) {
         case 'custom':
           return {
-            label: t('mission.task_table.custom'),
+            label: t('mission.task_table.fork_height_custom'),
             value: type
           };
         case 'select':
           return {
-            label: t('mission.task_table.select'),
+            label: t('mission.task_table.fork_height_select'),
             value: type
           };
         case 'default':
           return {
-            label: t('mission.task_table.default'),
+            label: t('mission.task_table.fork_height_default'),
             value: type
           };
         default:
@@ -169,7 +171,7 @@ const useTaskOptions = () => {
 
   const SelectActiveWaitRobotOptions: { label: string; value: Select_Active_Robot_Type }[] =
     activeWaitRobot.map((type) => ({
-      label: type,
+      label: type === 'enable' ? t('mission.task_table.active') : t('mission.task_table.inactive'),
       value: type
     }));
 
