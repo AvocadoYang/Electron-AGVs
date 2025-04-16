@@ -160,9 +160,13 @@ const TaskFormFork: FC<{
         yaw: originFormData.operation.yaw,
         fork_height_select: originFormData.io?.fork?.is_define_height,
         height: originFormData.io?.fork?.height,
-        active_wait_amr: originFormData.operation.hasCargoToProcess ? 'enable' : 'disable',
+        active_wait_amr: originFormData.operation.waitGenre !== null ? 'enable' : 'disable',
         waitOtherAmr: originFormData.operation.waitOtherAmr,
-        wait_genre: originFormData.operation.waitGenre
+        wait_genre: originFormData.operation.waitGenre,
+        tolerance: originFormData.operation.tolerance,
+        lookahead: originFormData.operation.lookahead,
+        camera_config: originFormData.io?.camera?.config || 0,
+        modify_dis: originFormData.io?.camera?.modify_dis || 0
       });
     }
   }, [originFormData, form]);
@@ -444,6 +448,78 @@ const TaskFormFork: FC<{
           >
             <InputNumber min={1} placeholder="1" addonAfter="mm" />
           </Form.Item>
+        )}
+
+        {actionState === 'load' ? (
+          <>
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.camera_config')}</span>
+                  <Tooltip title={t('mission.task_table.camera_config')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="camera_config"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+            </Form.Item>
+
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.modify_dis')}</span>
+                  <Tooltip title={t('mission.task_table.modify_dis')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="modify_dis"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+            </Form.Item>
+          </>
+        ) : (
+          []
+        )}
+
+        {actionState === 'move' ? (
+          <>
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.tolerance')}</span>
+                  <Tooltip title={t('mission.task_table.tolerance')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="tolerance"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+            </Form.Item>
+
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.lookahead')}</span>
+                  <Tooltip title={t('mission.task_table.lookahead')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="lookahead"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+            </Form.Item>
+          </>
+        ) : (
+          []
         )}
 
         <Flex gap="middle" style={{ marginBottom: 24 }}>

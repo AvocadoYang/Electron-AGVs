@@ -83,7 +83,7 @@ const ForkTaskTable: FC<{
   const { t } = useTranslation();
   const [importConfig, setImportConfig] = useState<{ order: number; key: string } | null>(null);
   const [showImportMission, setShowImportMission] = useState(false);
-  console.log(taskDataSource);
+
   const sortTaskMutation = useMutation({
     mutationFn: (data: { keyAndSort: { key: string; order: number }[]; missionTitleId: string }) =>
       client.post('api/setting/update-task-order', data),
@@ -299,22 +299,18 @@ const ForkTaskTable: FC<{
         {record.operation.hasCargoToProcess ? t('utils.yes') : t('utils.no')}
       </Descriptions.Item> */}
 
-      {/* 等待其他車 wait other	 */}
-      <Descriptions.Item label={t('mission.task_table.amr_list')}>
-        {record.operation.waitOtherAmr || '-'}
-      </Descriptions.Item>
-
-      {/* 先等或是後等 wait genre	 */}
-      <Descriptions.Item label={t('mission.task_table.wait_genre')}>
-        {record.operation.waitGenre === 'first'
-          ? t('mission.task_table.execute_first')
-          : record.operation.waitGenre === 'second'
-            ? t('mission.task_table.wait_other_finish')
-            : '-'}
-      </Descriptions.Item>
-
       <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
       <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
+
+      {/* tolerance 不知道這是啥問捷克 */}
+      <Descriptions.Item label={t('mission.task_table.tolerance')}>
+        {record.operation.tolerance || '-'}
+      </Descriptions.Item>
+
+      {/* lookahead 不知道這是啥問捷克	 */}
+      <Descriptions.Item label={t('mission.task_table.lookahead')}>
+        {record.operation.lookahead || '-'}
+      </Descriptions.Item>
 
       {/* camera config 不知道這是啥問捷克 */}
       <Descriptions.Item label={'camera config'}>
@@ -324,6 +320,23 @@ const ForkTaskTable: FC<{
       {/* camera modify_dis 不知道這是啥問捷克	 */}
       <Descriptions.Item label={'camera modify dis'}>
         {record.io.camera.modify_dis || '-'}
+      </Descriptions.Item>
+
+      <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
+      <Descriptions.Item label={''}>{'-'}</Descriptions.Item>
+
+      {/* 等待其他車 wait other	 */}
+      <Descriptions.Item label={t('mission.task_table.amr_list')}>
+        {record.operation.waitOtherAmr || '-'}
+      </Descriptions.Item>
+
+      {/* 先等或是後等 wait genre	 */}
+      <Descriptions.Item label={t('mission.task_table.wait_genre')}>
+        {record.operation.waitGenre === 'execute_first'
+          ? t('mission.task_table.execute_first')
+          : record.operation.waitGenre === 'wait_other_finish'
+            ? t('mission.task_table.wait_other_finish')
+            : '-'}
       </Descriptions.Item>
     </Descriptions>
   );

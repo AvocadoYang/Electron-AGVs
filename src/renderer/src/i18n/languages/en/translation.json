@@ -508,6 +508,12 @@
       "auto_preparatory_point": "Automatic Preparatory Point",
       "is_define_heigh": "Fork Height Option",
       "height": "Height",
+
+      "tolerance": "tolerance",
+      "lookahead": "lookahead",
+      "camera_config": "camera config",
+      "modify_dis": "modify dis",
+
       "by_target_shelf_setting": "by target shelf setting",
       "calculate_by_agv_and_shelf_angle": "calculate by agv shelf angle",
       "has_cargo_to_process": "Shelf Status",

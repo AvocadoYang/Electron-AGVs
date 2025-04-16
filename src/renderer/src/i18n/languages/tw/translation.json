@@ -506,6 +506,12 @@
       "auto_preparatory_point": "自動預備點",
       "is_define_heigh": "枒杈高度選項",
       "height": "高度",
+
+      "tolerance": "tolerance",
+      "lookahead": "lookahead",
+      "camera_config": "相機參數",
+      "modify_dis": "modify dis",
+
       "by_target_shelf_setting": "帶入貨架設定值",
       "calculate_by_agv_and_shelf_angle": "由交管計算車輛與目標地點夾角",
       "has_cargo_to_process": "貨架狀態",
