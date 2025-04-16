@@ -18,15 +18,7 @@ const schema = object({
     yaw: number().optional(),
     tolerance: number().optional(),
     lookahead: number().optional(),
-    roughly_pass: boolean().optional(),
-    from: number().optional(),
-    to: number().optional(),
-    hasCargoToProcess: boolean().optional(),
-    max_forward: number().optional(),
-    min_forward: number().optional(),
-    max_backward: number().optional(),
-    min_backward: number().optional(),
-    auto_preparatory_point: boolean().optional(),
+
     waitOtherAmr: string().optional().nullable(),
     waitGenre: string().optional().nullable()
   }).required('Operation object is required'),

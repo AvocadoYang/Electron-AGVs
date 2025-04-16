@@ -17,14 +17,7 @@ const missionSchema = array(
       yaw: number().required('Yaw value is required'),
       tolerance: number().required('Tolerance is required'),
       lookahead: number().required('Lookahead is required'),
-      roughly_pass: boolean().required('Roughly pass flag is required'),
-      from: number().required('From position is required'),
-      to: number().required('To position is required'),
-      hasCargoToProcess: boolean().required('Cargo process flag is required'),
-      max_forward: number().required('Max forward speed is required'),
-      min_forward: number().required('Min forward speed is required'),
-      max_backward: number().required('Max backward speed is required'),
-      min_backward: number().required('Min backward speed is required'),
+
       waitOtherAmr: string().optional().nullable(),
       waitGenre: string().optional().nullable(),
       auto_preparatory_point: boolean().required('Preparatory point flag is required')

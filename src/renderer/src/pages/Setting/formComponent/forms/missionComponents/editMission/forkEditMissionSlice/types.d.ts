@@ -18,14 +18,6 @@ export type Fork_Action = {
     yaw: number;
     tolerance: number;
     lookahead: number;
-    roughly_pass: boolean;
-    from: number;
-    to: number;
-    hasCargoToProcess: boolean;
-    max_forward: number;
-    min_forward: number;
-    max_backward: number;
-    min_backward: number;
 
     waitOtherAmr: string;
     waitGenre: string;
