@@ -31,6 +31,7 @@ import {
   isShowEditWarningId,
   isShowRegisterAMR,
   QuickEditLocationPanelSwitch,
+  QuickEditRoadSwitch,
   RoadListTableSwitch,
   showZonesTableSwitch
 } from '@renderer/utils/siderGloble';
@@ -55,6 +56,7 @@ import { EditWarningListPanel } from '../formComponent/forms/file/warningId';
 import { BackupPanel } from '../formComponent/forms/file/backup';
 import { RegisterAmrPanel } from '../formComponent/forms/amrSetting/registerAmr';
 import AmrConfigPanel from '../formComponent/forms/amrSetting/amrConfig/AmrConfigPanel';
+import QuickEditRoadPanel from '../formComponent/QuickEditRoadPanel';
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType;
@@ -134,6 +136,20 @@ const SortableWrap: FC<{
                 <RoadList sortableId={sortableId} attributes={attributes} listeners={listeners} />
               </Card>
             );
+
+          // 2-3 顯示快速拉路線
+          case 'quick_road_panel':
+            return (
+              <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <FormCloseBtn sortableId={sortableId} panelName="quick_road_panel" />
+                <QuickEditRoadPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            );
+
           // 3-1 編輯區域
           case 'edit_zone':
             return (
@@ -361,6 +377,8 @@ const ToolComponents: FC<{
   const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch);
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch);
   const showRoadList = useAtomValue(RoadListTableSwitch);
+  const showQuickEditRoad = useAtomValue(QuickEditRoadSwitch);
+
   const openZonePanel = useAtomValue(EditZoneSwitch);
   const openZoneTable = useAtomValue(showZonesTableSwitch);
   const openEditShelf = useAtomValue(EditShelfPanelSwitch);
@@ -423,6 +441,16 @@ const ToolComponents: FC<{
       );
     }
     if (formKey === 'show_roads_table' && showRoadList) {
+      return (
+        <SortableWrap
+          sortableId={formKey}
+          key={formKey}
+          locationPanelForm={locationPanelForm}
+          roadPanelForm={roadPanelForm}
+        ></SortableWrap>
+      );
+    }
+    if (formKey === 'quick_road_panel' && showQuickEditRoad) {
       return (
         <SortableWrap
           sortableId={formKey}

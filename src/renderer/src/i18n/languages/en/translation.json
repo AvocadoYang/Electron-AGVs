@@ -119,7 +119,8 @@
         "edit_roads": "Edit Roads",
         "show_in_use_roads": "Show stored Roads",
         "show_edit_roads": "Show Edit Locations",
-        "show_roads_table": "Show Roads Table"
+        "show_roads_table": "Show Roads Table",
+        "quick_edit_road": "Quick Edit Road"
       }
     },
     "zone": {
@@ -195,6 +196,10 @@
       "is_a_navigate": "Location ID can't be a negative number or zero",
       "duplicate_id": "ID is duplicated with existing ID"
     }
+  },
+
+  "quick_edit_road_panel": {
+    "title": "Quick edit Road"
   },
 
   "edit_location_panel": {

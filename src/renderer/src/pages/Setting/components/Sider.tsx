@@ -30,7 +30,8 @@ import {
   isOpenUploadWarningIDModal,
   isOpenSwitchMap,
   isShowRegisterAMR,
-  isShowAMRConfig
+  isShowAMRConfig,
+  QuickEditRoadSwitch
 } from '@renderer/utils/siderGloble';
 import {
   AimOutlined,
@@ -88,6 +89,7 @@ const Sider: React.FC<{
 
   const [openEditRoadPanel, setOpenEditRoadPanel] = useAtom(EditRoadPanelSwitch);
   const [showAllRoadListTable, setShowAllRoadListTable] = useAtom(RoadListTableSwitch);
+  const [quickEditRoad, setQuickEditRoadPanel] = useAtom(QuickEditRoadSwitch);
 
   const [openEditZone, setOpenEditZone] = useAtom(EditZoneSwitch);
   const [showAllZones, setShowAllZones] = useAtom(showAllZonesSwitch);
@@ -151,7 +153,8 @@ const Sider: React.FC<{
       openRegisterAMR,
       openAMRConfig,
       openWarningId,
-      openBackup
+      openBackup,
+      quickEditRoad
     ].some((item) => item);
 
     setHasOpenTool(isOpen);
@@ -178,7 +181,8 @@ const Sider: React.FC<{
     openRegisterAMR,
     openAMRConfig,
     openWarningId,
-    openBackup
+    openBackup,
+    quickEditRoad
   ]);
 
   const handleShowPanel = async (check: boolean, itemType: ToolBarItemType) => {
@@ -204,7 +208,9 @@ const Sider: React.FC<{
       case 'show_roads_table':
         setShowAllRoadListTable(check);
         break;
-
+      case 'quick_road_panel':
+        setQuickEditRoadPanel(check);
+        break;
       // ===================
 
       // === zone ===
@@ -340,10 +346,18 @@ const Sider: React.FC<{
       ),
       getItem(
         t('toolbar.road.roads.show_roads_table'),
-        '2-4',
+        '2-2',
         <Switch
           checked={showAllRoadListTable}
           onChange={(checked) => handleShowPanel(checked, 'show_roads_table')}
+        />
+      ),
+      getItem(
+        t('toolbar.road.roads.quick_edit_road'),
+        '2-3',
+        <Switch
+          checked={quickEditRoad}
+          onChange={(checked) => handleShowPanel(checked, 'quick_road_panel')}
         />
       )
     ]),

@@ -7,6 +7,7 @@ import { draggableLineInitialPoint } from '@renderer/pages/Setting/hooks/hook';
 import { Point, DraggableLine } from './components/PointAndLine';
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/utils/siderGloble';
+import { IsEditingQuickRoads, QuickRoadsArray } from '@renderer/pages/Setting/utils/settingJotai';
 
 const AllLocation: FC<{
   setInitPoint: React.Dispatch<draggableLineInitialPoint>;
@@ -17,6 +18,14 @@ const AllLocation: FC<{
   const setTooltip = useSetAtom(tooltipProp);
   const { data } = useMap();
   const openEditZone = useAtomValue(EditZoneSwitch);
+  const quickRoad = useAtomValue(IsEditingQuickRoads);
+  const setQuickRoadArr = useSetAtom(QuickRoadsArray);
+
+  const handleQuickRoad = (locationId: string) => {
+    if (!quickRoad) return;
+
+    setQuickRoadArr((prev) => [...prev, locationId]);
+  };
 
   const handleEnter = useCallback((locationId: string, x: number, y: number) => {
     setTooltip({
@@ -60,6 +69,7 @@ const AllLocation: FC<{
                 left={displayX}
                 top={displayY}
                 key={nanoid()}
+                onClick={() => handleQuickRoad(loc.locationId)}
                 onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
                 onMouseLeave={() => handleLeave()}
                 onMouseDown={(e) => {
