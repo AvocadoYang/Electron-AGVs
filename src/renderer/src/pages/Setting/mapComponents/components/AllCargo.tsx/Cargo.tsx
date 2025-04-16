@@ -7,9 +7,10 @@ import { useCargoMutations } from './hook/useCargoMutations';
 import CargoDisplay from './CargoDisplay';
 import CargoModal from './CargoModal';
 import { Info } from '@renderer/sockets/useCargoInfo';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble';
 import { LoadingStation } from './LoadingStation';
+import { IsEditingQuickRoads, QuickRoadsArray } from '@renderer/pages/Setting/utils/settingJotai';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -51,8 +52,27 @@ const Cargo: FC<{
   const openEditZone = useAtomValue(EditZoneSwitch);
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch);
   const [isEditLayer, setIsEditLayer] = useState(false);
-
   const { editColumnMutation } = useCargoMutations(messageApi);
+
+  const quickRoad = useAtomValue(IsEditingQuickRoads);
+  const setQuickRoadArr = useSetAtom(QuickRoadsArray);
+
+  const handleQuickRoad = (locationId: string) => {
+    if (!quickRoad) return;
+
+    setQuickRoadArr((prev) => [...prev, locationId]);
+  };
+
+  const handleCargo = () => {
+    if (quickRoad) {
+      handleQuickRoad(locId);
+      return;
+    }
+
+    if (openEditRoadPanel || openEditZone) return;
+    setIsEditModalOpen(true);
+  };
+
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>, targetId: string, targetLevel: number) => {
       if (event.button !== 1) return;
@@ -71,8 +91,7 @@ const Cargo: FC<{
         scale={scale}
         rotate={rotate}
         onClick={() => {
-          if (openEditRoadPanel || openEditZone) return;
-          setIsEditModalOpen(true);
+          handleCargo();
         }}
       >
         {' '}

@@ -15,6 +15,9 @@ export const EditRoadPanelSwitch = atom<boolean>(false);
 /** 2-2 顯示所有路徑表單 */
 export const RoadListTableSwitch = atom<boolean>(false);
 
+/** 2-3 顯示快速拉路線表單 */
+export const QuickEditRoadSwitch = atom<boolean>(false);
+
 /** 3-1 編輯區域開關 */
 export const EditZoneSwitch = atom<boolean>(false);
 

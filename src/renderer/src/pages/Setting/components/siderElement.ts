@@ -8,6 +8,7 @@ export const formList = [
   // === road ===
   { key: 'road_panel' },
   { key: 'show_roads_table' },
+  { key: 'quick_road_panel' },
   // ===================
   // === zone ===
   { key: 'edit_zone' },

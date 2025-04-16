@@ -25,7 +25,8 @@ import {
   isShowEditChargeStationPosition,
   isShowEditWarningId,
   isOpenUploadWarningIDModal,
-  isShowEditBackup
+  isShowEditBackup,
+  QuickEditRoadSwitch
 } from '@renderer/utils/siderGloble';
 import { ToolBarItemType } from '../components/siderElement';
 
@@ -35,6 +36,7 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
   const setShowAllLocationListTable = useSetAtom(EditLocationListTableSwitch); // 1-4
   const setOpenEditRoadPanel = useSetAtom(EditRoadPanelSwitch); // 2-1
   const setShowAllRoadListTable = useSetAtom(RoadListTableSwitch); // 2-2
+  const setQuickEditRoadPanel = useSetAtom(QuickEditRoadSwitch); // 2-3
 
   const setOpenEditZone = useSetAtom(EditZoneSwitch); // 3-1
   const setShowAllZones = useSetAtom(showAllZonesSwitch); // 3-2
@@ -73,6 +75,9 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
         break;
       case 'show_roads_table':
         setShowAllRoadListTable(false);
+        break;
+      case 'quick_road_panel':
+        setQuickEditRoadPanel(false);
         break;
       case 'edit_zone':
         setOpenEditZone(false);
@@ -130,7 +135,6 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
         setOpenBackup(false);
         break;
       case 'edit_amr_config':
-      case 'edit_amr_cargo_info':
       case 'shelf_mission':
       case 'todo_dependent_on_return_id_task':
       case 'edit_region_name':

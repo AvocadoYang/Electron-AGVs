@@ -116,7 +116,8 @@
         "edit_roads": "編輯路徑",
         "show_in_use_roads": "顯示現有路徑",
         "show_edit_roads": "顯示編輯中路徑",
-        "show_roads_table": "顯示路徑表"
+        "show_roads_table": "顯示路徑表",
+        "quick_edit_road": "快速編輯路徑"
       }
     },
     "zone": {
@@ -192,6 +193,10 @@
       "is_a_navigate": "存在負值點位,ID不可為負值或0",
       "duplicate_id": "點位ID與現存ID重複"
     }
+  },
+
+  "quick_edit_road_panel": {
+    "title": "快速編輯路徑"
   },
 
   "edit_location_panel": {

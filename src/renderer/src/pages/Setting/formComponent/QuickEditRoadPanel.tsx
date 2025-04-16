@@ -1,75 +1,74 @@
-import {
-  Button,
-  Checkbox,
-  Col,
-  Form,
-  FormInstance,
-  InputNumber,
-  message,
-  Radio,
-  Row,
-  Space,
-  Switch
-} from 'antd';
+import { Button, Checkbox, Col, Flex, Form, message, Radio, Row, Space, Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { SaveOutlined } from '@ant-design/icons';
-import { memo, useState } from 'react';
-import { initialRoadValue } from './formInitValue';
-import { ErrorResponse } from '@renderer/utils/globalType';
-import { errorHandler } from '@renderer/utils/utils';
+import FormHr from '../utils/FormHr';
+import { useState } from 'react';
+import { useAtom } from 'jotai';
+import { IsEditingQuickRoads, QuickRoadsArray } from '../utils/settingJotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Road } from './road';
 import client from '@renderer/api/axiosClient';
-import FormHr from '../../utils/FormHr';
+import { errorHandler } from '@renderer/utils/utils';
+import { ErrorResponse } from '@renderer/utils/globalType';
 
-const EditRoadPanel: React.FC<{
+type RoadFormData = {
+  validYawList?: string | number[];
+  disabled: boolean;
+  limit: boolean;
+  roadType: string;
+  roadArr: string[];
+};
+
+const QuickEditRoadPanel: React.FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-  roadPanelForm: FormInstance<unknown>;
-}> = ({ attributes, listeners, roadPanelForm }) => {
-  const [chooseAngle, setChooseAngle] = useState<string>('');
-  const [messageApi, contextHolders] = message.useMessage();
+}> = ({ attributes, listeners }) => {
+  const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
   const { t } = useTranslation();
+  const [chooseAngle, setChooseAngle] = useState<string>('');
+  const [quickRoad, setQuickRoad] = useAtom(IsEditingQuickRoads);
+  const [quickRoadArr, setQuickRoadArr] = useAtom(QuickRoadsArray);
   const queryClient = useQueryClient();
 
   const saveRoadMutation = useMutation({
-    mutationFn: (payload: Road) => {
-      return client.post('api/setting/save-edit-road', payload);
+    mutationFn: (payload: RoadFormData) => {
+      return client.post('api/setting/save-quick-edit-road', payload);
     },
     onSuccess: () => {
       void messageApi.success('success');
       queryClient.refetchQueries({ queryKey: ['map'] });
+      setQuickRoadArr([]);
+      setQuickRoad(false);
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  const saveRoad = () => {
-    console.log(roadPanelForm.getFieldsValue());
-    const payload: Road = {
-      spot1Id: (roadPanelForm.getFieldValue('x') as number).toString(),
-      spot2Id: (roadPanelForm.getFieldValue('to') as number).toString(),
-      limit: roadPanelForm.getFieldValue('limit') as boolean,
-      roadType: roadPanelForm.getFieldValue('roadType') as string,
-      validYawList: roadPanelForm.getFieldValue('validYawList') as number[] | string[],
-      disabled: roadPanelForm.getFieldValue('disabled') as boolean
+  const handleEditing = () => {
+    setQuickRoad(!quickRoad);
+  };
+
+  const submit = (formData: RoadFormData) => {
+    console.log(formData);
+
+    const payload: RoadFormData = {
+      ...formData,
+      disabled: formData.disabled === undefined ? false : true,
+      limit: formData.limit === undefined ? false : true,
+      roadArr: quickRoadArr
     };
+
     saveRoadMutation.mutate(payload);
   };
 
   return (
     <>
-      {contextHolders}
+      {contextHolder}
       <div style={{ width: '23em' }}>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
-          {t('sider_output_form_name.roadPanel')}
+          {t('quick_edit_road_panel.title')}
         </h3>
         <FormHr></FormHr>
-        <Form
-          initialValues={{ ...initialRoadValue }}
-          form={roadPanelForm}
-          style={{ paddingTop: '10px' }}
-        >
+        <Form onFinish={submit} form={form} style={{ fontWeight: 'bold' }}>
           <Form.Item label={t('edit_road_panel.road')} name="roadType" shouldUpdate>
             <Radio.Group buttonStyle="solid">
               <Radio.Button value="oneWayRoad">{t('edit_road_panel.single_road')}</Radio.Button>
@@ -174,30 +173,19 @@ const EditRoadPanel: React.FC<{
             </Form.Item>
           </Space>
 
-          <Space size={'large'} style={{ marginBottom: '15px', overflow: 'hidden' }}>
-            <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>
-              <InputNumber />
-            </Form.Item>
+          <Flex vertical gap="middle">
+            <Button onClick={() => handleEditing()}>start editing</Button>
+            {quickRoad ? 'please start click points to connect ' : []}
+          </Flex>
 
-            <Form.Item label={t('edit_road_panel.end_point')} name="to" shouldUpdate required>
-              <InputNumber />
-            </Form.Item>
-          </Space>
-
-          <Form.Item style={{ textAlign: 'center' }}>
-            <Button
-              icon={<SaveOutlined />}
-              onClick={() => saveRoad()}
-              color="primary"
-              variant="filled"
-            >
-              {t('edit_road_panel.add')}
-            </Button>
-          </Form.Item>
+          {quickRoadArr.toString()}
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
         </Form>
       </div>
     </>
   );
 };
 
-export default memo(EditRoadPanel);
+export default QuickEditRoadPanel;

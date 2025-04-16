@@ -12,8 +12,8 @@ import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 import useCargoInfo from '@renderer/sockets/useCargoInfo';
 
 const AllCargo: React.FC<{
-  setInitPoint: React.Dispatch<draggableLineInitialPoint>
-  handleMouseDown: (startId: string) => void
+  setInitPoint: React.Dispatch<draggableLineInitialPoint>;
+  handleMouseDown: (startId: string) => void;
 }> = ({ setInitPoint, handleMouseDown }) => {
   const setTooltip = useSetAtom(tooltipProp);
   const shelfInfo = useCargoInfo();
