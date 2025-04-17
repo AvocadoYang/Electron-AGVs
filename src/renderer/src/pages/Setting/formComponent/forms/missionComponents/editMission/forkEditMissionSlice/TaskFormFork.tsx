@@ -442,7 +442,14 @@ const TaskFormFork: FC<{
 
         {selectForkHeight === 'custom' && isIncludeH && (
           <Form.Item
-            label={t('mission.task_table.height')}
+            label={
+              <Flex gap="small" align="center">
+                <span>{t('mission.task_table.height')}</span>
+                <Tooltip title={t('mission.task_table.camera_config')}>
+                  <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                </Tooltip>
+              </Flex>
+            }
             name="height"
             rules={[{ required: true, message: t('mission.task_table.height_required') }]}
           >
@@ -471,7 +478,7 @@ const TaskFormFork: FC<{
               label={
                 <Flex gap="small" align="center">
                   <span>{t('mission.task_table.modify_dis')}</span>
-                  <Tooltip title={t('mission.task_table.modify_dis')}>
+                  <Tooltip title={t('mission.task_table.modify_dis_info')}>
                     <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
                   </Tooltip>
                 </Flex>
@@ -479,7 +486,7 @@ const TaskFormFork: FC<{
               name="modify_dis"
               rules={[{ required: true, message: t('utils.required') }]}
             >
-              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+              <InputNumber min={1} placeholder="1" addonAfter="meter" />
             </Form.Item>
           </>
         ) : (

@@ -512,7 +512,9 @@
       "tolerance": "tolerance",
       "lookahead": "lookahead",
       "camera_config": "camera config",
+      "camera_config_info": "This setting defines the height at which the recognition camera observes the pallet. If the camera is mounted above the forks, set it to the same height as the forks. If it's mounted below, set it to a height higher than the forks.",
       "modify_dis": "modify dis",
+      "modify_dis_info": "please as FAE engineer",
 
       "by_target_shelf_setting": "by target shelf setting",
       "calculate_by_agv_and_shelf_angle": "calculate by agv shelf angle",

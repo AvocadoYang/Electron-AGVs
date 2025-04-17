@@ -25,6 +25,7 @@ import ImportMissionForm from './ImportMissionForm';
 import CarControlTranslate from './CarControlTranslate';
 import { Fork_mission_Slice } from './mission';
 import { Err } from '@renderer/utils/responseErr';
+import './style/index.css';
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   'data-row-key': string;
