@@ -727,11 +727,11 @@ export const useYaw = (amrId: string) => {
     );
     const yaw$ = profile$
       .pipe(
-        map((info) => info.pose?.yaw),
-        distinctUntilChanged((pre, cur) => {
-          if (pre == undefined || cur == undefined) return true;
-          return cur - pre < 0.03;
-        })
+        map((info) => info.pose?.yaw)
+        // distinctUntilChanged((pre, cur) => {
+        //   if (pre == undefined || cur == undefined) return true;
+        //   return cur - pre < 0.03;
+        // })
       )
       .subscribe((yaw) => setYaw(yaw));
 
