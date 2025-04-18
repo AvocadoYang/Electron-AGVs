@@ -228,11 +228,6 @@ type FleetInfoData = {
         yaw?: number;
         tolerance?: number;
         lookahead?: number;
-        roughly_pass?: boolean;
-        from?: number;
-        to?: number;
-        max_speed?: number;
-        hasCargoToProcess?: boolean;
       };
       io?: {
         fork?: {
@@ -403,11 +398,7 @@ const schema = () =>
             yaw: number().optional(),
             tolerance: number().optional(),
             lookahead: number().optional(),
-            roughly_pass: boolean().optional(),
-            from: number().optional(),
-            to: number().optional(),
-            max_speed: number().optional(),
-            hasCargoToProcess: boolean().optional(),
+
             waitOtherAmr: string().optional().nullable(),
             waitGenre: string().optional().nullable(),
             auto_preparatory_point: boolean().optional()

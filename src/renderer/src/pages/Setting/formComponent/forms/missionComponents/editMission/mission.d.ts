@@ -36,14 +36,7 @@ export interface EmitActions {
     yaw: number;
     tolerance: number;
     lookahead: number;
-    roughly_pass: boolean;
-    from: number;
-    to: number;
-    hasCargoToProcess: boolean;
-    max_forward: number;
-    min_forward: number;
-    max_backward: number;
-    min_backward: number;
+
     waitOtherAmr: string | null;
     waitGenre: string | null;
     auto_preparatory_point: boolean;
@@ -77,14 +70,7 @@ export interface Fork_mission_Slice {
     yaw: number;
     tolerance: number;
     lookahead: number;
-    roughly_pass: boolean;
-    from: number;
-    to: number;
-    hasCargoToProcess: boolean;
-    max_forward: number;
-    min_forward: number;
-    max_backward: number;
-    min_backward: number;
+
     waitOtherAmr: string;
     waitGenre: string;
     auto_preparatory_point: boolean;
@@ -142,91 +128,11 @@ export type Robot_Mission_Slice_Table = {
   };
 };
 
-export interface DataType {
-  order: number;
-  locationId: string;
-  types: string;
-  control: (string | undefined)[];
-  wait: number;
-  is_define_id: string;
-  locationId: number;
-
-  is_define_yaw: number;
-  yaw: number;
-  tolerance: number;
-  lookahead: number;
-  roughly_pass: boolean;
-  from: number;
-  to: number;
-  max_speed: number;
-  hasCargoToProcess: boolean;
-
-  waitOtherAmr: string | null;
-  waitGenre: string | null;
-  auto_preparatory_point: boolean;
-
-  f_is_define_height: string;
-  f_height: number;
-  f_move: number;
-  f_shift: number;
-  f_tilt: number;
-
-  c_config: number;
-  c_modify_dis: number;
-
-  titleId: string;
-}
-
 export type CarType = {
   id: string;
   name: string;
   value: string;
 };
-
-export interface AllTitleMissionType {
-  id: string;
-  name: string;
-  value: string;
-  Car: {
-    id: string;
-    name: string;
-    value: string;
-  };
-  actions: {
-    is_define_id: string;
-    locationId: string;
-    order: number;
-    types: string;
-    control: string[];
-    locationId: number;
-
-    wait: number;
-    is_define_yaw: number;
-    yaw: number;
-    tolerance: number;
-    lookahead: number;
-    roughly_pass: boolean;
-    from: number;
-    to: number;
-    max_speed: number;
-    hasCargoToProcess: boolean;
-
-    waitOtherAmr: string | null;
-    waitGenre: string | null;
-    auto_preparatory_point: boolean;
-
-    f_execute: boolean;
-    f_is_define_height: string;
-    f_height: number;
-    f_move: number;
-    f_shift: number;
-    f_tilt: number;
-    c_execute: boolean;
-    c_config: number;
-    c_modify_dis: number;
-    titleId: string;
-  }[];
-}
 
 export type MissionData = {
   titleId: string;
@@ -258,11 +164,7 @@ interface CarConfig {
   id: string;
   tolerance: number;
   lookahead: number;
-  roughly_pass: boolean;
-  max_forward: number;
-  min_forward: number;
-  max_backward: number;
-  min_backward: number;
+
   carTypeId: string;
 }
 

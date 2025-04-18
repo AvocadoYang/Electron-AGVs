@@ -1,4 +1,15 @@
-import { Button, Flex, Form, Input, InputNumber, message, Segmented, Select, Tooltip } from 'antd';
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Segmented,
+  Select,
+  Tooltip,
+  Typography
+} from 'antd';
 import { QuestionCircleOutlined, RedoOutlined } from '@ant-design/icons';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,11 +37,11 @@ type Form_Value = {
   action_type: string;
   control: string[];
   wait: number;
-  is_define_id: 'custom' | 'select';
+  is_define_id: 'custom' | 'select' | 'available_charge_station';
   locationId: string;
   is_define_yaw: YawGenre;
   yaw: number;
-  fork_height_select: 'custom' | 'select';
+  fork_height_select: 'custom' | 'select' | 'default';
   height: number;
   active_wait_amr: 'enable' | 'disable';
   waitOtherAmr: string;
@@ -41,7 +52,7 @@ const TaskFormFork: FC<{
   editTaskKey: string;
   selectedMissionCar: string;
   selectedMissionKey: string;
-}> = ({ editTaskKey, selectedMissionCar, selectedMissionKey }) => {
+}> = ({ editTaskKey, selectedMissionKey }) => {
   const {
     robotOption,
     locationsOption,
@@ -73,12 +84,9 @@ const TaskFormFork: FC<{
   const handleControlClick = (controlValue: string) => {
     setControlClickOrder((prevOrder) => {
       if (prevOrder.includes(controlValue)) {
-        const newOrder = prevOrder.filter((item) => item !== controlValue);
-        return newOrder;
-      } else {
-        const newOrder = [...prevOrder, controlValue];
-        return newOrder;
+        return prevOrder.filter((item) => item !== controlValue);
       }
+      return [...prevOrder, controlValue];
     });
 
     setTimeout(() => {
@@ -108,17 +116,19 @@ const TaskFormFork: FC<{
 
     const newPayload = {
       ...payload,
+      is_define_id: selectLocationType,
       action_type: actionState,
       control: controlClickOrder,
       id: editTaskKey,
-      missionTitleId: selectedMissionKey
+      missionTitleId: selectedMissionKey,
+      fork_height_select: selectForkHeight
     };
 
     if (controlClickOrder.length === 0) {
       messageApi.warning(t('mission.task_table.control_warn'));
       return;
     }
-    // console.log(newPayload);
+
     editMutation.mutate(newPayload);
   };
 
@@ -150,9 +160,13 @@ const TaskFormFork: FC<{
         yaw: originFormData.operation.yaw,
         fork_height_select: originFormData.io?.fork?.is_define_height,
         height: originFormData.io?.fork?.height,
-        active_wait_amr: originFormData.operation.hasCargoToProcess ? 'enable' : 'disable',
+        active_wait_amr: originFormData.operation.waitGenre !== null ? 'enable' : 'disable',
         waitOtherAmr: originFormData.operation.waitOtherAmr,
-        wait_genre: originFormData.operation.waitGenre
+        wait_genre: originFormData.operation.waitGenre,
+        tolerance: originFormData.operation.tolerance,
+        lookahead: originFormData.operation.lookahead,
+        camera_config: originFormData.io?.camera?.config || 0,
+        modify_dis: originFormData.io?.camera?.modify_dis || 0
       });
     }
   }, [originFormData, form]);
@@ -181,17 +195,25 @@ const TaskFormFork: FC<{
       }
     }
 
-    if (value.is_define_id === 'custom' && value.locationId === '0') {
+    if (selectLocationType === 'custom' && !value.locationId) {
       setSubmittable(false);
       return;
     }
 
-    // 等車demo
     if (value?.active_wait_amr && value.active_wait_amr === 'enable') {
       if (!value.waitOtherAmr || !value.wait_genre) {
         setSubmittable(false);
         return;
       }
+    }
+
+    if (
+      value.is_define_yaw === YawGenre.CUSTOM &&
+      isIncludeSpin &&
+      (value.yaw === undefined || value.yaw < 0 || value.yaw > 360)
+    ) {
+      setSubmittable(false);
+      return;
     }
 
     setSubmittable(true);
@@ -200,7 +222,14 @@ const TaskFormFork: FC<{
   return (
     <>
       {contextHolder}
-      <Form form={form} autoComplete="off" size="large" variant="underlined" onFinish={onFinish}>
+      <Form
+        form={form}
+        autoComplete="off"
+        size="large"
+        variant="outlined"
+        onFinish={onFinish}
+        layout="vertical"
+      >
         <Flex gap="large" justify="space-between">
           <Form.Item label={t('mission.task_table_human_robot.action')} name="action_type">
             <Segmented
@@ -228,7 +257,6 @@ const TaskFormFork: FC<{
               <Flex gap="small">
                 {controlList[actionState].map((v, i) => {
                   const uniqueValue = `${v}-${i}`;
-
                   const movement = v as Control_Types;
                   let text = '';
 
@@ -286,64 +314,217 @@ const TaskFormFork: FC<{
 
         {controlClickOrder.some((item) => item.startsWith('W')) && (
           <Form.Item label={t('mission.task_table.wait')} name="wait">
-            <InputNumber min={1} placeholder="1" />
+            <InputNumber min={1} placeholder="1" addonAfter="s" />
           </Form.Item>
         )}
 
-        {actionState !== 'spin' ? (
-          <Form.Item label={t('mission.task_table.is_custom_location')} name="is_define_id">
+        {actionState !== 'spin' && (
+          <Form.Item
+            label={
+              <Flex gap="small" align="center">
+                <span>{t('mission.task_table.is_custom_location')}</span>
+                <Tooltip title={t('mission.task_table.location_tooltip')}>
+                  <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                </Tooltip>
+              </Flex>
+            }
+            name="is_define_id"
+          >
             <Segmented
               onChange={(e: Select_Location_Type) => setSelectLocationType(e)}
               options={SelectLocationOptions}
             />
+            {selectLocationType === 'custom' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.location_custom_desc')}
+              </Typography.Text>
+            )}
+            {selectLocationType === 'select' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.location_select_desc')}
+              </Typography.Text>
+            )}
+            {selectLocationType === 'available_charge_station' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.location_charge_station_desc')}
+              </Typography.Text>
+            )}
           </Form.Item>
-        ) : (
-          []
         )}
 
-        {selectLocationType === 'custom' && actionState !== 'spin' ? (
+        {selectLocationType === 'custom' && actionState !== 'spin' && (
           <Form.Item
             label={t('mission.task_table.location')}
             name="locationId"
-            rules={[{ required: false }]}
+            rules={[{ required: true, message: t('mission.task_table.location_required') }]}
           >
             <Select style={{ width: 210 }} options={locationsOption} />
           </Form.Item>
-        ) : (
-          []
         )}
 
-        {actionState === 'spin' || isIncludeSpin ? (
-          <Form.Item label={t('mission.task_table.is_custom_yaw')} name="is_define_yaw">
+        {(actionState === 'spin' || isIncludeSpin) && (
+          <Form.Item
+            label={
+              <Flex gap="small" align="center">
+                <span>{t('mission.task_table.is_custom_yaw')}</span>
+                <Tooltip title={t('mission.task_table.yaw_tooltip')}>
+                  <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                </Tooltip>
+              </Flex>
+            }
+            name="is_define_yaw"
+          >
             <Segmented onChange={(e: YawGenre) => setSelectYaw(e)} options={SelectYawOptions} />
+            {selectYaw === YawGenre.CUSTOM && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.yaw_custom_desc')}
+              </Typography.Text>
+            )}
+            {selectYaw === YawGenre.SELECT && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.yaw_select_desc')}
+              </Typography.Text>
+            )}
+            {selectYaw === YawGenre.CALCULATE_BY_AGV_AND_SHELF_ANGLE && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.yaw_calculate_desc')}
+              </Typography.Text>
+            )}
           </Form.Item>
-        ) : (
-          []
         )}
 
-        {selectYaw === YawGenre.CUSTOM && isIncludeSpin ? (
-          <Form.Item label={t('mission.task_table.yaw')} name="yaw">
-            <InputNumber />
+        {selectYaw === YawGenre.CUSTOM && isIncludeSpin && (
+          <Form.Item
+            label={t('mission.task_table.yaw')}
+            name="yaw"
+            rules={[
+              { required: true, message: t('mission.task_table.yaw_required') },
+              { type: 'number', min: 0, max: 360, message: t('mission.task_table.yaw_range') }
+            ]}
+          >
+            <InputNumber min={0} max={360} addonAfter="°" />
           </Form.Item>
-        ) : (
-          []
         )}
 
-        {actionState === 'load' || actionState === 'offload' || isIncludeH ? (
-          <Form.Item label={t('mission.task_table.is_define_heigh')} name="fork_height_select">
+        {(actionState === 'load' || actionState === 'offload' || isIncludeH) && (
+          <Form.Item
+            label={
+              <Flex gap="small" align="center">
+                <span>{t('mission.task_table.is_define_height')}</span>
+                <Tooltip title={t('mission.task_table.fork_height_tooltip')}>
+                  <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                </Tooltip>
+              </Flex>
+            }
+            name="fork_height_select"
+          >
             <Segmented
               onChange={(e: Select_Fork_Height_Type) => setSelectForkHeight(e)}
               options={SelectForkHeightOptions}
             />
+            {selectForkHeight === 'custom' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.fork_height_custom_desc')}
+              </Typography.Text>
+            )}
+            {selectForkHeight === 'select' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.fork_height_select_desc')}
+              </Typography.Text>
+            )}
+            {selectForkHeight === 'default' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.fork_height_default_desc')}
+              </Typography.Text>
+            )}
           </Form.Item>
+        )}
+
+        {selectForkHeight === 'custom' && isIncludeH && (
+          <Form.Item
+            label={
+              <Flex gap="small" align="center">
+                <span>{t('mission.task_table.height')}</span>
+                <Tooltip title={t('mission.task_table.camera_config')}>
+                  <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                </Tooltip>
+              </Flex>
+            }
+            name="height"
+            rules={[{ required: true, message: t('mission.task_table.height_required') }]}
+          >
+            <InputNumber min={1} placeholder="1" addonAfter="mm" />
+          </Form.Item>
+        )}
+
+        {actionState === 'load' ? (
+          <>
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.camera_config')}</span>
+                  <Tooltip title={t('mission.task_table.camera_config')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="camera_config"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+            </Form.Item>
+
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.modify_dis')}</span>
+                  <Tooltip title={t('mission.task_table.modify_dis_info')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="modify_dis"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="meter" />
+            </Form.Item>
+          </>
         ) : (
           []
         )}
 
-        {selectForkHeight === 'custom' && isIncludeH ? (
-          <Form.Item label={t('mission.task_table.height')} name="height">
-            <InputNumber min={1} placeholder="1" />
-          </Form.Item>
+        {actionState === 'move' ? (
+          <>
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.tolerance')}</span>
+                  <Tooltip title={t('mission.task_table.tolerance')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="tolerance"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+            </Form.Item>
+
+            <Form.Item
+              label={
+                <Flex gap="small" align="center">
+                  <span>{t('mission.task_table.lookahead')}</span>
+                  <Tooltip title={t('mission.task_table.lookahead')}>
+                    <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                  </Tooltip>
+                </Flex>
+              }
+              name="lookahead"
+              rules={[{ required: true, message: t('utils.required') }]}
+            >
+              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+            </Form.Item>
+          </>
         ) : (
           []
         )}
@@ -360,36 +541,43 @@ const TaskFormFork: FC<{
           </Tooltip>
         </Flex>
 
-        {otherSpecial ? (
+        {otherSpecial && (
           <Form.Item label={t('mission.task_table.active_wait_amr')} name="active_wait_amr">
             <Segmented
               onChange={(e: Select_Active_Robot_Type) => setSelectActiveWaitRobot(e)}
               options={SelectActiveWaitRobotOptions}
             />
           </Form.Item>
-        ) : (
-          []
         )}
 
-        {otherSpecial && selectActiveWaitRobot === 'enable' ? (
-          <Form.Item label={t('mission.task_table.wait_genre')} name="waitOtherAmr">
+        {otherSpecial && selectActiveWaitRobot === 'enable' && (
+          <Form.Item
+            label={t('mission.task_table.wait_genre')}
+            name="waitOtherAmr"
+            rules={[{ required: true, message: t('mission.task_table.wait_other_amr_required') }]}
+          >
             <Select options={robotOption} />
           </Form.Item>
-        ) : (
-          []
         )}
 
-        {otherSpecial && selectActiveWaitRobot === 'enable' ? (
-          <Form.Item label={t('mission.task_table.wait_genre')} name="wait_genre">
+        {otherSpecial && selectActiveWaitRobot === 'enable' && (
+          <Form.Item
+            label={t('mission.task_table.wait_genre')}
+            name="wait_genre"
+            rules={[{ required: true, message: t('mission.task_table.wait_genre_required') }]}
+          >
             <Segmented options={SelectWaitRobotOptions} />
           </Form.Item>
-        ) : (
-          []
         )}
 
         <Flex align="center" justify="center">
           <Form.Item>
-            <Button disabled={!submittable} variant="text" htmlType="submit">
+            <Button
+              type="primary"
+              disabled={!submittable}
+              htmlType="submit"
+              loading={editMutation.isLoading}
+            >
               {t('utils.save')}
             </Button>
           </Form.Item>
