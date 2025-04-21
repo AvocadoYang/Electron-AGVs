@@ -47,6 +47,10 @@
     }
   },
 
+  "scale_pad": {
+    "title": "Change simulate speed"
+  },
+
   "change_map": {
     "view_maps": "View Maps",
     "upload_map": "Upload Map",
@@ -87,6 +91,7 @@
   "page_setting": "Setting",
   "page_dashboard": "Dashboard",
   "page_simulate": "Simulate",
+  "simulate": "simulate",
   "header": {
     "inactive_sim": "Stop simulate",
     "active_sim": "Start simulation",
@@ -422,7 +427,16 @@
     "reachOutCharge": "reach out charge",
     "returning": "returning",
     "isStretching": "is stretching",
-    "reset": "reset"
+    "reset": "reset",
+    "form_title": "Charge Configuration",
+    "amrId_required": "Please select at least one AMR ID",
+    "select_amr": "Select AMR(s)",
+    "task_required": "Please select a task",
+    "select_task": "Select a task",
+    "aggressive_max": "Aggressive threshold must be at most 70%",
+    "full_rate_min": "Full charge threshold must be at least 70%",
+    "available_min": "Available task threshold must be at least 11%",
+    "submit": "Submit"
   },
 
   "main": {
@@ -437,6 +451,7 @@
     "card_name": {
       "map_2D_view": "2D Map",
       "map_3D_view": "3D Map",
+      "mission": "send mission",
       "quick_mission": "Quick mission",
       "auto_mission": "Cycle mission",
       "new_mission": "New mission",

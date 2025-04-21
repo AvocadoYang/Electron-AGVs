@@ -32,7 +32,7 @@ const TittleTools: React.FC<{}> = () => {
   useEffect(() => {
     if (!names) return;
     const AMRCategories = new Set<string>();
-    for (let name of names) {
+    for (let name of names.amrs) {
       const { amrId } = name;
       const category = amrId.split('-').slice(0, 3).join('-');
       AMRCategories.add(category);

@@ -134,6 +134,7 @@ const TaskFormFork: FC<{
 
   useEffect(() => {
     if (originFormData) {
+      console.log(originFormData);
       setActionStatus(originFormData.operation.type as Action_Type);
       setControlClickOrder(
         originFormData.operation.control?.map((v: string, i: number) => `${v}-${i}`) || []
@@ -331,6 +332,7 @@ const TaskFormFork: FC<{
             name="is_define_id"
           >
             <Segmented
+              value={selectLocationType}
               onChange={(e: Select_Location_Type) => setSelectLocationType(e)}
               options={SelectLocationOptions}
             />
@@ -374,7 +376,11 @@ const TaskFormFork: FC<{
             }
             name="is_define_yaw"
           >
-            <Segmented onChange={(e: YawGenre) => setSelectYaw(e)} options={SelectYawOptions} />
+            <Segmented
+              value={selectYaw}
+              onChange={(e: YawGenre) => setSelectYaw(e)}
+              options={SelectYawOptions}
+            />
             {selectYaw === YawGenre.CUSTOM && (
               <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
                 {t('mission.task_table.yaw_custom_desc')}
@@ -419,6 +425,7 @@ const TaskFormFork: FC<{
             name="fork_height_select"
           >
             <Segmented
+              value={selectForkHeight}
               onChange={(e: Select_Fork_Height_Type) => setSelectForkHeight(e)}
               options={SelectForkHeightOptions}
             />

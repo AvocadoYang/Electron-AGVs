@@ -6,13 +6,16 @@ const getName = async () => {
   const { data } = await client.get<unknown>('api/test/all-amr-name');
 
   const schema = () =>
-    array(
-      object({
-        amrId: string().required(),
-        serialNumber: string().required(),
-        isReal: boolean().required()
-      }).required()
-    ).required();
+    object({
+      isSim: boolean().required(),
+      amrs: array(
+        object({
+          amrId: string().required(),
+          serialNumber: string().required(),
+          isReal: boolean().required()
+        }).required()
+      ).required()
+    }).required();
 
   return schema().validate(data, { stripUnknown: true });
 };

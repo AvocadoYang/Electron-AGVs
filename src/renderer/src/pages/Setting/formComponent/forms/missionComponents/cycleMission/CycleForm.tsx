@@ -4,10 +4,18 @@ import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, message, Select } from 'antd';
+import { Button, Form, message, Select, Tag } from 'antd';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+
+const FormContainer = styled.div`
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px;
+`;
 
 const CycleForm: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -15,12 +23,15 @@ const CycleForm: FC = () => {
   const { data: missionTitle } = useAllMissionTitles();
   const { t } = useTranslation();
   const { data: name } = useName();
-  const AmrOption: { value: string; label: string }[] | undefined = name?.map((v) => ({
-    value: v.amrId,
-    label: v.amrId
-  }));
-  // Use an empty string instead of null
-  AmrOption?.push({ value: '', label: t('mission.cycle_mission.random') });
+
+  const AmrOption: { value: string; label: string }[] = useMemo(() => {
+    return (
+      name?.amrs.flatMap((m) => ({
+        label: `${m.amrId} ${m.isReal ? '' : t('simulate')}`,
+        value: m.amrId
+      })) || []
+    );
+  }, [name, t]);
 
   const misOptions = useMemo(() => {
     if (!missionTitle) return [];
@@ -57,22 +68,28 @@ const CycleForm: FC = () => {
   };
 
   return (
-    <Form form={formRegionSample} autoComplete="off">
-      {contextHolder}
-
-      <Form.Item label={t('mission.cycle_mission.mission')} name="missionId" shouldUpdate>
-        <Select showSearch options={misOptions} placeholder="Select a mission ok" />
-      </Form.Item>
-
-      <Form.Item label={t('mission.cycle_mission.car')} name="amrId" shouldUpdate>
-        <Select showSearch placeholder="Select a mission ok" options={AmrOption} />
-      </Form.Item>
-      <Form.Item>
-        <Button icon={<PlusOutlined />} onClick={() => submit()} color="primary" variant="filled">
-          {t('utils.submit')}
-        </Button>
-      </Form.Item>
-    </Form>
+    <FormContainer>
+      <Form
+        form={formRegionSample}
+        autoComplete="off"
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
+      >
+        {contextHolder}
+        <Form.Item label={t('mission.cycle_mission.mission')} name="missionId" shouldUpdate>
+          <Select showSearch options={misOptions} placeholder="Select a mission ok" />
+        </Form.Item>
+        <Form.Item label={t('mission.cycle_mission.car')} name="amrId" shouldUpdate>
+          <Select showSearch placeholder="Select a mission ok" options={AmrOption} />
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
+          <Button icon={<PlusOutlined />} onClick={() => submit()} color="primary" variant="filled">
+            {t('utils.submit')}
+          </Button>
+        </Form.Item>
+      </Form>
+    </FormContainer>
   );
 };
+
 export default CycleForm;

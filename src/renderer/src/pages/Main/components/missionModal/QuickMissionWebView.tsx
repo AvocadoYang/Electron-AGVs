@@ -1,16 +1,17 @@
-import { Select, Radio, Form, Input } from 'antd';
+import { Select, Radio, Form, Input, Button, Space } from 'antd';
 import './style.css';
 import useName from '@renderer/api/useAmrName';
 import { useMemo, useState } from 'react';
 import { CloseOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { QuickMissionSelectParam } from '@renderer/utils/gloable';
+import { QuickMissionPayload } from '../../global/jotai';
 
 enum MissionPriority {
-  TRIVIAL, //沒差最後再做
-  NORMAL, //普通
-  PIVOTAL, //特別優先
+  TRIVIAL, // 沒差最後再做
+  NORMAL, // 普通
+  PIVOTAL, // 特別優先
   CRITICAL // 緊急
 }
 
@@ -21,21 +22,24 @@ const QuickMissionWebView: React.FC<{
   const [form] = Form.useForm();
   const { data: names } = useName();
   const setQuickMissionSelectParam = useSetAtom(QuickMissionSelectParam);
+  const quickPayload = useAtomValue(QuickMissionPayload);
   const { t } = useTranslation();
   const [, setAmrGenre] = useState<string | null>(null);
-  const [loadShelf, setLoadShelf] = useState<{ label: string; value: string }[]>([]);
-  const [offLoadShelf, setOffLoadShelf] = useState<{ label: string; value: string }[]>([]);
-  const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
-    if (!names) return [];
-    const options = names.map((v) => ({
-      value: v.amrId,
-      label: v.amrId
-    }));
 
-    options.unshift({ value: '*', label: t('utils.random') });
+  const AmrOption: { value: string; label: string }[] | undefined = useMemo(() => {
+    let options;
+    if (names?.isSim) {
+      options = names.amrs
+        .filter((a) => a.isReal === false)
+        .map((m) => ({ label: m.amrId, value: m.amrId }));
+    } else {
+      options = names?.amrs
+        .filter((a) => a.isReal === true)
+        .map((m) => ({ label: m.amrId, value: m.amrId }));
+    }
+    return options ? [...options, { value: 'null', label: t('utils.random') }] : undefined;
+  }, [names, t]);
 
-    return options;
-  }, [name]);
   return (
     <div
       className={`quick-mission-web-wrap ${showQuickMission ? 'quick-mission-web-wrap-show' : ''}`}
@@ -73,23 +77,29 @@ const QuickMissionWebView: React.FC<{
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label={t('car_control_translate.load')} name={'load'}>
-          <Input
-            placeholder={t('car_control_translate.load')}
-            onMouseDown={() => {
-              setQuickMissionSelectParam('load');
-            }}
-          />
-        </Form.Item>
+        <Space>
+          <Form.Item label={t('car_control_translate.load')} name={'load'}>
+            <Input
+              placeholder={t('car_control_translate.load')}
+              onMouseDown={() => {
+                setQuickMissionSelectParam('load');
+              }}
+            />
+          </Form.Item>
+          <Button>load</Button>
+        </Space>
 
-        <Form.Item label={t('car_control_translate.offload')} name={'offload'}>
-          <Input
-            placeholder={t('car_control_translate.offload')}
-            onMouseDown={() => {
-              setQuickMissionSelectParam('offload');
-            }}
-          />
-        </Form.Item>
+        <Space>
+          <Form.Item label={t('car_control_translate.offload')} name={'offload'}>
+            <Input
+              placeholder={t('car_control_translate.offload')}
+              onMouseDown={() => {
+                setQuickMissionSelectParam('offload');
+              }}
+            />
+          </Form.Item>
+          <Button>offload</Button>
+        </Space>
       </Form>
     </div>
   );

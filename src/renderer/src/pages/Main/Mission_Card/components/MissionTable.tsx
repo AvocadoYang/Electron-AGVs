@@ -87,8 +87,7 @@ const MissionTable = () => {
       render: (code: string) =>
         code ? code.replace('amr-0', '#') : t('main_task_list.wait_suitable'),
       filters: (() => {
-        if (!name) return [];
-        return name.map((amrInfo) => ({
+        return name?.amrs.map((amrInfo) => ({
           text: `${amrInfo.amrId}`,
           value: `${amrInfo.amrId}`
         }));
@@ -188,7 +187,7 @@ const MissionTable = () => {
     deleteMissionMutation.mutate(convertArr);
   };
 
-  if (!missions || !name)
+  if (!missions || !name?.amrs)
     return (
       <div
         style={{

@@ -5,7 +5,7 @@ import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Select, message } from 'antd';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -18,7 +18,13 @@ const BeforeLeftChargeStationForm: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
   const { data: name } = useName();
-  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
+
+  const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
+    return name?.amrs.map((m) => ({
+      label: `${m.amrId} ${m.isReal ? [] : t('simulate')}`,
+      value: m.amrId
+    }));
+  }, [name]);
 
   const addMutation = useMutation({
     mutationFn: (payload: DataType) => {

@@ -12,14 +12,11 @@ import FormHr from '@renderer/pages/Setting/utils/FormHr';
 import CycleForm from './CycleForm';
 
 const NotActive = styled.div`
-  /* HTML: <div class="loader"></div> */
-
   min-width: 65px;
   min-height: 65px;
 `;
 
 const ActiveLogo = styled.div`
-  /* HTML: <div class="loader"></div> */
   width: 45px;
   aspect-ratio: 0.75;
   --c: no-repeat linear-gradient(#c30000 0 0);
@@ -69,10 +66,26 @@ const ActiveLogo = styled.div`
   }
 `;
 
-/* HTML: <div class="loader"></div> */
-
 const MinWid = styled.div`
-  min-width: 12em;
+  min-width: 10em;
+`;
+
+const PanelContainer = styled.div`
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+`;
+
+const WideTable = styled(Table)`
+  width: 100%;
+  min-width: 600px;
+  .ant-table {
+    width: 100%;
+  }
+  .ant-table-container {
+    width: 100%;
+  }
 `;
 
 type CM = {
@@ -140,12 +153,14 @@ const CycleMissionPanel: FC<{
     {
       title: t('mission.cycle_mission.random'),
       dataIndex: 'missionName',
-      key: 'missionName'
+      key: 'missionName',
+      width: '30%'
     },
     {
       title: t('mission.cycle_mission.car'),
       dataIndex: 'amrId',
       key: 'amrId',
+      width: '25%',
       render(_, record) {
         return record.amrId ? record.amrId : t('mission.cycle_mission.random');
       }
@@ -154,12 +169,14 @@ const CycleMissionPanel: FC<{
       title: t('mission.cycle_mission.status'),
       dataIndex: 'status',
       key: 'status',
+      width: '15%',
       render(_, record) {
         return record.isActive ? <ActiveLogo /> : <NotActive />;
       }
     },
     {
       key: 'action',
+      width: '30%',
       render: (_, record) => (
         <MinWid>
           <Flex gap="middle">
@@ -202,22 +219,21 @@ const CycleMissionPanel: FC<{
   return (
     <>
       {contextHolder}
-      <div>
+      <PanelContainer>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('mission.cycle_mission.cycle_mission')}
         </h3>
         <FormHr />
-
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <CycleForm />
-          <Table
+          <WideTable
             rowKey={(record) => record?.cycle_relate_id as string}
             columns={columns as []}
             dataSource={data}
             pagination={{ pageSize: 4 }}
           />
         </Flex>
-      </div>
+      </PanelContainer>
     </>
   );
 };

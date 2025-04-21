@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Checkbox, Form, FormInstance, Modal, Select, TimePicker, message } from 'antd';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import useName from '@renderer/api/useAmrName';
@@ -56,7 +56,13 @@ const ScheduleForm: FC<{
   const { data: missionTitle } = useAllMissionTitles();
   const queryClient = useQueryClient();
   const { data: name } = useName();
-  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
+
+  const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
+    return name?.amrs.map((m) => ({
+      label: `${m.amrId} ${m.isReal ? [] : t('simulate')}`,
+      value: m.amrId
+    }));
+  }, [name]);
 
   const handleCancel = () => {
     setIsModalOpen(false);

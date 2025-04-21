@@ -47,6 +47,10 @@
     }
   },
 
+  "scale_pad": {
+    "title": "模擬速度調整"
+  },
+
   "change_map": {
     "view_maps": "查看現有地圖",
     "upload_map": "上傳地圖",
@@ -86,6 +90,7 @@
   "page_setting": "點位設定",
   "page_dashboard": "控制中心",
   "page_simulate": "模擬任務",
+  "simulate": "模擬的",
   "header": {
     "inactive_sim": "中止模擬",
     "active_sim": "啟動模擬",
@@ -417,7 +422,17 @@
     "reachOutCharge": "伸出充電",
     "returning": "正在退回",
     "isStretching": "正在伸出",
-    "reset": "歸位"
+    "reset": "歸位",
+    "form_title": "充電配置",
+    " amrId": "AMR ID",
+    " amrId_required": "請至少選擇一個AMR ID",
+    " select_amr": "選擇AMR",
+    "task_required": "請選擇一個任務",
+    "select_task": "選擇任務",
+    "aggressive_max": "激進門檻最多為70%",
+    "full_rate_min": "滿載充電閾值至少為70%",
+    "available_min": "可用任務閾值至少為11%",
+    "submit": "提交"
   },
 
   "main": {
@@ -432,6 +447,7 @@
     "card_name": {
       "map_2D_view": "2D 地圖",
       "map_3D_view": "3D 地圖",
+      "mission": "任務派發",
       "quick_mission": "快速任務",
       "auto_mission": "循環任務",
       "new_mission": "新增任務",

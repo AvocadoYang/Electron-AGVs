@@ -8,7 +8,7 @@ const Cards: React.FC<{}> = () => {
   const { data: names } = useName();
   const { data: mockRobot } = useMockRobot();
 
-  if (!names || !names.length) return;
+  if (!names || !names.amrs.length) return;
   if (mockRobot && mockRobot.isSimulate) {
     return (
       <Flex align="center" justify="center" wrap gap="middle" style={{ width: '95%' }}>
@@ -22,7 +22,7 @@ const Cards: React.FC<{}> = () => {
   }
   return (
     <Flex align="center" justify="center" wrap gap="middle" style={{ width: '95%' }}>
-      {names
+      {names.amrs
         .filter((v) => v.isReal)
         .map((item) => (
           <Card key={item.amrId} id={item.amrId}></Card>

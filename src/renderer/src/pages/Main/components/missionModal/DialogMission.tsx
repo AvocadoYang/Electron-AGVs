@@ -16,7 +16,7 @@ enum MissionPriority {
 }
 
 type MissionFrom = {
-  amrId: string;
+  amrId: string | null;
   titleId: string;
   priority: MissionPriority;
 };
@@ -30,12 +30,19 @@ const DialogMission = () => {
 
   const [openDialogMission, setOpenDialogMission] = useAtom(OpenAssignMission);
   const [, setAmrGenre] = useState<string | null>(null);
-  const AmrOption: { value: null | string; label: string }[] | undefined = name?.map((v) => ({
-    value: v.amrId,
-    label: v.amrId
-  }));
-  AmrOption?.push({ value: null, label: t('utils.random') });
-
+  const AmrOption: { value: string; label: string }[] | undefined = useMemo(() => {
+    let options;
+    if (name?.isSim) {
+      options = name.amrs
+        .filter((a) => a.isReal === false)
+        .map((m) => ({ label: m.amrId, value: m.amrId }));
+    } else {
+      options = name?.amrs
+        .filter((a) => a.isReal === true)
+        .map((m) => ({ label: m.amrId, value: m.amrId }));
+    }
+    return options ? [...options, { value: 'null', label: t('utils.random') }] : undefined;
+  }, [name, t]);
   const canSubmitMutation = useMutation({
     mutationFn: (payload: MissionFrom) => {
       return client.post('api/missions/dialog-mission', payload, {
@@ -78,7 +85,13 @@ const DialogMission = () => {
       void messageApi.error('尚未完成選項');
       return;
     }
-    canSubmitMutation.mutate(payload);
+
+    const newPayload = {
+      ...payload,
+      amrId: payload.amrId === 'null' ? null : payload.amrId
+    };
+
+    canSubmitMutation.mutate(newPayload);
   };
 
   const handleCancel = () => {
@@ -86,10 +99,11 @@ const DialogMission = () => {
   };
 
   useEffect(() => {
+    if (!openDialogMission) return;
     missionForm.setFieldValue('priority', MissionPriority.PIVOTAL);
-  }, []);
+  }, [openDialogMission]);
 
-  if (!data) return [];
+  if (!data || !openDialogMission) return [];
   return (
     <Modal
       title={t('main.card_name.new_mission')}

@@ -1,4 +1,4 @@
-import { Button, Form, message, Modal, Radio, Select } from 'antd';
+import { Button, Form, message, Modal, Radio, Select, Tag } from 'antd';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { OpenQuickMission } from '../../../global/jotai';
@@ -70,17 +70,18 @@ const QuickMission = () => {
     setOffLoadShelf(offLoadShelves);
   }, [shelves]);
 
-  const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
-    if (!name) return [];
-    const options = name.map((v) => ({
-      value: v.amrId,
-      label: v.amrId
-    }));
-
-    options.unshift({ value: '*', label: t('utils.random') });
-
-    return options;
+  const AmrOption: { value: null | string; label: string }[] = useMemo(() => {
+    return (
+      name?.amrs
+        .filter((a) => a.isReal === true)
+        .map((m) => ({
+          label: `${m.amrId} ${m.isReal ? [] : <Tag>{`${t('simulate')}`}</Tag>}`,
+          value: m.amrId
+        })) || []
+    );
   }, [name]);
+
+  AmrOption.unshift({ value: '*', label: t('utils.random') });
 
   const submitMutation = useMutation({
     mutationFn: (data: QuickMissionType) => {
