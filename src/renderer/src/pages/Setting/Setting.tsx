@@ -21,7 +21,6 @@ const Setting: React.FC = () => {
   const { isMobile } = useIsMobile();
   const [roadPanelForm] = Form.useForm();
   const [zonePanelForm] = Form.useForm();
-  const [tagSettingForm] = Form.useForm();
   const [dataList, setDataList] = useState(toolbarState);
   const [scale, setScale] = useState(1);
   const [splitterSize, setSplitterSize] = useState<number[] | string[]>(['0%', '100%']);
@@ -45,7 +44,6 @@ const Setting: React.FC = () => {
                 locationPanelForm={locationPanelForm}
                 roadPanelForm={roadPanelForm}
                 zonePanelForm={zonePanelForm}
-                tagSettingForm={tagSettingForm}
                 dataList={dataList}
               />
             }

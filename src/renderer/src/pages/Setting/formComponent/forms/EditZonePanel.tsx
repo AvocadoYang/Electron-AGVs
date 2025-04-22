@@ -32,12 +32,6 @@ import useAmrName from '@renderer/api/useAmrName';
 
 type TagRender = SelectProps['tagRender'];
 
-const zoneType: SelectProps['options'] = [
-  { value: '減速區' },
-  { value: '限高區' },
-  { value: '禁止區' }
-];
-
 type Save_Zone = {
   name: string;
   backgroundColor: string;
@@ -78,16 +72,16 @@ const tagRender: TagRender = (props) => {
 
 const EditZonePanel: React.FC<{
   zonePanelForm: FormInstance<unknown>;
-  tagSettingForm: FormInstance<unknown>;
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ attributes, listeners, sortableId, zonePanelForm, tagSettingForm }) => {
+}> = ({ attributes, listeners, sortableId, zonePanelForm }) => {
   const { t } = useTranslation();
   const { data } = useMap();
   const { data: allAmr = [] } = useAmrName();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [tagSettingForm] = Form.useForm();
   const [isHint, setIsHint] = useState(false);
   const queryClient = useQueryClient();
   const [zoneTags, setZoneTags] = useState<string[] | undefined>([]);
@@ -95,8 +89,15 @@ const EditZonePanel: React.FC<{
   const [notVehicleForbidden, setNotVehicleForbidden] = useState(false);
   const [messageApi, contextHolders] = message.useMessage();
 
+  const zoneType: SelectProps['options'] = [
+    { label: `${t('edit_zone_panel.deceleration_zone')}`, value: '減速區' },
+    { label: `${t('edit_zone_panel.height_limit_zone')}`, value: '限高區' },
+    { label: `${t('edit_zone_panel.restricted_zone')}`, value: '禁止區' },
+    { label: `${t('edit_zone_panel.controlled_zone')}`, value: '限制區' }
+  ];
+
   const AmrsID: SelectProps['options'] = allAmr.map((amr) => {
-    return { value: amr.id };
+    return { value: amr.amrId };
   });
 
   const handleCancel = () => {
@@ -194,6 +195,8 @@ const EditZonePanel: React.FC<{
       }
     };
 
+    console.log(newZone);
+
     saveZoneMutation.mutate(newZone);
     setAllVehicleForbidden(false);
     setNotVehicleForbidden(false);
@@ -203,12 +206,12 @@ const EditZonePanel: React.FC<{
   };
 
   useEffect(() => {
+    console.log(zoneTags);
     if (zoneTags?.length) {
       if (Object.keys(tagSettingForm.getFieldsValue(true) as {}).length === 0) {
         setIsHint(true);
         return;
       }
-      // console.log(tagSettingForm.getFieldsValue())
       if (
         zoneTags.includes('禁止區') &&
         !(
@@ -338,18 +341,18 @@ const EditZonePanel: React.FC<{
         </Form>
       </div>
 
-      <Modal
-        title={t('edit_zone_panel.tag_setting')}
-        open={isModalOpen}
-        maskClosable={false}
-        onOk={handleCancel}
-        getContainer={false}
-        onCancel={handleCancel}
-        cancelButtonProps={{ style: { display: 'none' } }}
-        mask={false}
-        style={{ borderTop: `5px solid ${borderColor(sortableId)}`, borderRadius: '11px' }}
-      >
-        <Form layout="vertical" form={tagSettingForm} style={{ fontWeight: 'bold' }}>
+      <Form layout="vertical" form={tagSettingForm} style={{ fontWeight: 'bold' }}>
+        <Modal
+          title={t('edit_zone_panel.tag_setting')}
+          open={isModalOpen}
+          maskClosable={false}
+          onOk={handleCancel}
+          getContainer={false}
+          onCancel={handleCancel}
+          cancelButtonProps={{ style: { display: 'none' } }}
+          mask={false}
+          style={{ borderTop: `5px solid ${borderColor(sortableId)}`, borderRadius: '11px' }}
+        >
           <hr style={{ border: '1px solid black', marginBottom: '8px' }}></hr>
           {zoneTags?.includes('減速區') ? (
             <Form.Item
@@ -413,8 +416,8 @@ const EditZonePanel: React.FC<{
           ) : (
             []
           )}
-        </Form>
-      </Modal>
+        </Modal>
+      </Form>
     </>
   );
 };

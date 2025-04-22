@@ -36,6 +36,7 @@ type RoadListType = {
   validYawList?: string | number[];
   spot1Id: string;
   spot2Id: string;
+  priority: number;
   x1: number;
   y1: number;
   x2: number;
@@ -53,6 +54,7 @@ const whenAll = yawOptions.map((m) => ({
   ...m,
   disabled: ['0', '90', '180', '270'].includes(m.value)
 }));
+
 const when0 = yawOptions.map((m) => ({ ...m, disabled: ['*', '90', '270'].includes(m.value) }));
 const when90 = yawOptions.map((m) => ({ ...m, disabled: ['0', '180', '*'].includes(m.value) }));
 const when180 = yawOptions.map((m) => ({ ...m, disabled: ['*', '90', '270'].includes(m.value) }));
@@ -74,6 +76,12 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const { t } = useTranslation();
   const [chooseAngle, setChooseAngle] = useState<string>('');
   const [yawOption, setYawOption] = useState<typeof yawOptions>(yawOptions);
+
+  const levelOption = [
+    { value: 5, label: t('edit_road_panel.low') },
+    { value: 3, label: t('edit_road_panel.medium') },
+    { value: 1, label: t('edit_road_panel.high') }
+  ];
 
   useEffect(() => {
     switch (chooseAngle) {
@@ -119,6 +127,9 @@ const EditableCell: React.FC<EditableCellProps> = ({
         </Radio.Group>
       );
       break;
+    case 'priority':
+      inputNode = <Select options={levelOption} style={{ minWidth: 120 }} />;
+      break;
     case 'validYawList':
       inputNode = (
         <Select
@@ -163,6 +174,7 @@ type DotStyle = { $active: boolean };
 type SubmitRoad = {
   roadId: string;
   limit: boolean;
+  priority: number;
   validYawList: number[] | string[];
 };
 
@@ -287,6 +299,7 @@ const RoadList: React.FC<{
       spot1Id: record.spot1Id,
       spot2Id: record.spot2Id,
       limit: record.limit,
+      priority: record.priority,
       roadType: record.roadType,
       validYawList
     });
@@ -299,8 +312,10 @@ const RoadList: React.FC<{
     const payload: SubmitRoad = {
       roadId: key,
       limit: formRoad.getFieldValue('limit') as boolean,
+      priority: formRoad.getFieldValue('priority'),
       validYawList: formRoad.getFieldValue('validYawList') as number[] | string[]
     };
+    console.log(payload);
     editRoadMutation.mutate(payload);
     formRoad.setFieldsValue(payload);
     setEditingKey(null);
@@ -347,15 +362,28 @@ const RoadList: React.FC<{
       dataIndex: 'validYawList',
       key: 'validYawList',
       editable: true,
-      minWidth: 140, // Space for multiple yaw values like "0, 90, 180"
+      minWidth: 80, // Space for multiple yaw values like "0, 90, 180"
       render: (_: unknown, record: RoadListType) => record.validYawList?.toString() || ''
+    },
+    {
+      title: t('edit_road_panel.priority'),
+      dataIndex: 'priority',
+      key: 'priority',
+      editable: true,
+      minWidth: 80, // Enough for "Yes" or "No"
+      render: (_: unknown, record: RoadListType) => {
+        const level = record.priority;
+        if (level === 1) return t('edit_road_panel.low');
+        if (level === 5) return t('edit_road_panel.high');
+        return t('edit_road_panel.medium');
+      }
     },
     {
       title: t('edit_road_panel.limit'),
       dataIndex: 'limit',
       key: 'limit',
       editable: true,
-      minWidth: 80, // Enough for "Yes" or "No"
+      minWidth: 50, // Enough for "Yes" or "No"
       render: (_: unknown, record: RoadListType) => (record.limit ? t('utils.yes') : t('utils.no'))
     },
     {

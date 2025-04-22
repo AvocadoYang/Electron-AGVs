@@ -20,17 +20,21 @@ const Line = styled.div.attrs<{
   length: number;
   angle: number;
   color: string;
+  priority: number;
   $isOneWayRoad: boolean;
   $isClaimed: boolean;
   $limit: boolean;
   $isOnHover: boolean;
-}>(({ length, angle, $isOneWayRoad, $isClaimed, $isOnHover, color }) => ({
+}>(({ length, angle, $isOneWayRoad, $isClaimed, $isOnHover, color, priority }) => ({
   style: {
     width: length,
     height: $isOnHover ? '2px' : '1px',
     transform: `rotate(${angle}deg) translateY(-50%)`,
     backgroundColor: $isOneWayRoad ? '#ffffff5' : 'rgb(0 68 255 / 0%)',
-    border: $isClaimed || $isOnHover ? `1px solid ${color}` : '2px solid #cccccc47'
+    border:
+      $isClaimed || $isOnHover
+        ? `1px solid ${color}`
+        : `${priority === 1 ? '0.5px solid #f74f8746' : '0.5px solid #adadad46'}`
   }
 }))<{
   length: number;
@@ -79,17 +83,30 @@ const Road: FC<{
   x2: number; // in pixel, css coordinate
   y2: number; // in pixel, css coordinate
   validYawList: '*' | number[];
+  priority: number;
   disabled: boolean;
   isClaimedBy?: string;
   limit: boolean;
   isRoadOnHover: boolean;
-}> = ({ roadId, roadType, x1, y1, x2, y2, isClaimedBy, limit, disabled, isRoadOnHover }) => {
+}> = ({
+  roadId,
+  roadType,
+  x1,
+  y1,
+  x2,
+  y2,
+  isClaimedBy,
+  limit,
+  disabled,
+  isRoadOnHover,
+  priority
+}) => {
   const ref = useRef(null);
+
   const [simulateColor, setSimulateColor] = useState('#ff9646');
   const length = Math.hypot(x1 - x2, y1 - y2);
   const angle = rad2Deg(Math.atan2(y2 - y1, x2 - x1));
   const { data: script } = useMockRobot();
-
   const showRoadTooltip = useAtomValue(isShowRoadTooltip);
 
   useEffect(() => {
@@ -108,6 +125,7 @@ const Road: FC<{
           length={length}
           angle={angle}
           ref={ref}
+          priority={priority}
           color={simulateColor}
           $isOneWayRoad={roadType === 'oneWayRoad'}
           $isClaimed={isClaimedBy !== undefined}

@@ -236,6 +236,9 @@
     "road_table": "Road Table",
     "road": "Road",
     "single_road": "Single Road",
+    "high": "Height",
+    "medium": "Medium",
+    "low": "Low",
     "two_way_road": "Two Way Road",
     "yaw": "Yaw",
     "disabled": "Disable Line",
@@ -243,6 +246,7 @@
     "start_point": "Start Point",
     "end_point": "End Point",
     "add": "Add New Road",
+    "priority": "Priority",
 
     "save_road_notify": {
       "warn": "road setting error",
@@ -278,6 +282,10 @@
     "not_vehicle_forbidden": "Not set",
     "hint": "Tag setting isn't yet completed !",
     "edit_zone": "Edit Zones",
+    "deceleration_zone": "Deceleration zone",
+    "height_limit_zone": "Height limit zone",
+    "restricted_zone": "Restricted zone",
+    "controlled_zone": "Controlled zone",
     "waring": {
       "tag_not_yet_setting": "The tag setting is still not setting ",
       "name_empty_error": "Name field cannot be empty",

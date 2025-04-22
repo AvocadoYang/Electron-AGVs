@@ -1,6 +1,7 @@
 export const initialRoadValue = {
   roadId: '',
   validYawList: [] as unknown as number[],
+  priority: 3,
   x: '',
   to: '',
   x1: 0,
@@ -34,8 +35,8 @@ export const initialTagSettingValue = {
 };
 
 export type TagSettingFormType = {
-  speed_limit?: number
-  hight_limit?: number
-  all_forbidden?: boolean
-  forbidden?: string[]
-}
+  speed_limit?: number;
+  hight_limit?: number;
+  all_forbidden?: boolean;
+  forbidden?: string[];
+};

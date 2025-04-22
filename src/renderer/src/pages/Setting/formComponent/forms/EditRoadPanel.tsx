@@ -45,15 +45,16 @@ const EditRoadPanel: React.FC<{
   });
 
   const saveRoad = () => {
-    console.log(roadPanelForm.getFieldsValue());
     const payload: Road = {
       spot1Id: (roadPanelForm.getFieldValue('x') as number).toString(),
       spot2Id: (roadPanelForm.getFieldValue('to') as number).toString(),
       limit: roadPanelForm.getFieldValue('limit') as boolean,
+      priority: roadPanelForm.getFieldValue('priority') as number,
       roadType: roadPanelForm.getFieldValue('roadType') as string,
       validYawList: roadPanelForm.getFieldValue('validYawList') as number[] | string[],
       disabled: roadPanelForm.getFieldValue('disabled') as boolean
     };
+
     saveRoadMutation.mutate(payload);
   };
 
@@ -173,6 +174,14 @@ const EditRoadPanel: React.FC<{
               <Switch />
             </Form.Item>
           </Space>
+
+          <Form.Item label={t('edit_road_panel.priority')} name="priority" shouldUpdate>
+            <Radio.Group buttonStyle="solid">
+              <Radio.Button value={5}>{t('edit_road_panel.low')}</Radio.Button>
+              <Radio.Button value={3}>{t('edit_road_panel.medium')}</Radio.Button>
+              <Radio.Button value={1}>{t('edit_road_panel.high')}</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
 
           <Space size={'large'} style={{ marginBottom: '15px', overflow: 'hidden' }}>
             <Form.Item label={t('edit_road_panel.start_point')} name="x" shouldUpdate required>

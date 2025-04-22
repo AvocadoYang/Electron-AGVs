@@ -22,6 +22,7 @@ const schema = object({
       x1: number().required(),
       y1: number().required(),
       disabled: boolean().required(),
+      priority: number().required(),
       limit: boolean().required(),
       x2: number().required(),
       y2: number().required(),

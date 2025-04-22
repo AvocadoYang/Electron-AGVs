@@ -63,8 +63,7 @@ const SortableWrap: FC<{
   locationPanelForm?: FormInstance<unknown>;
   roadPanelForm?: FormInstance<unknown>;
   zonePanelForm?: FormInstance<unknown>;
-  tagSettingForm?: FormInstance<unknown>;
-}> = ({ sortableId, locationPanelForm, roadPanelForm, zonePanelForm, tagSettingForm }) => {
+}> = ({ sortableId, locationPanelForm, roadPanelForm, zonePanelForm }) => {
   const { setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: sortableId, //這裡的id必須和SortableContext的item裡的id對應
     transition: {
@@ -157,7 +156,6 @@ const SortableWrap: FC<{
                 <FormCloseBtn sortableId={sortableId} panelName="edit_zone" />
                 <EditZonePanel
                   zonePanelForm={zonePanelForm as FormInstance<unknown>}
-                  tagSettingForm={tagSettingForm as FormInstance<unknown>}
                   sortableId={sortableId}
                   attributes={attributes}
                   listeners={listeners}
@@ -369,9 +367,8 @@ const ToolComponents: FC<{
   locationPanelForm: FormInstance<unknown>;
   roadPanelForm: FormInstance<unknown>;
   zonePanelForm: FormInstance<unknown>;
-  tagSettingForm: FormInstance<unknown>;
   dataList: ToolBarType;
-}> = ({ locationPanelForm, dataList, roadPanelForm, zonePanelForm, tagSettingForm }) => {
+}> = ({ locationPanelForm, dataList, roadPanelForm, zonePanelForm }) => {
   const showEditLocationPanel = useAtomValue(EditLocationPanelSwitch);
   const showQuickEditLocationPanel = useAtomValue(QuickEditLocationPanelSwitch);
   const showAllLocationListTable = useAtomValue(EditLocationListTableSwitch);
@@ -466,7 +463,6 @@ const ToolComponents: FC<{
           sortableId={formKey}
           key={formKey}
           zonePanelForm={zonePanelForm}
-          tagSettingForm={tagSettingForm}
         ></SortableWrap>
       );
     }

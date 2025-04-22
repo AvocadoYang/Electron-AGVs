@@ -21,44 +21,46 @@ const AllRoads: FC<{}> = () => {
   if (!data?.roads) return [];
   return (
     <div draggable={false}>
-      {data.roads.map(({ roadId, roadType, x1, y1, x2, y2, validYawList, disabled, limit }) => {
-        const [displayX1, displayY1] = rosCoord2DisplayCoord({
-          x: x1,
-          y: y1,
-          mapHeight: data.mapHeight,
-          mapOriginX: data.mapOriginX,
-          mapOriginY: data.mapOriginY,
-          mapResolution: data.mapResolution
-        });
+      {data.roads.map(
+        ({ roadId, roadType, x1, y1, x2, y2, validYawList, disabled, limit, priority }) => {
+          const [displayX1, displayY1] = rosCoord2DisplayCoord({
+            x: x1,
+            y: y1,
+            mapHeight: data.mapHeight,
+            mapOriginX: data.mapOriginX,
+            mapOriginY: data.mapOriginY,
+            mapResolution: data.mapResolution
+          });
 
-        const [displayX2, displayY2] = rosCoord2DisplayCoord({
-          x: x2,
-          y: y2,
-          mapHeight: data.mapHeight,
-          mapOriginX: data.mapOriginX,
-          mapOriginY: data.mapOriginY,
-          mapResolution: data.mapResolution
-        });
+          const [displayX2, displayY2] = rosCoord2DisplayCoord({
+            x: x2,
+            y: y2,
+            mapHeight: data.mapHeight,
+            mapOriginX: data.mapOriginX,
+            mapOriginY: data.mapOriginY,
+            mapResolution: data.mapResolution
+          });
 
-        const currentClaimedStatus = claimedRoads.get(roadId);
-
-        return (
-          <MemoizedRoad
-            key={roadId}
-            roadId={roadId}
-            roadType={roadType}
-            x1={displayX1}
-            y1={displayY1}
-            x2={displayX2}
-            y2={displayY2}
-            limit={limit}
-            disabled={disabled}
-            validYawList={validYawList}
-            isClaimedBy={currentClaimedStatus}
-            isRoadOnHover={roadOnHover === roadId}
-          />
-        );
-      })}
+          const currentClaimedStatus = claimedRoads.get(roadId);
+          return (
+            <MemoizedRoad
+              key={roadId}
+              roadId={roadId}
+              priority={priority}
+              roadType={roadType}
+              x1={displayX1}
+              y1={displayY1}
+              x2={displayX2}
+              y2={displayY2}
+              limit={limit}
+              disabled={disabled}
+              validYawList={validYawList}
+              isClaimedBy={currentClaimedStatus}
+              isRoadOnHover={roadOnHover === roadId}
+            />
+          );
+        }
+      )}
     </div>
   );
 };
