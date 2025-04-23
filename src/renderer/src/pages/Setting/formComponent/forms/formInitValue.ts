@@ -27,6 +27,15 @@ export const initialZoneValue = {
   endY: 0
 };
 
+export const initialTagFormValue = {
+  speed_limit: undefined,
+  forbidden: [],
+  all_forbidden: false,
+  not_forbidden: false,
+
+  hight_limit: undefined
+};
+
 export const initialTagSettingValue = {
   speed_limit: undefined,
   hight_limit: undefined,

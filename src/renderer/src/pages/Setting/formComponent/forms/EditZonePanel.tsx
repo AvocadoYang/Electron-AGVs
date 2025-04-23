@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from 'react';
 import './form.css';
 import { useTranslation } from 'react-i18next';
+import { CloseOutlined } from '@ant-design/icons';
 import {
   Badge,
   Button,
@@ -14,12 +15,11 @@ import {
   SelectProps,
   Space,
   Tag,
-  Modal,
   Checkbox
 } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import FormHr from '../../utils/FormHr';
-import { initialZoneValue } from './formInitValue';
+import { initialTagFormValue, initialZoneValue } from './formInitValue';
 import { openNotificationWithIcon } from '../../utils/notification';
 import { TagSettingType, ZoneType } from '@renderer/utils/jotai';
 import client from '@renderer/api/axiosClient';
@@ -27,7 +27,6 @@ import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useMap from '@renderer/api/useMap';
-import { borderColor } from '../../utils/utils';
 import useAmrName from '@renderer/api/useAmrName';
 
 type TagRender = SelectProps['tagRender'];
@@ -75,11 +74,11 @@ const EditZonePanel: React.FC<{
   sortableId: string;
   attributes: import('@dnd-kit/core').DraggableAttributes;
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
-}> = ({ attributes, listeners, sortableId, zonePanelForm }) => {
+}> = ({ attributes, listeners, zonePanelForm }) => {
   const { t } = useTranslation();
   const { data } = useMap();
   const { data: allAmr = [] } = useAmrName();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showTagSetting, setShowTagSetting] = useState(false);
 
   const [tagSettingForm] = Form.useForm();
   const [isHint, setIsHint] = useState(false);
@@ -100,9 +99,6 @@ const EditZonePanel: React.FC<{
     return { value: amr.amrId };
   });
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
   const saveZoneMutation = useMutation({
     mutationFn: (payload: Save_Zone) => {
       return client.post('api/setting/save-new-zone', payload);
@@ -195,8 +191,6 @@ const EditZonePanel: React.FC<{
       }
     };
 
-    console.log(newZone);
-
     saveZoneMutation.mutate(newZone);
     setAllVehicleForbidden(false);
     setNotVehicleForbidden(false);
@@ -206,7 +200,7 @@ const EditZonePanel: React.FC<{
   };
 
   useEffect(() => {
-    console.log(zoneTags);
+    console.log(tagSettingForm.getFieldsValue());
     if (zoneTags?.length) {
       if (Object.keys(tagSettingForm.getFieldsValue(true) as {}).length === 0) {
         setIsHint(true);
@@ -321,7 +315,7 @@ const EditZonePanel: React.FC<{
                     }
                   }}
                 >
-                  <Button onClick={() => setIsModalOpen(true)} size="small">
+                  <Button onClick={() => setShowTagSetting(!showTagSetting)} size="small">
                     {t('edit_zone_panel.tag_setting')}
                   </Button>
                 </ConfigProvider>
@@ -341,83 +335,86 @@ const EditZonePanel: React.FC<{
         </Form>
       </div>
 
-      <Form layout="vertical" form={tagSettingForm} style={{ fontWeight: 'bold' }}>
-        <Modal
-          title={t('edit_zone_panel.tag_setting')}
-          open={isModalOpen}
-          maskClosable={false}
-          onOk={handleCancel}
-          getContainer={false}
-          onCancel={handleCancel}
-          cancelButtonProps={{ style: { display: 'none' } }}
-          mask={false}
-          style={{ borderTop: `5px solid ${borderColor(sortableId)}`, borderRadius: '11px' }}
+      <div
+        className={`tag-setting-wrap ${showTagSetting ? 'tag-setting-wrap-show' : ''}`}
+        style={{ borderTop: `5px solid #315E7D` }}
+      >
+        <CloseOutlined
+          onClick={() => setShowTagSetting(false)}
+          className="form-close-btn"
+          style={{ position: 'absolute', right: '1em', top: '1em' }}
+        />
+        <Form
+          layout="vertical"
+          form={tagSettingForm}
+          initialValues={initialTagFormValue}
+          style={{ fontWeight: 'bold' }}
         >
+          <h3 style={{ width: '100%', textAlign: 'left', marginBottom: '3px' }}>
+            {t('edit_zone_panel.tag_setting')}
+          </h3>
           <hr style={{ border: '1px solid black', marginBottom: '8px' }}></hr>
-          {zoneTags?.includes('減速區') ? (
-            <Form.Item
-              name="speed_limit"
-              label={`${t('edit_zone_panel.highest_speed')}: (${t('edit_zone_panel.necessary')}) `}
-            >
-              <Input type="number" placeholder="請輸入最高速限" style={{ width: '50%' }} />
-            </Form.Item>
-          ) : (
-            []
-          )}
-          {zoneTags?.includes('限高區') ? (
-            <Form.Item
-              name="hight_limit"
-              label={`${t('edit_zone_panel.hight_limit')}: (${t('edit_zone_panel.necessary')})`}
-            >
-              <Input type="number" placeholder="請輸入高度限制" style={{ width: '50%' }} />
-            </Form.Item>
-          ) : (
-            []
-          )}
-          {zoneTags?.includes('禁止區') ? (
-            <>
-              <Space>
-                <Form.Item
-                  name="all_forbidden"
-                  valuePropName="checked"
-                  // label={`${t('edit_zone_panel.all_vehicle_forbidden')}: `}
-                  style={{ margin: '0' }}
-                >
-                  <Checkbox
-                    checked={notVehicleForbidden}
-                    disabled={allVehicleForbidden}
-                    onChange={(e) => setNotVehicleForbidden(e.target.checked)}
-                  >{`${t('edit_zone_panel.not_vehicle_forbidden')}`}</Checkbox>
-                </Form.Item>
-                <Form.Item
-                  name="not_forbidden"
-                  valuePropName="checked"
-                  // label={`${t('edit_zone_panel.all_vehicle_forbidden')}: `}
-                  style={{ margin: '0' }}
-                >
-                  <Checkbox
-                    checked={allVehicleForbidden}
-                    disabled={notVehicleForbidden}
-                    onChange={(e) => setAllVehicleForbidden(e.target.checked)}
-                  >{`${t('edit_zone_panel.all_vehicle_forbidden')}`}</Checkbox>
-                </Form.Item>
-              </Space>
-              <Form.Item name="forbidden" label={`${t('edit_zone_panel.forbidden_vehicle')}: `}>
-                <Select
-                  placeholder={'請選擇限制進入車輛'}
-                  disabled={allVehicleForbidden || notVehicleForbidden}
-                  mode={'multiple'}
-                  tagRender={tagRender}
-                  style={{ width: '100%' }}
-                  options={[...AmrsID]}
-                />
+
+          <Form.Item
+            name="speed_limit"
+            label={`${t('edit_zone_panel.highest_speed')}: (${t('edit_zone_panel.necessary')}) `}
+            style={{ display: `${zoneTags?.includes('減速區') ? '' : 'none'}` }}
+          >
+            <Input type="number" placeholder="請輸入最高速限" style={{ width: '50%' }} />
+          </Form.Item>
+
+          <Form.Item
+            name="hight_limit"
+            label={`${t('edit_zone_panel.hight_limit')}: (${t('edit_zone_panel.necessary')})`}
+            style={{ display: `${zoneTags?.includes('限高區') ? '' : 'none'}` }}
+          >
+            <Input type="number" placeholder="請輸入高度限制" style={{ width: '50%' }} />
+          </Form.Item>
+
+          <>
+            <Space style={{ display: `${zoneTags?.includes('禁止區') ? '' : 'none'}` }}>
+              <Form.Item
+                name="all_forbidden"
+                valuePropName="checked"
+                // label={`${t('edit_zone_panel.all_vehicle_forbidden')}: `}
+                style={{ margin: '0' }}
+              >
+                <Checkbox
+                  checked={notVehicleForbidden}
+                  disabled={allVehicleForbidden}
+                  onChange={(e) => setNotVehicleForbidden(e.target.checked)}
+                >{`${t('edit_zone_panel.not_vehicle_forbidden')}`}</Checkbox>
               </Form.Item>
-            </>
-          ) : (
-            []
-          )}
-        </Modal>
-      </Form>
+              <Form.Item
+                name="not_forbidden"
+                valuePropName="checked"
+                // label={`${t('edit_zone_panel.all_vehicle_forbidden')}: `}
+                style={{ margin: '0' }}
+              >
+                <Checkbox
+                  checked={allVehicleForbidden}
+                  disabled={notVehicleForbidden}
+                  onChange={(e) => setAllVehicleForbidden(e.target.checked)}
+                >{`${t('edit_zone_panel.all_vehicle_forbidden')}`}</Checkbox>
+              </Form.Item>
+            </Space>
+            <Form.Item
+              name="forbidden"
+              label={`${t('edit_zone_panel.forbidden_vehicle')}: `}
+              style={{ display: `${zoneTags?.includes('禁止區') ? '' : 'none'}` }}
+            >
+              <Select
+                placeholder={'請選擇限制進入車輛'}
+                disabled={allVehicleForbidden || notVehicleForbidden}
+                mode={'multiple'}
+                tagRender={tagRender}
+                style={{ width: '100%' }}
+                options={[...AmrsID]}
+              />
+            </Form.Item>
+          </>
+        </Form>
+      </div>
     </>
   );
 };
