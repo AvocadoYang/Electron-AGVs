@@ -4,11 +4,12 @@ import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Flex, Form, InputNumber, message, Select } from 'antd';
-import { FC } from 'react';
+import { Form, InputNumber, message, Select, Tag } from 'antd';
+import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { array, object, string } from 'yup';
 import SubmitButton from '@renderer/utils/SubmitButton';
+import styled from 'styled-components';
 
 type SubmitPayload = {
   amrId: string[];
@@ -16,6 +17,10 @@ type SubmitPayload = {
   preventLocation: string[] | null;
   idle_min: number;
 };
+
+const Wrapper = styled.div`
+  min-width: 600px;
+`;
 
 const getIdleSelect = async () => {
   const { data } = await client.get<unknown>('api/setting/idle-task-loc-selection');
@@ -40,7 +45,14 @@ const IdleMissionForm: FC = () => {
   const { data: idleLocSelect, isLoading } = useQuery(['idle-task-selection'], getIdleSelect);
   const queryClient = useQueryClient();
 
-  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
+  const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
+    return name?.amrs
+      .filter((a) => a.isReal === true)
+      .map((m) => ({
+        label: `${m.amrId} ${m.isReal ? [] : <Tag>{`${t('simulate')}`}</Tag>}`,
+        value: m.amrId
+      }));
+  }, [name]);
 
   const missionOptions = missionTitle?.map((v) => {
     return {
@@ -79,7 +91,7 @@ const IdleMissionForm: FC = () => {
   };
 
   return (
-    <Flex>
+    <Wrapper>
       {contextHolder}
       <Form form={form} title="設定依照車輛回傳的id來做任務" onFinish={submit}>
         <Form.Item
@@ -107,7 +119,7 @@ const IdleMissionForm: FC = () => {
             }
           ]}
         >
-          <InputNumber min={3} />
+          <InputNumber min={3} style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item
@@ -142,7 +154,7 @@ const IdleMissionForm: FC = () => {
           <SubmitButton form={form} isModel={false} />
         </Form.Item>
       </Form>
-    </Flex>
+    </Wrapper>
   );
 };
 

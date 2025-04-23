@@ -12,7 +12,7 @@ const AllAMRs = () => {
   if (!data) return null;
   return (
     <>
-      {data.map(({ amrId }) => (
+      {data.amrs.map(({ amrId }) => (
         <MemoizedAMR amrId={amrId} key={amrId} />
       ))}
     </>

@@ -60,13 +60,14 @@ const useTaskOptions = () => {
     return text;
   };
 
-  const robotOption = useMemo(() => {
-    return (
-      robots?.map(({ amrId }) => ({
-        label: amrId,
-        value: amrId
-      })) || []
-    );
+  const robotOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
+    if (!robots) return;
+    return robots.amrs
+      .filter((a) => a.isReal === true)
+      .map((m) => ({
+        label: `${m.amrId} ${m.isReal ? '' : t('simulate')}`,
+        value: m.amrId
+      }));
   }, [robots]);
 
   const locationsOption = useMemo(() => {

@@ -1,81 +1,158 @@
-import Icon, {
+import {
   ThunderboltOutlined,
   RedoOutlined,
   CalendarOutlined,
-  CaretRightOutlined,
-  PauseOutlined
+  SwapOutlined,
+  CloseOutlined
 } from '@ant-design/icons';
-import '../webview.css';
-import { Button, Flex, GetProps } from 'antd';
+import { Button, Flex, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { DialogMission } from '../../missionModal';
-import { memo, useState } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { OpenAssignMission } from '@renderer/pages/Main/global/jotai';
 import { useSetAtom } from 'jotai';
 import QuickMissionWebView from '../../missionModal/QuickMissionWebView';
-type CustomIconComponentProps = GetProps<typeof Icon>;
+import styled from 'styled-components';
 
-const Cube = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <title>cube-outline</title>
-    <path d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z" />
-  </svg>
-);
+// Styled Components
+const MissionBtnWrap = styled.div<{ $isMinimized: boolean }>`
+  position: absolute;
+  z-index: 4;
+  top: 16px; /* Align with the header */
+  right: 16px; /* Align with the right edge of the mission panel */
+  background-color: #ffffff; /* White background to match panels */
+  border-radius: 8px; /* Consistent rounded corners */
+  padding: 8px; /* More padding for a spacious feel */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow to match panels */
+  opacity: 1; /* Always fully opaque for clarity */
+  transition: all 0.3s ease-in-out;
+  width: ${(props) => (props.$isMinimized ? '40px' : 'auto')};
+  height: ${(props) => (props.$isMinimized ? '4em' : 'auto')};
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slight shadow on hover */
+  }
+
+  @media (max-width: 768px) {
+    padding: ${(props) => (props.$isMinimized ? '0' : '6px')};
+    border-radius: 6px;
+  }
+
+  @media (max-width: 576px) {
+    padding: ${(props) => (props.$isMinimized ? '0' : '4px')};
+    border-radius: 4px;
+  }
+
+  @media (max-width: 480px) {
+    padding: ${(props) => (props.$isMinimized ? '0' : '4px')};
+    border-radius: 4px;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  height: 40px; /* Consistent height with other buttons */
+  border-radius: 4px; /* Rounded corners for a modern look */
+  border: none; /* No border for a clean look */
+  background-color: #f5f5f5; /* Light gray background for unselected buttons */
+  color: #333; /* Darker text for contrast */
+  font-weight: 500; /* Slightly bold text */
+  font-size: 14px; /* Larger font size for readability */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #1890ff; /* Ant Design primary color on hover */
+    color: #fff; /* White text on hover */
+    transform: scale(1.05); /* Slight scale-up effect */
+  }
+
+  &:active {
+    transform: scale(0.95); /* Scale-down on click */
+  }
+`;
+
+const MinimizeButton = styled(Button)`
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #ff4d4f;
+    color: #fff;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
 
 const MissionBtn = () => {
   const { t } = useTranslation();
   const openAssignMission = useSetAtom(OpenAssignMission);
   const [showQuickMission, setShowQuickMission] = useState(false);
-  const [isStart, setIsStart] = useState(true);
+  const [$isMinimized, set$isMinimized] = useState(false);
 
-  const CubeIcon = (props: Partial<CustomIconComponentProps>) => (
-    <Icon component={Cube} {...props} />
-  );
+  useEffect(() => {
+    const savedState = localStorage.getItem('missionBtnMinimized');
+    if (savedState) {
+      set$isMinimized(JSON.parse(savedState));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('missionBtnMinimized', JSON.stringify($isMinimized));
+  }, [$isMinimized]);
+
   return (
     <>
-      <Flex gap="small" wrap="wrap" align="center" justify="end" className="mission-btn-wrap">
-        <Button color="primary" variant="outlined" onClick={() => {}} icon={<RedoOutlined />}>
-          {t('toolbar.mission.cycle_mission')}
-        </Button>
+      <MissionBtnWrap $isMinimized={$isMinimized}>
+        {$isMinimized ? (
+          <Tooltip title={t('main.card_name.mission')} placement="bottom">
+            <Button icon={<SwapOutlined />} type="text" onClick={() => set$isMinimized(false)} />
+          </Tooltip>
+        ) : (
+          <Flex gap="small" wrap="wrap" align="center" justify="end">
+            <StyledButton onClick={() => {}} icon={<RedoOutlined />}>
+              {t('toolbar.mission.cycle_mission')}
+            </StyledButton>
 
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={() => {
-            setShowQuickMission(!showQuickMission);
-          }}
-          icon={<ThunderboltOutlined />}
-        >
-          {t('main.card_name.quick_mission')}
-        </Button>
+            <StyledButton
+              onClick={() => {
+                setShowQuickMission(!showQuickMission);
+              }}
+              icon={<ThunderboltOutlined />}
+            >
+              {t('main.card_name.quick_mission')}
+            </StyledButton>
 
-        <Button
-          color="primary"
-          variant="outlined"
-          onClick={() => {
-            openAssignMission(true);
-          }}
-          icon={<CalendarOutlined />}
-        >
-          {t('main.card_name.new_mission')}
-        </Button>
-      </Flex>
-      <DialogMission></DialogMission>
+            <StyledButton
+              onClick={() => {
+                openAssignMission(true);
+              }}
+              icon={<CalendarOutlined />}
+            >
+              {t('main.card_name.new_mission')}
+            </StyledButton>
+
+            <MinimizeButton icon={<CloseOutlined />} onClick={() => set$isMinimized(true)} />
+          </Flex>
+        )}
+      </MissionBtnWrap>
+      <DialogMission />
       <QuickMissionWebView
         showQuickMission={showQuickMission}
         setShowQuickMission={setShowQuickMission}
-      ></QuickMissionWebView>
-      {/* <Flex gap={'meddle'} wrap="wrap" align="center" justify="end" className="mission-btn-wrap">
-        <CaretRightOutlined
-          className={`${isStart ? 'hide' : 'start-button'}`}
-          onClick={() => setIsStart(true)}
-        />
-        <PauseOutlined
-          className={`${isStart ? 'pause-button' : 'hide-pause'}`}
-          onClick={() => setIsStart(false)}
-        />
-        <CubeIcon style={{ fontSize: '100px' }}></CubeIcon>
-      </Flex> */}
+      />
     </>
   );
 };

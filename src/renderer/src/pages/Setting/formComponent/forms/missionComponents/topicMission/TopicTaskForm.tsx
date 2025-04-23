@@ -6,15 +6,19 @@ import { ErrorResponse } from '@renderer/utils/globalType';
 import SubmitButton from '@renderer/utils/SubmitButton';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation } from '@tanstack/react-query';
-import { Flex, Form, InputNumber, message, Select } from 'antd';
-import { FC } from 'react';
+import { Form, InputNumber, message, Select } from 'antd';
+import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 type SubmitPayload = {
   amrId: string[];
   missionId: string;
   topicId: number;
 };
+const Wrapper = styled.div`
+  min-width: 600px;
+`;
 
 const TopicForm: FC = () => {
   const [form] = Form.useForm();
@@ -24,7 +28,12 @@ const TopicForm: FC = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const { data: topicData, refetch } = useTopicMission();
 
-  const AmrOption = name?.map((v) => ({ value: v.amrId, label: v.amrId }));
+  const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
+    return name?.amrs.map((m) => ({
+      label: `${m.amrId} ${m.isReal ? [] : t('simulate')}`,
+      value: m.amrId
+    }));
+  }, [name]);
 
   const missionOptions = missionTitle?.map((v) => {
     return {
@@ -67,57 +76,56 @@ const TopicForm: FC = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       {contextHolder}
-      <Flex>
-        <Form form={form} title={t('mission.topic_mission.topic_mission')}>
-          <Form.Item
-            label={t('mission.topic_mission.car')}
-            name="amrId"
-            hasFeedback
-            rules={[
-              {
-                required: true,
-                message: t('utils.required')
-              }
-            ]}
-          >
-            <Select mode="multiple" options={AmrOption} />
-          </Form.Item>
 
-          <Form.Item
-            label="topic ID"
-            name="topicId"
-            hasFeedback
-            rules={[
-              {
-                required: true,
-                message: t('utils.required')
-              }
-            ]}
-          >
-            <InputNumber min={1} />
-          </Form.Item>
+      <Form form={form} title={t('mission.topic_mission.topic_mission')}>
+        <Form.Item
+          label={t('mission.topic_mission.car')}
+          name="amrId"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
+          <Select mode="multiple" options={AmrOption} />
+        </Form.Item>
 
-          <Form.Item
-            label={t('mission.topic_mission.mission')}
-            name="missionId"
-            hasFeedback
-            rules={[
-              {
-                required: true,
-                message: t('utils.required')
-              }
-            ]}
-          >
-            <Select options={missionOptions} />
-          </Form.Item>
-          <Form.Item>
-            <SubmitButton form={form} isModel={false} onOk={submit} />
-          </Form.Item>
-        </Form>
-      </Flex>
-    </>
+        <Form.Item
+          label="topic ID"
+          name="topicId"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
+          <InputNumber min={1} style={{ width: '100%' }} />
+        </Form.Item>
+
+        <Form.Item
+          label={t('mission.topic_mission.mission')}
+          name="missionId"
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: t('utils.required')
+            }
+          ]}
+        >
+          <Select options={missionOptions} />
+        </Form.Item>
+        <Form.Item>
+          <SubmitButton form={form} isModel={false} onOk={submit} />
+        </Form.Item>
+      </Form>
+    </Wrapper>
   );
 };
 

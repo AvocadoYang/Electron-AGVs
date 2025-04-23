@@ -14,11 +14,19 @@ const AutoMission = () => {
   const [formRegionSample] = Form.useForm();
   const { data: missionTitle } = useAllMissionTitles();
   const { data: name } = useName();
-  const AmrOption: { value: null | string; label: string }[] | undefined = name?.map((v) => ({
-    value: v.amrId,
-    label: v.amrId
-  }));
-  AmrOption?.push({ value: null, label: t('utils.random') });
+  const AmrOption: { value: string; label: string }[] | undefined = useMemo(() => {
+    let options;
+    if (name?.isSim) {
+      options = name.amrs
+        .filter((a) => a.isReal === false)
+        .map((m) => ({ label: m.amrId, value: m.amrId }));
+    } else {
+      options = name?.amrs
+        .filter((a) => a.isReal === true)
+        .map((m) => ({ label: m.amrId, value: m.amrId }));
+    }
+    return options ? [...options, { value: 'null', label: t('utils.random') }] : undefined;
+  }, [name, t]);
 
   const misOptions = useMemo(() => {
     if (!missionTitle) return [];
@@ -31,7 +39,7 @@ const AutoMission = () => {
   }, [missionTitle]);
 
   const submitMutation = useMutation({
-    mutationFn: (payload: { amrId: string; missionId: string }) => {
+    mutationFn: (payload: { amrId: string | null; missionId: string }) => {
       return client.post('api/setting/add-cycle-mission', payload);
     },
     onSuccess: () => {
@@ -54,7 +62,12 @@ const AutoMission = () => {
       return;
     }
 
-    submitMutation.mutate(data);
+    const payload = {
+      ...data,
+      amrId: data.amrId === null ? null : data.amrId
+    };
+
+    submitMutation.mutate(payload);
   };
 
   const [openAutoMission, setOpenAutoMission] = useAtom(OpenAutoMission);
