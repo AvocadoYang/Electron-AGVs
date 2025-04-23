@@ -77,7 +77,7 @@ const EditZonePanel: React.FC<{
 }> = ({ attributes, listeners, zonePanelForm }) => {
   const { t } = useTranslation();
   const { data } = useMap();
-  const { data: allAmr = [] } = useAmrName();
+  const { data: allAmr } = useAmrName();
   const [showTagSetting, setShowTagSetting] = useState(false);
 
   const [tagSettingForm] = Form.useForm();
@@ -95,7 +95,7 @@ const EditZonePanel: React.FC<{
     { label: `${t('edit_zone_panel.controlled_zone')}`, value: '限制區' }
   ];
 
-  const AmrsID: SelectProps['options'] = allAmr.map((amr) => {
+  const AmrsID: SelectProps['options'] = allAmr?.amrs.map((amr) => {
     return { value: amr.amrId };
   });
 
@@ -409,7 +409,7 @@ const EditZonePanel: React.FC<{
                 mode={'multiple'}
                 tagRender={tagRender}
                 style={{ width: '100%' }}
-                options={[...AmrsID]}
+                options={AmrsID}
               />
             </Form.Item>
           </>

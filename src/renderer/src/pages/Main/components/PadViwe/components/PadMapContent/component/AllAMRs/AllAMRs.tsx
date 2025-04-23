@@ -12,9 +12,13 @@ const AllAMRs = () => {
   if (!data) return null;
   return (
     <>
-      {data.amrs.map(({ amrId }) => (
-        <MemoizedAMR amrId={amrId} key={amrId} />
-      ))}
+      {data.isSim
+        ? data.amrs
+            .filter((v) => v.isReal === false)
+            .map(({ amrId }) => <MemoizedAMR amrId={amrId} key={amrId} />)
+        : data.amrs
+            .filter((v) => v.isReal)
+            .map(({ amrId }) => <MemoizedAMR amrId={amrId} key={amrId} />)}
     </>
   );
 };
