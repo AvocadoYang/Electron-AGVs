@@ -142,9 +142,9 @@ const AllLocationTable: React.FC<{
   });
 
   const deleteLocationMutation = useMutation({
-    mutationFn: (locationId: string) => {
+    mutationFn: (id: string) => {
       return client.post('api/setting/delete-edit-loc', {
-        locationId
+        id
       });
     },
     onSuccess: () => {
@@ -155,9 +155,9 @@ const AllLocationTable: React.FC<{
   });
 
   const deleteMultiLocationMutation = useMutation({
-    mutationFn: (locationId: string[]) => {
+    mutationFn: (id: string[]) => {
       return client.post('api/setting/delete-multi-edit-loc', {
-        locationId
+        id
       });
     },
     onSuccess: () => {
@@ -267,7 +267,7 @@ const AllLocationTable: React.FC<{
 
   // --------------------------
 
-  const savePos = (oldLocationId: string) => {
+  const savePos = (id: string, oldLocationId: string) => {
     const payload = locationPanelForm.getFieldsValue() as LocationType;
     const isNegative = Number(payload.locationId) <= 0;
 
@@ -278,6 +278,7 @@ const AllLocationTable: React.FC<{
 
     const sanitizedPayload = {
       ...payload,
+      id,
       newLocationId: payload.locationId.toString(),
       oldLocationId
     };
@@ -289,13 +290,13 @@ const AllLocationTable: React.FC<{
     setEditingKey(null);
   };
 
-  const save = (id: string) => {
-    savePos(id);
+  const save = (id: string, locationId: string) => {
+    savePos(id, locationId);
     setEditingKey(null);
   };
 
   const deleteLocationInList = (id: string) => {
-    deleteLocationMutation.mutate(id.toString());
+    deleteLocationMutation.mutate(id);
   };
 
   const handleHover = (locationId: string, x: number, y: number) => {
@@ -378,7 +379,7 @@ const AllLocationTable: React.FC<{
           <Flex gap="small">
             <Typography.Link
               onClick={() => {
-                save(record.locationId);
+                save(record.id, record.locationId);
               }}
               style={{ marginRight: 8 }}
             >
@@ -410,7 +411,7 @@ const AllLocationTable: React.FC<{
             <Popconfirm
               title={t('utils.delete')}
               description={t('edit_location_panel.table_notify.are_you_sure')}
-              onConfirm={() => deleteLocationInList(record.locationId)}
+              onConfirm={() => deleteLocationInList(record.id)}
               onCancel={cancel}
               okText={t('utils.yes')}
               cancelText={t('utils.no')}
@@ -479,7 +480,7 @@ const AllLocationTable: React.FC<{
                   setSelectedRowKeys([...selectedRowKeys]);
                 }
               }}
-              rowKey={(property) => property.locationId}
+              rowKey={(property) => property.id}
               components={{
                 body: {
                   cell: EditableCell

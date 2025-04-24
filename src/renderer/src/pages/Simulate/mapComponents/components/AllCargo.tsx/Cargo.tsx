@@ -3,7 +3,7 @@ import { FC, memo, useCallback } from 'react';
 
 import { WrapperType } from './types';
 import styled from 'styled-components';
-import { useCargoMutations } from './hook/useCargoMutations';
+import { useCargoMutations } from '../../../../../api/useCargoMutations';
 import CargoDisplay from './CargoDisplay';
 import { Info } from '@renderer/sockets/useCargoInfo';
 import { LoadingStation } from './LoadingStation';
@@ -41,13 +41,14 @@ const MemoizedCargo = memo(CargoDisplay, (prevProps, nextProps) => {
 });
 
 const Cargo: FC<{
+  id: string;
   locId: string;
   translateX: number;
   translateY: number;
   rotate: number;
   scale: number;
   shelfInfo: Info | undefined;
-}> = ({ locId, translateX, translateY, rotate, scale, shelfInfo }) => {
+}> = ({ id, locId, translateX, translateY, rotate, scale, shelfInfo }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const setTargetKey = useSetAtom(targetKeyJotai);
   const setIsOpening = useSetAtom(isOpenCargoModal);
@@ -58,7 +59,7 @@ const Cargo: FC<{
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>, targetId: string, targetLevel: number) => {
       if (event.button !== 1) return;
-      editColumnMutation.mutate({ locationId: targetId, level: targetLevel });
+      editColumnMutation.mutate({ locationId: targetId, level: targetLevel, id });
     },
     [editColumnMutation]
   );

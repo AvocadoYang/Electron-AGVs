@@ -37,13 +37,14 @@ const MemoizedCargo = memo(CargoDisplay, (prevProps, nextProps) => {
 });
 
 const Cargo: FC<{
+  id: string;
   locId: string;
   translateX: number;
   translateY: number;
   rotate: number;
   scale: number;
   shelfInfo: Info | undefined;
-}> = ({ locId, translateX, translateY, rotate, scale, shelfInfo }) => {
+}> = ({ id, locId, translateX, translateY, rotate, scale, shelfInfo }) => {
   const [settingForm] = Form.useForm();
   const [layerForm] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -76,7 +77,7 @@ const Cargo: FC<{
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLDivElement>, targetId: string, targetLevel: number) => {
       if (event.button !== 1) return;
-      editColumnMutation.mutate({ locationId: targetId, level: targetLevel });
+      editColumnMutation.mutate({ id, locationId: targetId, level: targetLevel });
     },
     [editColumnMutation]
   );

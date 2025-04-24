@@ -1,46 +1,48 @@
 export type LocationType = {
-  locationId: string
-  x: number
-  y: number
-  areaType: string
-  rotation: number
-  canRotate: boolean
-}
+  id: string;
+  locationId: string;
+  x: number;
+  y: number;
+  areaType: string;
+  rotation: number;
+  canRotate: boolean;
+};
 
 export type ZoneType = {
-  name?: string
-  color?: AggregationColor2
-  category?: string[]
-  startX: number
-  startY: number
-  endX: number
-  endY: number
-}
+  name?: string;
+  color?: AggregationColor2;
+  category?: string[];
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+};
 
 export type TagSettingType = {
-  speed_limit?: number
-  forbidden?: string[]
-  all_forbidden?: boolean
-  hight_limit?: number
-}
+  speed_limit?: number;
+  forbidden?: string[];
+  all_forbidden?: boolean;
+  hight_limit?: number;
+};
 
 export type RoadListType = {
-  roadId: string
-  validYawList: string | number[]
-  x: string
-  to: string
-  x1: number
-  y1: number
-  x2: number
-  y2: number
-  roadType: 'oneWayRoad' | 'twoWayRoad'
-  checkboxGroup?: string[]
-  disabled: boolean
-  limit: boolean
-}
+  id: string;
+  roadId: string;
+  validYawList: string | number[];
+  x: string;
+  to: string;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  roadType: 'oneWayRoad' | 'twoWayRoad';
+  checkboxGroup?: string[];
+  disabled: boolean;
+  limit: boolean;
+};
 
 export type Modify = {
-  delete: string[]
-  edit: string[]
-  add: string[]
-}
+  delete: string[];
+  edit: string[];
+  add: string[];
+};

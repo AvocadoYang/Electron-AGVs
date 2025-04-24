@@ -22,8 +22,8 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
   });
 
   const editColumnMutation = useMutation({
-    mutationFn: ({ locationId, level }: EditColumn) =>
-      client.post('api/setting/edit-column', { locationId, level }),
+    mutationFn: ({ locationId, level, id }: EditColumn) =>
+      client.post('api/setting/edit-column', { locationId, level, id }),
     onSuccess: async () => {
       void messageApi.success('Edit success');
       await Promise.all([

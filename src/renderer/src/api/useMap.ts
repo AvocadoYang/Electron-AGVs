@@ -6,6 +6,7 @@ import api from './axiosClient';
 const schema = object({
   locations: array(
     object({
+      id: string().required(),
       locationId: string().required(),
       x: number().required(),
       y: number().required(),
@@ -15,6 +16,7 @@ const schema = object({
   ).required(),
   roads: array(
     object({
+      id: string().required(),
       roadId: string().required(),
       roadType: mixed<'oneWayRoad' | 'twoWayRoad'>().oneOf(['oneWayRoad', 'twoWayRoad']).required(),
       spot1Id: string().required(),

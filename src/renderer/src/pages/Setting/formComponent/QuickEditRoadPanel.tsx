@@ -27,6 +27,7 @@ type RoadFormData = {
   limit: boolean;
   roadType: string;
   roadArr: string[];
+  priority: number;
 };
 
 const QuickEditRoadPanel: React.FC<{
@@ -174,6 +175,14 @@ const QuickEditRoadPanel: React.FC<{
               <Switch />
             </Form.Item>
           </Space>
+
+          <Form.Item label={t('edit_road_panel.priority')} name="priority" shouldUpdate>
+            <Radio.Group buttonStyle="solid">
+              <Radio.Button value={5}>{t('edit_road_panel.low')}</Radio.Button>
+              <Radio.Button value={3}>{t('edit_road_panel.medium')}</Radio.Button>
+              <Radio.Button value={1}>{t('edit_road_panel.high')}</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
 
           <Flex vertical gap="middle">
             <Button

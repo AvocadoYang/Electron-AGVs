@@ -79,6 +79,7 @@ const AllCargo: React.FC<{
                 }}
               >
                 <Cargo
+                  id={loc.id}
                   locId={loc.locationId}
                   translateX={translateX}
                   translateY={translateY}

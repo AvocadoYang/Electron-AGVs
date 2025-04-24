@@ -95,6 +95,7 @@ const AllCargo: React.FC = () => {
                 onMouseLeave={() => handleLeave()}
               >
                 <Cargo
+                  id={loc.id}
                   locId={loc.locationId}
                   translateX={translateX}
                   translateY={translateY}
