@@ -13,7 +13,7 @@ export type ZoneTableData = {
   name: string;
   category: string[];
   tagSetting: {
-    forbidden_car: string[] | null;
+    forbidden_car: string[];
     hight_limit: number | null;
     speed_limit: number | null;
     limitNum: number | null;
