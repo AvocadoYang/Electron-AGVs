@@ -33,6 +33,7 @@ type FormType = {
   category: string[] | undefined;
   color: string;
   endX: number;
+  limitNum: number;
   endY: number;
   forbidden: string[] | undefined;
   hight_limit: number;
@@ -55,7 +56,8 @@ type FormKey =
   | 'hight_limit'
   | 'speed_limit'
   | 'startX'
-  | 'startY';
+  | 'startY'
+  | 'limitNum';
 
 const zoneType: SelectProps['options'] = [
   { value: '減速區' },
@@ -78,13 +80,13 @@ const EditZoneTable: FC<{
   const [zoneTags, setZoneTags] = useState<string[] | undefined>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messageApi, contextHolders] = message.useMessage();
-  const { data: allAmr = [] } = useAmrName();
+  const { data: allAmr } = useAmrName();
   const { data: mapData } = useMap();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const AmrsID: SelectProps['options'] = allAmr.map((amr) => {
-    return { value: amr.id };
+  const AmrsID: SelectProps['options'] = allAmr?.amrs.map((amr) => {
+    return { value: amr.amrId };
   });
 
   const saveMutation = useMutation({
@@ -203,6 +205,7 @@ const EditZoneTable: FC<{
         endY: key === 'endY' ? (value as number) : prev?.endY,
         forbidden: key === 'forbidden' ? (value as string[]) : prev?.forbidden,
         hight_limit: key === 'hight_limit' ? (value as number) : prev?.hight_limit,
+        limitNum: key === 'limitNum' ? (value as number) : prev?.limitNum,
         name: key === 'name' ? (value as string) : prev?.name,
         speed_limit: key === 'speed_limit' ? (value as number) : prev?.speed_limit,
         startX: key === 'startX' ? (value as number) : prev?.startX,
@@ -265,6 +268,7 @@ const EditZoneTable: FC<{
     editZoneForm.setFieldValue('hight_limit', oldData.tagSetting.hight_limit);
     editZoneForm.setFieldValue('speed_limit', oldData.tagSetting.speed_limit);
     editZoneForm.setFieldValue('forbidden', oldData.tagSetting.forbidden_car);
+    editZoneForm.setFieldValue('limitNum', oldData.tagSetting.limitNum);
 
     setSyncForm({
       all_forbidden: forbiddenCar?.includes('*'),
@@ -275,6 +279,7 @@ const EditZoneTable: FC<{
       endY: oldData.endPoint.endY,
       forbidden: oldData.tagSetting.forbidden_car as string[],
       hight_limit: oldData.tagSetting.hight_limit as number,
+      limitNum: oldData.tagSetting.hight_limit as number,
       name: oldData.name,
       speed_limit: oldData.tagSetting.speed_limit as number,
       startX: oldData.startPoint.startX,
@@ -454,12 +459,32 @@ const EditZoneTable: FC<{
               <Form.Item
                 name="hight_limit"
                 label={`${t('edit_zone_panel.hight_limit')}: (${t('edit_zone_panel.necessary')})`}
+                rules={[{ required: true }]}
               >
                 <InputNumber
                   addonAfter="mm"
                   onChange={(e) => handleSyneForm('hight_limit', e)}
                   type="number"
                   placeholder="請輸入高度限制"
+                  style={{ width: '50%' }}
+                />
+              </Form.Item>
+            ) : (
+              []
+            )}
+            {zoneTags?.includes('限制區') ? (
+              <Form.Item
+                name="limitNum"
+                label={`${t('edit_zone_panel.limit_count')} `}
+                rules={[{ required: true }]}
+              >
+                <InputNumber
+                  onChange={(e) => {
+                    console.log(e);
+                    handleSyneForm('limitNum', e);
+                  }}
+                  type="number"
+                  placeholder={t('edit_zone_panel.placeholder.limit')}
                   style={{ width: '50%' }}
                 />
               </Form.Item>

@@ -126,7 +126,7 @@
 
 .tag-setting-wrap {
   position: fixed;
-  top: 50%;
+  top: -250%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 50vw;
@@ -138,14 +138,15 @@
   box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   padding: 20px;
-  opacity: 0;
+  /* top: -300%; */
   display: flex;
   flex-direction: column;
 }
 
 .tag-setting-wrap-show {
 /* transition: all 0.3s ease-in-out; */
-opacity: 1;
+  top: 50%;
+
 visibility: visible;
 }
 

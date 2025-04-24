@@ -8,6 +8,7 @@
     "search": "search",
     "reset": "reset",
     "close": "Close",
+    "count": "Count",
     "random": "random",
     "working": "Working",
     "stopping": "Stop",
@@ -283,6 +284,8 @@
     "highest_speed": "Highest speed",
     "hight_limit": "Hight limit",
     "forbidden_vehicle": "Forbidden vehicles",
+    "limit_count": "Max number of AMRs",
+    "car_type": "AMR type",
     "all_vehicle_forbidden": "All vehicle forbidden",
     "not_vehicle_forbidden": "Not set",
     "hint": "Tag setting isn't yet completed !",
@@ -291,6 +294,14 @@
     "height_limit_zone": "Height limit zone",
     "restricted_zone": "Restricted zone",
     "controlled_zone": "Controlled zone",
+    "placeholder": {
+      "zone_name": "Please enter zone name",
+      "zone_category": "Please select zone category (multiple selection allowed)",
+      "forbidden": "Please select forbidden vehicles",
+      "limit": "Please enter vehicle limit",
+      "hight_limit": "Please enter height limit",
+      "speed_limit": "Please enter maximum speed limit"
+    },
     "waring": {
       "tag_not_yet_setting": "The tag setting is still not setting ",
       "name_empty_error": "Name field cannot be empty",

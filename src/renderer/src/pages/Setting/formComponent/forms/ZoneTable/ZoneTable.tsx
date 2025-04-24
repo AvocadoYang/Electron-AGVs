@@ -71,7 +71,6 @@ const ZoneTable: React.FC<{
       tagSetting: record.tagSetting,
       name: record.name
     };
-
     setOldData(data);
     setEditingKey(record.id);
   };

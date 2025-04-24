@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import './form.css';
 import { useTranslation } from 'react-i18next';
 import { CloseOutlined } from '@ant-design/icons';
@@ -83,9 +83,15 @@ const EditZonePanel: React.FC<{
   const [tagSettingForm] = Form.useForm();
   const [isHint, setIsHint] = useState(false);
   const queryClient = useQueryClient();
-  const [zoneTags, setZoneTags] = useState<string[] | undefined>([]);
+  const [zoneTags, setZoneTags] = useState<string[]>([]);
+
   const [allVehicleForbidden, setAllVehicleForbidden] = useState(false);
   const [notVehicleForbidden, setNotVehicleForbidden] = useState(false);
+  const [, setForbiddenVehicles] = useState<string[]>([]);
+  const [maxSpeed, setMaxSpeed] = useState<number | undefined>(undefined);
+  const [maxHight, setMaxHight] = useState<number | undefined>(undefined);
+  const [limitCount, setLimitCount] = useState<number | undefined>(undefined);
+
   const [messageApi, contextHolders] = message.useMessage();
 
   const zoneType: SelectProps['options'] = [
@@ -105,6 +111,15 @@ const EditZonePanel: React.FC<{
     },
     onSuccess: () => {
       void messageApi.success('success');
+      setZoneTags([]);
+      setForbiddenVehicles([]);
+      setAllVehicleForbidden(false);
+      setNotVehicleForbidden(false);
+      setMaxHight(undefined);
+      setMaxSpeed(undefined);
+      setLimitCount(undefined);
+      zonePanelForm.resetFields();
+      tagSettingForm.resetFields();
       queryClient.refetchQueries({ queryKey: ['map'] });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
@@ -115,7 +130,6 @@ const EditZonePanel: React.FC<{
       return;
     const { name, color, category, startX, startY, endX, endY } =
       zonePanelForm.getFieldsValue() as ZoneType;
-
     if ((startX === endX && startY === endY) || !startX || !startY) {
       openNotificationWithIcon(
         'warning',
@@ -167,8 +181,23 @@ const EditZonePanel: React.FC<{
       return;
     }
 
-    const { speed_limit, hight_limit, forbidden } =
+    const { speed_limit, hight_limit, forbidden, limitNum, all_forbidden, not_forbidden } =
       tagSettingForm.getFieldsValue() as TagSettingType;
+
+    if (
+      (zoneTags.includes['減速區'] && speed_limit === undefined) ||
+      (zoneTags.includes['限高區'] && hight_limit === undefined) ||
+      (zoneTags.includes['限制區'] && limitNum === undefined) ||
+      (zoneTags.includes['禁止區'] && !all_forbidden && !not_forbidden && !forbidden.length)
+    ) {
+      openNotificationWithIcon(
+        'warning',
+        t('edit_zone_panel.waring.tag_not_yet_setting'),
+        t('edit_zone_panel.waring.tag_not_yet_setting'),
+        'bottomLeft'
+      );
+      return;
+    }
 
     let rgba = `rgba(${color.metaColor.r}, ${color.metaColor.g}, ${color.metaColor.b} , 0.05)`;
     const newZone = {
@@ -179,7 +208,8 @@ const EditZonePanel: React.FC<{
         forbidden_car:
           (category?.includes('禁止區') && allVehicleForbidden) == true ? ['*'] : forbidden,
         speed_limit: category?.includes('減速區') ? Number(speed_limit) : undefined,
-        hight_limit: category?.includes('限高區') ? Number(hight_limit) : undefined
+        hight_limit: category?.includes('限高區') ? Number(hight_limit) : undefined,
+        limitNum: category?.includes('限制區') ? Number(limitNum) : undefined
       },
       startPoint: {
         startX,
@@ -192,20 +222,10 @@ const EditZonePanel: React.FC<{
     };
 
     saveZoneMutation.mutate(newZone);
-    setAllVehicleForbidden(false);
-    setNotVehicleForbidden(false);
-    setZoneTags([]);
-    zonePanelForm.resetFields();
-    tagSettingForm.resetFields();
   };
 
   useEffect(() => {
-    console.log(tagSettingForm.getFieldsValue());
     if (zoneTags?.length) {
-      if (Object.keys(tagSettingForm.getFieldsValue(true) as {}).length === 0) {
-        setIsHint(true);
-        return;
-      }
       if (
         zoneTags.includes('禁止區') &&
         !(
@@ -218,19 +238,60 @@ const EditZonePanel: React.FC<{
         setIsHint(true);
         return;
       }
-      if (zoneTags.includes('減速區') && !tagSettingForm.getFieldValue('speed_limit')) {
+      if (zoneTags.includes('減速區') && maxSpeed == undefined) {
         setIsHint(true);
         return;
       }
 
-      if (zoneTags.includes('限高區') && !tagSettingForm.getFieldValue('hight_limit')) {
+      if (zoneTags.includes('限高區') && maxHight == undefined) {
+        setIsHint(true);
+        return;
+      }
+      if (zoneTags.includes('限制區') && limitCount == undefined) {
         setIsHint(true);
         return;
       }
     }
+
     setIsHint(false);
     return;
   });
+
+  const tagChangeFn = useCallback(
+    (tags) => {
+      setZoneTags((pre) => {
+        pre.forEach((tag) => {
+          if (!tags.includes(tag)) {
+            switch (tag) {
+              case '減速區':
+                setMaxSpeed(undefined);
+                tagSettingForm.setFieldValue('speed_limit', undefined);
+                break;
+              case '限高區':
+                setMaxHight(undefined);
+                tagSettingForm.setFieldValue('hight_limit', undefined);
+                break;
+              case '禁止區':
+                setAllVehicleForbidden(false);
+                setNotVehicleForbidden(false);
+                setForbiddenVehicles([]);
+                tagSettingForm.setFieldValue('forbidden', []);
+                tagSettingForm.setFieldValue('all_forbidden', false);
+                tagSettingForm.setFieldValue('not_forbidden', false);
+                break;
+              case '限制區':
+                setLimitCount(undefined);
+                tagSettingForm.setFieldValue('limitNum', undefined);
+                break;
+            }
+          }
+        });
+        return tags;
+      });
+      console.log(tagSettingForm.getFieldsValue());
+    },
+    [zoneTags]
+  );
 
   return (
     <>
@@ -247,7 +308,11 @@ const EditZonePanel: React.FC<{
           style={{ fontWeight: 'bold' }}
         >
           <Form.Item label={t('edit_zone_panel.name')} name="name" style={{ marginBottom: 16 }}>
-            <Input type="string" style={{ width: 150 }} placeholder="請輸入區域名稱" />
+            <Input
+              type="string"
+              style={{ width: 150 }}
+              placeholder={t('edit_zone_panel.placeholder.zone_name')}
+            />
           </Form.Item>
           <Space size={'large'} style={{ marginBottom: '15px', overflow: 'hidden' }}>
             <div>
@@ -294,12 +359,12 @@ const EditZonePanel: React.FC<{
             style={{ marginBottom: `${zoneTags?.length ? '5px' : '20px'}` }}
           >
             <Select
-              placeholder={'請選擇區域屬性'}
+              placeholder={t('edit_zone_panel.placeholder.zone_category')}
               mode="multiple"
               tagRender={tagRender}
               style={{ width: '100%' }}
               options={zoneType}
-              onChange={(tags) => setZoneTags(tags)}
+              onChange={(tags) => tagChangeFn(tags)}
             />
           </Form.Item>
           {zoneTags?.length ? (
@@ -336,7 +401,7 @@ const EditZonePanel: React.FC<{
       </div>
 
       <div
-        className={`tag-setting-wrap ${showTagSetting ? 'tag-setting-wrap-show' : ''}`}
+        className={`tag-setting-wrap ${showTagSetting && zoneTags.length ? 'tag-setting-wrap-show' : ''}`}
         style={{ borderTop: `5px solid #315E7D` }}
       >
         <CloseOutlined
@@ -350,29 +415,96 @@ const EditZonePanel: React.FC<{
           initialValues={initialTagFormValue}
           style={{ fontWeight: 'bold' }}
         >
-          <h3 style={{ width: '100%', textAlign: 'left', marginBottom: '3px' }}>
+          <h3 style={{ width: '100%', textAlign: 'left', marginBottom: '12px' }}>
             {t('edit_zone_panel.tag_setting')}
           </h3>
-          <hr style={{ border: '1px solid black', marginBottom: '8px' }}></hr>
 
           <Form.Item
             name="speed_limit"
             label={`${t('edit_zone_panel.highest_speed')}: (${t('edit_zone_panel.necessary')}) `}
-            style={{ display: `${zoneTags?.includes('減速區') ? '' : 'none'}` }}
+            style={{
+              display: `${zoneTags?.includes('減速區') ? '' : 'none'}`,
+              boxShadow: '3px 3px 15px rgba(0, 0, 0, 0.05)',
+              borderLeft: '4px solid #8491ea',
+              padding: '10px',
+              borderRadius: '5px'
+            }}
           >
-            <Input type="number" placeholder="請輸入最高速限" style={{ width: '50%' }} />
+            <Input
+              type="number"
+              placeholder={t('edit_zone_panel.placeholder.speed_limit')}
+              style={{ width: '50%' }}
+              onChange={(e) => {
+                if (!e.currentTarget.value) {
+                  setMaxSpeed(undefined);
+                  return;
+                }
+                setMaxSpeed(Number(e.currentTarget.value));
+              }}
+            />
           </Form.Item>
 
           <Form.Item
             name="hight_limit"
             label={`${t('edit_zone_panel.hight_limit')}: (${t('edit_zone_panel.necessary')})`}
-            style={{ display: `${zoneTags?.includes('限高區') ? '' : 'none'}` }}
+            style={{
+              display: `${zoneTags?.includes('限高區') ? '' : 'none'}`,
+              boxShadow: '3px 3px 15px rgba(0, 0, 0, 0.05)',
+              borderLeft: '4px solid #8491ea',
+              padding: '10px',
+              borderRadius: '5px'
+            }}
           >
-            <Input type="number" placeholder="請輸入高度限制" style={{ width: '50%' }} />
+            <Input
+              type="number"
+              placeholder={t('edit_zone_panel.placeholder.hight_limit')}
+              style={{ width: '50%' }}
+              onChange={(e) => {
+                if (!e.currentTarget.value) {
+                  setMaxHight(undefined);
+                  return;
+                }
+                setMaxHight(Number(e.currentTarget.value));
+              }}
+            />
           </Form.Item>
 
-          <>
-            <Space style={{ display: `${zoneTags?.includes('禁止區') ? '' : 'none'}` }}>
+          <Form.Item
+            name="limitNum"
+            label={`${t('edit_zone_panel.limit_count')}: `}
+            style={{
+              display: `${zoneTags?.includes('限制區') ? '' : 'none'}`,
+              boxShadow: '3px 3px 15px rgba(0, 0, 0, 0.05)',
+              borderLeft: '4px solid #8491ea',
+              padding: '10px',
+              borderRadius: '5px',
+              marginBottom: '10px'
+            }}
+          >
+            <Input
+              type="number"
+              placeholder={t('edit_zone_panel.placeholder.limit')}
+              onChange={(e) => {
+                if (!e.currentTarget.value) {
+                  setLimitCount(undefined);
+                  return;
+                }
+                setLimitCount(Number(e.currentTarget.value));
+              }}
+            />
+          </Form.Item>
+
+          <div
+            style={{
+              boxShadow: '3px 3px 15px rgba(0, 0, 0, 0.05)',
+              borderLeft: '4px solid #8491ea',
+              padding: '10px',
+              borderRadius: '5px',
+              marginBottom: '20px',
+              display: `${zoneTags?.includes('禁止區') ? '' : 'none'}`
+            }}
+          >
+            <Space>
               <Form.Item
                 name="all_forbidden"
                 valuePropName="checked"
@@ -401,18 +533,24 @@ const EditZonePanel: React.FC<{
             <Form.Item
               name="forbidden"
               label={`${t('edit_zone_panel.forbidden_vehicle')}: `}
-              style={{ display: `${zoneTags?.includes('禁止區') ? '' : 'none'}` }}
+              style={{
+                display: `${zoneTags?.includes('禁止區') ? '' : 'none'}`,
+                marginBottom: '5px'
+              }}
             >
               <Select
-                placeholder={'請選擇限制進入車輛'}
+                placeholder={t('edit_zone_panel.placeholder.forbidden')}
                 disabled={allVehicleForbidden || notVehicleForbidden}
                 mode={'multiple'}
                 tagRender={tagRender}
                 style={{ width: '100%' }}
                 options={AmrsID}
+                onChange={(select) => {
+                  setForbiddenVehicles(select);
+                }}
               />
             </Form.Item>
-          </>
+          </div>
         </Form>
       </div>
     </>

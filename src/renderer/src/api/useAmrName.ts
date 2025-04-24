@@ -4,7 +4,6 @@ import client from './axiosClient';
 
 const getName = async () => {
   const { data } = await client.get<unknown>('api/test/all-amr-name');
-
   const schema = () =>
     object({
       isSim: boolean().required(),

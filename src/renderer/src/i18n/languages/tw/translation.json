@@ -4,6 +4,7 @@
     "no": "否",
     "open": "開啟",
     "close": "關閉",
+    "count": "數量",
     "detail": "詳情",
     "search": "搜尋",
     "reset": "重設",
@@ -272,6 +273,8 @@
     "highest_speed": "最高速限",
     "hight_limit": "限制高度",
     "forbidden_vehicle": "指定限制進入車輛",
+    "limit_count": "限制車數",
+    "car_type": "車型",
     "all_vehicle_forbidden": "禁止所有車輛通行",
     "not_vehicle_forbidden": "不設定限制車輛",
     "edit_zone": "編輯區域",
@@ -280,6 +283,14 @@
     "restricted_zone": "禁制區",
     "controlled_zone": "限制區",
     "hint": "參數數設定尚未完成！",
+    "placeholder": {
+      "zone_name": "請輸入區域名稱",
+      "zone_category": "請選擇區域類型 (可多選)",
+      "forbidden": "請選擇禁止車輛",
+      "limit": "請輸入限制車數",
+      "hight_limit": "請輸入高度限制",
+      "speed_limit": "請輸入最高速限"
+    },
     "waring": {
       "tag_not_yet_setting": "尚未設定完成區域參數設定",
       "name_empty_error": "區域名稱不可為空",
