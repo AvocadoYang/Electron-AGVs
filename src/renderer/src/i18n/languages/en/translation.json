@@ -38,6 +38,8 @@
     "required": "Required",
     "delete_warn": "Are you sure?",
     "cost_time": "Cost Time (minutes)",
+    "loading": "Loading...",
+    "retry": "Retry",
     "location_property": {
       "none": "Normal",
       "charge_station": "Charge Station",
@@ -55,6 +57,7 @@
     "view_maps": "View Maps",
     "upload_map": "Upload Map",
     "switch_map": "Switch Map",
+    "import_map": "Import locations and roads from other script",
     "no_img_found": "No image found"
   },
 
@@ -171,7 +174,8 @@
       "warning_id": "Warning ID Setting",
       "upload_warning_file": "Upload warning id file",
       "backup_file": "Backup",
-      "switch_map": "Switch Map"
+      "switch_map": "Switch Map",
+      "import_map": "Import locations and roads from other script"
     },
     "restart": {
       "restart": "restart system"
@@ -391,6 +395,14 @@
       "executing": "using",
       "stale": "not in use"
     }
+  },
+
+  "import_map": {
+    "title": "Import Points, Paths, and Zones from Another Script",
+    "info": "This feature will copy points, paths, and zones from another script into the currently selected script. If any data already exists, it will not be overwritten.",
+    "import": "Import",
+    "confirm_title": "Confirm Import",
+    "confirm_content": "Are you sure you want to import this script? This action may overwrite existing data."
   },
 
   "charge": {
@@ -799,7 +811,11 @@
       "status": "Status",
       "using": "using",
       "no_using": "-",
-      "using_this": "use this script"
+      "using_this": "use this script",
+      "title": "Select a Script",
+      "selected": "Selected",
+      "no_scripts": "No scripts available",
+      "error_loading": "Failed to load scripts"
     }
   }
 }

@@ -54,6 +54,7 @@ import client from '@renderer/api/axiosClient';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import ChangeMapModal from './ChangeMap/ChangeMapCar';
+import ImportMapConfigModal from './importMap/ImportMapConfigModal';
 
 export type MenuItem = Required<MenuProps>['items'][number];
 
@@ -122,6 +123,7 @@ const Sider: React.FC<{
   const [OpenUploadWarningIDModal, setOpenUploadWarningIDModal] = useAtom(
     isOpenUploadWarningIDModal
   );
+  const [openImportMapConfig, setImportMapConfig] = useState(false);
   const [openBackup, setOpenBackup] = useAtom(isShowEditBackup);
 
   const setOpenSwitchMap = useSetAtom(isOpenSwitchMap);
@@ -553,7 +555,8 @@ const Sider: React.FC<{
         />
       ),
       getItem(t('toolbar.file_setting.switch_map'), '8-4', <DeliveredProcedureOutlined />),
-      getItem(t('toolbar.restart.restart'), '8-5', <RedoOutlined />)
+      getItem(t('toolbar.file_setting.import_map'), '8-5', <DeliveredProcedureOutlined />),
+      getItem(t('toolbar.restart.restart'), '8-6', <RedoOutlined />)
     ])
   ];
 
@@ -572,12 +575,15 @@ const Sider: React.FC<{
   const handleRestart = (keyPath: Array<string>) => {
     const key = keyPath[0];
     switch (key) {
-      case '8-5':
+      case '8-6':
         restartMutate.mutate();
         setTimeout(() => {
           window.location.reload();
         }, 6000);
         return;
+      case '8-5':
+        setImportMapConfig(true);
+        break;
       case '8-4':
         setOpenSwitchMap(true);
         console.log('open');
@@ -608,6 +614,10 @@ const Sider: React.FC<{
 
       {/**  -------- 錯誤表 --------  */}
 
+      <ImportMapConfigModal
+        setImportMapConfig={setImportMapConfig}
+        openImportMapConfig={openImportMapConfig}
+      ></ImportMapConfigModal>
       <UploadWarningModal></UploadWarningModal>
       <ChangeMapModal></ChangeMapModal>
     </>

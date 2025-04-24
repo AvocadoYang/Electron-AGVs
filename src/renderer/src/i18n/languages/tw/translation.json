@@ -38,6 +38,8 @@
     "required": "必填",
     "delete_warn": "確定刪除？",
     "cost_time": "耗時（分鐘)",
+    "loading": "載入中...",
+    "retry": "重試",
     "location_property": {
       "none": "點位",
       "charge_station": "充電站",
@@ -55,6 +57,7 @@
     "view_maps": "查看現有地圖",
     "upload_map": "上傳地圖",
     "switch_map": "變更地圖",
+    "import_map": "引入其他腳本點位路徑",
     "no_img_found": "尚未存地圖"
   },
 
@@ -168,7 +171,8 @@
       "warning_id": "告警ID設定",
       "upload_warning_file": "上傳錯誤表",
       "backup_file": "備份檔案",
-      "switch_map": "變更地圖"
+      "switch_map": "變更地圖",
+      "import_map": "引入其他腳本點位路徑"
     },
     "restart": {
       "restart": "重起系統"
@@ -386,6 +390,13 @@
       "executing": "啟用中",
       "stale": "已停用"
     }
+  },
+  "import_map": {
+    "title": "引入其他腳本的點位、路徑與區域",
+    "info": "此功能會將其他腳本中的點位、路徑與區域複製到目前使用的腳本中。若資料重複，現有資料將不會被覆蓋。",
+    "import": "引入",
+    "confirm_title": "確認引入",
+    "confirm_content": "您確定要引入此腳本嗎？此操作可能會覆蓋現有資料。"
   },
 
   "charge": {
@@ -796,11 +807,15 @@
       "change": "選擇其他腳本",
       "add_or_change": "新增或建立新腳本",
       "info": "可新增或切換不同腳本, 每次切換地點設定與車輛設定會不同,但是地點和路線會是相同的.",
+      "title": "選擇腳本",
       "script": "腳本",
       "status": "狀態",
       "using": "使用中",
-      "no_using": "-",
-      "using_this": "使用此腳本"
+      "no_using": "未使用",
+      "using_this": "使用此腳本",
+      "selected": "已選擇",
+      "no_scripts": "沒有可用的腳本",
+      "error_loading": "無法載入腳本"
     }
   }
 }

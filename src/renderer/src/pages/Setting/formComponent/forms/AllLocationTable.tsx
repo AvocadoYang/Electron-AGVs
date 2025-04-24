@@ -142,10 +142,8 @@ const AllLocationTable: React.FC<{
   });
 
   const deleteLocationMutation = useMutation({
-    mutationFn: (id: string) => {
-      return client.post('api/setting/delete-edit-loc', {
-        id
-      });
+    mutationFn: (data: { id: string; locationId: string }) => {
+      return client.post('api/setting/delete-edit-loc', data);
     },
     onSuccess: () => {
       void messageApi.success(t('utils.success'));
@@ -295,8 +293,8 @@ const AllLocationTable: React.FC<{
     setEditingKey(null);
   };
 
-  const deleteLocationInList = (id: string) => {
-    deleteLocationMutation.mutate(id);
+  const deleteLocationInList = (id: string, locationId: string) => {
+    deleteLocationMutation.mutate({ id, locationId });
   };
 
   const handleHover = (locationId: string, x: number, y: number) => {
@@ -411,7 +409,7 @@ const AllLocationTable: React.FC<{
             <Popconfirm
               title={t('utils.delete')}
               description={t('edit_location_panel.table_notify.are_you_sure')}
-              onConfirm={() => deleteLocationInList(record.id)}
+              onConfirm={() => deleteLocationInList(record.id, record.locationId)}
               onCancel={cancel}
               okText={t('utils.yes')}
               cancelText={t('utils.no')}

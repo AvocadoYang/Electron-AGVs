@@ -9,6 +9,7 @@ import { EditRoadPanelSwitch, EditZoneSwitch, isShowLocation } from '@renderer/u
 import { DraggableLine, Point } from '../AllLocation/components/PointAndLine';
 import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 import Station from './Station';
+import { IsEditingQuickRoads, QuickRoadsArray } from '@renderer/pages/Setting/utils/settingJotai';
 
 const AllChargeStation: FC<{
   setInitPoint: React.Dispatch<draggableLineInitialPoint>;
@@ -20,6 +21,15 @@ const AllChargeStation: FC<{
   const { data } = useMap();
   const openEditZone = useAtomValue(EditZoneSwitch);
   const { data: locInfo } = useLoc(undefined);
+  const quickRoad = useAtomValue(IsEditingQuickRoads);
+  const setQuickRoadArr = useSetAtom(QuickRoadsArray);
+
+  const handleQuickRoad = (locationId: string) => {
+    if (!quickRoad) return;
+
+    setQuickRoadArr((prev) => [...prev, locationId]);
+  };
+
   const handleEnter = useCallback((locationId: string, x: number, y: number) => {
     setTooltip({
       x,
@@ -63,6 +73,9 @@ const AllChargeStation: FC<{
               }}
               style={{ borderRadius: '50%' }}
               id={loc.locationId.toString()}
+              onClick={() => {
+                handleQuickRoad(loc.locationId);
+              }}
             >
               <Point
                 id={loc.locationId.toString()}
