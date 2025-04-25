@@ -2,8 +2,8 @@ import { FC, memo, useMemo } from 'react';
 import styled from 'styled-components';
 import { AGV_HEIGHT, AGV_WIDTH, AMR_FORK_HEIGHT, AMR_FORK_WIDTH } from '@renderer/configs/config';
 import useMap from '@renderer/api/useMap';
-import { useAtom } from 'jotai';
-import { AmrFilterCarCard } from '@renderer/utils/gloable';
+import { useAtom, useAtomValue } from 'jotai';
+import { AmrFilterCarCard, showZoneForbidden } from '@renderer/utils/gloable';
 import { useAmrPose, useIsCarry } from '@renderer/sockets/useAMRInfo';
 
 const colors = {
@@ -93,12 +93,19 @@ const Icon: FC<{
   const { pose } = useAmrPose(amrId);
   const { isCarry } = useIsCarry(amrId);
   const [amrFilterCarCard, setAmrFilterCarCard] = useAtom(AmrFilterCarCard);
+  const zoneForbidden = useAtomValue(showZoneForbidden);
+
   const needOpacity = useMemo(() => {
-    if (!amrFilterCarCard.size) {
+    if (!amrFilterCarCard.size && !zoneForbidden.size) {
       return false;
     }
-    return amrFilterCarCard.has(amrId) ? false : true;
-  }, [amrFilterCarCard]);
+
+    if (amrFilterCarCard.size) {
+      return amrFilterCarCard.has(amrId) ? false : true;
+    } else {
+      return zoneForbidden.has(amrId) ? false : true;
+    }
+  }, [amrFilterCarCard, zoneForbidden]);
 
   if (!map || !pose) return null;
 

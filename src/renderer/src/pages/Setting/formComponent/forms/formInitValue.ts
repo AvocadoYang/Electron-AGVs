@@ -30,9 +30,9 @@ export const initialZoneValue = {
 export const initialTagFormValue = {
   speed_limit: undefined,
   forbidden: [],
+  count: undefined,
   all_forbidden: false,
   not_forbidden: false,
-
   hight_limit: undefined
 };
 

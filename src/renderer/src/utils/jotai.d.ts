@@ -1,5 +1,8 @@
 export type LocationType = {
+<<<<<<< HEAD
   id: string;
+=======
+>>>>>>> charlie
   locationId: string;
   x: number;
   y: number;
@@ -19,14 +22,15 @@ export type ZoneType = {
 };
 
 export type TagSettingType = {
-  speed_limit?: number;
-  forbidden?: string[];
-  all_forbidden?: boolean;
-  hight_limit?: number;
+  speed_limit: number;
+  forbidden: string[];
+  all_forbidden: boolean;
+  not_forbidden: boolean;
+  hight_limit: number;
+  limitNum: number;
 };
 
 export type RoadListType = {
-  id: string;
   roadId: string;
   validYawList: string | number[];
   x: string;

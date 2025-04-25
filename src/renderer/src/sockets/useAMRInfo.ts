@@ -725,7 +725,6 @@ export const useYaw = (amrId: string) => {
         })
       )
       .subscribe((yaw) => {
-        console.log(yaw);
         setYaw(yaw);
       });
 

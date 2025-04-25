@@ -44,10 +44,11 @@ const schema = object({
       backgroundColor: string().required(),
       category: array(string().required()).required(),
       tagSetting: object({
-        speed_limit: number().nullable(),
-        hight_limit: number().nullable(),
-        forbidden_car: array(string()).nullable()
-      }),
+        speed_limit: number().required().nullable(),
+        hight_limit: number().required().nullable(),
+        forbidden_car: array(string()).required(),
+        limitNum: number().required().nullable()
+      }).required(),
       startPoint: object({
         startX: number().required(),
         startY: number().required()
