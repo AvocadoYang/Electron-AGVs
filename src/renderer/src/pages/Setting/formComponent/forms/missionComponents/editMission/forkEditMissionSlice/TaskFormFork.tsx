@@ -53,17 +53,6 @@ const TaskFormFork: FC<{
   selectedMissionCar: string;
   selectedMissionKey: string;
 }> = ({ editTaskKey, selectedMissionKey }) => {
-  const {
-    robotOption,
-    locationsOption,
-    NormalActionListOptions,
-    SpecialActionListOptions,
-    SelectLocationOptions,
-    SelectYawOptions,
-    SelectForkHeightOptions,
-    SelectActiveWaitRobotOptions,
-    SelectWaitRobotOptions
-  } = useTaskOptions();
   const { data: originFormData } = useOneTaskDetailFork(editTaskKey);
   const [actionState, setActionStatus] = useState<Action_Type>();
   const [messageApi, contextHolder] = message.useMessage();
@@ -80,6 +69,17 @@ const TaskFormFork: FC<{
   const values = Form.useWatch([], form);
   const isIncludeSpin = controlClickOrder.map((v) => v.split('-')[0]).includes('S');
   const isIncludeH = controlClickOrder.map((v) => v.split('-')[0]).includes('H');
+  const {
+    robotOption,
+    locationsOption,
+    NormalActionListOptions,
+    SpecialActionListOptions,
+    SelectLocationOptions,
+    SelectYawOptions,
+    SelectForkHeightOptions,
+    SelectActiveWaitRobotOptions,
+    SelectWaitRobotOptions
+  } = useTaskOptions(actionState as Action_Type);
 
   const handleControlClick = (controlValue: string) => {
     setControlClickOrder((prevOrder) => {
@@ -349,6 +349,11 @@ const TaskFormFork: FC<{
             {selectLocationType === 'available_charge_station' && (
               <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
                 {t('mission.task_table.location_charge_station_desc')}
+              </Typography.Text>
+            )}
+            {selectLocationType === 'prepare_point' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.prepare_point_desc')}
               </Typography.Text>
             )}
           </Form.Item>

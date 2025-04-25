@@ -252,7 +252,9 @@ const ForkTaskTable: FC<{
               ? t('mission.task_table.is_selectable')
               : record.operation.is_define_id === 'available_charge_station'
                 ? t('mission.task_table.available_charge_station')
-                : '-'}
+                : record.operation.is_define_id === 'prepare_point'
+                  ? t('mission.task_table.prepare_point')
+                  : '-'}
       </Descriptions.Item>
 
       <Descriptions.Item label={''}>{'-'}</Descriptions.Item>

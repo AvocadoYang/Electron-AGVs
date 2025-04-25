@@ -23,7 +23,7 @@ enum YawGenre {
   CALCULATE_BY_AGV_AND_SHELF_ANGLE
 }
 
-const useTaskOptions = () => {
+const useTaskOptions = (action: Action_Type) => {
   const { data: mapData } = useMap();
   const { data: robots } = useName();
 
@@ -93,31 +93,71 @@ const useTaskOptions = () => {
       value: type
     }));
 
-  const SelectLocationOptions: { label: string; value: Select_Location_Type }[] =
-    selectLocationOption.map((type) => {
-      switch (type) {
-        case 'custom':
-          return {
-            label: t('mission.task_table.location_custom'), // "Custom (Enter Location ID)"
-            value: type
-          };
-        case 'select':
-          return {
-            label: t('mission.task_table.location_select'), // "Auto (Fast-Mission Location)"
-            value: type
-          };
-        case 'available_charge_station':
-          return {
-            label: t('mission.task_table.location_charge_station'), // "Auto (Idle Charge Station)"
-            value: type
-          };
-        default:
-          return {
-            label: type,
-            value: type
-          };
-      }
-    });
+  const SelectLocationOptions: { label: string; value: Select_Location_Type }[] = useMemo(() => {
+    return selectLocationOption
+      .map((type) => {
+        switch (type) {
+          case 'custom':
+            return {
+              label: t('mission.task_table.location_custom'),
+              value: type
+            };
+          case 'select':
+            return {
+              label: t('mission.task_table.location_select'),
+              value: type
+            };
+          case 'available_charge_station':
+            return {
+              label: t('mission.task_table.location_charge_station'),
+              value: type
+            };
+          case 'prepare_point':
+            if (action !== 'move') return null;
+            return {
+              label: t('mission.task_table.prepare_point'),
+              value: type
+            };
+          default:
+            return {
+              label: type,
+              value: type
+            };
+        }
+      })
+      .filter(Boolean) as { label: string; value: Select_Location_Type }[];
+  }, [action, t, selectLocationOption]);
+
+  // const SelectLocationOptions: { label: string; value: Select_Location_Type }[] =
+  //   selectLocationOption.map((type) => {
+  //     switch (type) {
+  //       case 'custom':
+  //         return {
+  //           label: t('mission.task_table.location_custom'), // "Custom (Enter Location ID)"
+  //           value: type
+  //         };
+  //       case 'select':
+  //         return {
+  //           label: t('mission.task_table.location_select'), // "Auto (Fast-Mission Location)"
+  //           value: type
+  //         };
+  //       case 'available_charge_station':
+  //         return {
+  //           label: t('mission.task_table.location_charge_station'), // "Auto (Idle Charge Station)"
+  //           value: type
+  //         };
+  //       case 'prepare_point':
+  //         return {
+  //           label: t('mission.task_table.prepare_point'), // "Auto (Prepare point)"
+  //           value: type
+  //         };
+  //       default:
+  //         return {
+  //           label: type,
+  //           value: type
+  //         };
+  //     }
+  //   });
 
   const SelectYawOptions: { label: string; value: YawGenre }[] = [0, 1, 2].map((type: YawGenre) => {
     switch (type) {

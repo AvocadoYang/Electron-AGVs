@@ -1,5 +1,5 @@
 import { Button, Col, Form, Modal, Row, Input, Select, Flex, message } from 'antd';
-import { FC, useState, useMemo } from 'react';
+import { FC, useState, useMemo, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,7 @@ const EditMissionPanel: FC<{
   const [search, setSearch] = useState('');
   const [selectedMissionKey, setSelectedMissionKey] = useState('');
   const [selectedMissionCar, setSelectedMissionCar] = useState('');
+  const [tag, setTag] = useState<string[]>([]);
   const [openMissionModel, setOpenMissionModel] = useState(false);
   const [openWithCreateMission, setOpenWithCreateMission] = useState(false);
   const [editMissionKey, setEditMissionKey] = useState('');
@@ -34,6 +35,7 @@ const EditMissionPanel: FC<{
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
+  const [canBeCreate, setCanBeCreate] = useState(false);
 
   const catOption = cat?.map((v) => ({ value: v.id, label: v.tagName })) || [];
   const filterMissionData = useMemo(
@@ -62,6 +64,8 @@ const EditMissionPanel: FC<{
   };
 
   const handleAdd = () => {
+    if (!canBeCreate) messageApi.warning('tag is require');
+
     const formData = createMissionForm.getFieldsValue(true) as MissionListType;
     if (!formData.name) {
       messageApi.warning(t('mission.add_mission.empty_warn'));
@@ -84,6 +88,11 @@ const EditMissionPanel: FC<{
   };
 
   const handleOk = () => {
+    if (!canBeCreate) {
+      messageApi.warning('tag is wrong');
+      return;
+    }
+
     if (!allMissionTitle) return;
     const editData = formMission.getFieldsValue() as MissionListType;
 
@@ -109,6 +118,19 @@ const EditMissionPanel: FC<{
     setOpenWithCreateMission(true);
     createMissionForm.setFieldValue('robot_type_id', amrs[0].name);
   };
+
+  useEffect(() => {
+    if (!openMissionModel) return;
+
+    const hasNormal = tag.includes('normal-mission');
+    const hasDynamic = tag.includes('dynamic-mission');
+
+    if ((hasNormal || hasDynamic) && !(hasNormal && hasDynamic)) {
+      setCanBeCreate(true);
+    } else {
+      setCanBeCreate(false);
+    }
+  }, [tag]);
 
   return (
     <>
@@ -179,7 +201,13 @@ const EditMissionPanel: FC<{
             <Select placeholder="請選擇" options={newCarList} />
           </Form.Item>
           <Form.Item label={t('mission.add_mission.tag')} name="category">
-            <Select placeholder="請選擇" mode="multiple" options={catOption} />
+            <Select
+              onChange={(v) => setTag(v)}
+              value={tag}
+              placeholder="請選擇"
+              mode="multiple"
+              options={catOption}
+            />
           </Form.Item>
         </Form>
       </Modal>

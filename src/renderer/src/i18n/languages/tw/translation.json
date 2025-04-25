@@ -583,13 +583,17 @@
       "wait_genre_required": "請選擇等待模式。",
 
       "is_custom_location": "位置選擇模式",
-      "location_tooltip": "選擇如何設定位置：『自訂』可讓您輸入特定位置 ID，『自動』使用快速任務中的位置，『自動（空閒充電站）』尋找可用的充電站。",
+      "location_tooltip": "選擇如何設定位置：『自訂』可讓您輸入特定位置 ID，『自動』使用快速任務中的位置，『自動（空閒充電站）』尋找可用的充電站。『自動（自動（預派點））』自動尋找路徑中的預派點。",
       "location_custom": "自訂（輸入位置 ID）",
       "location_custom_desc": "從可用選項中手動選擇一個位置 ID。",
       "location_select": "自動（快速任務位置）",
       "location_select_desc": "根據快速任務自動設定位置。",
       "location_charge_station": "自動（空閒充電站）",
       "location_charge_station_desc": "自動尋找可用的充電站。",
+
+      "prepare_point": "自動（預派點）",
+      "prepare_point_desc": "自動尋找路徑中的預派點",
+
       "is_custom_yaw": "轉角選擇",
       "yaw_tooltip": "選擇如何設定偏航：『自訂』可讓您輸入特定的角度，『自動』使用快速任務中的架子方向，『自動（在架子處計算）』計算 AMR 到達架子時的偏航。",
       "yaw_custom": "自訂（輸入偏航度數）",

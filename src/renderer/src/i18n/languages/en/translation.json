@@ -591,6 +591,8 @@
       "location_select_desc": "Automatically sets the location based on the fast-mission.",
       "location_charge_station": "Auto (Idle Charge Station)",
       "location_charge_station_desc": "Automatically finds an available charging station.",
+      "prepare_point": "Auto (Prepare Point)",
+      "prepare_point_desc": "Automatically finds an prepare point",
       "is_custom_yaw": "Yaw Selection Mode",
       "yaw_tooltip": "Choose how to set the yaw: 'Custom' lets you enter a specific degree, 'Auto' uses the shelf direction from a fast-mission, and 'Auto (Calculate at Shelf)' calculates the yaw when the AMR reaches the shelf.",
       "yaw_custom": "Custom (Enter Yaw Degree)",

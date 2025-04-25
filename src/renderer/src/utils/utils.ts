@@ -72,7 +72,7 @@ export const errorHandler = (e: ErrorResponse, messageApi: MessageInstance) => {
 
   const errorMessage = e?.response?.data?.message || 'An unknown error occurred';
 
-  void messageApi.error(errorMessage);
+  void messageApi.error(errorMessage, 5);
 };
 
 export const amrId2Color = (amrId: string) => {
