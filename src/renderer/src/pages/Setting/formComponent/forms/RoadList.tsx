@@ -2,6 +2,7 @@ import {
   Button,
   Flex,
   Form,
+  FormInstance,
   Input,
   InputNumber,
   InputRef,
@@ -15,7 +16,7 @@ import {
   TableColumnType,
   Typography
 } from 'antd';
-import { memo, useEffect, useRef, useState } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { CloseOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
@@ -32,6 +33,7 @@ import FormHr from '../../utils/FormHr';
 import SubmitButton from '@renderer/utils/SubmitButton';
 
 type RoadListType = {
+  id: string;
   roadId: string;
   validYawList?: string | number[];
   spot1Id: string;
@@ -48,18 +50,6 @@ type RoadListType = {
 
 type DataIndex = keyof RoadListType;
 
-const yawOptions = ['0', '90', '180', '270', '*'].map((v) => ({ value: v }));
-
-const whenAll = yawOptions.map((m) => ({
-  ...m,
-  disabled: ['0', '90', '180', '270'].includes(m.value)
-}));
-
-const when0 = yawOptions.map((m) => ({ ...m, disabled: ['*', '90', '270'].includes(m.value) }));
-const when90 = yawOptions.map((m) => ({ ...m, disabled: ['0', '180', '*'].includes(m.value) }));
-const when180 = yawOptions.map((m) => ({ ...m, disabled: ['*', '90', '270'].includes(m.value) }));
-const when270 = yawOptions.map((m) => ({ ...m, disabled: ['0', '180', '*'].includes(m.value) }));
-
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing?: boolean;
   dataIndex?: string;
@@ -67,15 +57,47 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
 }
 
-const EditableCell: React.FC<EditableCellProps> = ({
+const yawOptions = ['0', '90', '180', '270', '*'].map((v) => ({
+  value: v,
+  label: v === '*' ? 'All Angles' : `${v}°`
+}));
+
+const whenAll = yawOptions.slice(1); // Exclude '*' option
+const when0 = [
+  { value: '0', label: '0°' },
+  { value: '180', label: '180°' }
+];
+const when90 = [
+  { value: '90', label: '90°' },
+  { value: '270', label: '270°' }
+];
+const when180 = [
+  { value: '0', label: '0°' },
+  { value: '180', label: '180°' }
+];
+const when270 = [
+  { value: '90', label: '90°' },
+  { value: '270', label: '270°' }
+];
+
+interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
+  editing?: boolean;
+  dataIndex?: string;
+  title: string;
+  children: React.ReactNode;
+  form?: FormInstance;
+}
+
+const EditableCell: FC<EditableCellProps> = ({
   editing,
   dataIndex,
   children,
+  form,
   ...restProps
 }) => {
   const { t } = useTranslation();
   const [chooseAngle, setChooseAngle] = useState<string>('');
-  const [yawOption, setYawOption] = useState<typeof yawOptions>(yawOptions);
+  const [yawOption, setYawOption] = useState<typeof yawOptions>(whenAll);
 
   const levelOption = [
     { value: 5, label: t('edit_road_panel.low') },
@@ -84,6 +106,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ];
 
   useEffect(() => {
+    if (!chooseAngle) {
+      setYawOption(whenAll);
+      return;
+    }
+
     switch (chooseAngle) {
       case '*':
         setYawOption(whenAll);
@@ -101,19 +128,27 @@ const EditableCell: React.FC<EditableCellProps> = ({
         setYawOption(when270);
         break;
       default:
+        setYawOption(whenAll);
         break;
     }
   }, [chooseAngle]);
 
+  useEffect(() => {
+    if (editing && dataIndex === 'validYawList' && form) {
+      const initialValue = form.getFieldValue('validYawList') || [];
+      setChooseAngle(initialValue[0] || '');
+    }
+  }, [editing, dataIndex, form]);
+
   let inputNode;
   switch (dataIndex) {
     case 'spot1Id':
-      inputNode = <InputNumber disabled />;
+      inputNode = <InputNumber />;
       break;
     case 'spot2Id':
-      inputNode = <InputNumber disabled />;
+      inputNode = <InputNumber />;
       break;
-    case 'disable':
+    case 'disabled':
       inputNode = <Switch />;
       break;
     case 'limit':
@@ -121,7 +156,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
       break;
     case 'roadType':
       inputNode = (
-        <Radio.Group buttonStyle="solid" disabled>
+        <Radio.Group buttonStyle="solid">
           <Radio.Button value="oneWayRoad">{t('edit_road_panel.single_road')}</Radio.Button>
           <Radio.Button value="twoWayRoad">{t('edit_road_panel.two_way_road')}</Radio.Button>
         </Radio.Group>
@@ -135,8 +170,12 @@ const EditableCell: React.FC<EditableCellProps> = ({
         <Select
           mode="multiple"
           options={yawOption}
-          onChange={(value: string[]) => setChooseAngle(value[0] || '')}
+          onChange={(value: string[]) => {
+            setChooseAngle(value[0] || '');
+          }}
           style={{ minWidth: 120 }}
+          allowClear
+          placeholder={t('utils.required')}
         />
       );
       break;
@@ -150,7 +189,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
         <Form.Item
           name={dataIndex}
           style={{ margin: 0 }}
-          rules={[{ required: true, message: 'Please Input!' }]}
+          rules={[{ required: true, message: t('utils.required') }]}
         >
           {inputNode}
         </Form.Item>
@@ -172,9 +211,13 @@ const ActiveBox = styled.div`
 type DotStyle = { $active: boolean };
 
 type SubmitRoad = {
-  roadId: string;
+  id: string;
   limit: boolean;
+  spot1Id: number;
+  spot2Id: number;
+  roadType: string;
   priority: number;
+  disabled: boolean;
   validYawList: number[] | string[];
 };
 
@@ -310,12 +353,16 @@ const RoadList: React.FC<{
 
   const save = (key: string) => {
     const payload: SubmitRoad = {
-      roadId: key,
+      id: key,
+      spot1Id: formRoad.getFieldValue('spot1Id') as number,
+      spot2Id: formRoad.getFieldValue('spot2Id') as number,
+      roadType: formRoad.getFieldValue('roadType') as string,
       limit: formRoad.getFieldValue('limit') as boolean,
       priority: formRoad.getFieldValue('priority'),
+      disabled: formRoad.getFieldValue('disabled') as boolean,
       validYawList: formRoad.getFieldValue('validYawList') as number[] | string[]
     };
-    console.log(payload);
+
     editRoadMutation.mutate(payload);
     formRoad.setFieldsValue(payload);
     setEditingKey(null);
@@ -362,7 +409,7 @@ const RoadList: React.FC<{
       dataIndex: 'validYawList',
       key: 'validYawList',
       editable: true,
-      minWidth: 80, // Space for multiple yaw values like "0, 90, 180"
+      minWidth: 80,
       render: (_: unknown, record: RoadListType) => record.validYawList?.toString() || ''
     },
     {
@@ -370,7 +417,7 @@ const RoadList: React.FC<{
       dataIndex: 'priority',
       key: 'priority',
       editable: true,
-      minWidth: 80, // Enough for "Yes" or "No"
+      minWidth: 80,
       render: (_: unknown, record: RoadListType) => {
         const level = record.priority;
         if (level === 1) return t('edit_road_panel.low');
@@ -383,18 +430,19 @@ const RoadList: React.FC<{
       dataIndex: 'limit',
       key: 'limit',
       editable: true,
-      minWidth: 50, // Enough for "Yes" or "No"
+      minWidth: 50,
       render: (_: unknown, record: RoadListType) => (record.limit ? t('utils.yes') : t('utils.no'))
     },
     {
       title: t('edit_road_panel.disabled'),
-      key: 'status',
-      dataIndex: 'status',
-      minWidth: 100, // Matches existing width, ensures dot + text fit
+      key: 'disabled',
+      dataIndex: 'disabled',
+      editable: true,
+      minWidth: 100,
       render: (_v: unknown, record: RoadListType) => (
         <ActiveBox>
           <Dot $active={record.disabled as boolean} />{' '}
-          <>{record.disabled ? t('utils.no') : t('utils.yes')}</>
+          <>{record.disabled ? t('utils.yes') : t('utils.no')}</>
         </ActiveBox>
       )
     },
@@ -402,12 +450,12 @@ const RoadList: React.FC<{
       title: '',
       dataIndex: 'operation',
       key: nanoid(),
-      minWidth: 150, // Space for Edit/Delete buttons
+      minWidth: 150,
       render(_v: unknown, record: RoadListType) {
         const editable = isEditing(record);
         return editable ? (
           <Flex gap="small">
-            <Typography.Link onClick={() => save(record.roadId)} style={{ marginRight: 8 }}>
+            <Typography.Link onClick={() => save(record.id)} style={{ marginRight: 8 }}>
               <SubmitButton isModel={false} form={formRoad} text="save" />
             </Typography.Link>
             <Typography.Link onClick={() => cancel()} style={{ marginRight: 8 }}>
