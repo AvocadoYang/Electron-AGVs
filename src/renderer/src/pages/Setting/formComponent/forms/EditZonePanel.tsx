@@ -288,7 +288,6 @@ const EditZonePanel: React.FC<{
         });
         return tags;
       });
-      console.log(tagSettingForm.getFieldsValue());
     },
     [zoneTags]
   );

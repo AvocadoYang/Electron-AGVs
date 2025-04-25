@@ -3,6 +3,11 @@ import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import { FC, memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
+import { Flex } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { showZoneForbidden } from '@renderer/utils/gloable';
+import { useSetAtom } from 'jotai';
 
 type ZoneInfo = {
   id: string;
@@ -16,6 +21,12 @@ type ZoneInfo = {
   endPoint: {
     endX: number;
     endY: number;
+  };
+  tagSetting: {
+    speed_limit: number | null;
+    hight_limit: number | null;
+    forbidden_car: (string | undefined)[];
+    limitNum: number | null;
   };
 };
 
@@ -102,9 +113,12 @@ const Zone: FC<{ id: string; info: ZoneInfo; scale: number }> = ({ id, info }) =
         ) : (
           <EyeInvisibleOutlined style={{ cursor: 'pointer' }} onClick={() => setHidden(true)} />
         )}
-
-        {` ${info.name}`}
       </FrameName>
+      <Tooltip color="rgba(0, 0, 0, 0.4)" title={<FrameInfo info={info}></FrameInfo>}>
+        <FrameName left={axis.x + 22} top={axis.y - 20} draggable={false}>
+          <p onClick={() => {}} style={{ cursor: 'pointer' }}>{` ${info.name}`}</p>
+        </FrameName>
+      </Tooltip>
       {hidden ? (
         []
       ) : (
@@ -119,6 +133,61 @@ const Zone: FC<{ id: string; info: ZoneInfo; scale: number }> = ({ id, info }) =
         ></Frame>
       )}
     </>
+  );
+};
+
+const FrameInfo: FC<{ info: ZoneInfo }> = ({ info }) => {
+  const { category } = info;
+  const { t } = useTranslation();
+  const setZoneForbidden = useSetAtom(showZoneForbidden);
+
+  return (
+    <Flex gap="middle" vertical>
+      {category.includes('減速區') ? (
+        <div>
+          <p style={{ color: 'yellow' }}>{`${t('edit_zone_panel.deceleration_zone')}: `}</p>
+          <p>{`${t('edit_zone_panel.highest_speed')} - ${info.tagSetting.speed_limit} (m/s)`}</p>
+        </div>
+      ) : (
+        []
+      )}
+      {category.includes('限高區') ? (
+        <div>
+          <p style={{ color: 'yellow' }}>{`${t('edit_zone_panel.height_limit_zone')}: `}</p>
+          <p>{`${t('edit_zone_panel.hight_limit')} - ${info.tagSetting.hight_limit} (mm)`}</p>
+        </div>
+      ) : (
+        []
+      )}
+      {category.includes('限制區') ? (
+        <div>
+          <p style={{ color: 'yellow' }}>{`${t('edit_zone_panel.controlled_zone')}: `}</p>
+          <p>{`${t('edit_zone_panel.limit_count')} - ${info.tagSetting.limitNum} `}</p>
+        </div>
+      ) : (
+        []
+      )}
+      {category.includes('禁止區') ? (
+        <div style={{ fontWeight: 'bold' }}>
+          <p style={{ color: 'yellow' }}>{`${t('edit_zone_panel.restricted_zone')}: `}</p>
+          {info.tagSetting.forbidden_car.length == 0 ? (
+            <p>{`- ${t('edit_zone_panel.free_zone')} `}</p>
+          ) : info.tagSetting.forbidden_car.includes('*') ? (
+            <p>{`- ${t('edit_zone_panel.all_vehicle_forbidden')} `}</p>
+          ) : (
+            <p
+              style={{ cursor: 'pointer', color: '#13dff2' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoneForbidden(new Set(info.tagSetting.forbidden_car as string[]));
+              }}
+            >{`- 查看限制車輛 `}</p>
+          )}
+        </div>
+      ) : (
+        []
+      )}
+    </Flex>
   );
 };
 

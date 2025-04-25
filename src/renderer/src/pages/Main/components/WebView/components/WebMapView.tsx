@@ -4,7 +4,7 @@ import '../webview.css';
 import { AllZones } from '@renderer/pages/Setting/mapComponents/components';
 import AllLocation from '../../PadViwe/components/PadMapContent/component/AllLocation';
 import { useAtom, useAtomValue } from 'jotai';
-import { AmrFilterCarCard, Scale } from '@renderer/utils/gloable';
+import { AmrFilterCarCard, Scale, showZoneForbidden } from '@renderer/utils/gloable';
 
 import AllRoads from '@renderer/pages/Setting/mapComponents/components/AllRoads/AllRoads';
 import AllAMRs from '../../PadViwe/components/PadMapContent/component/AllAMRs/AllAMRs';
@@ -18,6 +18,7 @@ const WebMapView: React.FC<{
 }> = ({ mapRef }) => {
   const scale = useAtomValue(Scale);
   const [hintAmrId, setHintAmrId] = useAtom(AmrFilterCarCard);
+  const [zoneForbidden, setZoneForbidden] = useAtom(showZoneForbidden);
   const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   const showLocation = useAtomValue(isShowLocation);
   const showRoad = useAtomValue(isShowRoad);
@@ -28,6 +29,10 @@ const WebMapView: React.FC<{
       draggable={false}
       ref={mapRef}
       onClick={(e) => {
+        if (zoneForbidden.size) {
+          setZoneForbidden(new Set());
+        }
+        setZoneForbidden(new Set());
         if (!hintAmrId.size) {
           return;
         }

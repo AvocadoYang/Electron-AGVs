@@ -8,7 +8,7 @@ import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 import { amrId2ColorRainbow } from '@renderer/utils/utils';
-import { AmrFilterCarCard, hintAmr } from '@renderer/utils/gloable';
+import { AmrFilterCarCard, hintAmr, showZoneForbidden } from '@renderer/utils/gloable';
 
 const Tip = styled.div.attrs<{
   left: number;
@@ -30,7 +30,7 @@ const Tip = styled.div.attrs<{
   align-items: center;
   justify-content: center;
   height: 20px;
-  width: 110px;
+  width: 130px;
   font-size: 0.7em;
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 5px;
@@ -66,10 +66,16 @@ const AMR: FC<{
   const color = amrId2ColorRainbow(amrId);
   const hintAmrId = useAtomValue(hintAmr);
   const hintAmrId2 = useAtomValue(AmrFilterCarCard);
+  const zoneForbidden = useAtomValue(showZoneForbidden);
+
+  const isForbidden = useMemo(() => {
+    return zoneForbidden.has(amrId);
+  }, [zoneForbidden]);
 
   const showTooltip = useMemo(() => {
-    return hintAmrId2.has(amrId) || hintAmrId === amrId;
-  }, [hintAmrId2, hintAmrId]);
+    return hintAmrId2.has(amrId) || hintAmrId === amrId || zoneForbidden.has(amrId);
+  }, [hintAmrId2, hintAmrId, zoneForbidden]);
+
   const { pose } = useAmrPose(amrId);
   if (!pose || !map) return null;
 
@@ -88,7 +94,7 @@ const AMR: FC<{
     <>
       {showTooltip ? (
         <Tip left={left} top={top}>
-          <p>{amrId}</p>
+          <p>{`${isForbidden ? '🚫 ' : ''}${amrId}`}</p>
           {/* <ArrowDownOutlined className="hint-icon" /> */}
         </Tip>
       ) : (

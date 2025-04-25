@@ -276,6 +276,7 @@
     "limit_count": "限制車數",
     "car_type": "車型",
     "all_vehicle_forbidden": "禁止所有車輛通行",
+    "free_zone": "所有車輛皆可通行",
     "not_vehicle_forbidden": "不設定限制車輛",
     "edit_zone": "編輯區域",
     "deceleration_zone": "減速區",
