@@ -552,6 +552,7 @@ const EditZoneTable: FC<{
                       setTagSetting((pre) => {
                         return { ...pre, notVehicleForbidden: e.target.checked };
                       });
+                      editZoneForm.setFieldValue('forbidden', []);
                     }}
                   >{`${t('edit_zone_panel.not_vehicle_forbidden')}`}</Checkbox>
                 </Form.Item>
@@ -563,6 +564,7 @@ const EditZoneTable: FC<{
                       setTagSetting((pre) => {
                         return { ...pre, allVehicleForbidden: e.target.checked };
                       });
+                      editZoneForm.setFieldValue('forbidden', []);
                     }}
                   >{`${t('edit_zone_panel.all_vehicle_forbidden')}`}</Checkbox>
                 </Form.Item>
@@ -574,6 +576,9 @@ const EditZoneTable: FC<{
                   mode={'multiple'}
                   tagRender={tagRender}
                   style={{ width: '100%' }}
+                  onChange={(e) => {
+                    editZoneForm.setFieldValue('forbidden', e);
+                  }}
                   options={AmrsID}
                 />
               </Form.Item>
