@@ -24,18 +24,18 @@ const EditMissionPanel: FC<{
   const [search, setSearch] = useState('');
   const [selectedMissionKey, setSelectedMissionKey] = useState('');
   const [selectedMissionCar, setSelectedMissionCar] = useState('');
-  const [tag, setTag] = useState<string[]>([]);
   const [openMissionModel, setOpenMissionModel] = useState(false);
   const [openWithCreateMission, setOpenWithCreateMission] = useState(false);
   const [editMissionKey, setEditMissionKey] = useState('');
   const [loadingTitle, setLoadingTitle] = useState(false);
+  const [canBeCreate, setCanBeCreate] = useState(false);
+  const [tag, setTag] = useState<string[]>([]);
   const { data: amrs } = useAMRsample();
-  const { data: allMissionTitle, refetch } = useAllMissionTitlesDetail();
+  const { data: allMissionTitle } = useAllMissionTitlesDetail();
   const { data: cat } = useCategory();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-  const [canBeCreate, setCanBeCreate] = useState(false);
 
   const catOption = cat?.map((v) => ({ value: v.id, label: v.tagName })) || [];
   const filterMissionData = useMemo(
@@ -52,11 +52,6 @@ const EditMissionPanel: FC<{
     }
   );
 
-  const editMutation = useMutation(
-    (editValue: MissionListType) => client.post('api/setting/update-mission-title', editValue),
-    { onSuccess: () => void refetch() }
-  );
-
   const refetchData = async () => {
     setLoadingTitle(true);
     await queryClient.refetchQueries({ queryKey: ['all-mission-title'] });
@@ -64,8 +59,10 @@ const EditMissionPanel: FC<{
   };
 
   const handleAdd = () => {
-    if (!canBeCreate) messageApi.warning('tag is require');
-
+    if (!canBeCreate) {
+      messageApi.warning(t('mission.add_mission.tag_warn'));
+      return;
+    }
     const formData = createMissionForm.getFieldsValue(true) as MissionListType;
     if (!formData.name) {
       messageApi.warning(t('mission.add_mission.empty_warn'));
@@ -87,28 +84,6 @@ const EditMissionPanel: FC<{
     setOpenWithCreateMission(false);
   };
 
-  const handleOk = () => {
-    if (!canBeCreate) {
-      messageApi.warning('tag is wrong');
-      return;
-    }
-
-    if (!allMissionTitle) return;
-    const editData = formMission.getFieldsValue() as MissionListType;
-
-    if (!editData.name || editData.name.trim() === '') {
-      messageApi.warning(t('mission.add_mission.name_warn'));
-      return;
-    }
-    if (!editData.robot_type_id || editData.robot_type_id.trim() === '') {
-      messageApi.warning(t('mission.add_mission.car_warn'));
-      return;
-    }
-
-    editMutation.mutate({ ...editData, key: editMissionKey });
-    setOpenMissionModel(false);
-  };
-
   const newCarList = amrs?.map((v) => ({ label: v.name, value: v.id }));
   const createMissionBtn = () => {
     if (!amrs?.[0]?.id) {
@@ -120,10 +95,13 @@ const EditMissionPanel: FC<{
   };
 
   useEffect(() => {
-    if (!openMissionModel) return;
+    const getName = tag.map((v) => {
+      const c = catOption.find((f) => f.value === v);
+      return c?.label || '';
+    });
 
-    const hasNormal = tag.includes('normal-mission');
-    const hasDynamic = tag.includes('dynamic-mission');
+    const hasNormal = getName.includes('normal-mission');
+    const hasDynamic = getName.includes('dynamic-mission');
 
     if ((hasNormal || hasDynamic) && !(hasNormal && hasDynamic)) {
       setCanBeCreate(true);
@@ -179,51 +157,55 @@ const EditMissionPanel: FC<{
           </SwitchTable>
         </Flex>
       </div>
-      <Modal
-        title={t('mission.add_mission.create_mission')}
-        open={openWithCreateMission}
-        onOk={handleAdd}
-        onCancel={() => {
-          createMissionForm.setFieldValue('name', '');
-          setOpenWithCreateMission(false);
-        }}
-      >
-        <Form form={createMissionForm} labelCol={{ span: 6 }} autoComplete="off">
-          <Form.Item
-            hasFeedback
-            label={t('mission.add_mission.name')}
-            name="name"
-            rules={[{ required: true, message: t('mission.add_mission.car_warn') }]}
-          >
-            <Input placeholder="請輸入任務名稱" />
-          </Form.Item>
-          <Form.Item hasFeedback label={t('mission.add_mission.car')} name="robot_type_id">
-            <Select placeholder="請選擇" options={newCarList} />
-          </Form.Item>
-          <Form.Item label={t('mission.add_mission.tag')} name="category">
-            <Select
-              onChange={(v) => setTag(v)}
-              value={tag}
-              placeholder="請選擇"
-              mode="multiple"
-              options={catOption}
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
-      <Modal
-        title={t('mission.add_mission.title')}
-        open={openMissionModel}
-        onOk={handleOk}
-        onCancel={() => setOpenMissionModel(false)}
-      >
+
+      {/* 新增任務Create Mission Modal */}
+      {openWithCreateMission ? (
+        <Modal
+          title={t('mission.add_mission.create_mission')}
+          open={openWithCreateMission}
+          onOk={handleAdd}
+          onCancel={() => {
+            createMissionForm.setFieldValue('name', '');
+            setOpenWithCreateMission(false);
+          }}
+        >
+          <Form form={createMissionForm} labelCol={{ span: 6 }} autoComplete="off">
+            <Form.Item
+              hasFeedback
+              label={t('mission.add_mission.name')}
+              name="name"
+              rules={[{ required: true, message: t('mission.add_mission.car_warn') }]}
+            >
+              <Input placeholder="請輸入任務名稱" />
+            </Form.Item>
+            <Form.Item hasFeedback label={t('mission.add_mission.car')} name="robot_type_id">
+              <Select placeholder="請選擇" options={newCarList} />
+            </Form.Item>
+            <Form.Item label={t('mission.add_mission.tag')} name="category">
+              <Select
+                placeholder="請選擇"
+                mode="multiple"
+                options={catOption}
+                onChange={(v) => setTag(v)}
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+      ) : (
+        []
+      )}
+
+      {/* 編輯任務Edit Mission Modal */}
+      {openMissionModel ? (
         <MissionForm
-          carDataSource={amrs}
-          missionDataSource={allMissionTitle}
           editMissionKey={editMissionKey}
           formMission={formMission}
+          openMissionModel={openMissionModel}
+          setOpenMissionModel={setOpenMissionModel}
         />
-      </Modal>
+      ) : (
+        []
+      )}
     </>
   );
 };

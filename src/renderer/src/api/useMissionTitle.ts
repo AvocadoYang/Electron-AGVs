@@ -5,7 +5,16 @@ import client from './axiosClient';
 const schema = array(
   object({
     id: string().required(),
-    name: string().required()
+    name: string().required(),
+    MissionTitleBridgeCategory: array(
+      object({
+        Category: object({
+          id: string().required(),
+          tagName: string().required(),
+          color: string().required()
+        }).optional()
+      })
+    ).required()
   }).required()
 );
 

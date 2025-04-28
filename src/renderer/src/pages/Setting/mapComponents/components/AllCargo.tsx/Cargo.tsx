@@ -120,6 +120,7 @@ const Cargo: FC<{
         })}
       </WrapperDiv>
       <CargoModal
+        id={id}
         locId={locId}
         settingForm={settingForm}
         layerForm={layerForm}

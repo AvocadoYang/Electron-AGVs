@@ -522,7 +522,15 @@
       "name_placeholder": "please insert mission name",
       "car": "Car type",
       "car_type_placeholder": "Please select",
-      "tag": " Tag"
+      "tag": " Tag",
+      "dynamic_mission": "dynamic mission",
+      "normal_mission": "normal mission",
+      "tag_warn": "You must select either 'dynamic-mission' or 'normal-mission' as a tag, but you cannot select both at the same time.",
+      "tag_info": "'Dynamic-mission' tags are used for quick tasks that require specific settings, while 'normal-mission' tags are for standard task assignments. For more details, please refer to the usage instructions in the tag editing section.",
+      "normal_mission_tag_description": "A 'normal-mission' tag is used for tasks where each subtask has predefined, fixed parameters, such as location, shelf height, and rotation angle. These parameters are typically set to 'custom,' allowing you to manually input the values for each subtask.",
+      "dynamic_mission_tag_description": "A 'dynamic-mission' tag is designed for quick-pickup tasks where certain subtask parameters, such as location, shelf height, and rotation angle, are set to 'automatic.' When a task with this tag is assigned, the system automatically selects a storage slot and retrieves its details (e.g., location, shelf height, rotation angle). These details are then dynamically applied to the subtask, enabling faster task dispatching.",
+      "charge": "Used for charging tasks",
+      "force": "When this tag is present, dispatching this task will immediately elevate its priority to the highest level (note: this is not an inserted task)."
     },
     "mission_list": {
       "wait_required_warn": " wait column need default value",

@@ -520,7 +520,15 @@
       "name_placeholder": "請輸入任務名稱",
       "car": "車輛類型",
       "car_type_placeholder": "請選擇",
-      "tag": " 標籤"
+      "tag": " 標籤",
+      "dynamic_mission": "動態任務",
+      "normal_mission": "一般任務",
+      "tag_warn": "您必須選擇 'dynamic-mission' 或 'normal-mission' 其中之一作為標籤，但不能同時選擇兩個。",
+      "tag_info": "'dynamic-mission' 標籤用於需要特定設定的快速任務，'normal-mission' 標籤則用於標準任務指派。更多細節請參考標籤編輯區的使用說明。",
+      "normal_mission_tag_description": "'normal-mission' 標籤適用於每個子任務皆有預設且固定參數的任務，例如地點、貨架高度與旋轉角度。這些參數通常設定為 '自訂'，允許您為每個子任務手動輸入數值。",
+      "dynamic_mission_tag_description": "'dynamic-mission' 標籤設計用於快速取放任務，部分子任務參數（如地點、貨架高度、旋轉角度）會設定為 '自動'。當指派此類標籤的任務時，系統會自動選擇儲位並讀取其詳細資訊（如地點、貨架高度、旋轉角度），並動態套用到子任務中，加快任務派送速度。",
+      "charge": "充電任務使用",
+      "force": "有此標籤時,派該任務會直接將此任務的級別順序調為為最高(不是插單任務)."
     },
     "mission_list": {
       "wait_required_warn": "不須等待請填 0",

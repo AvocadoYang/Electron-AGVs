@@ -4,7 +4,7 @@ import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Form, message, Select, Tag } from 'antd';
+import { Button, Form, message, Select } from 'antd';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
@@ -35,12 +35,16 @@ const CycleForm: FC = () => {
 
   const misOptions = useMemo(() => {
     if (!missionTitle) return [];
-    return missionTitle?.map((v) => {
-      return {
-        value: v.id,
-        label: v.name
-      };
-    });
+    return missionTitle
+      ?.filter((g) =>
+        g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'normal-mission')
+      )
+      .map((v) => {
+        return {
+          value: v.id,
+          label: v.name
+        };
+      });
   }, [missionTitle]);
 
   const submitMutation = useMutation({

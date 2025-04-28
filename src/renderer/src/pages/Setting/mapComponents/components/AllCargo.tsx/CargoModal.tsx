@@ -8,6 +8,7 @@ import CargoMissionForm from './CargoMissionForm';
 import LayerForm from './LayerForm';
 
 const CargoModal: FC<{
+  id: string;
   locId: string;
   settingForm: FormInstance<unknown>;
   layerForm: FormInstance<unknown>;
@@ -17,6 +18,7 @@ const CargoModal: FC<{
   setIsEditLayer: (value: SetStateAction<boolean>) => void;
   setIsEditModalOpen: (value: SetStateAction<boolean>) => void;
 }> = ({
+  id,
   locId,
   settingForm,
   layerForm,
@@ -38,6 +40,7 @@ const CargoModal: FC<{
     setIsEditLayer(false);
 
     const mis = {
+      id,
       loc: locId,
       name: payload.name || '',
       region: payload.region,
@@ -58,43 +61,48 @@ const CargoModal: FC<{
   return (
     <>
       {contextHolders}
-      <Modal
-        title={
-          <span
-            style={{ fontSize: '1.5em', fontWeight: 'bold' }}
-          >{`${t('shelf.shelf')} ${locId}`}</span>
-        }
-        open={isEditModalOpen}
-        onOk={handleEditOk}
-        onCancel={handleEditCancel}
-        width={1530}
-        styles={{
-          body: { padding: '24px', background: '#fafafa' }
-        }}
-        okButtonProps={{
-          size: 'large',
-          type: 'primary',
-          style: { background: '#1890ff', borderRadius: 6 }
-        }}
-        cancelButtonProps={{ size: 'large', style: { borderRadius: 6 } }}
-        style={{ top: 20 }}
-      >
-        <div style={{ display: 'flex', gap: '24px' }}>
-          <CargoMissionForm locId={locId} form={settingForm} locName={shelfInfo?.name || ''} />
-          {shelfInfo === undefined ? (
-            <div style={{ color: '#ff4d4f', fontWeight: 'bold', padding: '16px' }}>
-              {t('utils.error')}
-            </div>
-          ) : (
-            <LayerForm
-              layer={shelfInfo.layer as Info[]}
-              locId={locId}
-              form={layerForm}
-              setIsEditLayer={setIsEditLayer}
-            />
-          )}
-        </div>
-      </Modal>
+
+      {isEditModalOpen ? (
+        <Modal
+          title={
+            <span
+              style={{ fontSize: '1.5em', fontWeight: 'bold' }}
+            >{`${t('shelf.shelf')} ${locId}`}</span>
+          }
+          open={isEditModalOpen}
+          onOk={handleEditOk}
+          onCancel={handleEditCancel}
+          width={1530}
+          styles={{
+            body: { padding: '24px', background: '#fafafa' }
+          }}
+          okButtonProps={{
+            size: 'large',
+            type: 'primary',
+            style: { background: '#1890ff', borderRadius: 6 }
+          }}
+          cancelButtonProps={{ size: 'large', style: { borderRadius: 6 } }}
+          style={{ top: 20 }}
+        >
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <CargoMissionForm locId={locId} form={settingForm} locName={shelfInfo?.name || ''} />
+            {shelfInfo === undefined ? (
+              <div style={{ color: '#ff4d4f', fontWeight: 'bold', padding: '16px' }}>
+                {t('utils.error')}
+              </div>
+            ) : (
+              <LayerForm
+                layer={shelfInfo.layer as Info[]}
+                locId={locId}
+                form={layerForm}
+                setIsEditLayer={setIsEditLayer}
+              />
+            )}
+          </div>
+        </Modal>
+      ) : (
+        []
+      )}
     </>
   );
 };

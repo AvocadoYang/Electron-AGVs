@@ -91,9 +91,11 @@ const ChargeForm: FC<{ form: FormInstance<unknown>; selectKey: string }> = ({
     }));
   }, [name, t]);
 
-  const taskOption = missionTitle?.map((v) => {
-    return { value: v.id, label: v.name };
-  });
+  const taskOption = missionTitle
+    ?.filter((g) => g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'charge'))
+    .map((v) => {
+      return { value: v.id, label: v.name };
+    });
 
   useEffect(() => {
     if (!selectKey || !selectedCharge) return;

@@ -39,12 +39,16 @@ const BeforeLeftChargeStationForm: FC = () => {
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  const missionOptions = missionTitle?.map((v) => {
-    return {
-      value: v.id,
-      label: v.name
-    };
-  });
+  const missionOptions = missionTitle
+    ?.filter((g) =>
+      g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'normal-mission')
+    )
+    .map((v) => {
+      return {
+        value: v.id,
+        label: v.name
+      };
+    });
 
   const handleAdd = () => {
     const payload = form.getFieldsValue() as DataType;

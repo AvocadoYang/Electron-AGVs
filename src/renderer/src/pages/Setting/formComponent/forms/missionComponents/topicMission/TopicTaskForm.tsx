@@ -35,12 +35,16 @@ const TopicForm: FC = () => {
     }));
   }, [name]);
 
-  const missionOptions = missionTitle?.map((v) => {
-    return {
-      value: v.id,
-      label: v.name
-    };
-  });
+  const missionOptions = missionTitle
+    ?.filter((g) =>
+      g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'normal-mission')
+    )
+    .map((v) => {
+      return {
+        value: v.id,
+        label: v.name
+      };
+    });
 
   const setMissionMutation = useMutation({
     mutationFn: (payload: SubmitPayload) => {

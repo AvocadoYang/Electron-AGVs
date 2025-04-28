@@ -1,4 +1,4 @@
-import { Button, Form, message, Modal, Radio, Select } from 'antd';
+import { Button, Flex, Form, message, Modal, Radio, Select, Tag } from 'antd';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import { OpenAssignMission } from '../../global/jotai';
@@ -69,12 +69,27 @@ const DialogMission = () => {
   });
   const misOptions = useMemo(() => {
     if (!data) return [];
-    return data?.map((v) => {
-      return {
-        value: v.id,
-        label: v.name
-      };
-    });
+    return data
+      ?.filter((g) =>
+        g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'normal-mission')
+      )
+      .map((v) => {
+        return {
+          value: v.id,
+          label: (
+            <Flex justify="space-evenly">
+              {v.name}{' '}
+              {v.MissionTitleBridgeCategory.filter(
+                (f) => f.Category?.tagName !== 'normal-mission'
+              ).map((m) => (
+                <Tag key={m.Category?.id} color={m.Category?.color}>
+                  {m.Category?.tagName}
+                </Tag>
+              ))}
+            </Flex>
+          )
+        };
+      });
   }, [data]);
 
   const submit = () => {

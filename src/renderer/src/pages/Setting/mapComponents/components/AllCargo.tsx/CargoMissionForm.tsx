@@ -19,7 +19,12 @@ const CargoMissionForm: FC<{
   const { data: shelf } = useSpecificShelf(locId);
   const { t } = useTranslation();
 
-  const taskOption = misTitle?.map((v) => ({ value: v.id, label: v.name }));
+  const taskOption = misTitle
+    ?.filter((g) =>
+      g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'dynamic-mission')
+    )
+    .map((v) => ({ value: v.id, label: v.name ?? `Mission ${v.id}` }));
+
   const dirOption = yaw?.map((v) => ({ value: v.id, label: v.yaw }));
   const regionOption = region?.map((v) => ({ value: v?.id, label: v?.name }));
 

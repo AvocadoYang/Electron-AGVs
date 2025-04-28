@@ -1,78 +1,136 @@
-import { ASType } from '@renderer/api/useAMRsample';
+import useAMRsample from '@renderer/api/useAMRsample';
 import useCategory from '@renderer/api/useCategory';
-import { MTType } from '@renderer/api/useMissionTitle';
-import { isFork, isHumanRobot } from '@renderer/utils/globalFunction';
-import { Form, FormInstance, Input, Select } from 'antd';
-import { FC, useEffect } from 'react';
+import useMissionTitleById from '@renderer/api/useMissionTitleById';
+import { Flex, Form, FormInstance, Input, message, Modal, Select, Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MissionListType } from './mission';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
 
 const MissionForm: FC<{
-  missionDataSource: MTType;
+  openMissionModel: boolean;
+  setOpenMissionModel: Dispatch<SetStateAction<boolean>>;
   editMissionKey: string;
-  carDataSource: ASType;
   formMission: FormInstance<unknown>;
-}> = ({ missionDataSource, editMissionKey, formMission, carDataSource }) => {
+}> = ({ editMissionKey, formMission, openMissionModel, setOpenMissionModel }) => {
   const { data: cat } = useCategory();
+  const { data: amrs } = useAMRsample();
+  const { data: mission } = useMissionTitleById(editMissionKey);
+  const [canBeCreate, setCanBeCreate] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+  const queryClient = useQueryClient();
+  const [tag, setTag] = useState<string[]>([]);
+  const newCarList = amrs?.map((v) => ({ label: v.name, value: v.id })) || [];
 
-  const catOption =
-    cat?.map((v) => {
-      return { value: v.id, label: v.tagName };
-    }) || [];
-
-  const missionItem = missionDataSource?.filter((v) => v.id === editMissionKey)[0];
-
-  const newCarList = carDataSource
-    ?.filter((v) => {
-      if (isFork(missionItem?.Robot_types?.value || '')) {
-        return isFork(v.value || '');
-      }
-
-      if (isHumanRobot(missionItem?.Robot_types?.value || '')) {
-        return isHumanRobot(v.value || '');
-      }
-
-      return false;
-    })
-    .map((v) => ({
-      label: v.name,
-      value: v.id
-    }));
+  const catOption = cat?.map((v) => ({ value: v.id, label: v.tagName })) || [];
 
   const { t } = useTranslation();
+
+  const editMutation = useMutation(
+    (editValue: MissionListType) => client.post('api/setting/update-mission-title', editValue),
+    {
+      onSuccess: async () => {
+        await queryClient.refetchQueries({ queryKey: ['all-mission-title-detail'] });
+        await queryClient.refetchQueries({ queryKey: ['all-mission-title'] });
+        setOpenMissionModel(false);
+        messageApi.success(t('utils.success'));
+      }
+    }
+  );
+
   useEffect(() => {
-    if (!missionItem) return;
+    if (!mission) return;
+    const tags = mission.MissionTitleBridgeCategory?.map((v) => v.Category?.id) || [];
+    setTag(tags);
+    formMission.setFieldsValue({
+      name: mission?.name,
+      robot_type_id: mission?.Robot_types?.id,
+      category: tags
+    });
+  }, [mission, formMission]);
 
-    const option = missionItem?.MissionTitleBridgeCategory?.map((c) => c.Category?.id) || [];
+  useEffect(() => {
+    const getName = tag.map((v) => {
+      const c = catOption.find((f) => f.value === v);
+      return c?.label || '';
+    });
 
-    formMission.setFieldValue('name', missionItem?.name);
-    formMission.setFieldValue('robot_type_id', missionItem?.Robot_types?.id);
-    formMission.setFieldValue('category', option);
-  }, [formMission, missionItem]);
+    const hasNormal = getName.includes('normal-mission');
+    const hasDynamic = getName.includes('dynamic-mission');
+
+    if ((hasNormal || hasDynamic) && !(hasNormal && hasDynamic)) {
+      setCanBeCreate(true);
+    } else {
+      setCanBeCreate(false);
+    }
+  }, [tag]);
+
+  const handleOk = () => {
+    if (!canBeCreate) {
+      messageApi.warning(t('mission.add_mission.tag_warn'));
+      return;
+    }
+
+    const editData = formMission.getFieldsValue() as MissionListType;
+
+    if (!editData.name || editData.name.trim() === '') {
+      messageApi.warning(t('mission.add_mission.name_warn'));
+      return;
+    }
+    if (!editData.robot_type_id || editData.robot_type_id.trim() === '') {
+      messageApi.warning(t('mission.add_mission.car_warn'));
+      return;
+    }
+
+    editMutation.mutate({ ...editData, key: editMissionKey });
+  };
 
   return (
-    <Form form={formMission} autoComplete="off">
-      <Form.Item
-        rules={[{ required: true, message: t('mission.add_mission.name_warn') }]}
-        label={t('mission.add_mission.name')}
-        name="name"
-        hasFeedback
-      >
-        <Input />
-      </Form.Item>
+    <>
+      {contextHolder}
 
-      <Form.Item
-        hasFeedback
-        rules={[{ required: true, message: t('mission.add_mission.car_warn') }]}
-        label={t('mission.add_mission.car')}
-        name="robot_type_id"
+      <Modal
+        title={t('mission.add_mission.title')}
+        open={openMissionModel}
+        onOk={handleOk}
+        onCancel={() => setOpenMissionModel(false)}
       >
-        <Select options={newCarList} />
-      </Form.Item>
+        <Form form={formMission} autoComplete="off">
+          <Form.Item
+            rules={[{ required: true, message: t('mission.add_mission.name_warn') }]}
+            label={t('mission.add_mission.name')}
+            name="name"
+            hasFeedback
+          >
+            <Input />
+          </Form.Item>
 
-      <Form.Item label={t('mission.add_mission.tag')} name="category">
-        <Select mode="multiple" options={catOption} />
-      </Form.Item>
-    </Form>
+          <Form.Item
+            hasFeedback
+            rules={[{ required: true, message: t('mission.add_mission.car_warn') }]}
+            label={t('mission.add_mission.car')}
+            name="robot_type_id"
+          >
+            <Select options={newCarList} />
+          </Form.Item>
+
+          <Flex gap="middle" align="center">
+            <Form.Item
+              label={t('mission.add_mission.tag')}
+              name="category"
+              style={{ marginBottom: 0, flex: 1 }}
+            >
+              <Select mode="multiple" options={catOption} onChange={(v) => setTag(v)} />
+            </Form.Item>
+            <Tooltip title={t('mission.add_mission.tag_info')}>
+              <InfoCircleOutlined />
+            </Tooltip>
+          </Flex>
+        </Form>
+      </Modal>
+    </>
   );
 };
 

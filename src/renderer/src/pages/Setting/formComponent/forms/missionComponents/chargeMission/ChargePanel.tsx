@@ -339,15 +339,19 @@ const ChargePanel: FC<{
           />
         </Flex>
       </div>
-      <Modal
-        width={900}
-        title={t('mission.charge_mission.charge_mission')}
-        open={open}
-        onOk={() => handleSave()}
-        onCancel={handleCancel}
-      >
-        <ChargeForm form={form} selectKey={selectKey} />
-      </Modal>
+      {open ? (
+        <Modal
+          width={900}
+          title={t('mission.charge_mission.charge_mission')}
+          open={open}
+          onOk={() => handleSave()}
+          onCancel={handleCancel}
+        >
+          <ChargeForm form={form} selectKey={selectKey} />
+        </Modal>
+      ) : (
+        []
+      )}
     </>
   );
 };

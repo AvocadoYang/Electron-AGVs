@@ -7,7 +7,7 @@ import SubmitButton from '@renderer/utils/SubmitButton';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, Drawer, Form, FormProps, InputNumber, message, Select } from 'antd';
-import { Dispatch, FC, Key, SetStateAction } from 'react';
+import { Dispatch, FC, Key, SetStateAction, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type FieldType = {
@@ -24,13 +24,27 @@ const ShelfDrawer: FC<{
   setOpenDrawer: Dispatch<SetStateAction<boolean>>;
   selectedRowKeys: Key[];
 }> = ({ openDrawer, setOpenDrawer, selectedRowKeys }) => {
-  const { data: misTitle } = useAllMissionTitles();
+  const { data: missionTitle } = useAllMissionTitles();
   const { data: allCategory } = useShelfCategory();
   const { data: regionName } = useRegionName();
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
+
+  const misOptions = useMemo(() => {
+    if (!missionTitle) return [];
+    return missionTitle
+      ?.filter((g) =>
+        g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'dynamic-mission')
+      )
+      .map((v) => {
+        return {
+          value: v.id,
+          label: v.name
+        };
+      });
+  }, [missionTitle]);
 
   const submitMutation = useMutation({
     mutationFn: (payload: FieldType) => {
@@ -46,8 +60,6 @@ const ShelfDrawer: FC<{
   });
 
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
-
     const payload: FieldType = {
       ...values,
       shelfId: selectedRowKeys
@@ -78,23 +90,11 @@ const ShelfDrawer: FC<{
             </Form.Item>
 
             <Form.Item label={t('edit_shelf_panel.load_mission')} name="load">
-              <Select disabled={selectedRowKeys.length === 0} allowClear>
-                {misTitle?.map((v) => (
-                  <Select.Option key={v.id} value={v.id}>
-                    {v.name}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Select disabled={selectedRowKeys.length === 0} allowClear options={misOptions} />
             </Form.Item>
 
             <Form.Item label={t('edit_shelf_panel.offload_mission')} name="offload">
-              <Select disabled={selectedRowKeys.length === 0} allowClear>
-                {misTitle?.map((v) => (
-                  <Select.Option key={v.id} value={v.id}>
-                    {v.name}
-                  </Select.Option>
-                ))}
-              </Select>
+              <Select disabled={selectedRowKeys.length === 0} allowClear options={misOptions} />
             </Form.Item>
 
             <Form.Item label={t('edit_shelf_panel.cargo_limit')} name="cargo_limit">

@@ -4,15 +4,17 @@ import { useTranslation } from 'react-i18next';
 import {
   Button,
   ColorPicker,
+  Descriptions,
   Flex,
   Form,
   Input,
   Popconfirm,
+  Popover,
   Table,
   Typography,
   message
 } from 'antd';
-import { CloseOutlined, DeleteTwoTone, EditOutlined } from '@ant-design/icons';
+import { CloseOutlined, DeleteTwoTone, EditOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
 import useCategory from '@renderer/api/useCategory';
 import client from '@renderer/api/axiosClient';
@@ -34,7 +36,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   dataIndex: string;
 
   title: string;
-  inputType: string;
+
   record: DataType;
   index: number;
   children: React.ReactNode;
@@ -118,7 +120,12 @@ const TagTable: FC = () => {
   });
 
   const edit = (record: Partial<DataType> & { id: string }) => {
-    if (record.tagName === 'none') {
+    if (
+      record.tagName === 'none' ||
+      record.tagName === 'dynamic-mission' ||
+      record.tagName === 'normal-mission' ||
+      record.tagName === 'charge'
+    ) {
       void messageApi.warning(t('other.edit_mission_tag.forbidden_edit_default'));
       return;
     }
@@ -138,7 +145,12 @@ const TagTable: FC = () => {
   };
 
   const handleDelete = (record: Partial<DataType> & { id: string }) => {
-    if (record.tagName === '強制') {
+    if (
+      record.tagName === 'none' ||
+      record.tagName === 'dynamic-mission' ||
+      record.tagName === 'normal-mission' ||
+      record.tagName === 'charge'
+    ) {
       void messageApi.warning(t('other.edit_mission_tag.forbidden_edit_default'));
       return;
     }
@@ -237,7 +249,7 @@ const TagTable: FC = () => {
             <Popconfirm
               title={t('utils.delete')}
               description={t('utils.delete_warn')}
-              onConfirm={() => handleDelete({ id: record.id })}
+              onConfirm={() => handleDelete({ id: record.id, tagName: record.tagName })}
               onCancel={cancel}
               okText={t('utils.yes')}
               cancelText={t('utils.no')}
@@ -265,7 +277,7 @@ const TagTable: FC = () => {
       ...col,
       onCell: (record: DataType) => ({
         record,
-        inputType: col.dataIndex,
+
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record)
@@ -276,9 +288,17 @@ const TagTable: FC = () => {
   return (
     <>
       {contextHolder}
-      <Button color="primary" variant="filled" onClick={() => handleAdd()}>
-        {t('utils.add')}
-      </Button>
+      <div style={{ width: '100%' }}>
+        <Flex justify="space-between">
+          <Button color="primary" variant="filled" onClick={() => handleAdd()}>
+            {t('utils.add')}
+          </Button>
+          <Popover trigger="click" content={<DescribeTag></DescribeTag>}>
+            <InfoCircleOutlined />
+          </Popover>
+        </Flex>
+      </div>
+
       <Form form={form} component={false}>
         <Table
           rowKey={() => nanoid()}
@@ -296,3 +316,30 @@ const TagTable: FC = () => {
 };
 
 export default TagTable;
+
+const DescribeTag = () => {
+  const { t } = useTranslation();
+  return (
+    <Descriptions bordered column={2} size="small">
+      <Descriptions.Item>charge</Descriptions.Item>
+
+      <Descriptions.Item>{t('mission.add_mission.charge')}</Descriptions.Item>
+
+      <Descriptions.Item>force</Descriptions.Item>
+
+      <Descriptions.Item>{t('mission.add_mission.force')}</Descriptions.Item>
+
+      <Descriptions.Item>normal-mission</Descriptions.Item>
+
+      <Descriptions.Item>
+        {t('mission.add_mission.normal_mission_tag_description')}
+      </Descriptions.Item>
+
+      <Descriptions.Item>dynamic-mission</Descriptions.Item>
+
+      <Descriptions.Item>
+        {t('mission.add_mission.dynamic_mission_tag_description')}
+      </Descriptions.Item>
+    </Descriptions>
+  );
+};

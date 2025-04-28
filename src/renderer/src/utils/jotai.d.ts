@@ -1,8 +1,5 @@
 export type LocationType = {
-<<<<<<< HEAD
   id: string;
-=======
->>>>>>> charlie
   locationId: string;
   x: number;
   y: number;
