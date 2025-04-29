@@ -172,7 +172,6 @@ const QuickMissionWebView: React.FC<{
     setQuickSettingMode(null);
     setOffload(null);
     setLoad(null);
-    form.resetFields();
   };
 
   const submitMutation = useMutation({
@@ -202,10 +201,12 @@ const QuickMissionWebView: React.FC<{
     const values = form.getFieldsValue() as { amrId: string; priority: number };
     // console.log('Submitting quick mission:', { loadValue, offloadValue, ...values });
 
+    const prefixTask = [loadValue, offloadValue].filter((v) => v !== null);
+
     const payload: Submit = {
       amrId: [values.amrId],
       priority: values.priority,
-      task: [loadValue, offloadValue]
+      task: prefixTask
     };
 
     submitMutation.mutate(payload);

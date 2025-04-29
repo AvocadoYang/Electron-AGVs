@@ -2,11 +2,11 @@ import { memo } from 'react';
 import Card from './Card';
 import { Flex } from 'antd';
 import useName from '@renderer/api/useAmrName';
-import useMockRobot from '@renderer/api/useMockRobot';
+import { useMockInfo } from '@renderer/sockets/useMockInfo';
 
 const Cards: React.FC<{}> = () => {
   const { data: names } = useName();
-  const { data: mockRobot } = useMockRobot();
+  const mockRobot = useMockInfo();
 
   if (!names || !names.amrs.length) return;
   if (mockRobot && mockRobot.isSimulate) {

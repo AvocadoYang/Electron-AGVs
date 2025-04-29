@@ -41,6 +41,11 @@
     "cost_time": "Cost Time (minutes)",
     "loading": "Loading...",
     "retry": "Retry",
+    "minutes": "Minutes",
+    "units": "Units",
+    "missions": "Missions",
+    "seconds": "Seconds",
+    "meters": "Meters",
     "location_property": {
       "none": "Normal",
       "charge_station": "Charge Station",
@@ -96,17 +101,6 @@
   "page_dashboard": "Dashboard",
   "page_simulate": "Simulate",
   "simulate": "simulate",
-  "header": {
-    "inactive_sim": "Stop simulate",
-    "active_sim": "Start simulation",
-    "please_confirm_info": "Please confirm the following simulation details",
-    "sim_script": "Simulation script:",
-    "no_script_select": "No script selected",
-    "in_use_robot": "Vehicle/Robot used:",
-    "no_robot_select": "No vehicle/robot selected",
-    "active": "Confirm to start",
-    "cancel": "Cancel"
-  },
 
   "main_task_list": {
     "wait_suitable": "wait suitable"
@@ -845,6 +839,41 @@
       "selected": "Selected",
       "no_scripts": "No scripts available",
       "error_loading": "Failed to load scripts"
+    },
+
+    "start_sim_modal": {
+      "inactive_sim": "Stop simulate",
+      "active_sim": "Start simulation",
+      "please_confirm_info": "Please confirm the following simulation details",
+      "sim_script": "Simulation script:",
+      "no_script_select": "No script selected",
+      "in_use_robot": "Vehicle/Robot used:",
+      "no_robot_select": "No vehicle/robot selected",
+      "active": "Confirm to start",
+      "cancel": "Cancel",
+      "duration": "Simulation duration"
+    },
+
+    "results": {
+      "title": "Simulation results",
+      "duration": "Simulation duration",
+      "cargos_carried": "Number of cargoes transported",
+      "battery_cost": "Battery consumption",
+      "missions_per_amr": "Number of missions per AMR",
+      "average_mission_time": "Average mission time",
+      "total_distance_traveled": "Total travel distance",
+      "idle_time_per_amr": "Idle time per AMR",
+      "mission_success_rate": "Mission success rate",
+      "completed_missions": "Total number of completed missions",
+      "download": "Download results",
+      "table": {
+        "amr_id": "AMR ID",
+        "missions": "Number of missions",
+        "battery_cost": "Battery consumption",
+        "average_mission_time": "Average mission time",
+        "total_distance_traveled": "Total distance traveled",
+        "idle_time": "Idle time"
+      }
     }
   }
 }

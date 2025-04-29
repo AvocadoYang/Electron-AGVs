@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai';
 import { Tooltip } from 'antd';
 import { rad2Deg } from '@renderer/utils/utils';
 import { isShowRoadTooltip } from '@renderer/utils/siderGloble';
-import useMockRobot from '@renderer/api/useMockRobot';
+import { useMockInfo } from '@renderer/sockets/useMockInfo';
 
 const Container = styled.div.attrs<{
   left: number;
@@ -106,7 +106,7 @@ const Road: FC<{
   const [simulateColor, setSimulateColor] = useState('#ff9646');
   const length = Math.hypot(x1 - x2, y1 - y2);
   const angle = rad2Deg(Math.atan2(y2 - y1, x2 - x1));
-  const { data: script } = useMockRobot();
+  const script = useMockInfo();
   const showRoadTooltip = useAtomValue(isShowRoadTooltip);
 
   useEffect(() => {

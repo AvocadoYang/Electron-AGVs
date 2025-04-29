@@ -7,7 +7,7 @@ import { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import useMockRobot from '@renderer/api/useMockRobot';
+import { useMockInfo } from '@renderer/sockets/useMockInfo';
 
 const StyledForm = styled(Form)`
   background: #fff;
@@ -49,15 +49,15 @@ const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
     [data.data?.locations]
   );
 
-  const { data: name, isLoading: loadingCar } = useMockRobot();
+  const mockRobot = useMockInfo();
   const AmrOption = useMemo(
     () => [
       { label: t('sim.modal.none'), value: 'none' },
-      ...(name?.robot
+      ...(mockRobot?.robot
         ?.filter((v) => v.script_placement_location !== 'unset')
         .map((v) => ({ value: v.id, label: v.id })) || [])
     ],
-    [name, t]
+    [mockRobot, t]
   );
 
   useEffect(() => {
@@ -94,12 +94,7 @@ const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
       </Form.Item>
 
       <Form.Item name="specify_car" label={t('sim.cargo.output.specify_car')}>
-        <Select
-          mode="multiple"
-          options={AmrOption}
-          loading={loadingCar}
-          placeholder="Select AMRs"
-        />
+        <Select mode="multiple" options={AmrOption} placeholder="Select AMRs" />
       </Form.Item>
 
       <Flex gap="middle" align="center">

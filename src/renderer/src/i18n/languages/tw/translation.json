@@ -41,6 +41,11 @@
     "cost_time": "耗時（分鐘)",
     "loading": "載入中...",
     "retry": "重試",
+    "minutes": "分鐘",
+    "units": "單位",
+    "missions": "任務",
+    "seconds": "秒",
+    "meters": "米",
     "location_property": {
       "none": "點位",
       "charge_station": "充電站",
@@ -95,17 +100,6 @@
   "page_dashboard": "控制中心",
   "page_simulate": "模擬任務",
   "simulate": "模擬的",
-  "header": {
-    "inactive_sim": "中止模擬",
-    "active_sim": "啟動模擬",
-    "please_confirm_info": "請確認以下模擬詳情",
-    "sim_script": "模擬腳本：",
-    "no_script_select": "未指定腳本",
-    "in_use_robot": "使用的車輛/機器人：",
-    "no_robot_select": "未指定車輛/機器人",
-    "active": "確認啟動",
-    "cancel": "取消"
-  },
   "main_task_list": {
     "wait_suitable": "等待適合"
   },
@@ -847,6 +841,41 @@
       "selected": "已選擇",
       "no_scripts": "沒有可用的腳本",
       "error_loading": "無法載入腳本"
+    },
+
+    "start_sim_modal": {
+      "inactive_sim": "中止模擬",
+      "active_sim": "啟動模擬",
+      "please_confirm_info": "請確認以下模擬詳情",
+      "sim_script": "模擬腳本：",
+      "no_script_select": "未指定腳本",
+      "in_use_robot": "使用的車輛/機器人：",
+      "no_robot_select": "未指定車輛/機器人",
+      "active": "確認啟動",
+      "cancel": "取消",
+      "duration": "模擬時長"
+    },
+
+    "results": {
+      "title": "模擬結果",
+      "duration": "模擬時長",
+      "cargos_carried": "運送的貨物數量",
+      "battery_cost": "電池消耗",
+      "missions_per_amr": "每個 AMR 的任務數量",
+      "average_mission_time": "平均任務時間",
+      "total_distance_traveled": "總行駛距離",
+      "idle_time_per_amr": "每個 AMR 的空閒時間",
+      "mission_success_rate": "任務成功率",
+      "completed_missions": "完成的總任務數",
+      "download": "下載結果",
+      "table": {
+        "amr_id": "AMR ID",
+        "missions": "任務數量",
+        "battery_cost": "電池消耗",
+        "average_mission_time": "平均任務時間",
+        "total_distance_traveled": "總行駛距離",
+        "idle_time": "空閒時間"
+      }
     }
   }
 }

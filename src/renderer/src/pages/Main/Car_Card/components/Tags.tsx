@@ -12,12 +12,12 @@ import client from '@renderer/api/axiosClient';
 import { memo } from 'react';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { useTranslation } from 'react-i18next';
-import useMockRobot from '@renderer/api/useMockRobot';
+import { useMockInfo } from '@renderer/sockets/useMockInfo';
 
 export const ManualTag: React.FC<{ amrId }> = memo(({ amrId }) => {
   const { isManual } = useIsManual(amrId);
   const { t } = useTranslation();
-  const { data: mockRobot } = useMockRobot();
+  const mockRobot = useMockInfo();
   const [messageApi, contextHolders] = message.useMessage();
   const changeManualMode = useMutation({
     mutationFn: (payload: { manual_mode: boolean; amrId: string }) => {

@@ -1,63 +1,77 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import {
-  Layout,
-  Menu,
-  Flex,
-  Button,
-  Drawer,
-  Modal,
-  Divider,
-  Typography,
-  List,
-  Space,
-  Tag,
-  message,
-  Tooltip
-} from 'antd';
+import { Layout, Menu, Flex, Button, Drawer, Modal, message, Tooltip } from 'antd';
 import '../components/component.css';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import { memo, useEffect, useState } from 'react';
-import {
-  CarOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  MenuOutlined
-} from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { UserOutlined } from '@ant-design/icons';
 import { useAtom } from 'jotai';
 import { AmrFilterCarCard, darkMode } from '@renderer/utils/gloable';
-import useMockRobot from '@renderer/api/useMockRobot';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
 import { errorHandler } from '@renderer/utils/utils';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import useName from '@renderer/api/useAmrName';
+import StartSimModal from '@renderer/pages/Main/components/simulateModal/StartSimModal';
+import SimulationResultsModal from '@renderer/pages/Main/components/simulateModal/SimulationResultsModal';
+import { useMockInfo } from '@renderer/sockets/useMockInfo';
 const { Header: AntdHeader } = Layout;
-const { Title, Text } = Typography;
 
+const mockResult = {
+  simulationId: 'sim_123',
+  duration: 600,
+  cargosCarried: 50,
+  missionsPerAmr: {
+    AMR1: 10,
+    AMR2: 8,
+    AMR3: 12
+  },
+  batteryCostPerAmr: {
+    AMR1: 40.5,
+    AMR2: 35.2,
+    AMR3: 44.8
+  },
+  averageMissionTimePerAmr: {
+    AMR1: 42.3,
+    AMR2: 48.7,
+    AMR3: 45.1
+  },
+  totalDistanceTraveledPerAmr: {
+    AMR1: 500.2,
+    AMR2: 450.8,
+    AMR3: 549.7
+  },
+  idleTimePerAmr: {
+    AMR1: 120,
+    AMR2: 180,
+    AMR3: 90
+  },
+  missionSuccessRate: 98.5,
+  completedMissions: 30
+};
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isDark] = useAtom(darkMode);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOpenResultModal, setIsOpenResultModal] = useState(false);
   const [canSim, setCanSim] = useState(false);
   const [isSimulateOpen, setIsSimulateOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [hintAmrId, setHintAmrId] = useAtom(AmrFilterCarCard);
   //點擊地圖AMR時篩選卡片
-  const { data: script, refetch } = useMockRobot();
+  const script = useMockInfo();
   const { refetch: amrNameRefetch } = useName();
   const [messageApi, contextHolder] = message.useMessage();
 
   const simMutation = useMutation({
-    mutationFn: (isSimulate: boolean) => {
-      return client.post('api/simulate/simulate', { isSimulate });
+    mutationFn: (data: { isSimulate: boolean; duration: number }) => {
+      return client.post('api/simulate/simulate', data);
     },
     onSuccess: () => {
       messageApi.success(t('utils.success'));
-      refetch();
       amrNameRefetch();
       setIsSimulateOpen(false);
       if (!hintAmrId.size) {
@@ -71,12 +85,13 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  const handleSim = () => {
-    simMutation.mutate(true);
+  const handleSim = (duration: number) => {
+    localStorage.setItem('seem-mock-result', 'false');
+    simMutation.mutate({ duration, isSimulate: true });
   };
 
   const handleAbortSim = () => {
-    simMutation.mutate(false);
+    simMutation.mutate({ isSimulate: false, duration: 0 });
   };
 
   const items = [
@@ -118,6 +133,10 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     }
   };
 
+  const handleCloseResult = () => {
+    setIsOpenResultModal(false);
+  };
+
   useEffect(() => {
     if (!script) return;
     const inUseAmr = script.robot?.filter((v) => v.script_placement_location !== 'unset');
@@ -128,6 +147,21 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     }
 
     setCanSim(false);
+  }, [script]);
+
+  useEffect(() => {
+    const seemStatus = localStorage.getItem('seem-mock-result');
+    if (script?.result === 'done') {
+      if (seemStatus === 'true') return;
+      localStorage.setItem('seem-mock-result', 'true');
+      setIsOpenResultModal(true);
+      return;
+    }
+
+    if (script?.result === 'executing' || script?.result === 'pending') {
+      localStorage.setItem('seem-mock-result', 'false');
+      return;
+    }
   }, [script]);
 
   return (
@@ -210,7 +244,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
               </Badge> */}
 
               {script?.isSimulate ? (
-                <Tooltip title={t('header.inactive_sim')}>
+                <Tooltip title={t('sim.start_sim_modal.inactive_sim')}>
                   <svg
                     onClick={() => handleAbortSim()}
                     width={30}
@@ -237,7 +271,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   </svg>
                 </Tooltip>
               )}
-
+              <Button onClick={() => setIsOpenResultModal(true)}>R</Button>
               {/* {isDark ? (
                 <SunOutlined className="light-mode-icon" onClick={() => setIsDark(false)} />
               ) : (
@@ -261,6 +295,17 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         )}
       </AntdHeader>
 
+      <StartSimModal
+        isSimulateOpen={isSimulateOpen}
+        canSim={canSim}
+        handleSim={handleSim}
+        setIsSimulateOpen={setIsSimulateOpen}
+      />
+      <SimulationResultsModal
+        results={mockResult}
+        visible={isOpenResultModal}
+        onClose={handleCloseResult}
+      />
       <Modal
         mask={false}
         title="告警提示"
@@ -270,101 +315,6 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       >
         <p>Some contents...</p>
         <p>Some contents...</p>
-      </Modal>
-
-      <Modal
-        open={isSimulateOpen}
-        onCancel={() => setIsSimulateOpen(false)}
-        footer={null} // Custom footer for better control
-        width={450}
-        centered
-        style={{
-          padding: '24px',
-          borderRadius: '8px',
-          background: '#fff',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-        }}
-      >
-        {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <Title level={4} style={{ margin: 0, color: '#1d39c4' }}>
-            <CarOutlined style={{ marginRight: '8px', color: '#1d39c4' }} />
-            {t('header.active_sim')}
-          </Title>
-          <Text type="secondary">{t('header.please_confirm_info')}</Text>
-        </div>
-
-        {/* Script Details Section */}
-        <div style={{ marginBottom: '24px' }}>
-          <Text strong style={{ display: 'block', marginBottom: '8px' }}>
-            {t('header.sim_script')}
-          </Text>
-          <Tag color="blue" style={{ fontSize: '14px', padding: '4px 12px' }}>
-            {script?.scriptName || t('header.no_script_select')}
-          </Tag>
-        </div>
-
-        {/* Car List Section */}
-        <div style={{ marginBottom: '24px' }}>
-          <Text strong style={{ display: 'block', marginBottom: '8px' }}>
-            {t('header.in_use_robot')}
-          </Text>
-          {script?.robot &&
-          script.robot.filter((v) => v.script_placement_location !== 'unset').length > 0 ? (
-            <List
-              size="small"
-              dataSource={script.robot.filter((r) => r.script_placement_location !== 'unset')}
-              renderItem={(robot) => (
-                <List.Item style={{ padding: '8px 0', borderBottom: 'none' }}>
-                  <Text>
-                    <CarOutlined style={{ marginRight: '8px', color: '#1890ff' }} />
-                    {robot.id}
-                  </Text>
-                </List.Item>
-              )}
-              style={{
-                maxHeight: '150px',
-                overflowY: 'auto',
-                padding: '8px',
-                background: '#f9f9f9',
-                borderRadius: '4px'
-              }}
-            />
-          ) : (
-            <Text type="secondary"> {t('header.no_robot_select')}</Text>
-          )}
-        </div>
-
-        {/* Divider */}
-        <Divider style={{ margin: '16px 0' }} />
-
-        {/* Action Buttons */}
-        <Space style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button
-            disabled={!canSim}
-            type="primary"
-            icon={<CheckCircleOutlined />}
-            onClick={() => handleSim()}
-            style={{
-              background: canSim ? '#1d39c4' : '#fff',
-              borderColor: '#1d39c4',
-              borderRadius: '4px',
-              padding: '0 24px'
-            }}
-          >
-            {t('header.active')}
-          </Button>
-          <Button
-            icon={<CloseCircleOutlined />}
-            onClick={() => setIsSimulateOpen(false)}
-            style={{
-              borderRadius: '4px',
-              padding: '0 24px'
-            }}
-          >
-            {t('header.cancel')}
-          </Button>
-        </Space>
       </Modal>
     </>
   );

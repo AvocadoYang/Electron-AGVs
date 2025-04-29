@@ -3,9 +3,9 @@ import { memo, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
-import useMockRobot from '@renderer/api/useMockRobot';
 import { SwapOutlined, CloseOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { useMockInfo } from '@renderer/sockets/useMockInfo';
 
 const ScalePadWrap = styled.div<{ $isMinimized: boolean }>`
   position: absolute;
@@ -118,7 +118,7 @@ const ScalePad = () => {
   const [scale, setScale] = useState(1);
   const [$isMinimized, set$isMinimized] = useState(false); // State to toggle minimize/expand
   const [messageApi, contextHolder] = message.useMessage();
-  const { data: script } = useMockRobot();
+  const script = useMockInfo();
   const { t } = useTranslation();
 
   // Optionally persist the minimized state in localStorage

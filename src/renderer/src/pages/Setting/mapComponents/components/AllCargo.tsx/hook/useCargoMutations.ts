@@ -15,6 +15,7 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
         queryClient.refetchQueries({ queryKey: ['locations'] }),
         queryClient.refetchQueries({ queryKey: ['shelf'] })
       ]);
+      void messageApi.success('ok');
     },
     onError: (error: Err) => {
       void messageApi.error('duplicate name');
