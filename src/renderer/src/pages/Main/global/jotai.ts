@@ -26,9 +26,13 @@ export const OpenCarCardInfo = atom<boolean>(false);
 export const OpenMissionCardInfo = atom<boolean>(false);
 
 export type Quick_Mission = {
-  actionType: 'load' | 'offload';
+  missionType: 'load' | 'offload';
+  columnName: string;
   locationId: string;
   level: number;
 };
 
-export const QuickMissionPayload = atom<Quick_Mission[]>();
+export const QuickMissionLoad = atom<Quick_Mission | null>(null);
+export const QuickMissionOffload = atom<Quick_Mission | null>(null);
+export const StartQuickMissionSetting = atom<boolean>(false);
+export const QuickMissionSettingMode = atom<'load' | 'offload' | null>(null);

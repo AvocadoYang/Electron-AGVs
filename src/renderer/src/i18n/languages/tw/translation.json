@@ -497,6 +497,13 @@
           "CRITICAL": "緊急"
         }
       }
+    },
+    "quick_mission": {
+      "load_tooltip": "選擇一個貨架來裝載貨物",
+      "offload_tooltip": "選擇一個貨架來卸載貨物",
+      "load": "裝載",
+      "offload": "卸載",
+      "click_shelves_or_cancel": "點擊地圖中的貨架或按 ESC 鍵取消"
     }
   },
 

@@ -1,10 +1,18 @@
+import {
+  QuickMissionLoad,
+  QuickMissionOffload,
+  QuickMissionSettingMode,
+  StartQuickMissionSetting
+} from '@renderer/pages/Main/global/jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { FC } from 'react';
 import styled from 'styled-components';
 
 interface BlockProps {
-  $hasCargo: boolean
-  $isDisable: boolean
-  border: string
+  $hasCargo: boolean;
+  $isDisable: boolean;
+  $isSelecting: boolean;
+  border: string;
 }
 const Block = styled.div<BlockProps>`
   display: flex;
@@ -13,6 +21,8 @@ const Block = styled.div<BlockProps>`
   background-color: ${({ $hasCargo }) => ($hasCargo ? '#ffe73c73' : '#f5f5f538')};
   pointer-events: 'auto';
   cursor: 'pointer';
+
+  z-index: ${({ $isSelecting }) => ($isSelecting ? '50' : '1')};
   border: ${({ border }) => `2px dashed ${border}`};
 
   position: relative;
@@ -55,22 +65,54 @@ const BlockSpan = styled.span<{ rotate: number; $hasCargo: boolean }>`
 `;
 
 const CargoDisplay: FC<{
-  level: number
-  levelName: string
-  cargoValue: boolean
-  isDisable: boolean
-  border: string
-  locId: string
-  rotate: number
-  handleMouseDown: (e: React.MouseEvent<HTMLDivElement>, locId: string, level: number) => void
+  level: number;
+  levelName: string;
+  cargoValue: boolean;
+  isDisable: boolean;
+  border: string;
+  locId: string;
+  rotate: number;
+  handleMouseDown: (e: React.MouseEvent<HTMLDivElement>, locId: string, level: number) => void;
 }> = ({ level, levelName, cargoValue, isDisable, border, locId, rotate, handleMouseDown }) => {
+  const [selectMode, setQuickSettingMode] = useAtom(QuickMissionSettingMode);
+  const [isStartSelecting, setStartQuickSetting] = useAtom(StartQuickMissionSetting);
+  const setLoad = useSetAtom(QuickMissionLoad);
+  const setOffload = useSetAtom(QuickMissionOffload);
+
+  const handleQuickMissionPayload = () => {
+    if (isStartSelecting === false || selectMode === null) return;
+
+    if (selectMode === 'load') {
+      setLoad({
+        missionType: 'load',
+        columnName: levelName,
+        locationId: locId,
+        level
+      });
+    }
+
+    if (selectMode === 'offload') {
+      setOffload({
+        missionType: 'offload',
+        columnName: levelName,
+        locationId: locId,
+        level
+      });
+    }
+
+    setStartQuickSetting(false);
+    setQuickSettingMode(null);
+  };
+
   return (
     <Block
+      $isSelecting={isStartSelecting}
       key={level}
       $hasCargo={cargoValue}
       $isDisable={isDisable}
       border={border}
       onMouseDown={(e) => handleMouseDown(e, locId, level)}
+      onClick={() => handleQuickMissionPayload()}
     >
       <BlockSpan $hasCargo={cargoValue} rotate={rotate} id={locId}>
         {levelName}

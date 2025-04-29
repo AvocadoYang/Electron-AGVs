@@ -18,8 +18,8 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
         queryClient.refetchQueries({ queryKey: ['shelf'] })
       ]);
     },
-    onError: (error: Err) => {
-      void messageApi.error(error.response?.data?.message || 'Edit failed');
+    onError: () => {
+      void messageApi.error('duplicate name');
     }
   });
 

@@ -502,6 +502,13 @@
           "CRITICAL": "Critical"
         }
       }
+    },
+    "quick_mission": {
+      "load_tooltip": "Select a shelf to load cargo from",
+      "offload_tooltip": "Select a shelf to offload cargo to",
+      "load": "Load",
+      "offload": "Offload",
+      "click_shelves_or_cancel": "Click the shelves in the map or press ESC to cancel"
     }
   },
 

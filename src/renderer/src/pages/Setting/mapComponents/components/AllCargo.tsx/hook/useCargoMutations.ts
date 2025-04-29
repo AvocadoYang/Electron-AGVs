@@ -17,7 +17,7 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
       ]);
     },
     onError: (error: Err) => {
-      void messageApi.error(error.response?.data.message || 'Edit failed');
+      void messageApi.error('duplicate name');
     }
   });
 
