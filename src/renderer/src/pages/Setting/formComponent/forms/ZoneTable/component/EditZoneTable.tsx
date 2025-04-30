@@ -48,6 +48,7 @@ type FormType = {
 type TagSetting = {
   allVehicleForbidden: boolean;
   notVehicleForbidden: boolean;
+  forbidden: string[];
   speed_limit: number | undefined;
   hight_limit: number | undefined;
   limitNum: number | undefined;
@@ -56,6 +57,7 @@ type TagSetting = {
 const tagInit = {
   allVehicleForbidden: false,
   notVehicleForbidden: false,
+  forbidden: [],
   speed_limit: undefined,
   hight_limit: undefined,
   limitNum: undefined
@@ -116,7 +118,7 @@ const EditZoneTable: FC<{
     onSuccess: () => {
       void messageApi.success('success');
       queryClient.refetchQueries({ queryKey: ['map'] });
-      setEditingKey(null);
+      // setEditingKey(null);
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -127,6 +129,7 @@ const EditZoneTable: FC<{
       return;
     }
     const data = editZoneForm.getFieldsValue() as FormType;
+
     const { name, startX, startY, endX, endY, color } = data;
     if (!name || name.trim() === '') {
       messageApi.warning(t('edit_zone_panel.waring.name_empty_error'));
@@ -150,25 +153,17 @@ const EditZoneTable: FC<{
 
     let forbiddenCars: string[] = [];
 
-    if (data.all_forbidden === undefined) {
-      forbiddenCars = oldData?.tagSetting.forbidden_car as string[];
+    if (!data.all_forbidden && !data.not_forbidden && !data.forbidden?.length) {
+      messageApi.warning(t('edit_zone_panel.waring.tag_not_yet_setting'));
+      return;
     }
 
     if (data.all_forbidden) {
       forbiddenCars = ['*'];
-    }
-
-    if (data.not_forbidden) {
+    } else if (data.not_forbidden) {
       forbiddenCars = [];
-    }
-
-    if (
-      data.all_forbidden == false &&
-      data.not_forbidden == false &&
-      data.forbidden &&
-      data.forbidden.length > 0
-    ) {
-      forbiddenCars = data.forbidden;
+    } else {
+      forbiddenCars = data.forbidden as string[];
     }
 
     const payload: FormType = {
@@ -184,7 +179,6 @@ const EditZoneTable: FC<{
       id: editingKey,
       color: data.color
     };
-
     saveMutation.mutate(payload);
   };
 
@@ -198,6 +192,7 @@ const EditZoneTable: FC<{
     const tagSetting: TagSetting = {
       allVehicleForbidden: false,
       notVehicleForbidden: false,
+      forbidden: [],
       limitNum: undefined,
       hight_limit: undefined,
       speed_limit: undefined
@@ -207,6 +202,7 @@ const EditZoneTable: FC<{
       tagSetting.allVehicleForbidden = false;
       tagSetting.notVehicleForbidden = false;
       editZoneForm.setFieldValue('forbidden', oldData.tagSetting.forbidden_car);
+      tagSetting.forbidden = forbiddenCar;
     } else {
       if (!oldData.category.includes('限制區')) {
         tagSetting.allVehicleForbidden = false;
@@ -552,6 +548,7 @@ const EditZoneTable: FC<{
                       setTagSetting((pre) => {
                         return { ...pre, notVehicleForbidden: e.target.checked };
                       });
+                      editZoneForm.setFieldValue('forbidden', []);
                     }}
                   >{`${t('edit_zone_panel.not_vehicle_forbidden')}`}</Checkbox>
                 </Form.Item>
@@ -563,6 +560,7 @@ const EditZoneTable: FC<{
                       setTagSetting((pre) => {
                         return { ...pre, allVehicleForbidden: e.target.checked };
                       });
+                      editZoneForm.setFieldValue('forbidden', []);
                     }}
                   >{`${t('edit_zone_panel.all_vehicle_forbidden')}`}</Checkbox>
                 </Form.Item>
@@ -574,6 +572,12 @@ const EditZoneTable: FC<{
                   mode={'multiple'}
                   tagRender={tagRender}
                   style={{ width: '100%' }}
+                  onChange={(e) => {
+                    editZoneForm.setFieldValue('forbidden', e);
+                    setTagSetting((pre) => {
+                      return { ...pre, forbidden: e };
+                    });
+                  }}
                   options={AmrsID}
                 />
               </Form.Item>

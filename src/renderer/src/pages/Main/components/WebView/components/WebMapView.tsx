@@ -12,6 +12,7 @@ import AllCargo from '../../PadViwe/components/PadMapContent/AllCargo.tsx/AllCar
 import ToolTip from '@renderer/pages/Setting/components/ToolTip';
 import { isShowLocation, isShowLocationTooltip, isShowRoad } from '@renderer/utils/siderGloble';
 import { AllChargeStation } from './AllChargeStation';
+import useMap from '@renderer/api/useMap';
 
 const WebMapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>;
@@ -22,6 +23,8 @@ const WebMapView: React.FC<{
   const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   const showLocation = useAtomValue(isShowLocation);
   const showRoad = useAtomValue(isShowRoad);
+  const { isError } = useMap();
+
   return (
     <div
       className="map-view"
@@ -45,13 +48,19 @@ const WebMapView: React.FC<{
       }}
     >
       <MapImage></MapImage>
-      <AllAMRs></AllAMRs>
-      <AllCargo></AllCargo>
-      {showLocation ? <AllLocation></AllLocation> : null}
-      {showRoad ? <AllRoads></AllRoads> : null}
-      {showLocationToolTip ? <ToolTip /> : []}
-      <AllZones scale={scale}></AllZones>
-      <AllChargeStation />
+      {isError ? (
+        []
+      ) : (
+        <>
+          <AllAMRs></AllAMRs>
+          <AllCargo></AllCargo>
+          {showLocation ? <AllLocation></AllLocation> : null}
+          {showRoad ? <AllRoads></AllRoads> : null}
+          {showLocationToolTip ? <ToolTip /> : []}
+          <AllZones scale={scale}></AllZones>
+          <AllChargeStation />
+        </>
+      )}
     </div>
   );
 };

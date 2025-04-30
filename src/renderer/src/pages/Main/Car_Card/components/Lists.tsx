@@ -21,6 +21,7 @@ import {
 } from '@renderer/sockets/useAMRInfo';
 import { useTranslation } from 'react-i18next';
 import { CarryTag, ChargingTag, ManualTag, MissionTag, PowerTag } from './Tags';
+import useRoadConditions from '@renderer/sockets/useAmrRoadConditions';
 
 // ======= DropArrow =================
 const Arrow = styled.div<{ random_color: string }>`
@@ -286,6 +287,7 @@ const Statue: React.FC<{ amrId: string }> = memo(({ amrId }) => {
 
   return <CarStatus>{status ? status : '---------------'}</CarStatus>;
 });
+
 export const RowThread: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDark, amrId }) => {
   const { t } = useTranslation();
   return (
@@ -294,6 +296,41 @@ export const RowThread: React.FC<{ isDark: boolean; amrId: string }> = memo(({ i
         className={`third-row-span ${isDark ? 'third-row-span-dark' : ''}`}
       >{`${t('utils.status')}:`}</span>
       <Statue amrId={amrId}></Statue>
+    </CarRow3>
+  );
+});
+
+// ======= Fourth row in info ===============
+
+const RoadStyle = styled.span`
+  font-weight: bold;
+  font-size: 75%;
+  text-align: center;
+  word-wrap: break-word;
+  white-space: normal;
+  /* text-align: left; */
+  width: 80%;
+  /* color: #d10f0f; */
+  margin-right: 3px;
+`;
+
+const RoadStatue: React.FC<{ amrId: string }> = ({ amrId }) => {
+  const status = useRoadConditions(amrId);
+  return (
+    <RoadStyle style={{ color: `${status === '順暢' ? '#41cd16' : '#585757'}` }}>
+      {status ? status : '---------------'}
+    </RoadStyle>
+  );
+};
+
+export const RowFourth: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDark, amrId }) => {
+  const { t } = useTranslation();
+  return (
+    <CarRow3 is_dark={isDark.toString()}>
+      <span
+        className={`third-row-span ${isDark ? 'third-row-span-dark' : ''}`}
+      >{`${t('utils.road_conditions')}:`}</span>
+      <RoadStatue amrId={amrId}></RoadStatue>
     </CarRow3>
   );
 });

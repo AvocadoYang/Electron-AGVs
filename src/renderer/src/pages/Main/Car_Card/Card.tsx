@@ -1,5 +1,13 @@
 import { InfoWrap } from './components/InfoWrap';
-import { RowOne, RowThread, RowSecond, CarTag, HiddenRow, DropDown } from './components/Lists';
+import {
+  RowOne,
+  RowThread,
+  RowSecond,
+  CarTag,
+  HiddenRow,
+  DropDown,
+  RowFourth
+} from './components/Lists';
 import './car_info.css';
 import { useMemo, useState } from 'react';
 import { ConfigProvider, Popover } from 'antd';
@@ -81,6 +89,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
             ></RowSecond>
             <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark} amrId={id}></HiddenRow>
             <RowThread amrId={id} isDark={isDark}></RowThread>
+            <RowFourth amrId={id} isDark={isDark}></RowFourth>
             <CarTag openFullInfo={openFullInfo} amrId={id}></CarTag>
           </InfoWrap>
         </Popover>
