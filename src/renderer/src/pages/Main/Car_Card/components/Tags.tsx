@@ -35,8 +35,8 @@ export const ManualTag: React.FC<{ amrId }> = memo(({ amrId }) => {
         color={`${!isManual ? '#e3e4e3' : 'blue'}`}
         style={{ margin: 0, cursor: 'pointer' }}
         onClick={(e) => {
-          if (!mockRobot?.isSimulate) return;
           e.stopPropagation();
+          if (!mockRobot?.isSimulate) return;
           changeManualMode.mutate({ manual_mode: isManual as boolean, amrId });
         }}
       >
