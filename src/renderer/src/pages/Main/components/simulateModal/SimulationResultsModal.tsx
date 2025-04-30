@@ -1,4 +1,6 @@
+import useSimResult from '@renderer/api/useSimResult';
 import { Modal, Typography, Space, Button, Table } from 'antd';
+import { ColumnType } from 'antd/es/table';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -29,60 +31,40 @@ const StyledTable = styled(Table)`
     color: #1a1a1a;
   }
 `;
-
-interface SimulationResults {
-  simulationId: string;
-  duration: number; // In seconds
-  cargosCarried: number;
-  missionsPerAmr: Record<string, number>;
-  batteryCostPerAmr: Record<string, number>;
-  averageMissionTimePerAmr: Record<string, number>;
-  totalDistanceTraveledPerAmr: Record<string, number>;
-  idleTimePerAmr: Record<string, number>;
-  missionSuccessRate: number;
-  completedMissions: number;
-}
+type Mock_Result = {
+  amrId: string;
+  missionsPerAmr: number;
+  batteryCostPerAmr: number;
+  averageMissionTimePerAmr: number;
+  totalDistanceTraveledPerAmr: number;
+  cargoCarryPerAmr: number;
+};
 
 interface SimulationResultsModalProps {
   visible: boolean;
-  results: SimulationResults | null;
   onClose: () => void;
 }
 
-const SimulationResultsModal: React.FC<SimulationResultsModalProps> = ({
-  visible,
-  results,
-  onClose
-}) => {
+const SimulationResultsModal: React.FC<SimulationResultsModalProps> = ({ visible, onClose }) => {
   const { t } = useTranslation();
-
+  const { data: result } = useSimResult();
   const handleDownload = () => {
-    if (!results) return;
-    const dataStr = JSON.stringify(results, null, 2);
+    if (!result) return;
+    const dataStr = JSON.stringify(result, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `simulation_results_${results.simulationId}.json`;
+    link.download = `simulation_results_${result.simulationId}.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
-  if (!results) return null;
+  if (!result) return null;
 
-  const tableData = Object.keys(results.missionsPerAmr).map((amrId) => ({
-    key: amrId,
-    amrId,
-    missions: results.missionsPerAmr[amrId],
-    batteryCost: results.batteryCostPerAmr[amrId],
-    averageMissionTime: results.averageMissionTimePerAmr[amrId],
-    totalDistanceTraveled: results.totalDistanceTraveledPerAmr[amrId],
-    idleTime: results.idleTimePerAmr[amrId]
-  }));
-
-  const columns = [
+  const columns: Array<ColumnType<Mock_Result>> = [
     {
       title: t('sim.results.table.amr_id'),
       dataIndex: 'amrId',
@@ -90,34 +72,37 @@ const SimulationResultsModal: React.FC<SimulationResultsModalProps> = ({
     },
     {
       title: t('sim.results.table.missions'),
-      dataIndex: 'missions',
-      key: 'missions',
-      render: (value: number) => `${value} ${t('utils.missions')}`
+      dataIndex: 'missionsPerAmr',
+      key: 'missionsPerAmr',
+      render: (_, record: Mock_Result) => {
+        return `${record.missionsPerAmr} ${t('utils.missions')}`;
+      }
     },
     {
       title: t('sim.results.table.battery_cost'),
       dataIndex: 'batteryCost',
       key: 'batteryCost',
-      render: (value: number) => `${value.toFixed(2)} ${t('utils.units')}`
+      render: (_, record: Mock_Result) => `${record.batteryCostPerAmr} ${t('utils.units')}`
     },
     {
       title: t('sim.results.table.average_mission_time'),
       dataIndex: 'averageMissionTime',
       key: 'averageMissionTime',
-      render: (value: number) => `${value.toFixed(2)} ${t('utils.seconds')}`
+      render: (_, record: Mock_Result) => `${record.averageMissionTimePerAmr} ${t('utils.seconds')}`
     },
     {
       title: t('sim.results.table.total_distance_traveled'),
       dataIndex: 'totalDistanceTraveled',
       key: 'totalDistanceTraveled',
-      render: (value: number) => `${value.toFixed(2)} ${t('utils.meters')}`
+      render: (_, record: Mock_Result) =>
+        `${record.totalDistanceTraveledPerAmr} ${t('utils.meters')}`
+    },
+    {
+      title: t('sim.results.table.carried'),
+      dataIndex: 'cargoCarryPerAmr',
+      key: 'cargoCarryPerAmr',
+      render: (_, record) => `${record.cargoCarryPerAmr}`
     }
-    // {
-    //   title: t('sim.results.table.idle_time'),
-    //   dataIndex: 'idleTime',
-    //   key: 'idleTime',
-    //   render: (value: number) => `${value.toFixed(2)} ${t('utils.seconds')}`
-    // }
   ];
 
   return (
@@ -140,28 +125,33 @@ const SimulationResultsModal: React.FC<SimulationResultsModalProps> = ({
         <StatItem>
           <StatLabel>{t('sim.results.duration')}</StatLabel>
           <StatValue>
-            {(results.duration / 60).toFixed(2)} {t('utils.minutes')}
+            {result.duration} {t('utils.minutes')}
           </StatValue>
         </StatItem>
 
         <StatItem>
           <StatLabel>{t('sim.results.cargos_carried')}</StatLabel>
-          <StatValue>{results.cargosCarried}</StatValue>
+          <StatValue>{result.totalCargosCarried}</StatValue>
+        </StatItem>
+
+        <StatItem>
+          <StatLabel>{t('sim.results.total_missions')}</StatLabel>
+          <StatValue>{result.totalMissionCount}</StatValue>
         </StatItem>
 
         <StatItem>
           <StatLabel>{t('sim.results.mission_success_rate')}</StatLabel>
-          <StatValue>{results.missionSuccessRate.toFixed(2)}%</StatValue>
+          <StatValue>{result.missionSuccessRate.toFixed(2)}%</StatValue>
         </StatItem>
 
         <StatItem>
           <StatLabel>{t('sim.results.completed_missions')}</StatLabel>
-          <StatValue>{results.completedMissions}</StatValue>
+          <StatValue>{result.completedMissions}</StatValue>
         </StatItem>
 
         <StyledTable
-          columns={columns}
-          dataSource={tableData}
+          columns={columns as []}
+          dataSource={result.table as Mock_Result[]}
           pagination={false}
           size="middle"
           bordered

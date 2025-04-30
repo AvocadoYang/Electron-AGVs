@@ -19,38 +19,6 @@ import SimulationResultsModal from '@renderer/pages/Main/components/simulateModa
 import { useMockInfo } from '@renderer/sockets/useMockInfo';
 const { Header: AntdHeader } = Layout;
 
-const mockResult = {
-  simulationId: 'sim_123',
-  duration: 600,
-  cargosCarried: 50,
-  missionsPerAmr: {
-    AMR1: 10,
-    AMR2: 8,
-    AMR3: 12
-  },
-  batteryCostPerAmr: {
-    AMR1: 40.5,
-    AMR2: 35.2,
-    AMR3: 44.8
-  },
-  averageMissionTimePerAmr: {
-    AMR1: 42.3,
-    AMR2: 48.7,
-    AMR3: 45.1
-  },
-  totalDistanceTraveledPerAmr: {
-    AMR1: 500.2,
-    AMR2: 450.8,
-    AMR3: 549.7
-  },
-  idleTimePerAmr: {
-    AMR1: 120,
-    AMR2: 180,
-    AMR3: 90
-  },
-  missionSuccessRate: 98.5,
-  completedMissions: 30
-};
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -301,11 +269,12 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         handleSim={handleSim}
         setIsSimulateOpen={setIsSimulateOpen}
       />
-      <SimulationResultsModal
-        results={mockResult}
-        visible={isOpenResultModal}
-        onClose={handleCloseResult}
-      />
+      {isOpenResultModal ? (
+        <SimulationResultsModal visible={isOpenResultModal} onClose={handleCloseResult} />
+      ) : (
+        []
+      )}
+
       <Modal
         mask={false}
         title="告警提示"

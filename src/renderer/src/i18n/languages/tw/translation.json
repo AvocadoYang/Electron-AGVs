@@ -867,6 +867,7 @@
       "idle_time_per_amr": "每個 AMR 的空閒時間",
       "mission_success_rate": "任務成功率",
       "completed_missions": "完成的總任務數",
+      "total_missions": "總任務數",
       "download": "下載結果",
       "table": {
         "amr_id": "AMR ID",
@@ -874,7 +875,8 @@
         "battery_cost": "電池消耗",
         "average_mission_time": "平均任務時間",
         "total_distance_traveled": "總行駛距離",
-        "idle_time": "空閒時間"
+        "idle_time": "空閒時間",
+        "carried": "搬運數"
       }
     }
   }

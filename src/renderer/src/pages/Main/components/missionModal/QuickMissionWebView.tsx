@@ -212,6 +212,13 @@ const QuickMissionWebView: React.FC<{
     submitMutation.mutate(payload);
   };
 
+  useEffect(() => {
+    form.setFieldsValue({
+      amrId: 'none',
+      priority: MissionPriority.NORMAL
+    });
+  }, []);
+
   return (
     <>
       {contextHolder}

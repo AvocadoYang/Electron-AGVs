@@ -865,6 +865,7 @@
       "idle_time_per_amr": "Idle time per AMR",
       "mission_success_rate": "Mission success rate",
       "completed_missions": "Total number of completed missions",
+      "total_missions": "total mission",
       "download": "Download results",
       "table": {
         "amr_id": "AMR ID",
@@ -872,7 +873,8 @@
         "battery_cost": "Battery consumption",
         "average_mission_time": "Average mission time",
         "total_distance_traveled": "Total distance traveled",
-        "idle_time": "Idle time"
+        "idle_time": "Idle time",
+        "carried": "carried"
       }
     }
   }
