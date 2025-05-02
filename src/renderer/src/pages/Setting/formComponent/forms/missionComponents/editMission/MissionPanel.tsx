@@ -22,6 +22,7 @@ const EditMissionPanel: FC<{
   const [formMission] = Form.useForm();
   const [createMissionForm] = Form.useForm();
   const [search, setSearch] = useState('');
+  const [missionName, setMissionName] = useState('');
   const [selectedMissionKey, setSelectedMissionKey] = useState('');
   const [selectedMissionCar, setSelectedMissionCar] = useState('');
   const [openMissionModel, setOpenMissionModel] = useState(false);
@@ -125,6 +126,8 @@ const EditMissionPanel: FC<{
             setOpenMissionModel={setOpenMissionModel}
             setSelectedMissionKey={setSelectedMissionKey}
             setSelectedMissionCar={setSelectedMissionCar}
+            setMissionName={setMissionName}
+            missionName={missionName}
             selectedMissionCar={selectedMissionCar}
             filterMissionData={filterMissionData as unknown as MTType}
           >

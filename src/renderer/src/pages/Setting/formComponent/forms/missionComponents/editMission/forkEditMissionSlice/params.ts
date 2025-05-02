@@ -3,6 +3,7 @@ export const actonList = [
   'load',
   'offload',
   'spin',
+  'fork',
   'charge',
   'cargo_limit',
   'load_from_other',

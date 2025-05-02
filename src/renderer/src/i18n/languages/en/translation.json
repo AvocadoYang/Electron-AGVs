@@ -624,7 +624,7 @@
       "yaw_calculate": "Auto (Calculate at Shelf)",
       "yaw_calculate_desc": "Calculates the yaw when the AMR reaches the front of the target shelf.",
       "yaw_required": "Please enter the yaw angle.",
-      "yaw_range": "Yaw must be between 0 and 360 degrees."
+      "yaw_range": "Yaw must be between -180 and 180 degrees."
     },
 
     "task_table_human_robot": {
@@ -768,6 +768,7 @@
     "load": "load",
     "offload": "offload",
     "charge": "charge",
+    "fork": "fork",
     "load_from_other": "load from other",
     "offload_from_other": "offload to other",
     "upper_control": "Upper Control",

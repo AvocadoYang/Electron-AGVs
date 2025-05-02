@@ -11,6 +11,8 @@ const CarControlTranslate = ({ word }: { word: Action_Type }) => {
       return <>{t('car_control_translate.load')}</>;
     case 'offload':
       return <>{t('car_control_translate.offload')}</>;
+    case 'fork':
+      return t('car_control_translate.fork');
     case 'spin':
       return t('car_control_translate.S');
     case 'charge':

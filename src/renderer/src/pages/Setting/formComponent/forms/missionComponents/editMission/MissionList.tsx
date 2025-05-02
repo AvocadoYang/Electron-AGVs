@@ -25,7 +25,8 @@ const MissionList: FC<{
   selectedMissionKey: string;
   setSelectedMissionKey: Dispatch<SetStateAction<string>>;
   selectedMissionCar: string;
-}> = ({ selectedMissionKey, setSelectedMissionKey, selectedMissionCar }) => {
+  missionName: string;
+}> = ({ selectedMissionKey, setSelectedMissionKey, selectedMissionCar, missionName }) => {
   const [open, setOpen] = useState(false);
   const [editTaskKey, setEditTaskKey] = useState('');
 
@@ -40,8 +41,12 @@ const MissionList: FC<{
       });
     },
     onSuccess: async () => {
-      await queryClient.refetchQueries({ queryKey: ['all-relate-all-relate-task-fork'] });
-      await queryClient.refetchQueries({ queryKey: ['all-relate-task-human-robot'] });
+      await queryClient.refetchQueries({
+        queryKey: ['all-relate-all-relate-task-fork', selectedMissionKey]
+      });
+      await queryClient.refetchQueries({
+        queryKey: ['all-relate-task-human-robot', selectedMissionKey]
+      });
       messageApi.success(t('utils.success'));
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
@@ -81,7 +86,7 @@ const MissionList: FC<{
     <>
       {contextHolder}
       <Flex gap="middle" justify="flex-start" align="start" vertical>
-        <Flex gap="middle">
+        <Flex gap="middle" justify="center" align="center">
           <Tooltip title={t('mission.mission_list.previous')}>
             <Button
               onClick={() => setSelectedMissionKey('')}
@@ -95,7 +100,6 @@ const MissionList: FC<{
             icon={<PlusOutlined />}
             color="primary"
             variant="filled"
-            style={{ marginBottom: 16 }}
             onClick={() => addNewTask()}
           >
             {t('mission.mission_list.create_mission')}
@@ -106,10 +110,10 @@ const MissionList: FC<{
             color="primary"
             variant="filled"
             onClick={() => copyMission()}
-            style={{ marginBottom: 16 }}
           >
             {t('mission.mission_list.copy_mission')}
           </Button>
+          {missionName}
         </Flex>
 
         {isFork(selectedMissionCar) ? (

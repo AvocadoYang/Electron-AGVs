@@ -20,13 +20,15 @@ const MissionTable: FC<{
   selectedMissionKey: string;
   setSelectedMissionKey: React.Dispatch<React.SetStateAction<string>>;
   setSelectedMissionCar: React.Dispatch<React.SetStateAction<string>>;
+  setMissionName: React.Dispatch<React.SetStateAction<string>>;
   allMissionTitle: MTType;
 }> = ({
   setEditMissionKey,
   setOpenMissionModel,
   setSelectedMissionKey,
   setSelectedMissionCar,
-  allMissionTitle
+  allMissionTitle,
+  setMissionName
 }) => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
@@ -67,6 +69,7 @@ const MissionTable: FC<{
       setSelectedMissionCar(record.Robot_types.value);
     }
     setSelectedMissionKey(record.id);
+    setMissionName(record.name);
     try {
       await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
     } catch (e) {

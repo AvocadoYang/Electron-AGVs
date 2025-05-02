@@ -120,6 +120,7 @@ const TaskFormFork: FC<{
       action_type: actionState,
       control: controlClickOrder,
       id: editTaskKey,
+      is_define_yaw: selectYaw,
       missionTitleId: selectedMissionKey,
       fork_height_select: selectForkHeight
     };
@@ -132,13 +133,31 @@ const TaskFormFork: FC<{
     editMutation.mutate(newPayload);
   };
 
+  const updateControlClickOrder = () => {
+    if (!originFormData) return;
+
+    const type = originFormData.operation.type as Action_Type;
+    if (!controlList[type]) {
+      console.warn(`Invalid action type: ${type}`);
+      setControlClickOrder([]);
+      setActionStatus(undefined);
+      return;
+    }
+
+    setActionStatus(type);
+
+    const controlSequence = controlList[type];
+    const indexedControls = controlSequence
+      .map((v, i) => `${v}-${i}`)
+      .filter((v) => originFormData.operation.control?.includes(v.split('-')[0]));
+
+    setControlClickOrder(indexedControls);
+  };
+
   useEffect(() => {
     if (originFormData) {
-      console.log(originFormData);
-      setActionStatus(originFormData.operation.type as Action_Type);
-      setControlClickOrder(
-        originFormData.operation.control?.map((v: string, i: number) => `${v}-${i}`) || []
-      );
+      updateControlClickOrder();
+
       setSelectLocationType(
         (originFormData.operation.is_define_id as Select_Location_Type) || 'custom'
       );
@@ -185,34 +204,39 @@ const TaskFormFork: FC<{
     const value = form.getFieldsValue() as Form_Value;
 
     if (controlClickOrder.length === 0) {
+      // console.log('bitch 1');
       setSubmittable(false);
       return;
     }
 
     if (controlClickOrder.includes('W')) {
       if (value.wait <= 0) {
+        // console.log('bitch 2');
         setSubmittable(false);
         return;
       }
     }
 
-    if (selectLocationType === 'custom' && !value.locationId) {
+    if (selectLocationType === 'custom' && !value.locationId && actionState !== 'spin') {
+      // console.log('bitch 3');
       setSubmittable(false);
       return;
     }
 
     if (value?.active_wait_amr && value.active_wait_amr === 'enable') {
       if (!value.waitOtherAmr || !value.wait_genre) {
+        //     console.log('bitch 4');
         setSubmittable(false);
         return;
       }
     }
 
     if (
-      value.is_define_yaw === YawGenre.CUSTOM &&
+      selectYaw === YawGenre.CUSTOM &&
       isIncludeSpin &&
-      (value.yaw === undefined || value.yaw < 0 || value.yaw > 360)
+      (value.yaw === undefined || value.yaw < -180 || value.yaw > 180)
     ) {
+      // console.log('bitch 5');
       setSubmittable(false);
       return;
     }
@@ -410,10 +434,10 @@ const TaskFormFork: FC<{
             name="yaw"
             rules={[
               { required: true, message: t('mission.task_table.yaw_required') },
-              { type: 'number', min: 0, max: 360, message: t('mission.task_table.yaw_range') }
+              { type: 'number', min: -180, max: 180, message: t('mission.task_table.yaw_range') }
             ]}
           >
-            <InputNumber min={0} max={360} addonAfter="°" />
+            <InputNumber min={-180} max={180} addonAfter="°" />
           </Form.Item>
         )}
 

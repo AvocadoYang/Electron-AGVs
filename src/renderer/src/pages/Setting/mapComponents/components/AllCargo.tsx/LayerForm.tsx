@@ -4,6 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { nanoid } from 'nanoid';
 import { LayerType } from '@renderer/sockets/useCargoInfo';
 
+const prefixLevelName = (word: string | null | undefined) => {
+  if (!word) return null;
+  const parts = word.split('-');
+  parts.pop();
+  return parts.join('-');
+};
+
 const { Title } = Typography;
 
 const LayerForm: FC<{
@@ -25,9 +32,10 @@ const LayerForm: FC<{
   useEffect(() => {
     if (!layer) return;
     layer.forEach((L, i) => {
+      const levelName = prefixLevelName(L[i]?.levelName);
       form.setFieldsValue({
         [`hasCargo${i}`]: L[i].cargo?.hasCargo,
-        [`levelName${i}`]: L[i]?.levelName || null,
+        [`levelName${i}`]: levelName,
         [`disable${i}`]: L[i]?.disable || false,
         [`cargo_limit${i}`]: L[i]?.cargo_limit || 0
       });

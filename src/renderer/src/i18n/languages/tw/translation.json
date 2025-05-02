@@ -625,7 +625,7 @@
       "yaw_calculate": "自動（在貨架處計算）",
       "yaw_calculate_desc": "計算 AMR 到達目標貨架前方的偏航。",
       "yaw_required": "請輸入偏航角。",
-      "yaw_range": "偏航角必須介於 0 到 360 度之間。"
+      "yaw_range": "偏航角必須介於 -180 到 180 度之間。"
     },
     "task_table_human_robot": {
       "sort": "順序",
@@ -769,6 +769,7 @@
     "load": "取貨",
     "offload": "放貨",
     "charge": "充電",
+    "fork": "枒杈姿勢",
     "load_from_other": "從另一台車身上取貨",
     "offload_from_other": "放貨至令一台車上",
     "upper_control": "上肢控制",
@@ -871,6 +872,7 @@
       "total_missions": "總任務數",
       "download": "下載結果",
       "no_result": "尚未有任務紀錄",
+
       "table": {
         "amr_id": "AMR ID",
         "missions": "任務數量",

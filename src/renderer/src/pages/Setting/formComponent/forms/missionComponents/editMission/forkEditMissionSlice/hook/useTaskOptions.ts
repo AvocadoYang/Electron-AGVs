@@ -42,6 +42,9 @@ const useTaskOptions = (action: Action_Type) => {
       case 'spin':
         text = t('car_control_translate.S');
         break;
+      case 'fork':
+        text = t('car_control_translate.fork');
+        break;
       case 'charge':
         text = t('car_control_translate.charge');
         break;

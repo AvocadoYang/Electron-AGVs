@@ -4,14 +4,16 @@ import MissionTable from './MissionTable';
 import MissionList from './MissionList';
 
 interface SwitchTableProps {
-  selectedMissionKey: string
-  setEditMissionKey: React.Dispatch<React.SetStateAction<string>>
-  setOpenMissionModel: React.Dispatch<React.SetStateAction<boolean>>
-  setSelectedMissionKey: React.Dispatch<React.SetStateAction<string>>
-  setSelectedMissionCar: React.Dispatch<React.SetStateAction<string>>
-  selectedMissionCar: string
-  filterMissionData: MTType
-  children: React.ReactNode
+  selectedMissionKey: string;
+  setEditMissionKey: React.Dispatch<React.SetStateAction<string>>;
+  setOpenMissionModel: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedMissionKey: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedMissionCar: React.Dispatch<React.SetStateAction<string>>;
+  setMissionName: React.Dispatch<React.SetStateAction<string>>;
+  missionName: string;
+  selectedMissionCar: string;
+  filterMissionData: MTType;
+  children: React.ReactNode;
 }
 
 const SwitchTable: FC<SwitchTableProps> = ({
@@ -20,8 +22,10 @@ const SwitchTable: FC<SwitchTableProps> = ({
   setOpenMissionModel,
   setSelectedMissionKey,
   setSelectedMissionCar,
+  missionName,
   selectedMissionCar,
   filterMissionData,
+  setMissionName,
   children
 }) =>
   selectedMissionKey === '' ? (
@@ -31,6 +35,7 @@ const SwitchTable: FC<SwitchTableProps> = ({
         selectedMissionKey={selectedMissionKey}
         setEditMissionKey={setEditMissionKey}
         setOpenMissionModel={setOpenMissionModel}
+        setMissionName={setMissionName}
         setSelectedMissionKey={setSelectedMissionKey}
         setSelectedMissionCar={setSelectedMissionCar}
         allMissionTitle={filterMissionData}
@@ -40,6 +45,7 @@ const SwitchTable: FC<SwitchTableProps> = ({
     <MissionList
       selectedMissionKey={selectedMissionKey}
       setSelectedMissionKey={setSelectedMissionKey}
+      missionName={missionName}
       selectedMissionCar={selectedMissionCar}
     />
   );

@@ -120,15 +120,15 @@ const MissionTable = () => {
         if (typeof record.info === 'string') {
           const parseData = JSON.parse(record.info) as Additional_Mission_Info;
           const fullName = parseData.missionFullName === null ? '-' : parseData.missionFullName;
-          const from = parseData.loadLocationId === null ? '' : parseData.loadLocationId;
-          const to = parseData.offloadLocationId === null ? '' : parseData.offloadLocationId;
+          // const from = parseData.loadLocationId === null ? '' : parseData.loadLocationId;
+          // const to = parseData.offloadLocationId === null ? '' : parseData.offloadLocationId;
 
           return (
             <TaskInfo>
               <TaskTitle>
                 {typeof fullName === 'string' ? '-' : fullName?.join(' - ') || '-'}
               </TaskTitle>
-              <SubTitle>{from && to ? `${from} -> ${to}` : '-'}</SubTitle>
+              <SubTitle>{record.sub_name}</SubTitle>
             </TaskInfo>
           );
         }

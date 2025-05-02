@@ -33,6 +33,12 @@ const ImportMissionForm: FC<{
     },
     onSuccess: async () => {
       void messageApi.success(t('utils.success'));
+      await queryClient.refetchQueries({
+        queryKey: ['all-relate-all-relate-task-fork', importConfig?.key]
+      });
+      await queryClient.refetchQueries({
+        queryKey: ['all-relate-task-human-robot', importConfig?.key]
+      });
       await queryClient.refetchQueries({ queryKey: ['all-relate-task'] });
     },
     onError(error: Err) {
