@@ -11,6 +11,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble';
 import { LoadingStation } from './LoadingStation';
 import { IsEditingQuickRoads, QuickRoadsArray } from '@renderer/pages/Setting/utils/settingJotai';
+import { prefixLevelName } from '@renderer/utils/globalFunction';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -98,7 +99,7 @@ const Cargo: FC<{
         {' '}
         {shelfInfo?.layer?.map((cargo, index: number) => {
           const level = index;
-          const nameLevel = cargo[level]?.levelName || '';
+
           const cargoValue = cargo[level]?.cargo.hasCargo || false;
           const borderColor = '#c7c7c7';
 
@@ -108,7 +109,7 @@ const Cargo: FC<{
             <MemoizedCargo
               key={`${locId}-${level}`}
               level={level}
-              levelName={nameLevel}
+              levelName={prefixLevelName(cargo[level]?.levelName)}
               cargoValue={cargoValue}
               isDisable={isDisable}
               border={borderColor}

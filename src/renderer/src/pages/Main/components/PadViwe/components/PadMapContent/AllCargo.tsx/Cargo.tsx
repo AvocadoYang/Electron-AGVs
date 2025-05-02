@@ -7,6 +7,7 @@ import CargoDisplay from './CargoDisplay';
 import { Info } from '@renderer/sockets/useCargoInfo';
 import { LoadingStation } from './LoadingStation';
 import { useCargoMutations } from '@renderer/api/useCargoMutations';
+import { prefixLevelName } from '@renderer/utils/globalFunction';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -60,7 +61,7 @@ const Cargo: FC<{
         {' '}
         {shelfInfo?.layer?.map((cargo, index: number) => {
           const level = index;
-          const nameLevel = cargo[level]?.levelName || '';
+
           const cargoValue = cargo[level]?.cargo.hasCargo || false;
           const borderColor = '#c7c7c7';
 
@@ -70,7 +71,7 @@ const Cargo: FC<{
             <MemoizedCargo
               key={`${locId}-${level}`}
               level={level}
-              levelName={nameLevel}
+              levelName={prefixLevelName(cargo[level]?.levelName)}
               cargoValue={cargoValue}
               isDisable={isDisable}
               border={borderColor}

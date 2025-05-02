@@ -15,6 +15,7 @@ import {
 } from '@renderer/pages/Simulate/utils/status';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
+import { prefixLevelName } from '@renderer/utils/globalFunction';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -95,7 +96,7 @@ const Cargo: FC<{
         {' '}
         {shelfInfo?.layer?.map((cargo, index: number) => {
           const level = index;
-          const nameLevel = cargo[level]?.levelName || '';
+
           const cargoValue = cargo[level]?.cargo.hasCargo || false;
           const borderColor = '#c7c7c7';
 
@@ -105,7 +106,7 @@ const Cargo: FC<{
             <MemoizedCargo
               key={`${locId}-${level}`}
               level={level}
-              levelName={nameLevel}
+              levelName={prefixLevelName(cargo[level]?.levelName)}
               cargoValue={cargoValue}
               isDisable={isDisable}
               border={borderColor}

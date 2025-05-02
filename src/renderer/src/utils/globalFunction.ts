@@ -10,3 +10,10 @@ export const isFork = (robotId: string): boolean => {
     list.includes('cb15') || list.includes('ps14') || list.includes('sw15') || list.includes('pm')
   );
 };
+
+export const prefixLevelName = (word: string | null | undefined): string => {
+  if (!word) return '';
+  const parts = word.split('-');
+  parts.pop();
+  return parts.join('-');
+};
