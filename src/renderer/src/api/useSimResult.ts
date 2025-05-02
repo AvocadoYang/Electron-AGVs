@@ -23,7 +23,7 @@ const getSchedule = async () => {
           totalDistanceTraveledPerAmr: number().required(),
           cargoCarryPerAmr: number().required()
         })
-      ).required()
+      ).optional()
     }).required();
 
   return schema().validate(data, { stripUnknown: true });

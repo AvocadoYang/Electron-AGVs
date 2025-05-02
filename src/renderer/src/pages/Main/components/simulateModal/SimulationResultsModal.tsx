@@ -20,6 +20,11 @@ const StatValue = styled(Typography.Text)`
   color: #1a1a1a;
 `;
 
+const NoResult = styled.span`
+  font-size: 1.2em;
+  color: #bcbcbc;
+`;
+
 const StyledTable = styled(Table)`
   margin-top: 16px;
   .ant-table-thead > tr > th {
@@ -61,8 +66,6 @@ const SimulationResultsModal: React.FC<SimulationResultsModalProps> = ({ visible
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
-
-  if (!result) return null;
 
   const columns: Array<ColumnType<Mock_Result>> = [
     {
@@ -112,7 +115,9 @@ const SimulationResultsModal: React.FC<SimulationResultsModalProps> = ({ visible
       onCancel={onClose}
       footer={
         <Space>
-          <Button onClick={handleDownload}>{t('sim.results.download')}</Button>
+          <Button onClick={handleDownload} disabled={result?.table === undefined}>
+            {t('sim.results.download')}
+          </Button>
           <Button type="primary" onClick={onClose}>
             {t('utils.close')}
           </Button>
@@ -121,42 +126,46 @@ const SimulationResultsModal: React.FC<SimulationResultsModalProps> = ({ visible
       width={800}
       centered
     >
-      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
-        <StatItem>
-          <StatLabel>{t('sim.results.duration')}</StatLabel>
-          <StatValue>
-            {result.duration} {t('utils.minutes')}
-          </StatValue>
-        </StatItem>
+      {result && result.table ? (
+        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+          <StatItem>
+            <StatLabel>{t('sim.results.duration')}</StatLabel>
+            <StatValue>
+              {result.duration} {t('utils.minutes')}
+            </StatValue>
+          </StatItem>
 
-        <StatItem>
-          <StatLabel>{t('sim.results.cargos_carried')}</StatLabel>
-          <StatValue>{result.totalCargosCarried}</StatValue>
-        </StatItem>
+          <StatItem>
+            <StatLabel>{t('sim.results.cargos_carried')}</StatLabel>
+            <StatValue>{result.totalCargosCarried}</StatValue>
+          </StatItem>
 
-        <StatItem>
-          <StatLabel>{t('sim.results.total_missions')}</StatLabel>
-          <StatValue>{result.totalMissionCount}</StatValue>
-        </StatItem>
+          <StatItem>
+            <StatLabel>{t('sim.results.total_missions')}</StatLabel>
+            <StatValue>{result.totalMissionCount}</StatValue>
+          </StatItem>
 
-        <StatItem>
-          <StatLabel>{t('sim.results.mission_success_rate')}</StatLabel>
-          <StatValue>{result.missionSuccessRate.toFixed(2)}%</StatValue>
-        </StatItem>
+          <StatItem>
+            <StatLabel>{t('sim.results.mission_success_rate')}</StatLabel>
+            <StatValue>{result.missionSuccessRate.toFixed(2)}%</StatValue>
+          </StatItem>
 
-        <StatItem>
-          <StatLabel>{t('sim.results.completed_missions')}</StatLabel>
-          <StatValue>{result.completedMissions}</StatValue>
-        </StatItem>
+          <StatItem>
+            <StatLabel>{t('sim.results.completed_missions')}</StatLabel>
+            <StatValue>{result.completedMissions}</StatValue>
+          </StatItem>
 
-        <StyledTable
-          columns={columns as []}
-          dataSource={result.table as Mock_Result[]}
-          pagination={false}
-          size="middle"
-          bordered
-        />
-      </Space>
+          <StyledTable
+            columns={columns as []}
+            dataSource={result.table as Mock_Result[]}
+            pagination={false}
+            size="middle"
+            bordered
+          />
+        </Space>
+      ) : (
+        <NoResult>{t('sim.results.no_result')}</NoResult>
+      )}
     </Modal>
   );
 };

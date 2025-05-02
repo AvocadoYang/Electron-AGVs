@@ -868,6 +868,7 @@
       "completed_missions": "Total number of completed missions",
       "total_missions": "total mission",
       "download": "Download results",
+      "no_result": "No mission record yet",
       "table": {
         "amr_id": "AMR ID",
         "missions": "Number of missions",

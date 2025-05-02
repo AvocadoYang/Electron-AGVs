@@ -870,6 +870,7 @@
       "completed_missions": "完成的總任務數",
       "total_missions": "總任務數",
       "download": "下載結果",
+      "no_result": "尚未有任務紀錄",
       "table": {
         "amr_id": "AMR ID",
         "missions": "任務數量",

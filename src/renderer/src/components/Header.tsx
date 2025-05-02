@@ -239,7 +239,10 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   </svg>
                 </Tooltip>
               )}
-              <Button onClick={() => setIsOpenResultModal(true)}>R</Button>
+              <Tooltip title={t('sim.results.title')}>
+                <Button onClick={() => setIsOpenResultModal(true)}>R</Button>
+              </Tooltip>
+
               {/* {isDark ? (
                 <SunOutlined className="light-mode-icon" onClick={() => setIsDark(false)} />
               ) : (
