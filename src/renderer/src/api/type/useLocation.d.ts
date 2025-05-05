@@ -33,6 +33,7 @@ export type SelectStation = {
   translateY: number;
   rotate: number;
   scale: number;
+  flex_direction: string;
 };
 
 type GeneralStation = {

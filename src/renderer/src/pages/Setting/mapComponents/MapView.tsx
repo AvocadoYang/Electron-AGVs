@@ -2,7 +2,12 @@ import { RefObject, memo, useCallback, useRef, useState } from 'react';
 import '../setting.css';
 import { FormInstance } from 'antd';
 import { useAtom, useAtomValue } from 'jotai';
-import { DragLineInfo, sameVersion, showBlockId as ShowBlockId } from '@renderer/utils/gloable';
+import {
+  DragLineInfo,
+  sameVersion,
+  shelfSelectedStyleLocationId,
+  showBlockId as ShowBlockId
+} from '@renderer/utils/gloable';
 import {
   EditLocationPanelSwitch,
   EditZoneSwitch,
@@ -69,7 +74,7 @@ const MapView: React.FC<{
   const openEditLocationPanel = useAtomValue(EditLocationPanelSwitch);
   const openQuickEditLocationPanelSwitch = useAtomValue(QuickEditLocationPanelSwitch);
   const openEditZone = useAtomValue(EditZoneSwitch);
-
+  const shelfSelectedStyleId = useAtomValue(shelfSelectedStyleLocationId);
   const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   const showRoad = useAtomValue(isShowRoad);
 
@@ -175,7 +180,7 @@ const MapView: React.FC<{
 
       {showLocationToolTip ? <ToolTip /> : []}
 
-      <SudoCargo />
+      {shelfSelectedStyleId === '' ? [] : <SudoCargo />}
 
       <SudoChargeStation />
 

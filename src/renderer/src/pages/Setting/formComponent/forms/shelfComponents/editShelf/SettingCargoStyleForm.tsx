@@ -8,7 +8,7 @@ import {
   FullscreenOutlined,
   FullscreenExitOutlined
 } from '@ant-design/icons';
-import { Button, Card, Col, Form, Input, message, Row } from 'antd';
+import { Button, Card, Col, Form, Input, message, Row, Select } from 'antd';
 import { useAtom, useSetAtom } from 'jotai';
 import { FC, useEffect, useRef } from 'react';
 import styled from 'styled-components';
@@ -20,20 +20,21 @@ import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 
-type Options = 'areaType' | 'translateX' | 'translateY' | 'rotate' | 'scale'
+type Options = 'areaType' | 'translateX' | 'translateY' | 'rotate' | 'scale';
 
 type Val = {
-  input: Options
-  value: number
-}
+  input: Options;
+  value: number;
+};
 
 export type SubmitValue = {
-  id: string
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
-}
+  id: string;
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
+  flex_direction: string;
+};
 
 type Event =
   | 'up'
@@ -44,16 +45,23 @@ type Event =
   | 'l-rotate'
   | 'scale-up'
   | 'scale-down'
-  | ''
+  | '';
 
 const BtnWrapper = styled.div`
   display: flex;
   gap: 1em;
 `;
 
+const flexOption = [
+  { value: 'row' },
+  { value: 'column' },
+  { value: 'row-reverse' },
+  { value: 'column-reverse' }
+];
+
 const SettingCargoStyleForm: FC<{
-  selectId: string
-  cancelEditStyle: () => void
+  selectId: string;
+  cancelEditStyle: () => void;
 }> = ({ selectId, cancelEditStyle }) => {
   const [cStyle, setCStyle] = useAtom(cargoStyle);
   const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId);
@@ -83,13 +91,15 @@ const SettingCargoStyleForm: FC<{
     const y = form.getFieldValue('translateY') as number;
     const r = form.getFieldValue('rotate') as number;
     const s = form.getFieldValue('scale') as number;
+    const f = form.getFieldValue('flex_direction') as string;
 
     submitMutation.mutate({
       id: selectId,
       translateX: x,
       translateY: y,
       rotate: r,
-      scale: s
+      scale: s,
+      flex_direction: f
     });
     cancelEditStyle();
   };
@@ -98,6 +108,7 @@ const SettingCargoStyleForm: FC<{
     setCStyle((prev) => {
       if (!prev) return null;
       return {
+        flex_direction: prev.flex_direction,
         translateX: val.input === 'translateX' ? val.value : prev.translateX,
         translateY: val.input === 'translateY' ? val.value : prev.translateY,
         rotate: val.input === 'rotate' ? val.value : prev.rotate,
@@ -110,6 +121,7 @@ const SettingCargoStyleForm: FC<{
     setCStyle((prev) => {
       if (!prev) return null;
       return {
+        flex_direction: prev.flex_direction,
         translateX: val.input === 'translateX' ? val.value + prev.translateX : prev.translateX,
         translateY: val.input === 'translateY' ? val.value + prev.translateY : prev.translateY,
         rotate: val.input === 'rotate' ? val.value + prev.rotate : prev.rotate,
@@ -159,7 +171,8 @@ const SettingCargoStyleForm: FC<{
       translateX: thisLocData.translateX,
       translateY: thisLocData.translateY,
       rotate: thisLocData.rotate,
-      scale: thisLocData.scale
+      scale: thisLocData.scale,
+      flex_direction: thisLocData.flex_direction
     });
     form.setFieldValue('translateX', thisLocData.translateX);
     form.setFieldValue('translateY', thisLocData.translateY);
@@ -173,6 +186,7 @@ const SettingCargoStyleForm: FC<{
     form.setFieldValue('translateY', cStyle.translateY);
     form.setFieldValue('scale', cStyle.scale);
     form.setFieldValue('rotate', cStyle.rotate);
+    form.setFieldValue('flex_direction', cStyle.flex_direction);
   }, [cStyle]);
 
   // Function to handle the button press and start the transformations
@@ -189,6 +203,16 @@ const SettingCargoStyleForm: FC<{
       clearInterval(intervalId.current);
       intervalId.current = null;
     }
+  };
+
+  const handleChangeFlex = (val: string) => {
+    setCStyle((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        flex_direction: val
+      };
+    });
   };
 
   useEffect(() => {
@@ -307,6 +331,10 @@ const SettingCargoStyleForm: FC<{
                     })
                   }
                 />
+              </Form.Item>
+
+              <Form.Item label="flex_direction" name="flex_direction">
+                <Select options={flexOption} onChange={(e) => handleChangeFlex(e)} />
               </Form.Item>
             </Form>
           </Col>

@@ -14,7 +14,8 @@ const getLoc = async () => {
         translateX: number().required(),
         translateY: number().required(),
         rotate: number().required(),
-        scale: number().required()
+        scale: number().required(),
+        flex_direction: string().required()
       }).required()
     ).required();
 
@@ -34,13 +35,14 @@ const useLoc = (locId: string | undefined) => {
 };
 
 export type LocWithoutArr = {
-  id: string
-  locationId: string
-  areaType: string
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
-}
+  id: string;
+  locationId: string;
+  areaType: string;
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
+  flex_direction: string;
+};
 
 export default useLoc;

@@ -28,7 +28,6 @@ const PointDiv = styled.div.attrs<{
   border: ${(props) => (props.hoverLoc ? '5px solid #ff0000' : 'none')};
   &:hover {
     background: red;
-    scale: 1.8;
   }
 `;
 

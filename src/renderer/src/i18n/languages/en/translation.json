@@ -364,7 +364,9 @@
     "disabled": "Disable",
     "height": "Height",
     "save": "save",
-    "edit_position": "Edit Style"
+    "edit_position": "Edit Style",
+    "shelf_config": "Individual storage location information",
+    "config_tooltip": "Click on the storage location on the map to edit related parameters"
   },
   "edit_shelf_category": {
     "edit_shelf_category": "Edit Shelf Category",

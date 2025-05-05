@@ -7,80 +7,122 @@ import {
 import { useAtom, useSetAtom } from 'jotai';
 import { FC } from 'react';
 import styled from 'styled-components';
+import { Button } from 'antd';
 
-interface BlockProps {
+// Styled components for enhanced UI
+const Block = styled(Button)<{
   $hasCargo: boolean;
   $isDisable: boolean;
   $isSelecting: boolean;
-  border: string;
-}
-const Block = styled.div<BlockProps>`
+  $canBeClick: boolean;
+  $isHaveAction: boolean;
+}>`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ $hasCargo }) => ($hasCargo ? '#ffe73c73' : '#f5f5f538')};
-  pointer-events: 'auto';
-  cursor: 'pointer';
-
-  z-index: ${({ $isSelecting }) => ($isSelecting ? '50' : '1')};
-  border: ${({ border }) => `2px dashed ${border}`};
-
+  background-color: ${({ $hasCargo }) => ($hasCargo ? '#ffe73c80' : '#f5f5f580')};
+  border: ${({ $isSelecting, $canBeClick }) =>
+    $isSelecting && $canBeClick ? '2px solid #1890ff' : '1px dashed #727272'};
+  border-radius: 3px;
+  padding: 0 10px;
+  min-height: 1px;
+  max-height: 15px;
+  min-width: 15px;
+  transition: all 0.2s ease;
   position: relative;
   flex-grow: 1;
-  transition: transform 0.2s;
+  z-index: ${({ $isSelecting }) => ($isSelecting ? 50 : 1)};
+  cursor: ${({ $isDisable, $isSelecting, $canBeClick }) =>
+    $isDisable ? 'not-allowed' : $isSelecting && !$canBeClick ? 'not-allowed' : 'pointer'};
+  opacity: ${({ $isDisable }) => ($isDisable ? 0.6 : 1)};
+  box-shadow: ${({ $isSelecting, $canBeClick }) =>
+    $isSelecting && $canBeClick ? '0 0 8px rgba(24, 144, 255, 0.3)' : 'none'};
 
-  :after {
-    content: ${({ $isDisable }) => ($isDisable ? '"X"' : 'none')};
-    width: 98%;
-    height: 98%;
+  ${({ $isHaveAction, $isDisable }) =>
+    $isHaveAction && !$isDisable
+      ? `
+        animation: pulse 2s infinite;
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(82, 196, 26, 0.7);
+          }
+          70% {
+            box-shadow: 0 0 0 8px rgba(82, 196, 26, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(82, 196, 26, 0);
+          }
+        }
+      `
+      : ''}
+
+  &:hover:not(:disabled) {
+    background-color: ${({ $hasCargo }) => ($hasCargo ? '#ffe73cb3' : '#e8e8e8b3')};
+    transform: scale(1.05);
+  }
+
+  &:disabled::after {
+    content: 'X';
     position: absolute;
-    background-color: #717171;
-    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: rgba(113, 113, 113, 0.7);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 
 const BlockSpan = styled.span<{ rotate: number; $hasCargo: boolean }>`
-  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${({ $hasCargo }) => ($hasCargo ? '#000' : '#333')};
+  transform: ${({ rotate }) => `rotate(${-rotate}deg)`};
+  white-space: nowrap;
   user-select: none;
-  -webkit-user-select: none;
-
-  min-width: 10px;
-  min-height: 10px;
-  height: max-content;
-  width: max-content;
-  margin: 0;
-  font-size: 0.6em;
-  /* font-weight: bolder; */
-  display: inline-block;
-  transform: ${({ rotate }) => `rotate(${-rotate}deg) translateY(1px)`};
-  display: inline-block;
-  white-space: break-spaces;
-  color: ${({ $hasCargo }) => ($hasCargo ? '#000000fff' : 'black')};
-  height: 100%;
   text-align: center;
-  margin: 0px;
-
-  -webkit-text-stroke-width: 0.1px;
-  -webkit-text-stroke-color: black;
 `;
 
-const CargoDisplay: FC<{
+interface CargoDisplayProps {
   level: number;
   levelName: string;
   cargoValue: boolean;
   isDisable: boolean;
-  border: string;
+  isHaveAction: boolean;
   locId: string;
   rotate: number;
-  handleMouseDown: (e: React.MouseEvent<HTMLDivElement>, locId: string, level: number) => void;
-}> = ({ level, levelName, cargoValue, isDisable, border, locId, rotate, handleMouseDown }) => {
+  handleMouseDown: (e: React.MouseEvent<HTMLElement>, locId: string, level: number) => void;
+}
+
+const CargoDisplay: FC<CargoDisplayProps> = ({
+  level,
+  levelName,
+  cargoValue,
+  isDisable,
+  isHaveAction,
+  locId,
+  rotate,
+  handleMouseDown
+}) => {
   const [selectMode, setQuickSettingMode] = useAtom(QuickMissionSettingMode);
   const [isStartSelecting, setStartQuickSetting] = useAtom(StartQuickMissionSetting);
   const setLoad = useSetAtom(QuickMissionLoad);
   const setOffload = useSetAtom(QuickMissionOffload);
 
+  const canBeClickInSelection =
+    isStartSelecting &&
+    !isDisable &&
+    ((selectMode === 'load' && cargoValue) || (selectMode === 'offload' && !cargoValue));
+
   const handleQuickMissionPayload = () => {
-    if (isStartSelecting === false || selectMode === null) return;
+    if (!isStartSelecting || !canBeClickInSelection || selectMode === null) return;
 
     if (selectMode === 'load') {
       setLoad({
@@ -89,9 +131,7 @@ const CargoDisplay: FC<{
         locationId: locId,
         level
       });
-    }
-
-    if (selectMode === 'offload') {
+    } else if (selectMode === 'offload') {
       setOffload({
         missionType: 'offload',
         columnName: levelName,
@@ -106,13 +146,15 @@ const CargoDisplay: FC<{
 
   return (
     <Block
-      $isSelecting={isStartSelecting}
-      key={level}
       $hasCargo={cargoValue}
       $isDisable={isDisable}
-      border={border}
+      $isSelecting={isStartSelecting}
+      $canBeClick={isStartSelecting ? canBeClickInSelection : true}
+      $isHaveAction={isHaveAction}
+      disabled={isDisable}
       onMouseDown={(e) => handleMouseDown(e, locId, level)}
-      onClick={() => handleQuickMissionPayload()}
+      onClick={isStartSelecting ? handleQuickMissionPayload : undefined}
+      role="button"
     >
       <BlockSpan $hasCargo={cargoValue} rotate={rotate} id={locId}>
         {levelName}

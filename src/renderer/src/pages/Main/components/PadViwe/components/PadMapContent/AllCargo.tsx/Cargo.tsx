@@ -12,10 +12,11 @@ import { prefixLevelName } from '@renderer/utils/globalFunction';
 const Wrapper = styled.div<WrapperType>`
   position: relative;
   z-index: 1;
-  border-radius: 3px;
   display: flex;
-  gap: 0.2px;
-  flex-direction: row;
+  flex-direction: ${({ flex_direction }) => flex_direction};
+  width: max-content;
+  align-items: center;
+  gap: 0.35px;
   border-radius: 1px;
   transform: ${(props) =>
     `translate(${props.translatex}em, ${props.translatey}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
@@ -29,7 +30,8 @@ const MemoizedCargo = memo(CargoDisplay, (prevProps, nextProps) => {
     prevProps.levelName == nextProps.levelName &&
     prevProps.cargoValue == nextProps.cargoValue &&
     prevProps.isDisable == nextProps.isDisable &&
-    prevProps.rotate == nextProps.rotate
+    prevProps.rotate == nextProps.rotate &&
+    prevProps.isHaveAction === nextProps.isHaveAction
   );
 });
 
@@ -40,8 +42,9 @@ const Cargo: FC<{
   translateY: number;
   rotate: number;
   scale: number;
+  flex_direction: string;
   shelfInfo: Info | undefined;
-}> = ({ id, locId, translateX, translateY, rotate, scale, shelfInfo }) => {
+}> = ({ id, locId, translateX, translateY, rotate, scale, flex_direction, shelfInfo }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const { editColumnMutation } = useCargoMutations(messageApi);
@@ -57,15 +60,21 @@ const Cargo: FC<{
   return (
     <>
       {contextHolder}
-      <WrapperDiv translatex={translateX} translatey={translateY} scale={scale} rotate={rotate}>
+      <WrapperDiv
+        flex_direction={flex_direction}
+        translatex={translateX}
+        translatey={translateY}
+        scale={scale}
+        rotate={rotate}
+      >
         {' '}
         {shelfInfo?.layer?.map((cargo, index: number) => {
           const level = index;
 
           const cargoValue = cargo[level]?.cargo.hasCargo || false;
-          const borderColor = '#c7c7c7';
 
           const isDisable = cargo[level]?.disable;
+          const isHaveAction = cargo[level]?.booked;
 
           return (
             <MemoizedCargo
@@ -74,10 +83,12 @@ const Cargo: FC<{
               levelName={prefixLevelName(cargo[level]?.levelName)}
               cargoValue={cargoValue}
               isDisable={isDisable}
-              border={borderColor}
               locId={locId}
               rotate={0}
-              handleMouseDown={(e) => handleMouseDown(e, locId, level)}
+              isHaveAction={isHaveAction}
+              handleMouseDown={(e) =>
+                handleMouseDown(e as React.MouseEvent<HTMLDivElement>, locId, level)
+              }
             />
           );
         })}
@@ -87,5 +98,5 @@ const Cargo: FC<{
 };
 
 export default memo(Cargo, (prev, next) => {
-  return prev.locId !== next.locId;
+  return prev.locId !== next.locId && prev.flex_direction !== next.flex_direction;
 });

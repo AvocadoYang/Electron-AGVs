@@ -53,8 +53,10 @@ const AllCargo: React.FC<{
 
           const translateX = info?.find((i) => i.locationId === loc.locationId)?.translateX || 0;
           const translateY = info?.find((i) => i.locationId === loc.locationId)?.translateY || 0;
-          const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 270;
+          const rotate = info?.find((i) => i.locationId === loc.locationId)?.rotate || 0.1;
           const LocScale = info?.find((i) => i.locationId === loc.locationId)?.scale || 1;
+          const flex_direction =
+            info?.find((i) => i.locationId === loc.locationId)?.flex_direction || 'row';
           return (
             <div
               draggable={false}
@@ -85,6 +87,7 @@ const AllCargo: React.FC<{
                   translateY={translateY}
                   scale={LocScale}
                   rotate={rotate}
+                  flex_direction={flex_direction}
                   shelfInfo={shelfInfo?.find((s) => s.areaId === loc.locationId)}
                 />
               </Point>

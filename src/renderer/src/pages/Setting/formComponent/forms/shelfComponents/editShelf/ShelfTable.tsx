@@ -1,15 +1,55 @@
-import { FormatPainterOutlined } from '@ant-design/icons';
-import { Button, Flex, Skeleton, Table } from 'antd';
+import { FormatPainterOutlined, SearchOutlined } from '@ant-design/icons';
+import {
+  Button,
+  Card,
+  Descriptions,
+  Flex,
+  Input,
+  InputRef,
+  Skeleton,
+  Space,
+  Table,
+  TableColumnType,
+  Tag,
+  Tooltip
+} from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useSetAtom } from 'jotai';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import useYaw from '@renderer/api/useYaw';
 import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable';
 import useShelf from '@renderer/api/useShelf';
 import { ShelfWithoutList } from '@renderer/api/type/useShelf';
 import SettingCargoStyleForm from './SettingCargoStyleForm';
+import { DataIndex } from '../../antd';
+import { FilterDropdownProps } from 'antd/es/table/interface';
+
+const ExpandedRowWrapper = styled.div`
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+`;
+
+const ConfigCard = styled(Card)`
+  margin-bottom: 16px;
+  border-radius: 8px;
+  .ant-card-head {
+    background: #f0f2f5;
+    border-radius: 8px 8px 0 0;
+  }
+  .ant-card-body {
+    padding: 16px;
+  }
+`;
+
+const LevelTag = styled(Tag)`
+  margin-right: 8px;
+  font-size: 12px;
+`;
 
 const Wrapper = styled.div<{ $hasSelect: boolean }>`
   display: flex;
@@ -46,18 +86,101 @@ const ShelfTable: FC<{
   const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId);
   const { data: shelfDataSource, isLoading: isLoadingShelf } = useShelf();
   const { t } = useTranslation();
+  const searchInput = useRef<InputRef>(null);
   const handleEdit = (id: string) => {
     setSelectId(id);
   };
+
+  const handleSearch = (confirm: FilterDropdownProps['confirm']) => {
+    confirm();
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+  };
+
+  const getColumnSearchProps = (dataIndex: DataIndex): TableColumnType<ShelfWithoutList> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(confirm)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            color="primary"
+            variant="filled"
+            onClick={() => handleSearch(confirm)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            {t('utils.search')}
+          </Button>
+          <Button
+            color="default"
+            variant="filled"
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            {t('utils.reset')}
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+            }}
+          >
+            {t('utils.filter')}
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            {t('utils.cancel')}
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+    ),
+    onFilter: (value, record) => {
+      console.log(record);
+      return record.Loc.locationId
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase());
+    },
+    filterDropdownProps: {
+      onOpenChange: (visible) => {
+        if (visible) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      }
+    },
+
+    render: (text: string) => text
+  });
 
   const columns: ColumnsType<ShelfWithoutList> = [
     {
       title: t('edit_shelf_panel.location_id'),
       dataIndex: 'locationId',
       key: 'locationId',
-      sorter: (a, b) => Number(a.Loc.locationId) - Number(b.Loc.locationId),
       sortDirections: ['ascend', 'descend'],
       defaultSortOrder: 'ascend',
+      sorter: (a, b) => Number(a.Loc.locationId) - Number(b.Loc.locationId),
+      ...getColumnSearchProps('locationId'),
       render: (_v, recorder) => {
         const { locationId } = recorder.Loc;
         return locationId;
@@ -141,6 +264,7 @@ const ShelfTable: FC<{
     selectedRowKeys,
     onChange: onSelectChange
   };
+
   // Jerusalem
   const mergedColumns = columns.map((col) => {
     return {
@@ -167,37 +291,59 @@ const ShelfTable: FC<{
           rowKey={(record: ShelfWithoutList) => record.id}
           pagination={{ pageSize: 8 }}
           expandable={{
-            expandedRowRender: (record) => (
-              <>
-                <Flex justify="center" gap="large">
-                  <p>
-                    {record.ShelfConfig.sort((a, b) => a.level - b.level).map((item) => {
-                      return (
-                        <>
-                          <p>
-                            {t('edit_shelf_panel.level')}: {item.level + 1},{' '}
-                            {t('edit_shelf_panel.disabled')}:{' '}
-                            {item.disable ? t('utils.yes') : t('utils.no')}
-                          </p>
-                        </>
-                      );
-                    })}
-                  </p>
-                  <p>
-                    {record.ShelfConfig.sort((a, b) => a.level - b.level).map((item) => {
-                      return (
-                        <>
-                          <p>
-                            {t('edit_shelf_panel.level')}: {item.level + 1},{' '}
-                            {t('edit_shelf_panel.height')}: {item.cargo_limit}
-                          </p>
-                        </>
-                      );
-                    })}
-                  </p>
-                </Flex>
-              </>
-            )
+            expandedRowRender: (record) => {
+              const sortedConfig = record.ShelfConfig.sort((a, b) => a.level - b.level);
+
+              return (
+                <ExpandedRowWrapper>
+                  <ConfigCard
+                    title={
+                      <Flex align="center" gap="small">
+                        <span>{t('edit_shelf_panel.shelf_config')}</span>
+                        <Tooltip title={t('edit_shelf_panel.config_tooltip')}>
+                          <InfoCircleOutlined style={{ color: '#1890ff' }} />
+                        </Tooltip>
+                      </Flex>
+                    }
+                  >
+                    <Descriptions column={2} bordered size="small">
+                      {sortedConfig.map((item) => {
+                        const itemArr = item.name.split('-');
+
+                        return (
+                          <Descriptions.Item
+                            key={item.id}
+                            label={
+                              <Flex align="center" gap="small">
+                                <LevelTag color="blue">
+                                  {t('edit_shelf_panel.level')} {item.level + 1}
+                                </LevelTag>
+                                {item.name && (
+                                  <span>({itemArr.slice(0, itemArr.length - 1).join('-')})</span>
+                                )}
+                              </Flex>
+                            }
+                            span={2}
+                          >
+                            <Flex vertical gap="small">
+                              <span>
+                                {t('edit_shelf_panel.disabled')}:{' '}
+                                <Tag color={item.disable ? 'red' : 'green'}>
+                                  {item.disable ? t('utils.yes') : t('utils.no')}
+                                </Tag>
+                              </span>
+                              <span>
+                                {t('edit_shelf_panel.height')}: {item.cargo_limit} mm
+                              </span>
+                            </Flex>
+                          </Descriptions.Item>
+                        );
+                      })}
+                    </Descriptions>
+                  </ConfigCard>
+                </ExpandedRowWrapper>
+              );
+            }
           }}
         />
       </Wrapper>

@@ -1,91 +1,70 @@
 import { cargoStyle, shelfSelectedStyleLocationId } from '@renderer/utils/gloable';
 import { useAtomValue } from 'jotai';
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { rosCoord2DisplayCoord } from '@renderer/utils/utils';
 import useMap from '@renderer/api/useMap';
 import useShelf from '@renderer/api/useShelf';
+import { Button } from 'antd';
+import { prefixLevelName } from '@renderer/utils/globalFunction';
 
-const PointDiv = styled.div.attrs<{
-  left: number
-  top: number
-  canrotate: string
-}>(({ left, top, canrotate }) => ({
-  style: { left, top, canrotate }
+const WrapperForCargo = styled.div.attrs<{
+  left: number;
+  top: number;
+}>(({ left, top }) => ({
+  style: { left, top }
 }))<{
-  left: number
-  top: number
-  canrotate: string
+  left: number;
+  top: number;
 }>`
   position: absolute;
-  width: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
-  height: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
-  background: ${(props) => (props.canrotate === 'true' ? '#f27ef4' : '#1b00ce')};
-  border-radius: ${(props) => (props.canrotate === 'true' ? 0 : '50%')};
-  z-index: 10;
-  transition-duration: 200ms;
+  width: 5px;
+  height: 5px;
 `;
-export const Point = memo(PointDiv);
 
 const Wrapper = styled.div<{
-  translatex: number
-  translatey: number
-  rotate: number
-  scale: number
+  translatex: number;
+  translatey: number;
+  rotate: number;
+  scale: number;
+  flex_direction: string;
 }>`
   position: relative;
-  z-index: 1;
-  border-radius: 3px;
+  z-index: 20;
   display: flex;
-  gap: 0.2px;
-  flex-direction: row;
+  flex-direction: ${({ flex_direction }) => flex_direction};
+  gap: 0.35px;
+  width: max-content;
   border-radius: 1px;
   transform: ${(props) =>
     `translate(${props.translatex}em, ${props.translatey}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
 `;
 
-const Block = styled.div`
+const Block = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
-  pointer-events: 'auto';
-  cursor: 'pointer';
-  border: 2px dashed #fd2200;
-
+  border: 1px solid #ff0000;
+  background-color: unset;
+  border-radius: 3px;
+  padding: 0 10px;
+  min-height: 1px;
+  max-height: 15px;
+  min-width: 15px;
+  transition: all 0.2s ease;
   position: relative;
   flex-grow: 1;
-  transition: transform 0.2s;
-
-  :after {
-    width: 98%;
-    height: 98%;
-    position: absolute;
-    background-color: #717171;
-    text-align: center;
-  }
+  z-index: 1;
+  cursor: 'pointer';
+  opacity: 1;
 `;
 
 const BlockSpan = styled.span`
-  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
   user-select: none;
-  -webkit-user-select: none;
-
-  min-width: 10px;
-  min-height: 10px;
-  height: max-content;
-  width: max-content;
-  margin: 0;
-  font-size: 0.6em;
-  /* font-weight: bolder; */
-  display: inline-block;
-  display: inline-block;
-  white-space: break-spaces;
-  height: 100%;
   text-align: center;
-  margin: 0px;
-
-  -webkit-text-stroke-width: 0.1px;
-  -webkit-text-stroke-color: #ff0000;
 `;
 
 const SudoCargo: FC = () => {
@@ -93,7 +72,7 @@ const SudoCargo: FC = () => {
   const { data } = useMap();
   const shelfSelectedStyleId = useAtomValue(shelfSelectedStyleLocationId);
   const { data: shelf } = useShelf();
-  if (!cStyle || !data) return;
+  if (!cStyle || !data || !shelf) return;
 
   const currentShelf =
     shelf?.find((v) => v.Loc.locationId === shelfSelectedStyleId)?.ShelfConfig.length || 1;
@@ -107,21 +86,26 @@ const SudoCargo: FC = () => {
     mapResolution: data.mapResolution
   });
 
+  const eachShelf = shelf?.find((v) => v.Loc.locationId === shelfSelectedStyleId);
+
   return (
-    <Point canrotate="false" left={displayX} top={displayY}>
-      <Wrapper
-        translatex={cStyle.translateX}
-        translatey={cStyle.translateY}
-        scale={cStyle.scale}
-        rotate={cStyle.rotate}
-      >
-        {Array.from({ length: currentShelf }, (_, i) => (
-          <Block key={i}>
-            <BlockSpan></BlockSpan>
-          </Block>
-        ))}
-      </Wrapper>
-    </Point>
+    <>
+      <WrapperForCargo left={displayX} top={displayY}>
+        <Wrapper
+          translatex={cStyle.translateX}
+          translatey={cStyle.translateY}
+          scale={cStyle.scale}
+          rotate={cStyle.rotate}
+          flex_direction={cStyle.flex_direction}
+        >
+          {Array.from({ length: currentShelf }, (_, i) => (
+            <Block key={i}>
+              <BlockSpan>{prefixLevelName(eachShelf?.ShelfConfig[i]?.name)}</BlockSpan>
+            </Block>
+          ))}
+        </Wrapper>
+      </WrapperForCargo>
+    </>
   );
 };
 

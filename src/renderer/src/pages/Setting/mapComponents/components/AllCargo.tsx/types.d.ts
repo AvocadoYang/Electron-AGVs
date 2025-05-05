@@ -36,6 +36,7 @@ export type WrapperType = {
   translatey: number;
   scale: number;
   rotate: number;
+  flex_direction: string;
 };
 export type WrapperType2Type = {
   floors: number;

@@ -21,6 +21,7 @@ export const cargoStyle = atom<{
   translateY: number;
   rotate: number;
   scale: number;
+  flex_direction: string;
 } | null>(null);
 
 export const shelfSelectedStyleLocationId = atom<string>('');

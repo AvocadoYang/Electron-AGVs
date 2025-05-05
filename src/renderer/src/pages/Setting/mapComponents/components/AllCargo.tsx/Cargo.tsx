@@ -16,10 +16,10 @@ import { prefixLevelName } from '@renderer/utils/globalFunction';
 const Wrapper = styled.div<WrapperType>`
   position: relative;
   z-index: 1;
-  border-radius: 3px;
   display: flex;
-  gap: 0.2px;
-  flex-direction: row;
+  flex-direction: ${({ flex_direction }) => flex_direction};
+  width: max-content;
+  gap: 0.35px;
   border-radius: 1px;
   transform: ${(props) =>
     `translate(${props.translatex}em, ${props.translatey}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
@@ -44,8 +44,9 @@ const Cargo: FC<{
   translateY: number;
   rotate: number;
   scale: number;
+  flex_direction: string;
   shelfInfo: Info | undefined;
-}> = ({ id, locId, translateX, translateY, rotate, scale, shelfInfo }) => {
+}> = ({ id, locId, translateX, translateY, rotate, scale, shelfInfo, flex_direction }) => {
   const [settingForm] = Form.useForm();
   const [layerForm] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -88,6 +89,7 @@ const Cargo: FC<{
     <>
       {contextHolder}
       <WrapperDiv
+        flex_direction={flex_direction}
         translatex={translateX}
         translatey={translateY}
         scale={scale}
@@ -101,7 +103,6 @@ const Cargo: FC<{
           const level = index;
 
           const cargoValue = cargo[level]?.cargo.hasCargo || false;
-          const borderColor = '#c7c7c7';
 
           const isDisable = cargo[level]?.disable;
 
@@ -112,10 +113,11 @@ const Cargo: FC<{
               levelName={prefixLevelName(cargo[level]?.levelName)}
               cargoValue={cargoValue}
               isDisable={isDisable}
-              border={borderColor}
               locId={locId}
               rotate={0}
-              handleMouseDown={(e) => handleMouseDown(e, locId, level)}
+              handleMouseDown={(e) =>
+                handleMouseDown(e as React.MouseEvent<HTMLDivElement>, locId, level)
+              }
             />
           );
         })}

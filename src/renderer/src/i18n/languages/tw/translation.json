@@ -359,7 +359,9 @@
     "disabled": "停用",
     "height": "高度",
     "save": "儲存",
-    "edit_position": "調整位置"
+    "edit_position": "調整位置",
+    "shelf_config": "個別儲位資訊",
+    "config_tooltip": "點擊地圖上的儲位編輯相關參數"
   },
   "edit_shelf_category": {
     "edit_shelf_category": "編輯貨架種類",

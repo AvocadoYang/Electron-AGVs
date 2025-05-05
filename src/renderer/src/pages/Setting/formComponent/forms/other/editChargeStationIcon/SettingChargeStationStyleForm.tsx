@@ -8,7 +8,7 @@ import {
   FullscreenOutlined,
   FullscreenExitOutlined
 } from '@ant-design/icons';
-import { Button, Col, Form, InputNumber, message, Row } from 'antd';
+import { Button, Col, Form, InputNumber, message, Row, Select } from 'antd';
 import { FC, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -17,20 +17,21 @@ import { useAtom, useSetAtom } from 'jotai';
 import client from '@renderer/api/axiosClient';
 import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable';
 
-type Options = 'areaType' | 'translateX' | 'translateY' | 'rotate' | 'scale'
+type Options = 'areaType' | 'translateX' | 'translateY' | 'rotate' | 'scale' | 'flex_direction';
 
 type Val = {
-  input: Options
-  value: number
-}
+  input: Options;
+  value: number;
+};
 
 export type SubmitValue = {
-  loc: number
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
-}
+  loc: number;
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
+  flex_direction: string;
+};
 
 type Event =
   | 'up'
@@ -41,7 +42,14 @@ type Event =
   | 'l-rotate'
   | 'scale-up'
   | 'scale-down'
-  | ''
+  | '';
+
+const flexOption = [
+  { value: 'row' },
+  { value: 'column' },
+  { value: 'row-reverse' },
+  { value: 'column-reverse' }
+];
 
 const Wrapper = styled.div`
   max-width: 31em;
@@ -74,11 +82,10 @@ const SettingChargeStationStyleForm: FC = () => {
       await queryClient.refetchQueries({
         queryKey: ['loc-only']
       });
-       
+
       void messageApi.success(t('utils.success'));
     },
     onError: () => {
-       
       void messageApi.error('無法排除 聯絡FAE工程師');
     }
   });
@@ -97,7 +104,18 @@ const SettingChargeStationStyleForm: FC = () => {
         translateX: val.input === 'translateX' ? val.value : prev.translateX,
         translateY: val.input === 'translateY' ? val.value : prev.translateY,
         rotate: val.input === 'rotate' ? val.value : prev.rotate,
-        scale: val.input === 'scale' ? val.value : prev.scale
+        scale: val.input === 'scale' ? val.value : prev.scale,
+        flex_direction: prev.flex_direction
+      };
+    });
+  };
+
+  const handleChangeFlex = (val: string) => {
+    setSelectStation((prev) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        flex_direction: val
       };
     });
   };
@@ -107,6 +125,7 @@ const SettingChargeStationStyleForm: FC = () => {
       if (!prev) return null;
       return {
         loc: prev.loc,
+        flex_direction: prev.flex_direction,
         translateX:
           val.input === 'translateX'
             ? Number((val.value + prev.translateX).toFixed(1))
@@ -173,6 +192,7 @@ const SettingChargeStationStyleForm: FC = () => {
     form.setFieldValue('translateY', selectStation.translateY);
     form.setFieldValue('scale', selectStation.scale);
     form.setFieldValue('rotate', selectStation.rotate);
+    form.setFieldValue('flex_direction', selectStation.flex_direction);
   }, [selectStation]);
 
   useEffect(() => {
@@ -296,6 +316,14 @@ const SettingChargeStationStyleForm: FC = () => {
                       value: Number(e)
                     })
                   }
+                />
+              </Form.Item>
+
+              <Form.Item label="flex_direction" name="flex_direction">
+                <Select
+                  value={selectStation.flex_direction}
+                  options={flexOption}
+                  onChange={(e) => handleChangeFlex(e)}
                 />
               </Form.Item>
             </Form>
