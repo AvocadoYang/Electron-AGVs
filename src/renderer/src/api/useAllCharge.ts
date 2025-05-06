@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { array, object, number, InferType } from 'yup';
+import { array, object, number, InferType, string } from 'yup';
 import client from './axiosClient';
 
 const chargeSchema = array(
@@ -10,7 +10,8 @@ const chargeSchema = array(
     translateX: number().required(),
     translateY: number().required(),
     rotate: number().required(),
-    scale: number().required()
+    scale: number().required(),
+    flex_direction: string().required()
   }).optional()
 );
 
@@ -27,15 +28,15 @@ const useAllChargeStation = () => {
 };
 
 export type SingleChargeStation = {
-  locationId: number
-  x: number
-  y: number
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
-}
+  locationId: number;
+  x: number;
+  y: number;
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
+};
 
-export type AllChargeStationType = InferType<typeof chargeSchema>
+export type AllChargeStationType = InferType<typeof chargeSchema>;
 
 export default useAllChargeStation;

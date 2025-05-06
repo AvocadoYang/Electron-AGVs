@@ -34,7 +34,8 @@ const ChargeStationStylePanel: FC<{
       translateX: data[targetIndex]?.translateX || 0,
       translateY: data[targetIndex]?.translateY || 0,
       rotate: data[targetIndex]?.rotate || 270,
-      scale: data[targetIndex]?.scale || 1
+      scale: data[targetIndex]?.scale || 1,
+      flex_direction: data[targetIndex]?.flex_direction || 'row'
     });
 
     setIsEditStation(true);

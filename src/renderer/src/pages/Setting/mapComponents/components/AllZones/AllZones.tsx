@@ -6,8 +6,10 @@ import { showAllZonesSwitch } from '@renderer/utils/siderGloble';
 
 const AllZones: FC<{ scale: number }> = ({ scale }) => {
   const { data } = useMap();
+
   const showAllZones = useAtomValue(showAllZonesSwitch);
   if (!showAllZones || !data) return [];
+
   return (
     <>
       {data.zones.map((zone) => {
