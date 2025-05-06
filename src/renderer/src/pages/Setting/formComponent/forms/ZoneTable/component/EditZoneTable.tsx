@@ -130,6 +130,8 @@ const EditZoneTable: FC<{
     }
     const data = editZoneForm.getFieldsValue() as FormType;
 
+    console.log(data);
+
     const { name, startX, startY, endX, endY, color } = data;
     if (!name || name.trim() === '') {
       messageApi.warning(t('edit_zone_panel.waring.name_empty_error'));
@@ -153,7 +155,12 @@ const EditZoneTable: FC<{
 
     let forbiddenCars: string[] = [];
 
-    if (!data.all_forbidden && !data.not_forbidden && !data.forbidden?.length) {
+    if (
+      data.category?.includes('禁止區') &&
+      !data.all_forbidden &&
+      !data.not_forbidden &&
+      !data.forbidden?.length
+    ) {
       messageApi.warning(t('edit_zone_panel.waring.tag_not_yet_setting'));
       return;
     }
@@ -279,6 +286,7 @@ const EditZoneTable: FC<{
   const tagChangeFn = useCallback(
     (tags) => {
       setZoneTags((pre) => {
+        console.log(pre);
         pre.forEach((tag) => {
           if (!tags.includes(tag)) {
             switch (tag) {
@@ -348,14 +356,14 @@ const EditZoneTable: FC<{
                 name="startX"
                 style={{ marginBottom: 16 }}
               >
-                <Input type="number" />
+                <Input type="number" disabled />
               </Form.Item>
               <Form.Item
                 label={<Badge key={'red1'} color={'red'} text={t('edit_zone_panel.end_x')} />}
                 name="endX"
                 style={{ marginBottom: 16 }}
               >
-                <Input type="number" />
+                <Input type="number" disabled />
               </Form.Item>
             </div>
             <div>
@@ -366,7 +374,7 @@ const EditZoneTable: FC<{
                 name="startY"
                 style={{ marginBottom: 16 }}
               >
-                <Input type="number" />
+                <Input type="number" disabled />
               </Form.Item>
 
               <Form.Item
@@ -374,7 +382,7 @@ const EditZoneTable: FC<{
                 name="endY"
                 style={{ marginBottom: 16 }}
               >
-                <Input type="number" />
+                <Input type="number" disabled />
               </Form.Item>
             </div>
           </Space>
