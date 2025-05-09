@@ -13,10 +13,9 @@ const Block = styled(Button)<{
   background-color: ${({ $hasCargo }) => ($hasCargo ? '#ffe73c80' : '#f5f5f580')};
   border: '1px dashed #727272';
   border-radius: 3px;
-  padding: 0 10px;
-  min-height: 1px;
-  max-height: 15px;
-  min-width: 15px;
+  width: 15px;
+  height: 15px;
+  padding: 0;
   transition: all 0.2s ease;
   position: relative;
   flex-grow: 1;

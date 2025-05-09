@@ -15,7 +15,7 @@ const getLoc = async () => {
         translateY: number().required(),
         rotate: number().required(),
         scale: number().required(),
-        flex_direction: string().required()
+        flex_direction: string().required('all loc only req')
       }).required()
     ).required();
 

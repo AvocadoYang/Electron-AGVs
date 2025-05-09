@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import { useTranslation } from 'react-i18next';
 import FormHr from '../utils/FormHr';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 import { IsEditingQuickRoads, QuickRoadsArray } from '../utils/settingJotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -52,7 +52,7 @@ const QuickEditRoadPanel: React.FC<{
       queryClient.refetchQueries({ queryKey: ['map'] });
       setQuickRoadArr([]);
       setQuickRoad(false);
-      form.resetFields();
+      // form.resetFields();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -79,6 +79,10 @@ const QuickEditRoadPanel: React.FC<{
 
     saveRoadMutation.mutate(payload);
   };
+
+  useEffect(() => {
+    form.setFieldValue('priority', 3);
+  }, []);
 
   return (
     <>

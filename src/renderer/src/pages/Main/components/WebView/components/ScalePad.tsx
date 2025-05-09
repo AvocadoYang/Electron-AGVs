@@ -158,6 +158,13 @@ const ScalePad = () => {
 
   const scaleOptions = Array.from({ length: 10 }, (_, index) => index + 1);
 
+  useEffect(() => {
+    if (script?.isSimulate === false) {
+      setScale(1);
+    }
+    return;
+  }, [script]);
+
   return (
     <>
       {contextHolder}

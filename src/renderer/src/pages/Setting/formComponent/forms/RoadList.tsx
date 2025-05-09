@@ -30,7 +30,7 @@ import client from '@renderer/api/axiosClient';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import FormHr from '../../utils/FormHr';
-import SubmitButton from '@renderer/utils/SubmitButton';
+import { SaveOutlined } from '@ant-design/icons';
 
 type RoadListType = {
   id: string;
@@ -344,6 +344,7 @@ const RoadList: React.FC<{
       limit: record.limit,
       priority: record.priority,
       roadType: record.roadType,
+      disabled: record.disabled,
       validYawList
     });
     setEditingKey(record.roadId);
@@ -456,7 +457,9 @@ const RoadList: React.FC<{
         return editable ? (
           <Flex gap="small">
             <Typography.Link onClick={() => save(record.id)} style={{ marginRight: 8 }}>
-              <SubmitButton isModel={false} form={formRoad} text="save" />
+              <Button variant="filled" color="primary" htmlType="submit" icon={<SaveOutlined />}>
+                {t('utils.save')}
+              </Button>
             </Typography.Link>
             <Typography.Link onClick={() => cancel()} style={{ marginRight: 8 }}>
               <Button icon={<CloseOutlined />} color="default" variant="filled" type="link">

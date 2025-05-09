@@ -4,7 +4,7 @@ import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Form, InputNumber, message, Select, Tag } from 'antd';
+import { Form, InputNumber, message, Select } from 'antd';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { array, object, string } from 'yup';
@@ -46,12 +46,14 @@ const IdleMissionForm: FC = () => {
   const queryClient = useQueryClient();
 
   const AmrOption: { value: null | string; label: string }[] | undefined = useMemo(() => {
-    return name?.amrs
-      .filter((a) => a.isReal === true)
-      .map((m) => ({
-        label: `${m.amrId} ${m.isReal ? [] : <Tag>{`${t('simulate')}`}</Tag>}`,
-        value: m.amrId
-      }));
+    return (
+      name?.amrs
+        // .filter((a) => a.isReal === true)
+        .map((m) => ({
+          label: m.isReal ? m.amrId : `${m.amrId} (${t('simulate')})`,
+          value: m.amrId
+        }))
+    );
   }, [name]);
 
   const missionOptions = missionTitle
@@ -86,10 +88,10 @@ const IdleMissionForm: FC = () => {
       return;
     }
 
-    if (payload.idle_min < 3) {
-      messageApi.warning('不可少於3分鐘');
-      return;
-    }
+    // if (payload.idle_min < 3) {
+    //   messageApi.warning('不可少於3分鐘');
+    //   return;
+    // }
 
     setMissionMutation.mutate(payload);
   };
@@ -123,7 +125,7 @@ const IdleMissionForm: FC = () => {
             }
           ]}
         >
-          <InputNumber min={3} style={{ width: '100%' }} />
+          <InputNumber min={0.5} style={{ width: '100%' }} />
         </Form.Item>
 
         <Form.Item

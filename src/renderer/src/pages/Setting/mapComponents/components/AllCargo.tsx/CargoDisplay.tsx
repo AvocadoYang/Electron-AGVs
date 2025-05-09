@@ -23,13 +23,11 @@ const Block = styled(Button)<{
   border: ${({ $isSelecting, $canBeClick }) =>
     $isSelecting && $canBeClick ? '2px solid #1890ff' : '1px dashed #727272'};
   border-radius: 3px;
-  padding: 0 10px;
-  min-height: 1px;
-  max-height: 15px;
-  min-width: 15px;
+  width: 15px;
+  height: 15px;
+  padding: 0;
   transition: all 0.2s ease;
   position: relative;
-  flex-grow: 1;
   z-index: ${({ $isSelecting }) => ($isSelecting ? 50 : 1)};
   cursor: ${({ $isDisable, $isSelecting, $canBeClick }) =>
     $isDisable ? 'not-allowed' : $isSelecting && !$canBeClick ? 'not-allowed' : 'pointer'};

@@ -29,6 +29,9 @@ const EditLocationPanel: React.FC<{
     onSuccess: () => {
       void messageApi.success('success');
       queryClient.refetchQueries({ queryKey: ['map'] });
+      queryClient.refetchQueries({
+        queryKey: ['loc-only']
+      });
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });

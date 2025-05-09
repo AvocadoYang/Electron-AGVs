@@ -11,7 +11,7 @@ const chargeSchema = array(
     translateY: number().required(),
     rotate: number().required(),
     scale: number().required(),
-    flex_direction: string().required()
+    flex_direction: string().required('all charge require')
   }).optional()
 );
 

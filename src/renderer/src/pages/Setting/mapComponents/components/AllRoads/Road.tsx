@@ -34,7 +34,7 @@ const Line = styled.div.attrs<{
     border:
       $isClaimed || $isOnHover
         ? `1px solid ${color}`
-        : `${priority === 1 ? '0.5px solid #f74f8746' : '0.5px solid #adadad46'}`
+        : `${priority === 1 ? '0.5px solid #f74f8746' : '0.5px solid #02ddff'}`
   }
 }))<{
   length: number;

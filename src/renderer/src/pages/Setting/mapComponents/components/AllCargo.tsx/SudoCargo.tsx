@@ -47,10 +47,9 @@ const Block = styled(Button)`
   border: 1px solid #ff0000;
   background-color: unset;
   border-radius: 3px;
-  padding: 0 10px;
-  min-height: 1px;
-  max-height: 15px;
-  min-width: 15px;
+  width: 15px;
+  height: 15px;
+  padding: 0;
   transition: all 0.2s ease;
   position: relative;
   flex-grow: 1;
