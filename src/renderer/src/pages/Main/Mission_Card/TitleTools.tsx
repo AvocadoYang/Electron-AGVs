@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
+// import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { SelectProps } from 'antd';
 import { useAtomValue } from 'jotai';
 import { darkMode } from '@renderer/utils/gloable';
@@ -15,16 +15,16 @@ for (let i = 10; i < 36; i++) {
 
 const TitleTools = () => {
   const isDark = useAtomValue(darkMode);
-  const [isDrop, setIsDrop] = useState(false);
+  // const [isDrop, setIsDrop] = useState(false);
   return (
     <>
       <span className={`card-wrap-title ${isDark ? 'dark-mode-title' : ''}`}>
         Missions
-        {isDrop ? (
+        {/* {isDrop ? (
           <UpOutlined className="drop-icon" onClick={() => setIsDrop(false)} />
         ) : (
           <DownOutlined className="drop-icon" onClick={() => setIsDrop(true)} />
-        )}
+        )} */}
       </span>
     </>
   );

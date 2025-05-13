@@ -20,10 +20,9 @@ const MissionBtnWrap = styled.div<{ $isMinimized: boolean }>`
   z-index: 4;
   top: 16px; /* Align with the header */
   right: 16px; /* Align with the right edge of the mission panel */
-  background-color: #ffffff; /* White background to match panels */
+  background-color: rgba(255, 255, 255, 0.01); /* White background to match panels */
   border-radius: 8px; /* Consistent rounded corners */
   padding: 8px; /* More padding for a spacious feel */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow to match panels */
   opacity: 1; /* Always fully opaque for clarity */
   transition: all 0.3s ease-in-out;
   width: ${(props) => (props.$isMinimized ? '40px' : 'auto')};
@@ -32,9 +31,6 @@ const MissionBtnWrap = styled.div<{ $isMinimized: boolean }>`
   display: flex;
   align-items: center;
 
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Slight shadow on hover */
-  }
 
   @media (max-width: 768px) {
     padding: ${(props) => (props.$isMinimized ? '0' : '6px')};
@@ -56,7 +52,7 @@ const StyledButton = styled(Button)`
   height: 40px; /* Consistent height with other buttons */
   border-radius: 4px; /* Rounded corners for a modern look */
   border: none; /* No border for a clean look */
-  background-color: #f5f5f5; /* Light gray background for unselected buttons */
+  background-color:rgb(135, 208, 241); /* Light gray background for unselected buttons */
   color: #333; /* Darker text for contrast */
   font-weight: 500; /* Slightly bold text */
   font-size: 14px; /* Larger font size for readability */
@@ -122,7 +118,7 @@ const MissionBtn = () => {
           </Tooltip>
         ) : (
           <Flex gap="small" wrap="wrap" align="center" justify="end">
-            <StyledButton onClick={() => {}} icon={<RedoOutlined />}>
+            <StyledButton onClick={() => { }} icon={<RedoOutlined />}>
               {t('toolbar.mission.cycle_mission')}
             </StyledButton>
 

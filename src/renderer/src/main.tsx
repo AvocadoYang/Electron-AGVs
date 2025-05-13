@@ -5,6 +5,13 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './i18n/i18n';
 
+const cspMeta = document.getElementById('csp-meta') as HTMLElement;
+cspMeta.setAttribute(
+  'content',
+  `img-src 'self' data: https://${location.host.split(":")[0]}:4000 https://localhost:4000 https://127.0.0.1:4000; default-src 'self'; script-src 'self' blob:; connect-src 'self' https: http: wss:; style-src 'self' 'unsafe-inline';`
+);
+
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />
