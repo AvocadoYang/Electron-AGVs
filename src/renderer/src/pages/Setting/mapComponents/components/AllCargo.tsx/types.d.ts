@@ -9,6 +9,7 @@ export type CargoMissionEdit = {
 export type FormCargo = {
   disable: boolean;
   titleId: string;
+  prepare_point_id: string;
   name: string;
   region: string;
   loc: string;

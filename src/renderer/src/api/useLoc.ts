@@ -15,7 +15,13 @@ const getLoc = async () => {
         translateY: number().required(),
         rotate: number().required(),
         scale: number().required(),
-        flex_direction: string().required('all loc only req')
+        flex_direction: string().required('all loc only req'),
+        prepare_point: object({
+          id: string().required(),
+          locationId: string().required()
+        })
+          .optional()
+          .nullable()
       }).required()
     ).required();
 
@@ -43,6 +49,10 @@ export type LocWithoutArr = {
   rotate: number;
   scale: number;
   flex_direction: string;
+  prepare_point: {
+    id: string;
+    locationId: string;
+  };
 };
 
 export default useLoc;

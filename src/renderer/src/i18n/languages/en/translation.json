@@ -328,7 +328,9 @@
       "region_name": "Region Name",
       "load_mission": "Load Mission",
       "offload_mission": "Offload Mission",
-      "yaw": "Yaw"
+      "yaw": "Yaw",
+      "prepare_point": "Prepare Point",
+      "unset": "unset"
     },
     "layer_form": {
       "layers": "Individual floor settings",
@@ -797,6 +799,7 @@
       "output": {
         "output": "Output",
         "cargo_number": "Cargo Number",
+        "respawn_cargo": "respawn cargo",
         "speed": "Out cargo speed (millisecond)",
         "specify_car": "Specify car",
         "placement": "Placement"
@@ -855,7 +858,8 @@
       "no_robot_select": "No vehicle/robot selected",
       "active": "Confirm to start",
       "cancel": "Cancel",
-      "duration": "Simulation duration"
+      "duration": "Simulation duration",
+      "station_mission": "Active each station task"
     },
 
     "results": {

@@ -47,6 +47,7 @@ const CargoModal: FC<{
       directionId: payload.yaw,
       loadId: payload.load,
       offloadId: payload.offload,
+      prepare_point_id: payload.prepare_point_id,
       layer: { ...layerPayload, isEditLayer }
     };
 

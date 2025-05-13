@@ -72,6 +72,7 @@ const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
       form.setFieldsValue({
         is_active: tempFormData.is_active,
         cargo_number: tempFormData.cargo_number,
+        respawn_cargo: tempFormData.respawn_cargo,
         output_cargo_speed: tempFormData.output_cargo_speed,
         specify_car: tempFormData.specify_car || [],
         placement: tempFormData.placement || []
@@ -82,6 +83,10 @@ const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
   return (
     <StyledForm ref={ref} form={form} layout="vertical">
       <Form.Item name="is_active" label={t('utils.active')} valuePropName="checked">
+        <Switch checkedChildren={t('utils.active')} unCheckedChildren={t('utils.inactive')} />
+      </Form.Item>
+
+      <Form.Item name="respawn_cargo" label={t('sim.cargo.output.respawn_cargo')}>
         <Switch checkedChildren={t('utils.active')} unCheckedChildren={t('utils.inactive')} />
       </Form.Item>
 

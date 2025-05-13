@@ -35,7 +35,7 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const simMutation = useMutation({
-    mutationFn: (data: { isSimulate: boolean; duration: number }) => {
+    mutationFn: (data: { isSimulate: boolean; duration: number; activeStationTask: boolean }) => {
       return client.post('api/simulate/simulate', data);
     },
     onSuccess: () => {
@@ -53,13 +53,13 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  const handleSim = (duration: number) => {
+  const handleSim = (duration: number, activeStationTask: boolean) => {
     localStorage.setItem('seem-mock-result', 'false');
-    simMutation.mutate({ duration, isSimulate: true });
+    simMutation.mutate({ duration, isSimulate: true, activeStationTask });
   };
 
   const handleAbortSim = () => {
-    simMutation.mutate({ isSimulate: false, duration: 0 });
+    simMutation.mutate({ isSimulate: false, duration: 0, activeStationTask: false });
   };
 
   const items = [

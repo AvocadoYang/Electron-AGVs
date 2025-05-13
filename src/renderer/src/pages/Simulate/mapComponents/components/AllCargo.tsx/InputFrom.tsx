@@ -52,7 +52,7 @@ const InputFrom: FC<{ form: FormInstance }> = ({ form }) => {
     const loadTaskCount =
       shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'offload').length || 0;
     setIsSetMission(loadTaskCount > 0);
-  }, [shelf]);
+  }, [shelf, selectLocation]);
 
   useEffect(() => {
     if (tempFormData && ref.current) {

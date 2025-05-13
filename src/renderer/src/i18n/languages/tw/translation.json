@@ -323,7 +323,9 @@
       "region_name": "區域名稱",
       "load_mission": "取貨任務",
       "offload_mission": "放貨任務",
-      "yaw": "轉角"
+      "yaw": "轉角",
+      "prepare_point": "指定預派點",
+      "unset": "未配置"
     },
     "layer_form": {
       "layers": "個別樓層設定",
@@ -611,7 +613,7 @@
       "location_custom": "自訂（輸入位置 ID）",
       "location_custom_desc": "從可用選項中手動選擇一個位置 ID。",
       "location_select": "自動（快速任務位置）",
-      "location_select_desc": "根據快速任務自動設定位置。",
+      "location_select_desc": "根據快速任務自動設定位置。取放貨目標的前1點",
       "location_charge_station": "自動（空閒充電站）",
       "location_charge_station_desc": "自動尋找可用的充電站。",
 
@@ -799,6 +801,7 @@
       "output": {
         "output": "出貨",
         "cargo_number": "貨物數量",
+        "respawn_cargo": "自動重生貨物",
         "speed": "出貨速度 (毫秒 millisecond)",
         "specify_car": "指定車輛",
         "placement": "放置位置"
@@ -857,7 +860,8 @@
       "no_robot_select": "未指定車輛/機器人",
       "active": "確認啟動",
       "cancel": "取消",
-      "duration": "模擬時長"
+      "duration": "模擬時長",
+      "station_mission": "啟動各站點任務"
     },
 
     "results": {

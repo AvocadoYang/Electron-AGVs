@@ -1,6 +1,12 @@
-import { Button, Divider, InputNumber, List, Modal, Space, Tag, Typography } from 'antd';
+import { Button, Divider, InputNumber, List, Modal, Space, Switch, Tag, Typography } from 'antd';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { CarOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import {
+  CarOutlined,
+  CheckCircleOutlined,
+  CheckOutlined,
+  CloseCircleOutlined,
+  CloseOutlined
+} from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useMockInfo } from '@renderer/sockets/useMockInfo';
 
@@ -9,12 +15,13 @@ const { Title, Text } = Typography;
 const StartSimModal: FC<{
   isSimulateOpen: boolean;
   setIsSimulateOpen: Dispatch<SetStateAction<boolean>>;
-  handleSim: (duration: number) => void;
+  handleSim: (duration: number, activeStationTask: boolean) => void;
   canSim: boolean;
 }> = ({ isSimulateOpen, setIsSimulateOpen, handleSim, canSim }) => {
   const { t } = useTranslation();
   const script = useMockInfo();
   const [min, setMin] = useState(10);
+  const [isActiveStation, setIsActiveStation] = useState(true);
 
   return (
     <Modal
@@ -89,6 +96,18 @@ const StartSimModal: FC<{
         />
       </div>
 
+      <div style={{ marginBottom: '24px' }}>
+        <Text strong style={{ display: 'block', marginBottom: '8px' }}>
+          {t('sim.start_sim_modal.station_mission')}
+        </Text>
+        <Switch
+          checkedChildren={<CheckOutlined />}
+          unCheckedChildren={<CloseOutlined />}
+          value={isActiveStation}
+          onChange={(v) => setIsActiveStation(v)}
+        />
+      </div>
+
       <Divider style={{ margin: '16px 0' }} />
 
       <Space style={{ display: 'flex', justifyContent: 'center' }}>
@@ -96,7 +115,7 @@ const StartSimModal: FC<{
           disabled={!canSim && min !== 0}
           type="primary"
           icon={<CheckCircleOutlined />}
-          onClick={() => handleSim(min)}
+          onClick={() => handleSim(min, isActiveStation)}
           style={{
             background: canSim ? '#1d39c4' : '#fff',
             borderColor: '#1d39c4',

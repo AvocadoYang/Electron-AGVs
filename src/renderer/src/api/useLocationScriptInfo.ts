@@ -15,6 +15,7 @@ const getScript = async (locationId: string | null) => {
         id: string().optional(),
         is_active: boolean().optional(),
         cargo_number: number().optional(),
+        respawn_cargo: boolean().optional(),
         output_cargo_speed: number().optional(),
         specify_car: array(string().optional()).optional().nullable(),
         placement: array(string().optional()).optional().nullable(),

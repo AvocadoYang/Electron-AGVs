@@ -6,8 +6,9 @@ import useName from '@renderer/api/useAmrName';
 import { useEffect, useMemo, useState } from 'react';
 import useShelvesInfo from '@renderer/api/useShelvesInfo';
 import { useMutation } from '@tanstack/react-query';
-import { ErrorResponse } from 'react-router-dom';
 import client from '@renderer/api/axiosClient';
+import { errorHandler } from '@renderer/utils/utils';
+import { ErrorResponse } from '@renderer/utils/globalType';
 
 enum MissionPriority {
   TRIVIAL, //沒差最後再做
@@ -96,9 +97,7 @@ const QuickMission = () => {
         content: t('utils.success')
       });
     },
-    onError: (e: ErrorResponse) => {
-      void messageApi.error(e.statusText);
-    }
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
   const handleCancel = () => {

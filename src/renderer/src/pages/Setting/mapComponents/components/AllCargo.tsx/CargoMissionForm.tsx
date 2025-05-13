@@ -1,10 +1,11 @@
 import { Form, Select, Input, FormInstance, Skeleton, Typography } from 'antd';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import useYaw from '@renderer/api/useYaw';
 import useRegionName from '@renderer/api/useLocRegionName';
 import useSpecificShelf from '@renderer/api/useSpecificShelf';
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 
 const { Title } = Typography;
 
@@ -15,9 +16,24 @@ const CargoMissionForm: FC<{
 }> = ({ locId, locName, form }) => {
   const { data: misTitle } = useAllMissionTitles();
   const { data: yaw } = useYaw();
+  const { data: loc } = useLoc(undefined);
   const { data: region } = useRegionName();
   const { data: shelf } = useSpecificShelf(locId);
   const { t } = useTranslation();
+
+  const locationOption = useMemo(() => {
+    const info = loc as LocWithoutArr[];
+
+    const mixData = info
+      .filter((v) => v.areaType === '預派點')
+      .sort((a, b) => Number(a.locationId) - Number(b.locationId))
+      .map((v) => ({
+        label: v.locationId,
+        value: v.id
+      }));
+    mixData.unshift({ label: t('shelf.cargo_mission.unset'), value: 'null' });
+    return mixData;
+  }, [loc]);
 
   const taskOption = misTitle
     ?.filter((g) =>
@@ -35,11 +51,17 @@ const CargoMissionForm: FC<{
     const offloadTask = shelf.TitleBridgeLocs?.filter((v) => v.missionType === 'offload')[0]?.Title
       ?.id;
 
+    const info = loc as LocWithoutArr[];
+
+    const defaultPreparedPoint =
+      info.find((v) => v.locationId === locId)?.prepare_point?.id || null;
+
     form.setFieldsValue({
       load: loadTask,
       offload: offloadTask,
       region: shelf.loc_regions?.id,
-      yaw: shelf.Dir?.id
+      yaw: shelf.Dir?.id,
+      prepare_point_id: defaultPreparedPoint
     });
   }, [form, shelf]);
 
@@ -90,6 +112,14 @@ const CargoMissionForm: FC<{
 
         <Form.Item label={t('shelf.cargo_mission.yaw')} name="yaw" rules={[{ required: true }]}>
           <Select options={dirOption} placeholder={t('utils.select')} showSearch />
+        </Form.Item>
+
+        <Form.Item
+          label={t('shelf.cargo_mission.prepare_point')}
+          name="prepare_point_id"
+          rules={[{ required: true }]}
+        >
+          <Select options={locationOption} placeholder={t('utils.select')} showSearch />
         </Form.Item>
       </Form>
     </div>
