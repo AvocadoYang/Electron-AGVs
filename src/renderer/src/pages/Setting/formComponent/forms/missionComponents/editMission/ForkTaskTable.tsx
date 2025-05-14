@@ -225,6 +225,18 @@ const ForkTaskTable: FC<{
     }
   ];
 
+  const getLocationModeLabel = (isDefineId: string | undefined): string => {
+    const locationModeMap: Record<string, string> = {
+      custom: t('mission.task_table.custom'),
+      auto: t('mission.task_table.select'),
+      select: t('mission.task_table.is_selectable'),
+      available_charge_station: t('mission.task_table.available_charge_station'),
+      prepare_point: t('mission.task_table.prepare_point'),
+      back_to_load_place: t('mission.task_table.back_to_load_place_desc')
+    };
+    return isDefineId && locationModeMap[isDefineId] ? locationModeMap[isDefineId] : '-';
+  };
+
   const expandedRowRender = (record: Fork_mission_Slice) => (
     <Descriptions bordered column={2} size="small">
       {/* control */}
@@ -244,17 +256,7 @@ const ForkTaskTable: FC<{
 
       {/* 位置選擇模式 is define id */}
       <Descriptions.Item label={t('mission.task_table.is_custom_location')}>
-        {record.operation.is_define_id === 'custom'
-          ? t('mission.task_table.custom')
-          : record.operation.is_define_id === 'auto'
-            ? t('mission.task_table.select')
-            : record.operation.is_define_id === 'select'
-              ? t('mission.task_table.is_selectable')
-              : record.operation.is_define_id === 'available_charge_station'
-                ? t('mission.task_table.available_charge_station')
-                : record.operation.is_define_id === 'prepare_point'
-                  ? t('mission.task_table.prepare_point')
-                  : '-'}
+        {getLocationModeLabel(record.operation.is_define_id)}
       </Descriptions.Item>
 
       <Descriptions.Item label={''}>{'-'}</Descriptions.Item>

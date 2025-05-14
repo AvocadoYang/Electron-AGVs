@@ -26,7 +26,8 @@ export const selectLocationOption = [
   'custom',
   'select',
   'available_charge_station',
-  'prepare_point'
+  'prepare_point',
+  'back_to_load_place'
 ] as const;
 
 export const yawOption = ['custom', 'select', 'calculate_by_agv_and_shelf_angle'] as const;

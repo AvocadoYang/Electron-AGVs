@@ -617,6 +617,10 @@
       "location_select_desc": "Automatically sets the location based on the fast-mission.",
       "location_charge_station": "Auto (Idle Charge Station)",
       "location_charge_station_desc": "Automatically finds an available charging station.",
+
+      "back_to_load_place": "Auto (back to load prepare point)",
+      "back_to_load_place_desc": "back to load prepare point",
+
       "prepare_point": "Auto (Prepare Point)",
       "prepare_point_desc": "Automatically finds an prepare point",
       "is_custom_yaw": "Yaw Selection Mode",

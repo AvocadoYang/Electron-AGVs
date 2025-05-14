@@ -7,6 +7,8 @@ import { useEffect, useMemo, useState } from 'react';
 import useName from '@renderer/api/useAmrName';
 import { useMutation } from '@tanstack/react-query';
 import client from '@renderer/api/axiosClient';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
 enum MissionPriority {
   TRIVIAL, //沒差最後再做
@@ -63,9 +65,7 @@ const DialogMission = () => {
         void messageApi.error('無法排除 聯絡FAE工程師');
       }
     },
-    onError: () => {
-      void messageApi.error('無法排除 聯絡FAE工程師');
-    }
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
   const misOptions = useMemo(() => {
     if (!data) return [];

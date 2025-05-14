@@ -111,6 +111,7 @@ const useTaskOptions = (action: Action_Type) => {
               value: type
             };
           case 'available_charge_station':
+            if (action !== 'move') return null;
             return {
               label: t('mission.task_table.location_charge_station'),
               value: type
@@ -119,6 +120,11 @@ const useTaskOptions = (action: Action_Type) => {
             if (action !== 'move') return null;
             return {
               label: t('mission.task_table.prepare_point'),
+              value: type
+            };
+          case 'back_to_load_place':
+            return {
+              label: t('mission.task_table.back_to_load_place'),
               value: type
             };
           default:

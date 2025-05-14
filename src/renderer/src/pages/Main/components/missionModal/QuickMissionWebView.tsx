@@ -49,7 +49,7 @@ const fadeOut = keyframes`
 const QuickMissionContainer = styled.div<{ $visible: boolean }>`
   position: fixed;
   bottom: 1%;
-  right: 1%;
+  right: ${(props) => `${props.$visible ? '1%' : '-90%'}`};
   width: 100%;
   max-width: 450px;
   z-index: 1000;

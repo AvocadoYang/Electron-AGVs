@@ -37,7 +37,7 @@ type Form_Value = {
   action_type: string;
   control: string[];
   wait: number;
-  is_define_id: 'custom' | 'select' | 'available_charge_station';
+  is_define_id: 'custom' | 'select' | 'available_charge_station' | 'back_to_load_place';
   locationId: string;
   is_define_yaw: YawGenre;
   yaw: number;
@@ -355,11 +355,12 @@ const TaskFormFork: FC<{
             }
             name="is_define_id"
           >
-            <Segmented
+            <Select
               value={selectLocationType}
               onChange={(e: Select_Location_Type) => setSelectLocationType(e)}
               options={SelectLocationOptions}
             />
+
             {selectLocationType === 'custom' && (
               <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
                 {t('mission.task_table.location_custom_desc')}
@@ -378,6 +379,11 @@ const TaskFormFork: FC<{
             {selectLocationType === 'prepare_point' && (
               <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
                 {t('mission.task_table.prepare_point_desc')}
+              </Typography.Text>
+            )}
+            {selectLocationType === 'back_to_load_place' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.back_to_load_place_desc')}
               </Typography.Text>
             )}
           </Form.Item>
