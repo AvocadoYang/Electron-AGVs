@@ -1,5 +1,3 @@
-import { Info } from '~/api/useLocation';
-
 export type CargoMissionEdit = {
   loc: string;
   directionId: string;
@@ -16,12 +14,25 @@ export type FormCargo = {
   offload: string;
 };
 
+export type LayerType = {
+  [level: number]: {
+    levelName: string;
+    booked: boolean;
+    cargo_limit: number;
+    disable: boolean;
+    hasCargo: boolean;
+  };
+};
+
 export type CargoArea = {
-  id: string;
-  areaId: string;
   booker: string;
   occupier: string;
-  info: Info;
+
+  name?: string;
+  layer?: LayerType;
+  locationId: string;
+  type: string;
+  isDropping: boolean;
 };
 
 export type HasCargo = {

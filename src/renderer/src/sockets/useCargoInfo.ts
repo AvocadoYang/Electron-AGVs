@@ -1,34 +1,60 @@
-import { array, string, object, ValidationError, boolean } from 'yup';
+import { array, string, object, ValidationError, boolean, number } from 'yup';
 import { from, fromEventPattern, share, switchMap, distinctUntilChanged } from 'rxjs';
 import { useEffect, useState } from 'react';
 import { io } from './socketConnect';
 
+export const levelSchema = object({
+  levelName: string().optional().nullable(),
+  booked: boolean().optional().nullable(),
+  cargo_limit: number().optional(),
+  disable: boolean().optional(),
+  hasCargo: boolean().optional()
+});
+
+export const layerSchema = object().test(
+  'is-layer-type',
+  'socket Invalid layer format',
+  (value) => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+
+    for (const key in value) {
+      const valid = levelSchema.isValidSync(value[key]);
+      if (!valid) {
+        console.error(
+          `Validation failed for level ${key}:`,
+          levelSchema.validateSync(value[key], { abortEarly: false })
+        );
+        return false;
+      }
+    }
+    return true;
+  }
+);
 export type LayerType = {
   [level: number]: {
     levelName: string;
     booked: boolean;
     cargo_limit: number;
     disable: boolean;
-    cargo: {
-      hasCargo: boolean;
-      name: string | null;
-    };
+    hasCargo: boolean;
   };
 };
 
-export type Info = {
-  areaId?: string;
-  name?: string | null;
-  isDropping?: boolean;
-  layer?: LayerType[];
+export type CargoInfo = {
+  name?: string;
+  layer?: LayerType;
+  locationId: string;
+  type: string;
+  isDropping: boolean;
 };
 
 const schema = () =>
   array(
     object({
       name: string().optional().nullable(),
-      layer: array().optional(),
-      areaId: string().optional(),
+      type: string().optional(),
+      locationId: string().required(),
+      layer: layerSchema.optional(),
       isDropping: boolean().optional()
     }).required()
   ).required();
@@ -42,23 +68,25 @@ const profiles$ = fromEventPattern(
     io.off('cargo-info', next);
   }
 ).pipe(
-  switchMap((msg) =>
-    from(
+  switchMap((msg) => {
+    // console.log('Message received by switchMap:', msg);
+
+    return from(
       schema()
-        .validate(msg as unknown[], { stripUnknown: true })
+        .validate(msg as unknown[])
         .catch((err: ValidationError) => {
           console.error(err.message);
           console.error('cargo-info socket schema mismatch: ', err.value);
           return undefined;
         })
-    )
-  ),
+    );
+  }),
   distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
   share()
 );
 
 const useCargoInfo = () => {
-  const [cargoInfo, setCargoInfo] = useState<Info[]>();
+  const [cargoInfo, setCargoInfo] = useState<CargoInfo[]>();
 
   useEffect(() => {
     const subscription = profiles$
@@ -67,7 +95,7 @@ const useCargoInfo = () => {
       )
       .subscribe((filteredData) => {
         if (filteredData) {
-          setCargoInfo(filteredData);
+          setCargoInfo(filteredData as CargoInfo[]);
         }
       });
 

@@ -16,9 +16,9 @@ const { Title } = Typography;
 const LayerForm: FC<{
   locId: string;
   form: FormInstance<unknown>;
-  layer: LayerType[];
+  layer: LayerType;
   setIsEditLayer: Dispatch<SetStateAction<boolean>>;
-}> = ({ form, locId, layer, setIsEditLayer }) => {
+}> = ({ form, layer, setIsEditLayer }) => {
   const { t } = useTranslation();
 
   const clearCargoField = (index: number) => {
@@ -28,16 +28,16 @@ const LayerForm: FC<{
   const userHasChangeData = () => {
     setIsEditLayer(true);
   };
-
+  console.log(layer);
   useEffect(() => {
     if (!layer) return;
-    layer.forEach((L, i) => {
-      const levelName = prefixLevelName(L[i]?.levelName);
+    Object.entries(layer).forEach(([indexStr, info]) => {
+      const levelName = prefixLevelName(info?.levelName);
       form.setFieldsValue({
-        [`hasCargo${i}`]: L[i].cargo?.hasCargo,
-        [`levelName${i}`]: levelName,
-        [`disable${i}`]: L[i]?.disable || false,
-        [`cargo_limit${i}`]: L[i]?.cargo_limit || 0
+        [`hasCargo${indexStr}`]: info.hasCargo,
+        [`levelName${indexStr}`]: levelName,
+        [`disable${indexStr}`]: info.disable || false,
+        [`cargo_limit${indexStr}`]: info.cargo_limit || 0
       });
     });
   }, [form, layer]);
@@ -64,46 +64,50 @@ const LayerForm: FC<{
         <Title level={3} style={{ marginBottom: '24px', color: '#1890ff' }}>
           {t('shelf.layer_form.layers')}
         </Title>
-        {layer.map((_, i) => (
-          <div
-            key={nanoid()}
-            style={{
-              marginBottom: '24px',
-              padding: '16px',
-              background: '#f5f5f5',
-              borderRadius: 6
-            }}
-          >
-            <Title
-              level={4}
-              style={{ marginBottom: '16px' }}
-            >{`${t('shelf.layer_form.level')} ${i + 1}`}</Title>
-            <Form.Item label={t('shelf.layer_form.column_name')} name={`levelName${i}`}>
-              <Input placeholder={t('shelf.layer_form.enter_level_name')} />
-            </Form.Item>
-            <Form.Item
-              label={t('shelf.layer_form.disable')}
-              name={`disable${i}`}
-              valuePropName="checked"
+        {Object.entries(layer).map(([levelStr]) => {
+          const index = Number(levelStr);
+
+          return (
+            <div
+              key={nanoid()}
+              style={{
+                marginBottom: '24px',
+                padding: '16px',
+                background: '#f5f5f5',
+                borderRadius: 6
+              }}
             >
-              <Switch checkedChildren="On" unCheckedChildren="Off" />
-            </Form.Item>
-            <Form.Item
-              label={t('shelf.layer_form.has_cargo')}
-              name={`hasCargo${i}`}
-              valuePropName="checked"
-            >
-              <Switch
-                onChange={(v) => !v && clearCargoField(i)}
-                checkedChildren={t('shelf.layer_form.has_cargo')}
-                unCheckedChildren={t('shelf.layer_form.no_cargo')}
-              />
-            </Form.Item>
-            <Form.Item label={t('edit_road_panel.limit')} name={`cargo_limit${i}`}>
-              <Input type="number" min={0} placeholder="0" />
-            </Form.Item>
-          </div>
-        ))}
+              <Title
+                level={4}
+                style={{ marginBottom: '16px' }}
+              >{`${t('shelf.layer_form.level')} ${index + 1}`}</Title>
+              <Form.Item label={t('shelf.layer_form.column_name')} name={`levelName${index}`}>
+                <Input placeholder={t('shelf.layer_form.enter_level_name')} />
+              </Form.Item>
+              <Form.Item
+                label={t('shelf.layer_form.disable')}
+                name={`disable${index}`}
+                valuePropName="checked"
+              >
+                <Switch checkedChildren="On" unCheckedChildren="Off" />
+              </Form.Item>
+              <Form.Item
+                label={t('shelf.layer_form.has_cargo')}
+                name={`hasCargo${index}`}
+                valuePropName="checked"
+              >
+                <Switch
+                  onChange={(v) => !v && clearCargoField(index)}
+                  checkedChildren={t('shelf.layer_form.has_cargo')}
+                  unCheckedChildren={t('shelf.layer_form.no_cargo')}
+                />
+              </Form.Item>
+              <Form.Item label={t('edit_road_panel.limit')} name={`cargo_limit${index}`}>
+                <Input type="number" min={0} placeholder="0" />
+              </Form.Item>
+            </div>
+          );
+        })}
       </Form>
     </div>
   );

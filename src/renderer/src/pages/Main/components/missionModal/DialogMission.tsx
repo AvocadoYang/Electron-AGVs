@@ -43,7 +43,7 @@ const DialogMission = () => {
         .filter((a) => a.isReal === true)
         .map((m) => ({ label: m.amrId, value: m.amrId }));
     }
-    return options ? [...options, { value: 'null', label: t('utils.random') }] : undefined;
+    return options ? [...options, { value: 'none', label: t('utils.random') }] : undefined;
   }, [name, t]);
   const canSubmitMutation = useMutation({
     mutationFn: (payload: MissionFrom) => {
@@ -103,7 +103,7 @@ const DialogMission = () => {
 
     const newPayload = {
       ...payload,
-      amrId: payload.amrId === 'null' ? null : payload.amrId
+      amrId: payload.amrId
     };
 
     canSubmitMutation.mutate(newPayload);

@@ -1,18 +1,18 @@
 import { FC, SetStateAction } from 'react';
 import { FormInstance, message, Modal } from 'antd';
 import { useCargoMutations } from './hook/useCargoMutations';
-import { FormCargo } from './types';
+import { FormCargo, LayerType } from './types';
 import { useTranslation } from 'react-i18next';
-import { Info } from '@renderer/api/type/useLocation';
 import CargoMissionForm from './CargoMissionForm';
 import LayerForm from './LayerForm';
+import { CargoInfo } from '@renderer/sockets/useCargoInfo';
 
 const CargoModal: FC<{
   id: string;
   locId: string;
   settingForm: FormInstance<unknown>;
   layerForm: FormInstance<unknown>;
-  shelfInfo: Info | undefined;
+  shelfInfo: CargoInfo | undefined;
   isEditLayer: boolean;
   isEditModalOpen: boolean;
   setIsEditLayer: (value: SetStateAction<boolean>) => void;
@@ -93,7 +93,7 @@ const CargoModal: FC<{
               </div>
             ) : (
               <LayerForm
-                layer={shelfInfo.layer as Info[]}
+                layer={shelfInfo.layer as LayerType}
                 locId={locId}
                 form={layerForm}
                 setIsEditLayer={setIsEditLayer}

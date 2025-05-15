@@ -57,26 +57,19 @@ export type LayerType = {
     booked: boolean;
     cargo_limit: number;
     disable: boolean;
-    cargo: {
-      hasCargo: boolean;
-      name: string | null;
-    };
+    hasCargo: boolean;
   };
 };
 
-export type Info = {
-  areaId?: string;
-  name?: string | null;
-  isDropping?: boolean;
-  layer?: LayerType[];
-};
-
 export type CargoArea = {
-  id?: string;
-  areaId?: string;
-  booker?: string;
-  occupier?: string;
-  info?: Info;
+  booker: string;
+  occupier: string;
+
+  name?: string;
+  layer?: LayerType;
+  locationId: string;
+  type: string;
+  isDropping: boolean;
 };
 
 type Data = {

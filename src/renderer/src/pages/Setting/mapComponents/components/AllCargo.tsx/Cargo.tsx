@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { useCargoMutations } from './hook/useCargoMutations';
 import CargoDisplay from './CargoDisplay';
 import CargoModal from './CargoModal';
-import { Info } from '@renderer/sockets/useCargoInfo';
+import { CargoInfo } from '@renderer/sockets/useCargoInfo';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble';
 import { LoadingStation } from './LoadingStation';
@@ -45,7 +45,7 @@ const Cargo: FC<{
   rotate: number;
   scale: number;
   flex_direction: string;
-  shelfInfo: Info | undefined;
+  shelfInfo: CargoInfo | undefined;
 }> = ({ id, locId, translateX, translateY, rotate, scale, shelfInfo, flex_direction }) => {
   const [settingForm] = Form.useForm();
   const [layerForm] = Form.useForm();
@@ -84,7 +84,7 @@ const Cargo: FC<{
     [editColumnMutation]
   );
 
-  if (!shelfInfo) return <LoadingStation />;
+  if (!shelfInfo || !shelfInfo.layer) return <LoadingStation />;
   return (
     <>
       {contextHolder}
@@ -99,18 +99,16 @@ const Cargo: FC<{
         }}
       >
         {' '}
-        {shelfInfo?.layer?.map((cargo, index: number) => {
-          const level = index;
-
-          const cargoValue = cargo[level]?.cargo.hasCargo || false;
-
-          const isDisable = cargo[level]?.disable;
+        {Object.entries(shelfInfo.layer).map(([levelStr, info]) => {
+          const level = Number(levelStr);
+          const cargoValue = info.hasCargo || false;
+          const isDisable = info.disable;
 
           return (
             <MemoizedCargo
               key={`${locId}-${level}`}
               level={level}
-              levelName={prefixLevelName(cargo[level]?.levelName)}
+              levelName={prefixLevelName(info.levelName)}
               cargoValue={cargoValue}
               isDisable={isDisable}
               locId={locId}

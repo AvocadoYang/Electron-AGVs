@@ -119,7 +119,7 @@ const AllCargo: React.FC = () => {
                   scale={LocScale}
                   rotate={rotate}
                   flex_direction={flex_direction}
-                  shelfInfo={shelfInfo?.find((s) => s.areaId === loc.locationId)}
+                  shelfInfo={shelfInfo?.find((s) => s.locationId === loc.locationId)}
                 />
               </WrapperForCargo>
             </div>

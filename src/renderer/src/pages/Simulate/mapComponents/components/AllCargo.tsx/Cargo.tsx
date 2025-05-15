@@ -5,7 +5,7 @@ import { WrapperType } from './types';
 import styled from 'styled-components';
 import { useCargoMutations } from '../../../../../api/useCargoMutations';
 import CargoDisplay from './CargoDisplay';
-import { Info } from '@renderer/sockets/useCargoInfo';
+import { CargoInfo } from '@renderer/sockets/useCargoInfo';
 import { LoadingStation } from './LoadingStation';
 import {
   isOpenCargoModal,
@@ -50,7 +50,7 @@ const Cargo: FC<{
   rotate: number;
   scale: number;
   flex_direction: string;
-  shelfInfo: Info | undefined;
+  shelfInfo: CargoInfo | undefined;
 }> = ({ id, locId, translateX, translateY, rotate, scale, flex_direction, shelfInfo }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const setTargetKey = useSetAtom(targetKeyJotai);
@@ -84,7 +84,7 @@ const Cargo: FC<{
     });
   };
 
-  if (!shelfInfo) return <LoadingStation />;
+  if (!shelfInfo || !shelfInfo.layer) return <LoadingStation />;
   return (
     <>
       {contextHolder}
@@ -97,18 +97,16 @@ const Cargo: FC<{
         rotate={rotate}
       >
         {' '}
-        {shelfInfo?.layer?.map((cargo, index: number) => {
-          const level = index;
-
-          const cargoValue = cargo[level]?.cargo.hasCargo || false;
-
-          const isDisable = cargo[level]?.disable;
+        {Object.entries(shelfInfo.layer).map(([levelStr, info]) => {
+          const level = Number(levelStr);
+          const cargoValue = info.hasCargo || false;
+          const isDisable = info.disable;
 
           return (
             <MemoizedCargo
               key={`${locId}-${level}`}
               level={level}
-              levelName={prefixLevelName(cargo[level]?.levelName)}
+              levelName={prefixLevelName(info.levelName)}
               cargoValue={cargoValue}
               isDisable={isDisable}
               locId={locId}

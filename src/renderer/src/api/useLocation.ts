@@ -1,15 +1,32 @@
 import { useQuery } from '@tanstack/react-query';
-import { array, object, string, boolean, date } from 'yup';
+import { array, object, string, boolean, date, number } from 'yup';
 import api from './axiosClient';
 
-export type CargoAreaInfo = {
-  cargoName: string;
-  hasCargo: {
-    [level: number]: boolean;
-  };
-  areaId: string;
-  isDropping: boolean;
-};
+const levelSchema = object({
+  levelName: string().optional().nullable(),
+  booked: boolean().optional().nullable(),
+  cargo_limit: number().optional(),
+  disable: boolean().optional(),
+  hasCargo: boolean().optional()
+});
+
+export const layerSchema = object().test(
+  'is-layer-type',
+  'useLocationInvalid layer format',
+  (value) => {
+    if (!value || Object.keys(value).length === 0) return true;
+
+    if (typeof value !== 'object' || Array.isArray(value)) return false;
+
+    for (const key in value) {
+      const levelValue = value[key];
+      const valid = levelSchema.isValidSync(levelValue);
+      if (!valid) return false;
+    }
+
+    return true;
+  }
+);
 
 const getLocations = async () => {
   const { data } = await api.get<unknown>('api/test/locations');
@@ -54,16 +71,11 @@ const getLocations = async () => {
       ).required(),
       cargoArea: array(
         object({
-          id: string().optional(),
-          areaId: string().optional(),
+          locationId: string().optional(),
           booker: string().optional(),
           occupier: string().optional(),
-          info: object({
-            name: string().optional().nullable(),
-            layer: array().optional(),
-            areaId: string().optional(),
-            isDropping: boolean().optional()
-          }).optional()
+          layer: layerSchema.optional(),
+          isDropping: boolean().optional()
         }).required()
       ).required()
     }).required();
