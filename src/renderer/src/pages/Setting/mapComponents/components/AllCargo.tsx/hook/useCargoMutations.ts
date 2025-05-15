@@ -4,6 +4,8 @@ import { MessageInstance } from 'antd/es/message/interface';
 import type { CargoMissionEdit, EditColumn } from '../types';
 import client from '@renderer/api/axiosClient';
 import { Err } from '@renderer/utils/responseErr';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
 export const useCargoMutations = (messageApi: MessageInstance) => {
   const queryClient = useQueryClient();
@@ -17,9 +19,7 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
       ]);
       void messageApi.success('ok');
     },
-    onError: (error: Err) => {
-      void messageApi.error('duplicate name');
-    }
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
   const editColumnMutation = useMutation({

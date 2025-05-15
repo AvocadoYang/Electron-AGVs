@@ -28,7 +28,7 @@ const LayerForm: FC<{
   const userHasChangeData = () => {
     setIsEditLayer(true);
   };
-  console.log(layer);
+
   useEffect(() => {
     if (!layer) return;
     Object.entries(layer).forEach(([indexStr, info]) => {
