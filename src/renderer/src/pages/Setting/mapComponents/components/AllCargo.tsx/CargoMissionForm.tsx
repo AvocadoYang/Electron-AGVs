@@ -14,7 +14,6 @@ import { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import useYaw from '@renderer/api/useYaw';
-import useRegionName from '@renderer/api/useLocRegionName';
 import useSpecificShelf from '@renderer/api/useSpecificShelf';
 import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 import { MinusCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons';
@@ -29,7 +28,6 @@ const CargoMissionForm: FC<{
   const { data: misTitle } = useAllMissionTitles();
   const { data: yaw } = useYaw();
   const { data: loc } = useLoc(undefined);
-  const { data: region } = useRegionName();
   const { data: shelf } = useSpecificShelf(locId);
   const { t } = useTranslation();
 
@@ -65,7 +63,6 @@ const CargoMissionForm: FC<{
     .map((v) => ({ value: v.id, label: v.name ?? `Mission ${v.id}` }));
 
   const dirOption = yaw?.map((v) => ({ value: v.id, label: v.yaw }));
-  const regionOption = region?.map((v) => ({ value: v?.id, label: v?.name }));
 
   const relationshipTypeOption = [
     { value: 'fixed', label: t('shelf.cargo_mission.relationship_fixed') },
@@ -94,7 +91,6 @@ const CargoMissionForm: FC<{
     form.setFieldsValue({
       load: loadTask,
       offload: offloadTask,
-      region: shelf.loc_regions?.id,
       yaw: shelf.Dir?.id,
       prepare_point_id: defaultPreparedPoint,
       placement_priority,
@@ -155,14 +151,6 @@ const CargoMissionForm: FC<{
 
         <Form.Item label={t('shelf.cargo_mission.location_name')} name="name">
           <Input placeholder={t('shelf.cargo_mission.enter_name')} />
-        </Form.Item>
-
-        <Form.Item
-          label={t('shelf.cargo_mission.region_name')}
-          name="region"
-          rules={[{ required: true, message: t('shelf.cargo_mission.region_name_required') }]}
-        >
-          <Select options={regionOption} placeholder={t('utils.select')} showSearch />
         </Form.Item>
 
         <Form.Item

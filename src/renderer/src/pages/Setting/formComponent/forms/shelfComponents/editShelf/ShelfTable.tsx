@@ -26,6 +26,7 @@ import { ShelfWithoutList } from '@renderer/api/type/useShelf';
 import SettingCargoStyleForm from './SettingCargoStyleForm';
 import { DataIndex } from '../../antd';
 import { FilterDropdownProps } from 'antd/es/table/interface';
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 
 const ExpandedRowWrapper = styled.div`
   padding: 16px;
@@ -85,8 +86,11 @@ const ShelfTable: FC<{
   const setCStyle = useSetAtom(cargoStyle);
   const setShelfSelectedStyle = useSetAtom(shelfSelectedStyleLocationId);
   const { data: shelfDataSource, isLoading: isLoadingShelf } = useShelf();
+  const { data: locData } = useLoc(undefined);
+
   const { t } = useTranslation();
   const searchInput = useRef<InputRef>(null);
+
   const handleEdit = (id: string) => {
     setSelectId(id);
   };
@@ -155,7 +159,6 @@ const ShelfTable: FC<{
       <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
     ),
     onFilter: (value, record) => {
-      console.log(record);
       return record.Loc.locationId
         .toString()
         .toLowerCase()
@@ -168,7 +171,6 @@ const ShelfTable: FC<{
         }
       }
     },
-
     render: (text: string) => text
   });
 
@@ -212,15 +214,11 @@ const ShelfTable: FC<{
       key: 'yaw',
       render: (_v, recorder) => {
         if (!yaw) return '-';
-
         const yawIndex = yaw?.findIndex((s) => s.id === recorder.Loc.dirId);
-
         if (yawIndex === -1) return '-';
-
         return yaw[yawIndex].yaw;
       }
     },
-
     {
       title: t('edit_shelf_panel.region_name'),
       dataIndex: 'region_name',
@@ -229,12 +227,10 @@ const ShelfTable: FC<{
         return recorder.Loc?.loc_regions?.name || '';
       }
     },
-
     {
       title: t('edit_shelf_panel.setting'),
       dataIndex: 'operation',
       key: 'operation',
-
       render: (_v, recorder) => {
         return (
           <Button
@@ -265,7 +261,6 @@ const ShelfTable: FC<{
     onChange: onSelectChange
   };
 
-  // Jerusalem
   const mergedColumns = columns.map((col) => {
     return {
       ...col,
@@ -276,6 +271,7 @@ const ShelfTable: FC<{
   });
 
   if (isLoadingShelf) return <Skeleton active />;
+
   return (
     <>
       <Wrapper $hasSelect={selectId !== null}>
@@ -293,6 +289,18 @@ const ShelfTable: FC<{
           expandable={{
             expandedRowRender: (record) => {
               const sortedConfig = record.ShelfConfig.sort((a, b) => a.level - b.level);
+              const thisLocationInfo = (locData as LocWithoutArr[]).find(
+                (v) => v.locationId === record.Loc.locationId
+              );
+
+              const relationshipsDisplay = thisLocationInfo?.relationships
+                ? Object.entries(thisLocationInfo.relationships)
+                    .map(
+                      ([locId, type]) =>
+                        `${locId}: ${type === 'fixed' ? t('shelf.cargo_mission.relationship_fixed') : t('shelf.cargo_mission.relationship_non_fixed')}`
+                    )
+                    .join(', ')
+                : t('utils.none');
 
               return (
                 <ExpandedRowWrapper>
@@ -308,8 +316,7 @@ const ShelfTable: FC<{
                   >
                     <Descriptions column={2} bordered size="small">
                       {sortedConfig.map((item) => {
-                        const itemArr = item.name.split('-');
-
+                        const itemArr = item?.name?.split('-') || [];
                         return (
                           <Descriptions.Item
                             key={item.id}
@@ -318,8 +325,10 @@ const ShelfTable: FC<{
                                 <LevelTag color="blue">
                                   {t('edit_shelf_panel.level')} {item.level + 1}
                                 </LevelTag>
-                                {item.name && (
+                                {item?.name ? (
                                   <span>({itemArr.slice(0, itemArr.length - 1).join('-')})</span>
+                                ) : (
+                                  '-'
                                 )}
                               </Flex>
                             }
@@ -339,6 +348,32 @@ const ShelfTable: FC<{
                           </Descriptions.Item>
                         );
                       })}
+                      <Descriptions.Item
+                        label={
+                          <Flex align="center" gap="small">
+                            <span>{t('edit_shelf_panel.placement_priority')}</span>
+                            <Tooltip title={t('shelf.cargo_mission.priority_desc')}>
+                              <InfoCircleOutlined style={{ color: '#1890ff' }} />
+                            </Tooltip>
+                          </Flex>
+                        }
+                        span={2}
+                      >
+                        {thisLocationInfo?.placement_priority ?? t('utils.none')}
+                      </Descriptions.Item>
+                      <Descriptions.Item
+                        label={
+                          <Flex align="center" gap="small">
+                            <span>{t('edit_shelf_panel.relationships')}</span>
+                            <Tooltip title={t('shelf.cargo_mission.relationships_desc')}>
+                              <InfoCircleOutlined style={{ color: '#1890ff' }} />
+                            </Tooltip>
+                          </Flex>
+                        }
+                        span={2}
+                      >
+                        {relationshipsDisplay}
+                      </Descriptions.Item>
                     </Descriptions>
                   </ConfigCard>
                 </ExpandedRowWrapper>

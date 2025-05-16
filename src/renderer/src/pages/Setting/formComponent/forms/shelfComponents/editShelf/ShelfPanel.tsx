@@ -35,15 +35,12 @@ const ShelfPanel: React.FC<{
 
         <ShelfTable selectedRowKeys={selectedRowKeys} setSelectedRowKeys={setSelectedRowKeys} />
       </Flex>
-      {openDrawer ? (
-        <ShelfDrawer
-          openDrawer={openDrawer}
-          setOpenDrawer={setOpenDrawer}
-          selectedRowKeys={selectedRowKeys}
-        />
-      ) : (
-        []
-      )}
+
+      <ShelfDrawer
+        openDrawer={openDrawer}
+        setOpenDrawer={setOpenDrawer}
+        selectedRowKeys={selectedRowKeys}
+      />
     </>
   );
 };
