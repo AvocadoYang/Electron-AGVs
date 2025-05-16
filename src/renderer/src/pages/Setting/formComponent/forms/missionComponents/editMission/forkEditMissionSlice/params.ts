@@ -32,7 +32,7 @@ export const selectLocationOption = [
 
 export const yawOption = ['custom', 'select', 'calculate_by_agv_and_shelf_angle'] as const;
 
-export const forkHeightOption = ['default', 'custom', 'select'] as const;
+export const forkHeightOption = ['default', 'custom', 'select', 'level'] as const;
 
 export const activeWaitRobot = ['disable', 'enable'] as const;
 

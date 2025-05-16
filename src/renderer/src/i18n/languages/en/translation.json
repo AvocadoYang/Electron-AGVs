@@ -48,6 +48,7 @@
     "seconds": "Seconds",
     "meters": "Meters",
     "none": "noneA",
+    "floor": "floor",
     "location_property": {
       "none": "Normal",
       "charge_station": "Charge Station",
@@ -598,6 +599,7 @@
       "auto_preparatory_point": "Automatic Preparatory Point",
       "is_define_heigh": "Fork Height Option",
       "height": "Height",
+      "level": "Level",
 
       "tolerance": "tolerance",
       "lookahead": "lookahead",
@@ -633,6 +635,8 @@
       "fork_height_select_desc": "Automatically set forklift height to shelf height when using quick tasks.",
       "fork_height_default": "Default (350 mm)",
       "fork_height_default_desc": "Set forklift height to a fixed 350mm.",
+      "fork_height_level": "Select a floor",
+      "fork_height_level_desc": "Number of levels of the fork slot at the location",
       "height_required": "Please enter the forklift height.",
       "location_required": "Please select a location.",
       "wait_other_amr_required": "Please select a robot to wait for.",

@@ -27,6 +27,7 @@ const schema = object({
     fork: object({
       is_define_height: string().optional(),
       height: number().optional(),
+      level: number().optional(),
       move: number().optional(),
       shift: number().optional(),
       tilt: number().optional()

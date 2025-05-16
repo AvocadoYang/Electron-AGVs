@@ -43,6 +43,7 @@ type Form_Value = {
   yaw: number;
   fork_height_select: 'custom' | 'select' | 'default';
   height: number;
+  level: number;
   active_wait_amr: 'enable' | 'disable';
   waitOtherAmr: string;
   wait_genre: string;
@@ -180,6 +181,7 @@ const TaskFormFork: FC<{
         yaw: originFormData.operation.yaw,
         fork_height_select: originFormData.io?.fork?.is_define_height,
         height: originFormData.io?.fork?.height,
+        level: (originFormData.io?.fork?.level ?? 0) + 1 || 1,
         active_wait_amr: originFormData.operation.waitGenre !== null ? 'enable' : 'disable',
         waitOtherAmr: originFormData.operation.waitOtherAmr,
         wait_genre: originFormData.operation.waitGenre,
@@ -464,6 +466,11 @@ const TaskFormFork: FC<{
               onChange={(e: Select_Fork_Height_Type) => setSelectForkHeight(e)}
               options={SelectForkHeightOptions}
             />
+            {selectForkHeight === 'level' && (
+              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+                {t('mission.task_table.fork_height_level_desc')}
+              </Typography.Text>
+            )}
             {selectForkHeight === 'custom' && (
               <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
                 {t('mission.task_table.fork_height_custom_desc')}
@@ -496,6 +503,23 @@ const TaskFormFork: FC<{
             rules={[{ required: true, message: t('mission.task_table.height_required') }]}
           >
             <InputNumber min={1} placeholder="1" addonAfter="mm" />
+          </Form.Item>
+        )}
+
+        {selectForkHeight === 'level' && isIncludeH && (
+          <Form.Item
+            label={
+              <Flex gap="small" align="center">
+                <span>{t('mission.task_table.level')}</span>
+                <Tooltip title={t('mission.task_table.camera_config')}>
+                  <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+                </Tooltip>
+              </Flex>
+            }
+            name="level"
+            rules={[{ required: true, message: t('mission.task_table.height_required') }]}
+          >
+            <InputNumber min={1} placeholder="1" addonAfter={t('utils.floor')} />
           </Form.Item>
         )}
 

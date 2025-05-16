@@ -211,6 +211,11 @@ const useTaskOptions = (action: Action_Type) => {
             label: t('mission.task_table.fork_height_default'),
             value: type
           };
+        case 'level':
+          return {
+            label: t('mission.task_table.level'),
+            value: type
+          };
         default:
           return {
             label: type,

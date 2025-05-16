@@ -48,6 +48,7 @@
     "seconds": "秒",
     "meters": "米",
     "none": "無",
+    "floor": "層",
     "location_property": {
       "none": "點位",
       "charge_station": "充電站",
@@ -597,6 +598,7 @@
       "is_define_heigh": "枒杈高度選項",
       "height": "枒杈高度",
       "height_info": "枒杈進入棧板的高度",
+      "level": "儲位層數",
 
       "tolerance": "tolerance",
       "lookahead": "lookahead",
@@ -632,6 +634,8 @@
       "fork_height_select_desc": "使用快速任務或是交管指派時，自動將堆高機高度設定為貨架高度。",
       "fork_height_default": "預設（350毫米）",
       "fork_height_default_desc": "將堆高機高度設定為固定的350毫米。",
+      "fork_height_level": "選擇樓層",
+      "fork_height_level_desc": "地點的儲位的層數",
       "height_required": "請輸入堆高機高度。",
       "location_required": "請選擇一個位置。",
       "wait_other_amr_required": "請選擇要等待的機器人。",
