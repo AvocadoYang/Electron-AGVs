@@ -17,7 +17,27 @@ import useName from '@renderer/api/useAmrName';
 import StartSimModal from '@renderer/pages/Main/components/simulateModal/StartSimModal';
 import SimulationResultsModal from '@renderer/pages/Main/components/simulateModal/SimulationResultsModal';
 import { useMockInfo } from '@renderer/sockets/useMockInfo';
+import styled from 'styled-components';
 const { Header: AntdHeader } = Layout;
+
+const RemainText = styled.span`
+  font-size: 1em;
+  color: #9d9999;
+  margin-right: 8px;
+`;
+
+const Timer = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff4d4f;
+  background: #fef2f2;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  min-width: 60px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+`;
 
 const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const { t, i18n } = useTranslation();
@@ -131,7 +151,12 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
       return;
     }
   }, [script]);
-
+  const formatDuration = (ms: number): string => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  };
   return (
     <>
       {contextHolder}
@@ -210,6 +235,12 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
                   />
                 </svg>
               </Badge> */}
+              {script?.isSimulate ? (
+                <Flex align="center">
+                  <RemainText>{t('sim.start_sim_modal.remainTime')}</RemainText>
+                  <Timer>{formatDuration(script.duration)}</Timer>
+                </Flex>
+              ) : null}
 
               {script?.isSimulate ? (
                 <Tooltip title={t('sim.start_sim_modal.inactive_sim')}>

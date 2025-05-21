@@ -896,7 +896,8 @@
       "active": "Confirm to start",
       "cancel": "Cancel",
       "duration": "Simulation duration",
-      "station_mission": "Active each station task"
+      "station_mission": "Active each station task",
+      "remainTime": "Simulation remaining time"
     },
 
     "results": {

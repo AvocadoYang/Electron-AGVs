@@ -18,12 +18,7 @@ const collectionSchema = object({
   )
     .optional()
     .nullable(),
-  loc_regions: object({
-    id: number().required(),
-    name: string().required()
-  })
-    .optional()
-    .nullable(),
+
   Dir: object({
     id: string().required(),
     yaw: number().required()

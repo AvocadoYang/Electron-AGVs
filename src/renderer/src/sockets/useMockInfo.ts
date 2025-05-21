@@ -2,7 +2,7 @@ import { distinctUntilChanged, filter, from, fromEventPattern, share, switchMap 
 import { isDefined } from 'ts-extras';
 import { io } from './socketConnect';
 import { useState, useEffect } from 'react';
-import { object, ValidationError, boolean, array, string, InferType } from 'yup';
+import { object, ValidationError, boolean, array, string, InferType, number } from 'yup';
 
 const schema = object({
   robot: array(
@@ -14,6 +14,7 @@ const schema = object({
   ).optional(),
   isSimulate: boolean().required(),
   scriptName: string().required(),
+  duration: number().required(),
   result: string().required()
 }).optional();
 

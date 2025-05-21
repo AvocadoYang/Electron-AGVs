@@ -127,7 +127,6 @@ const CargoDisplay: FC<CargoDisplayProps> = ({
       $isDisable={isDisable}
       $isSelecting={isStartSelecting}
       $canBeClick={isStartSelecting ? canBeClickInSelection : true}
-      disabled={isDisable}
       onMouseDown={(e) => handleMouseDown(e, locId, level)}
       onClick={isStartSelecting ? handleQuickMissionPayload : undefined}
       role="button"

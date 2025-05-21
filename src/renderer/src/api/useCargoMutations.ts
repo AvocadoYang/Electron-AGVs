@@ -6,6 +6,8 @@ import type {
 } from '../pages/Simulate/mapComponents/components/AllCargo.tsx/types';
 import client from '@renderer/api/axiosClient';
 import { Err } from '@renderer/utils/responseErr';
+import { errorHandler } from '@renderer/utils/utils';
+import { ErrorResponse } from '@renderer/utils/globalType';
 
 export const useCargoMutations = (messageApi: MessageInstance) => {
   const queryClient = useQueryClient();
@@ -19,9 +21,7 @@ export const useCargoMutations = (messageApi: MessageInstance) => {
       ]);
       void messageApi.success('ok');
     },
-    onError: () => {
-      void messageApi.error('duplicate name');
-    }
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
   const editColumnMutation = useMutation({

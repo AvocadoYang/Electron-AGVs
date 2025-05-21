@@ -896,7 +896,8 @@
       "active": "確認啟動",
       "cancel": "取消",
       "duration": "模擬時長",
-      "station_mission": "啟動各站點任務"
+      "station_mission": "啟動各站點任務",
+      "remainTime": "模擬剩餘時間"
     },
 
     "results": {

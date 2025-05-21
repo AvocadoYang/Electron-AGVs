@@ -13,14 +13,7 @@ const shelfSchema = array(
       locationId: string().required(),
       areaType: string().optional(),
       dirId: string().nullable(),
-      shelfId: string().optional(),
-      loc_regions: object({
-        id: number().optional().nullable(),
-        name: string().optional().nullable(),
-        region_task_id: number().optional().nullable()
-      })
-        .optional()
-        .nullable()
+      shelfId: string().optional()
     }).required(),
     ShelfCategory: object({
       id: string().required(),
@@ -60,6 +53,6 @@ const useShelf = () => {
   return useQuery(['shelf'], getShelves);
 };
 
-export type ShelfType = InferType<typeof shelfSchema>
+export type ShelfType = InferType<typeof shelfSchema>;
 
 export default useShelf;
