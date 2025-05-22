@@ -6,7 +6,8 @@ import {
   CarTag,
   HiddenRow,
   DropDown,
-  RowFourth
+  RowFourth,
+  RowFifth
 } from './components/Lists';
 import './car_info.css';
 import { useMemo, useState } from 'react';
@@ -90,6 +91,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
             <HiddenRow openHiddenRow={openHiddenRow} isDark={isDark} amrId={id}></HiddenRow>
             <RowThread amrId={id} isDark={isDark}></RowThread>
             <RowFourth amrId={id} isDark={isDark}></RowFourth>
+            <RowFifth amrId={id} isDark={isDark}></RowFifth>
             <CarTag openFullInfo={openFullInfo} amrId={id}></CarTag>
           </InfoWrap>
         </Popover>

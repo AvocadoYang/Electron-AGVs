@@ -20,6 +20,7 @@
     "show": "show",
     "status": "Status",
     "road_conditions": "Road conditions",
+    "maintenance_level": "Maintenance level",
     "mission_is_required": "Mission is required",
     "point_type": "Point Type",
     "save": "Save",
@@ -56,6 +57,17 @@
       "shelve": "Shelf",
       "wait_side": "Waiting Side"
     }
+  },
+
+  "maintenance": {
+    "update": "update maintenance level",
+    "unknown": "initial value",
+    "normal": "normal",
+    "forbidden_all_mission": "Cannot accept missions",
+    "forbidden_wcs_mission": "Cannot accept WCS mission",
+    "forbidden_rcs_mission": "Cannot accept traffic control mission",
+    "forbidden_user_mission": "Cannot accept user missions",
+    "broken": "The vehicle is damaged"
   },
 
   "scale_pad": {
@@ -837,7 +849,7 @@
         "output": "Output",
         "cargo_number": "Cargo Number",
         "respawn_cargo": "respawn cargo",
-        "speed": "Out cargo speed (millisecond)",
+        "speed": "Out cargo speed (second)",
         "specify_car": "Specify car",
         "placement": "Placement"
       }

@@ -16,266 +16,70 @@ import {
 } from 'rxjs';
 import { io } from './socketConnect';
 import { isDefined } from 'ts-extras';
-import { array, boolean, mixed, number, object, string, ValidationError } from 'yup';
+import { array, boolean, number, object, string, ValidationError } from 'yup';
 import { translate } from '@renderer/i18n';
+import { useTranslation } from 'react-i18next';
 
-export interface InZoneItem {
-  key?: string;
-  value?: boolean;
+export enum MaintenanceLevel {
+  /**初始值 */
+  UNKNOWN,
+
+  /**  正常可接所有任務 */
+  NORMAL,
+
+  /** 不可接所有任務*/
+  FORBIDDEN_ALL_MISSION,
+
+  /** 不可接WCS所有任務 */
+  FORBIDDEN_WCS_MISSION,
+
+  /** 不可接交管所有任務 */
+  FORBIDDEN_RCS_MISSION,
+
+  /** 不可接USER所有任務 */
+  FORBIDDEN_USER_MISSION,
+
+  /**不可用壞爛*/
+  BROKEN
 }
 
-const initialValue = {
-  amrId: '',
-  pose: {},
-
-  connect_status: false,
-  Query: '',
-  Set: '',
-  MultiSet: '',
-  error_code: '',
-  error_info: '',
-  enable_ultrasoumd: false,
-  ultrasound: '',
-  enable_baffle: false,
-  baffle_left: false,
-  baffle_right: false,
-  manual_mode: false,
-  enforce_charge: false,
-  set_charge: false,
-  battery: 0,
-  charge_relay_status: false,
-  voltage: 0,
-  current: 0,
-
-  front_2d_layer: 0,
-  enable_2d_lidar: false,
-  obstacle_2d_signal: false,
-  obstacle_rear_2d_signal: false,
-  obstacle_3d_signal: false,
-  enable_recovery: false,
-  enable_reboot: false,
-  enable_tip: false,
-  tip_left: false,
-  tip_right: false,
-
-  set_tip: 0,
-
-  set_height: 0,
-  current_height: 0,
-  linear_x: 0,
-  angular_z: 0,
-  odom_x: 0,
-
-  odom_y: 0,
-
-  odom_w: 0,
-  emergency_signal: '',
-  emergency_stop: false,
-  bumper: false,
-  activated: false,
-  is_running: false,
-  warning_msg: '',
-  warning_id: 0,
-  warning: 0,
-  task_process: 0,
-  pallet_conflict: '',
-  reset_cargo: 0,
-  grid_info: '',
-  charging: false,
-  is_arrive: false,
-  is_locations: [],
-  checked_locations: [],
-  is_taking_goods: false,
-  is_dropping_goods: false,
-  is_drop_goods: false,
-  is_take_goods: false,
-  is_finished_mission: false,
-  leftArea: 0,
-  midArea: 0,
-  isAllowInput: 0,
-  isAllowOutput: 0,
-  isCompleteInput: 0,
-  isCompleteOutput: 0,
-  isAllowCharge: 0,
-  isStopCharge: 0,
-  region: {},
-  executeInput: 0,
-  executeOutput: 0,
-  executeCharge: 0,
-  executeStopCharge: 0,
-  send_mission: [],
-  check_mission: [],
-  start_mission: false,
-  cancel_mission: false,
-  charge_mission: false,
-  pause: false,
-  canTakeGoods: false,
-  canDropGoods: false,
-  arriveInit: false,
-  hasPallet: false,
-  carrierId: '',
-  error: '',
-  rosStatus: '',
-  machineStatus: '',
-  smStatus: '',
-  hasCargo: false,
-  maintenanceLevel: ''
-};
-
-type FleetInfoData = {
-  amrId: string;
-  pose?: { x?: number; y?: number; yaw?: number };
-  IO?: {
-    connect_status?: boolean;
-    Query?: string;
-    Set?: string;
-    MultiSet?: string;
-    error_code?: string;
-    error_info?: string;
-    enable_ultrasoumd?: boolean;
-    ultrasound?: string;
-    enable_baffle?: boolean;
-
-    baffle_left?: boolean | number;
-    baffle_right?: boolean | number;
-    manual_mode?: boolean;
-    enforce_charge?: boolean;
-    set_charge?: boolean;
-    battery?: number;
-    charge_relay_status?: boolean;
-
-    voltage?: number;
-    current?: number;
-
-    front_2d_layer?: number;
-    enable_2d_lidar?: boolean;
-    obstacle_2d_signal?: boolean;
-    obstacle_rear_2d_signal?: boolean;
-    obstacle_3d_signal?: boolean;
-    enable_recovery?: boolean;
-    enable_reboot?: boolean;
-    enable_tip?: boolean;
-    set_tip?: number;
-    tip_left?: boolean;
-    tip_right?: boolean;
-    set_height?: number;
-    current_height?: number;
-    linear_x?: number;
-    angular_z?: number;
-    odom_x?: number;
-    odom_y?: number;
-    odom_w?: number;
-    emergency_signal?: string;
-    emergency_stop?: boolean;
-    bumper?: boolean;
+export type FleetInfo = {
+  IO: {
+    connect_status: boolean;
+    baffle_left: boolean;
+    baffle_right: boolean;
+    manual_mode: boolean;
+    enforce_charge: boolean;
+    set_charge: boolean;
+    battery: number;
+    front_2d_layer: number;
+    enable_2d_lidar: boolean;
+    obstacle_2d_signal: boolean;
+    obstacle_rear_2d_signal: boolean;
+    obstacle_3d_signal: boolean;
+    enable_recovery: boolean;
+    enable_reboot: boolean;
+    enable_tip: boolean;
+    tip_left: boolean;
+    tip_right: boolean;
+    set_height: number;
+    current_height: number;
+    linear_x: number;
+    angular_z: number;
+    odom_x: number;
+    odom_w: number;
+    emergency_signal: string;
+    emergency_stop: boolean;
+    bumper: boolean;
+    recovery: boolean;
   };
-
-  read_status?: {
-    read?: {
-      is_arrive?: boolean;
-      is_locations?: (number | undefined)[];
-      checked_locations?: (number | undefined)[];
-      is_taking_goods?: boolean;
-      is_take_goods?: boolean;
-      is_dropping_goods?: boolean;
-      is_drop_goods?: boolean;
-      with_goods?: boolean;
-      is_finished_mission?: boolean;
-    };
-    info?: {
-      activated?: boolean;
-      is_running?: boolean;
-      warning_msg?: string;
-      warning_id?: number;
-      warning?: number;
-      task_process?: number;
-      action_process?: string;
-      pallet_conflict?: string;
-      grid_info?: string;
-      charging?: boolean;
-      heartbeat?: number;
-      error?: string;
-    };
-  };
-
-  write_status?: {
-    write?: {
-      send_mission?: (number | undefined)[];
-      check_mission?: (number | undefined)[];
-      start_mission?: boolean;
-      cancel_mission?: boolean;
-      pause?: boolean;
-      canTakeGoods?: boolean;
-      canDropGoods?: boolean;
-      heartbeat?: number;
-      charge_mission?: boolean;
-    };
-
-    region?: {
-      regionType?: string;
-      max_height?: number;
-      min_height?: number;
-      max_speed?: number;
-    };
-    action?: {
-      operation?: {
-        type?: string;
-        control?: (string | undefined)[];
-        wait?: number;
-        is_define_id?: string;
-        id?: number;
-        is_define_yaw?: number;
-        yaw?: number;
-        tolerance?: number;
-        lookahead?: number;
-      };
-      io?: {
-        fork?: {
-          is_define_height?: string;
-          execute?: boolean;
-          height?: number;
-          move?: number;
-          shift?: number;
-          tilt?: number;
-        };
-        camera?: {
-          execute?: boolean;
-          config?: number;
-          modify_dis?: number;
-        };
-      };
-    };
-  };
-
-  plc_read?: {
-    // camera
-    leftArea?: number;
-    midArea?: number;
-
-    isAllowInput?: number;
-    isAllowOutput?: number;
-    isCompleteInput?: number;
-    isCompleteOutput?: number;
-    isAllowCharge?: number;
-    isStopCharge?: number;
-  };
-  plc_write?: {
-    executeInput?: number;
-    executeOutput?: number;
-    executeCharge?: number;
-    executeStopCharge?: number;
-  };
-  manual_charge?: boolean;
-  hasPallet?: boolean;
-  carrierId?: string;
-  error?: string;
-  rosError?: string;
-  rosStatus?: string;
-  arriveInit?: boolean;
-  machineStatus?: string;
-  smStatus?: string;
-  hasCargo?: boolean;
-  maintenanceLevel?: string | undefined;
+  doingTask: boolean;
+  rosStatus: string;
+  rosError: string;
+  smStatus: string;
+  hasCargo: boolean;
+  arriveInit: boolean;
+  maintenanceLevel: MaintenanceLevel;
 };
 
 const schema = () =>
@@ -300,8 +104,8 @@ const schema = () =>
         ultrasound: string().optional(),
         enable_baffle: boolean().optional(),
 
-        baffle_left: mixed().optional(),
-        baffle_right: mixed().optional(),
+        baffle_left: boolean().optional(),
+        baffle_right: boolean().optional(),
         manual_mode: boolean().optional(),
         enforce_charge: boolean().optional(),
         set_charge: boolean().optional(),
@@ -336,121 +140,17 @@ const schema = () =>
         odom_w: number().optional(),
         emergency_signal: string().optional(),
         emergency_stop: boolean().optional(),
-        bumper: boolean().optional()
+        bumper: boolean().optional(),
+        recovery: boolean().optional()
       }).optional(),
 
-      read_status: object({
-        read: object({
-          is_arrive: boolean().optional(),
-          is_locations: array(number().optional()),
-          checked_locations: array(number().optional()),
-          is_taking_goods: boolean().optional(),
-          is_dropping_goods: boolean().optional(),
-          is_drop_goods: boolean().optional(),
-          is_take_goods: boolean().optional(),
-          with_goods: boolean().optional(),
-          is_finished_mission: boolean().optional()
-        }).optional(),
-        info: object({
-          activated: boolean().optional(),
-          is_running: boolean().optional(),
-          warning_msg: string().optional(),
-          warning_id: number().optional(),
-          warning: number().optional(),
-          task_process: number().optional(),
-          action_process: string().optional(),
-          pallet_conflict: string().optional(),
-          reset_cargo: number().optional(),
-          grid_info: string().optional(),
-          charging: boolean().optional(),
-          heartbeat: number().optional(),
-          error: string().optional()
-        }).optional()
-      }).optional(),
-
-      write_status: object({
-        write: object({
-          send_mission: array(number().optional()),
-          check_mission: array(number().optional()),
-          start_mission: boolean().optional(),
-          cancel_mission: boolean().optional(),
-          pause: boolean().optional(),
-          canTakeGoods: boolean().optional(),
-          canDropGoods: boolean().optional(),
-          heartbeat: number().optional(),
-          charge_mission: boolean().optional()
-        }).optional(),
-        region: object({
-          regionType: string().optional(),
-          max_height: number().optional(),
-          min_height: number().optional(),
-          max_speed: number().optional()
-        }).optional(),
-
-        action: object({
-          operation: object({
-            type: string().optional(),
-            control: array(string().optional()).optional(),
-            wait: number().optional(),
-            is_define_id: string().optional(),
-            id: number().optional(),
-            is_define_yaw: number().optional(),
-            yaw: number().optional(),
-            tolerance: number().optional(),
-            lookahead: number().optional(),
-
-            waitOtherAmr: string().optional().nullable(),
-            waitGenre: string().optional().nullable(),
-            auto_preparatory_point: boolean().optional()
-          }).optional(),
-          io: object({
-            fork: object({
-              is_define_height: string().optional(),
-              execute: boolean().optional(),
-              height: number().optional(),
-              move: number().optional(),
-              shift: number().optional(),
-
-              tilt: number().optional()
-            }).optional(),
-            camera: object({
-              execute: boolean().optional(),
-              config: number().optional(),
-              modify_dis: number().optional()
-            }).optional()
-          }).optional()
-        }).optional()
-      }).optional(),
-
-      plc_read: object({
-        leftArea: number().optional(),
-        midArea: number().optional(),
-        isAllowInput: number().optional(),
-        isAllowOutput: number().optional(),
-        isCompleteInput: number().optional(),
-        isCompleteOutput: number().optional(),
-        isAllowCharge: number().optional(),
-        isStopCharge: number().optional()
-      }).optional(),
-
-      plc_write: object({
-        executeInput: number().optional(),
-        executeOutput: number().optional(),
-        executeCharge: number().optional(),
-        executeStopCharge: number().optional()
-      }).optional(),
-      // hasPallet: boolean().optional(),
-      // carrierId: string().optional(),
-      manual_charge: boolean().optional(),
-      error: string().optional(),
       rosError: string().optional(),
       doingTask: boolean().optional(),
       rosStatus: string().optional(),
-      machineStatus: string().optional(),
       arriveInit: boolean().optional().default(false),
       smStatus: string().optional(),
       hasCargo: boolean().optional(),
-      maintenanceLevel: string().optional()
+      maintenanceLevel: number().optional()
     }).required()
   ).required();
 
@@ -523,7 +223,7 @@ const amrId2Color = (amrId: string) => {
 export const useAMR = (amrId: string) => {
   const [pose, setPose] = useState<Pose>();
   const [originPose, setOriginPose] = useState<Pose>();
-  const [data, setData] = useState<FleetInfoData>(initialValue);
+  const [data, setData] = useState<FleetInfo>();
 
   useEffect(() => {
     const profile$ = profiles$.pipe(
@@ -557,7 +257,7 @@ export const useAMR = (amrId: string) => {
 
     const sub2 = profile$.subscribe((fleetInfo) => {
       setData({
-        ...(fleetInfo as FleetInfoData)
+        ...(fleetInfo as FleetInfo)
       });
     });
 
@@ -780,12 +480,62 @@ export const useAmrStatus = (amrId: string) => {
     const battery$ = profile$
       .pipe(
         map((info) => {
-          const { error, machineStatus, rosStatus } = info;
-          const errorText = error ? `🤨 ${translate('normal', String(error))}` : '';
-          const machineText = machineStatus ? `${translate('normal', String(machineStatus))}` : '';
+          const { rosStatus } = info;
+
           const statusText = rosStatus ? `${translate('normal', String(rosStatus))}` : '';
-          const tipText = errorText || machineText || statusText;
+          const tipText = statusText;
           return tipText;
+        }),
+        distinctUntilChanged()
+      )
+      .subscribe((info) => {
+        setStatus(info);
+      });
+
+    return () => {
+      battery$.unsubscribe();
+    };
+  }, [amrId]);
+
+  return { status };
+};
+
+export const useMaintenanceStatus = (amrId: string) => {
+  const [status, setStatus] = useState<string>('');
+  const { t } = useTranslation();
+
+  const translateMaintenance = (value: MaintenanceLevel | undefined) => {
+    switch (value) {
+      case undefined:
+        return '';
+      case MaintenanceLevel.UNKNOWN:
+        return t('maintenance.unknown');
+      case MaintenanceLevel.NORMAL:
+        return t('maintenance.normal');
+      case MaintenanceLevel.FORBIDDEN_ALL_MISSION:
+        return t('maintenance.forbidden_all_mission');
+      case MaintenanceLevel.FORBIDDEN_WCS_MISSION:
+        return t('maintenance.forbidden_wcs_mission');
+      case MaintenanceLevel.FORBIDDEN_RCS_MISSION:
+        return t('maintenance.forbidden_rcs_mission');
+      case MaintenanceLevel.FORBIDDEN_USER_MISSION:
+        return t('maintenance.forbidden_user_mission');
+      case MaintenanceLevel.BROKEN:
+        return t('maintenance.broken');
+    }
+  };
+
+  useEffect(() => {
+    const maintenance$ = profiles$.pipe(
+      map((p) => p.find((x) => x.amrId === amrId)),
+      filter(isDefined),
+      share()
+    );
+    const battery$ = maintenance$
+      .pipe(
+        map((info) => {
+          const { maintenanceLevel } = info;
+          return translateMaintenance(maintenanceLevel);
         }),
         distinctUntilChanged()
       )

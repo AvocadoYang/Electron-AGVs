@@ -16,6 +16,7 @@
     "amr_id": "車輛",
     "status": "狀態",
     "road_conditions": "路況",
+    "maintenance_level": "車況",
     "location": "地點",
     "yaw": "轉角",
     "opacity": "淡化",
@@ -56,6 +57,17 @@
       "shelve": "貨區",
       "wait_side": "待命區"
     }
+  },
+
+  "maintenance": {
+    "update": "更新車輛狀態",
+    "unknown": "初始值",
+    "normal": "正常",
+    "forbidden_all_mission": "不可接任務",
+    "forbidden_wcs_mission": "不可接WCS任務",
+    "forbidden_rcs_mission": "不可接交管任務",
+    "forbidden_user_mission": "不可接使用者任務",
+    "broken": "車輛毀損"
   },
 
   "scale_pad": {
@@ -837,7 +849,7 @@
         "output": "出貨",
         "cargo_number": "貨物數量",
         "respawn_cargo": "自動重生貨物",
-        "speed": "出貨速度 (毫秒 millisecond)",
+        "speed": "出貨速度 (秒 second)",
         "specify_car": "指定車輛",
         "placement": "放置位置"
       }

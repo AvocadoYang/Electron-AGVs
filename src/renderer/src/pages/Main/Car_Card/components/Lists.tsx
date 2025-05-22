@@ -17,7 +17,8 @@ import {
   useCloseLoc,
   useIsLogIn,
   useYaw,
-  useXY
+  useXY,
+  useMaintenanceStatus
 } from '@renderer/sockets/useAMRInfo';
 import { useTranslation } from 'react-i18next';
 import { CarryTag, ChargingTag, ManualTag, MissionTag, PowerTag } from './Tags';
@@ -146,7 +147,7 @@ const LocValue: React.FC<{ amrId: string; isDark: boolean }> = memo(({ amrId, is
     </p>
   );
 });
-const CardSpeed: React.FC<{ amrId: string; isDark: boolean }> = memo(({ amrId, isDark }) => {
+const CardSpeed: React.FC<{ amrId: string; isDark: boolean }> = memo(({ isDark }) => {
   return (
     <p className="value">
       {`1.5`}
@@ -323,6 +324,11 @@ const RoadStatue: React.FC<{ amrId: string }> = ({ amrId }) => {
   );
 };
 
+const MaintenanceStatue: React.FC<{ amrId: string }> = ({ amrId }) => {
+  const status = useMaintenanceStatus(amrId);
+  return <RoadStyle style={{ color: '#585757' }}>{status.status}</RoadStyle>;
+};
+
 export const RowFourth: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDark, amrId }) => {
   const { t } = useTranslation();
   return (
@@ -331,6 +337,18 @@ export const RowFourth: React.FC<{ isDark: boolean; amrId: string }> = memo(({ i
         className={`third-row-span ${isDark ? 'third-row-span-dark' : ''}`}
       >{`${t('utils.road_conditions')}:`}</span>
       <RoadStatue amrId={amrId}></RoadStatue>
+    </CarRow3>
+  );
+});
+
+export const RowFifth: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDark, amrId }) => {
+  const { t } = useTranslation();
+  return (
+    <CarRow3 is_dark={isDark.toString()}>
+      <span
+        className={`third-row-span ${isDark ? 'third-row-span-dark' : ''}`}
+      >{`${t('utils.maintenance_level')}:`}</span>
+      <MaintenanceStatue amrId={amrId}></MaintenanceStatue>
     </CarRow3>
   );
 });

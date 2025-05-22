@@ -95,7 +95,7 @@ const OutputFrom: FC<{ form: FormInstance; tempSaveData: () => void }> = ({
       </Form.Item>
 
       <Form.Item name="output_cargo_speed" label={t('sim.cargo.output.speed')}>
-        <InputNumber min={1000} style={{ width: '100%' }} placeholder="Enter speed" />
+        <InputNumber min={1} style={{ width: '100%' }} placeholder="Enter speed" />
       </Form.Item>
 
       <Form.Item name="specify_car" label={t('sim.cargo.output.specify_car')}>
