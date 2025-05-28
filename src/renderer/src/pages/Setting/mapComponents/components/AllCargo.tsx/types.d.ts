@@ -15,6 +15,7 @@ export type FormCargo = {
   load: string;
   offload: string;
   placement_priority: number;
+  use_script_placement: boolean;
   relationships: unknown;
 };
 export type LayerType = {

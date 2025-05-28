@@ -33,7 +33,8 @@ export const initialTagFormValue = {
   count: undefined,
   all_forbidden: false,
   not_forbidden: false,
-  hight_limit: undefined
+  hight_limit: undefined,
+  view_available: undefined
 };
 
 export const initialTagSettingValue = {

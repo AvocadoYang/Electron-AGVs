@@ -345,51 +345,49 @@ const TaskFormFork: FC<{
           </Form.Item>
         )}
 
-        {actionState !== 'spin' && (
-          <Form.Item
-            label={
-              <Flex gap="small" align="center">
-                <span>{t('mission.task_table.is_custom_location')}</span>
-                <Tooltip title={t('mission.task_table.location_tooltip')}>
-                  <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
-                </Tooltip>
-              </Flex>
-            }
-            name="is_define_id"
-          >
-            <Select
-              value={selectLocationType}
-              onChange={(e: Select_Location_Type) => setSelectLocationType(e)}
-              options={SelectLocationOptions}
-            />
+        <Form.Item
+          label={
+            <Flex gap="small" align="center">
+              <span>{t('mission.task_table.is_custom_location')}</span>
+              <Tooltip title={t('mission.task_table.location_tooltip')}>
+                <QuestionCircleOutlined style={{ color: '#8c8c8c' }} />
+              </Tooltip>
+            </Flex>
+          }
+          name="is_define_id"
+        >
+          <Select
+            value={selectLocationType}
+            onChange={(e: Select_Location_Type) => setSelectLocationType(e)}
+            options={SelectLocationOptions}
+          />
 
-            {selectLocationType === 'custom' && (
-              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
-                {t('mission.task_table.location_custom_desc')}
-              </Typography.Text>
-            )}
-            {selectLocationType === 'select' && (
-              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
-                {t('mission.task_table.location_select_desc')}
-              </Typography.Text>
-            )}
-            {selectLocationType === 'available_charge_station' && (
-              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
-                {t('mission.task_table.location_charge_station_desc')}
-              </Typography.Text>
-            )}
-            {selectLocationType === 'prepare_point' && (
-              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
-                {t('mission.task_table.prepare_point_desc')}
-              </Typography.Text>
-            )}
-            {selectLocationType === 'back_to_load_place' && (
-              <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
-                {t('mission.task_table.back_to_load_place_desc')}
-              </Typography.Text>
-            )}
-          </Form.Item>
-        )}
+          {selectLocationType === 'custom' && (
+            <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+              {t('mission.task_table.location_custom_desc')}
+            </Typography.Text>
+          )}
+          {selectLocationType === 'select' && (
+            <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+              {t('mission.task_table.location_select_desc')}
+            </Typography.Text>
+          )}
+          {selectLocationType === 'available_charge_station' && (
+            <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+              {t('mission.task_table.location_charge_station_desc')}
+            </Typography.Text>
+          )}
+          {selectLocationType === 'prepare_point' && (
+            <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+              {t('mission.task_table.prepare_point_desc')}
+            </Typography.Text>
+          )}
+          {selectLocationType === 'back_to_load_place' && (
+            <Typography.Text type="secondary" style={{ marginTop: 8, display: 'block' }}>
+              {t('mission.task_table.back_to_load_place_desc')}
+            </Typography.Text>
+          )}
+        </Form.Item>
 
         {selectLocationType === 'custom' && actionState !== 'spin' && (
           <Form.Item

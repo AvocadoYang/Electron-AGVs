@@ -127,6 +127,7 @@ const useTaskOptions = (action: Action_Type) => {
               label: t('mission.task_table.back_to_load_place'),
               value: type
             };
+
           default:
             return {
               label: type,

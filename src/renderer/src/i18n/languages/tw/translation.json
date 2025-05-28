@@ -296,6 +296,8 @@
     "height_limit_zone": "限高區",
     "restricted_zone": "禁制區",
     "controlled_zone": "限制區",
+    "view_available_zone": "查看區",
+    "view_available": "查看區",
     "hint": "參數數設定尚未完成！",
     "placeholder": {
       "zone_name": "請輸入區域名稱",
@@ -303,7 +305,8 @@
       "forbidden": "請選擇禁止車輛",
       "limit": "請輸入限制車數",
       "hight_limit": "請輸入高度限制",
-      "speed_limit": "請輸入最高速限"
+      "speed_limit": "請輸入最高速限",
+      "view_available": "請輸入區域外等待點"
     },
     "waring": {
       "tag_not_yet_setting": "尚未設定完成區域參數設定",
@@ -365,7 +368,9 @@
       "yaw_desc": "如果在dynamic_mission中的有自轉的子任務角度設定為'自動（快速任務架方向）'就會使用到該角度",
       "prepare_point_desc": "dynamic_mission時, 有指定'自動(預設預派點)'時, 會帶入此地點ID",
       "priority_desc": "設定一個數字（0-1000）以確定該位置發送或接收貨物的優先級。較高的值會優先於較低值的其他位置。例如，放貨時,優先級為20的目的地會先於優先級為15的目的地被放貨。反之,取貨時, 優先級15會先比優先度20先被執行取貨",
-      "relationships_desc": "定義與其他位置的貨物放置關係。選擇「固定」以設定嚴格的起點-終點對（例如，僅到一個位置）。選擇「非固定」以允許靈活放置，若主要位置不可用，貨物可移至備用位置。"
+      "relationships_desc": "定義與其他位置的貨物放置關係。選擇「固定」以設定嚴格的起點-終點對（例如，僅到一個位置）。選擇「非固定」以允許靈活放置，若主要位置不可用，貨物可移至備用位置。",
+      "use_script_placement": "使用模擬頁面的放置地點",
+      "use_script_placement_desc": "啟動時, 在執行模擬或是實際與WCS派發任務會依照模擬頁面設定此地點的放置位置擺放, 所有地點的關係會是'非固定'"
     },
     "layer_form": {
       "layers": "個別樓層設定",

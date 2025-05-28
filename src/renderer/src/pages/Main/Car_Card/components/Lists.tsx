@@ -151,7 +151,7 @@ const CardSpeed: React.FC<{ amrId: string; isDark: boolean }> = memo(({ isDark }
   return (
     <p className="value">
       {`1.5`}
-      <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{'h/s'}</span>
+      <span className={`${isDark ? 'symbol-dark' : 'symbol'}`}>{'m/s'}</span>
     </p>
   );
 });

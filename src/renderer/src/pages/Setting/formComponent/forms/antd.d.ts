@@ -17,6 +17,7 @@ export type ZoneTableData = {
     hight_limit: number | null;
     speed_limit: number | null;
     limitNum: number | null;
+    view_available: string | null;
   };
   backgroundColor: string;
   startPoint: { startX: number; startY: number };

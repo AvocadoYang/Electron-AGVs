@@ -308,13 +308,16 @@
     "height_limit_zone": "Height limit zone",
     "restricted_zone": "Restricted zone",
     "controlled_zone": "Controlled zone",
+    "view_available_zone": "View available zone",
+    "view_available": "View available",
     "placeholder": {
       "zone_name": "Please enter zone name",
       "zone_category": "Please select zone category (multiple selection allowed)",
       "forbidden": "Please select forbidden vehicles",
       "limit": "Please enter vehicle limit",
       "hight_limit": "Please enter height limit",
-      "speed_limit": "Please enter maximum speed limit"
+      "speed_limit": "Please enter maximum speed limit",
+      "view_available": "Please enter waiting point"
     },
     "waring": {
       "tag_not_yet_setting": "The tag setting is still not setting ",
@@ -370,7 +373,9 @@
       "yaw_desc": "This angle will be used if the sub-mission angle with rotation in dynamic_mission is set to 'Auto (Fast Mission Frame Direction)'",
       "prepare_point_desc": "When dynamic_mission is selected, if 'Automatic (preset pre-assignment point)' is specified, this location ID will be imported",
       "priority_desc": "Set a number (0-1000) to determine the priority of this location for sending or receiving goods. Higher values ​​will take precedence over other locations with lower values. For example, when releasing goods, a destination with a priority of 20 will be released before a destination with a priority of 15. Conversely, when picking up goods, a destination with a priority of 15 will be picked up before a destination with a priority of 20",
-      "relationships_desc": "Define connections to other locations for cargo placement. Select 'Fixed' for strict source-destination pairs (e.g., only to one location). Select 'Non-Fixed' for flexible placement, allowing cargo to move to backup locations if the primary is unavailable."
+      "relationships_desc": "Define connections to other locations for cargo placement. Select 'Fixed' for strict source-destination pairs (e.g., only to one location). Select 'Non-Fixed' for flexible placement, allowing cargo to move to backup locations if the primary is unavailable.",
+      "use_script_placement": "Use the placement of the simulated page",
+      "use_script_placement_desc": "When enabled, when executing simulations or dispatching tasks with WCS, the placement of this location will be set according to the simulation page. The relationship between all locations will be 'non-fixed'"
     },
     "layer_form": {
       "layers": "Individual floor settings",

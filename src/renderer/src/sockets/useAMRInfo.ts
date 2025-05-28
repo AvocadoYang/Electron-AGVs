@@ -142,7 +142,9 @@ const schema = () =>
         emergency_stop: boolean().optional(),
         bumper: boolean().optional(),
         recovery: boolean().optional()
-      }).optional(),
+      })
+        .optional()
+        .nullable(),
 
       rosError: string().optional(),
       doingTask: boolean().optional(),

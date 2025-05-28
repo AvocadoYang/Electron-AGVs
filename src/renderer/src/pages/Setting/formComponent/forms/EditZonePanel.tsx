@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import './form.css';
 import { useTranslation } from 'react-i18next';
 import { CloseOutlined } from '@ant-design/icons';
@@ -28,6 +28,7 @@ import { errorHandler } from '@renderer/utils/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import useMap from '@renderer/api/useMap';
 import useAmrName from '@renderer/api/useAmrName';
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 
 type TagRender = SelectProps['tagRender'];
 
@@ -79,7 +80,7 @@ const EditZonePanel: React.FC<{
   const { data } = useMap();
   const { data: allAmr } = useAmrName();
   const [showTagSetting, setShowTagSetting] = useState(false);
-
+  const { data: loc } = useLoc(undefined);
   const [tagSettingForm] = Form.useForm();
   const [isHint, setIsHint] = useState(false);
   const queryClient = useQueryClient();
@@ -91,14 +92,28 @@ const EditZonePanel: React.FC<{
   const [maxSpeed, setMaxSpeed] = useState<number | undefined>(undefined);
   const [maxHight, setMaxHight] = useState<number | undefined>(undefined);
   const [limitCount, setLimitCount] = useState<number | undefined>(undefined);
+  const [viewAvailable, setViewAvailable] = useState<string | undefined>(undefined);
 
   const [messageApi, contextHolders] = message.useMessage();
+
+  const viewAvailableOption = useMemo(() => {
+    const info = loc as LocWithoutArr[];
+    const mixData = info
+      .filter((v) => v.areaType !== '存貨區')
+      .sort((a, b) => Number(a.locationId) - Number(b.locationId))
+      .map((v) => ({
+        label: v.locationId,
+        value: v.locationId
+      }));
+    return mixData;
+  }, [loc, t]);
 
   const zoneType: SelectProps['options'] = [
     { label: `${t('edit_zone_panel.deceleration_zone')}`, value: '減速區' },
     { label: `${t('edit_zone_panel.height_limit_zone')}`, value: '限高區' },
     { label: `${t('edit_zone_panel.restricted_zone')}`, value: '禁止區' },
-    { label: `${t('edit_zone_panel.controlled_zone')}`, value: '限制區' }
+    { label: `${t('edit_zone_panel.controlled_zone')}`, value: '限制區' },
+    { label: `${t('edit_zone_panel.view_available_zone')}`, value: '查看區' }
   ];
 
   const AmrsID: SelectProps['options'] = allAmr?.amrs.map((amr) => {
@@ -118,6 +133,7 @@ const EditZonePanel: React.FC<{
       setMaxHight(undefined);
       setMaxSpeed(undefined);
       setLimitCount(undefined);
+      setViewAvailable(undefined);
       zonePanelForm.resetFields();
       tagSettingForm.resetFields();
       queryClient.refetchQueries({ queryKey: ['map'] });
@@ -148,11 +164,9 @@ const EditZonePanel: React.FC<{
       );
       return;
     }
-
     const exists = data!.zones.some((zone) => {
       return zone.name.trim() === name.trim();
     });
-
     if (exists) {
       openNotificationWithIcon(
         'warning',
@@ -181,14 +195,22 @@ const EditZonePanel: React.FC<{
       return;
     }
 
-    const { speed_limit, hight_limit, forbidden, limitNum, all_forbidden, not_forbidden } =
-      tagSettingForm.getFieldsValue() as TagSettingType;
+    const {
+      speed_limit,
+      hight_limit,
+      forbidden,
+      limitNum,
+      all_forbidden,
+      not_forbidden,
+      view_available
+    } = tagSettingForm.getFieldsValue() as TagSettingType;
 
     if (
-      (zoneTags.includes['減速區'] && speed_limit === undefined) ||
-      (zoneTags.includes['限高區'] && hight_limit === undefined) ||
-      (zoneTags.includes['限制區'] && limitNum === undefined) ||
-      (zoneTags.includes['禁止區'] && !all_forbidden && !not_forbidden && !forbidden.length)
+      (zoneTags.includes('減速區') && speed_limit === undefined) ||
+      (zoneTags.includes('限高區') && hight_limit === undefined) ||
+      (zoneTags.includes('限制區') && limitNum === undefined) ||
+      (zoneTags.includes('禁止區') && !all_forbidden && !not_forbidden && !forbidden?.length) ||
+      (zoneTags.includes('查看區') && view_available === undefined)
     ) {
       openNotificationWithIcon(
         'warning',
@@ -205,11 +227,11 @@ const EditZonePanel: React.FC<{
       backgroundColor: rgba,
       category: {
         tags: category || [],
-        forbidden_car:
-          (category?.includes('禁止區') && allVehicleForbidden) == true ? ['*'] : forbidden,
+        forbidden_car: category?.includes('禁止區') && all_forbidden ? ['*'] : forbidden || [],
         speed_limit: category?.includes('減速區') ? Number(speed_limit) : undefined,
         hight_limit: category?.includes('限高區') ? Number(hight_limit) : undefined,
-        limitNum: category?.includes('限制區') ? Number(limitNum) : undefined
+        limitNum: category?.includes('限制區') ? Number(limitNum) : undefined,
+        view_available: category?.includes('查看區') ? view_available : undefined
       },
       startPoint: {
         startX,
@@ -242,7 +264,6 @@ const EditZonePanel: React.FC<{
         setIsHint(true);
         return;
       }
-
       if (zoneTags.includes('限高區') && maxHight == undefined) {
         setIsHint(true);
         return;
@@ -251,11 +272,14 @@ const EditZonePanel: React.FC<{
         setIsHint(true);
         return;
       }
+      if (zoneTags.includes('查看區') && viewAvailable == undefined) {
+        setIsHint(true);
+        return;
+      }
     }
 
     setIsHint(false);
-    return;
-  });
+  }, [zoneTags, maxSpeed, maxHight, limitCount, viewAvailable, tagSettingForm, t]);
 
   const tagChangeFn = useCallback(
     (tags) => {
@@ -283,13 +307,17 @@ const EditZonePanel: React.FC<{
                 setLimitCount(undefined);
                 tagSettingForm.setFieldValue('limitNum', undefined);
                 break;
+              case '查看區':
+                setViewAvailable(undefined);
+                tagSettingForm.setFieldValue('view_available', undefined);
+                break;
             }
           }
         });
         return tags;
       });
     },
-    [zoneTags]
+    [zoneTags, tagSettingForm]
   );
 
   return (
@@ -490,6 +518,33 @@ const EditZonePanel: React.FC<{
                 }
                 setLimitCount(Number(e.currentTarget.value));
               }}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="view_available"
+            label={`${t('edit_zone_panel.view_available')}: (${t('edit_zone_panel.necessary')})`}
+            style={{
+              display: `${zoneTags?.includes('查看區') ? '' : 'none'}`,
+              boxShadow: '3px 3px 15px rgba(0, 0, 0, 0.05)',
+              borderLeft: '4px solid #8491ea',
+              padding: '10px',
+              borderRadius: '5px',
+              marginBottom: '10px'
+            }}
+            rules={[
+              { required: zoneTags?.includes('查看區'), message: t('edit_zone_panel.necessary') }
+            ]}
+          >
+            <Select
+              placeholder={t('edit_zone_panel.placeholder.view_available')}
+              style={{ width: '50%' }}
+              options={viewAvailableOption}
+              onChange={(value) => {
+                setViewAvailable(value || undefined);
+                tagSettingForm.setFieldValue('view_available', value || undefined);
+              }}
+              value={viewAvailable}
             />
           </Form.Item>
 

@@ -25,6 +25,7 @@ export type TagSettingType = {
   not_forbidden: boolean;
   hight_limit: number;
   limitNum: number;
+  view_available: string;
 };
 
 export type RoadListType = {

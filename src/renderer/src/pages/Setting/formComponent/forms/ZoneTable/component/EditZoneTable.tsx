@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import '../../form.css';
 import { CloseOutlined } from '@ant-design/icons';
-import { FC, memo, useCallback, useEffect, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ZoneTableData } from '../../antd';
 import useAmrName from '@renderer/api/useAmrName';
@@ -25,6 +25,7 @@ import client from '@renderer/api/axiosClient';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import useMap from '@renderer/api/useMap';
+import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 
 type FormType = {
   id?: string;
@@ -40,7 +41,7 @@ type FormType = {
   limitNum: number | undefined;
   all_forbidden: boolean | undefined;
   not_forbidden: boolean | undefined;
-
+  view_available: string | undefined;
   forbidden: string[] | undefined;
   color: string;
 };
@@ -52,6 +53,7 @@ type TagSetting = {
   speed_limit: number | undefined;
   hight_limit: number | undefined;
   limitNum: number | undefined;
+  view_available: string | undefined;
 };
 
 const tagInit = {
@@ -60,7 +62,8 @@ const tagInit = {
   forbidden: [],
   speed_limit: undefined,
   hight_limit: undefined,
-  limitNum: undefined
+  limitNum: undefined,
+  view_available: undefined
 };
 
 type TagRender = SelectProps['tagRender'];
@@ -95,16 +98,30 @@ const EditZoneTable: FC<{
   const [tagsSetting, setTagSetting] = useState<TagSetting>(tagInit);
   const [zoneTags, setZoneTags] = useState<string[]>([]);
   const [messageApi, contextHolders] = message.useMessage();
+  const { data: loc } = useLoc(undefined);
   const { data: allAmr } = useAmrName();
   const { data: mapData } = useMap();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
+  const viewAvailableOption = useMemo(() => {
+    const info = loc as LocWithoutArr[];
+    const mixData = info
+      .filter((v) => v.areaType !== '存貨區')
+      .sort((a, b) => Number(a.locationId) - Number(b.locationId))
+      .map((v) => ({
+        label: v.locationId,
+        value: v.locationId
+      }));
+    return mixData;
+  }, [loc, t]);
+
   const zoneType: SelectProps['options'] = [
     { label: `${t('edit_zone_panel.deceleration_zone')}`, value: '減速區' },
     { label: `${t('edit_zone_panel.height_limit_zone')}`, value: '限高區' },
     { label: `${t('edit_zone_panel.restricted_zone')}`, value: '禁止區' },
-    { label: `${t('edit_zone_panel.controlled_zone')}`, value: '限制區' }
+    { label: `${t('edit_zone_panel.controlled_zone')}`, value: '限制區' },
+    { label: `${t('edit_zone_panel.view_available_zone')}`, value: '查看區' }
   ];
 
   const AmrsID: SelectProps['options'] = allAmr?.amrs.map((amr) => {
@@ -183,6 +200,9 @@ const EditZoneTable: FC<{
         : (oldData?.tagSetting.hight_limit as number),
       limitNum: data.limitNum ? data.limitNum : (oldData?.tagSetting.limitNum as number),
       forbidden: forbiddenCars,
+      view_available: data.view_available
+        ? data.view_available
+        : (oldData?.tagSetting.view_available as string),
       id: editingKey,
       color: data.color
     };
@@ -202,7 +222,8 @@ const EditZoneTable: FC<{
       forbidden: [],
       limitNum: undefined,
       hight_limit: undefined,
-      speed_limit: undefined
+      speed_limit: undefined,
+      view_available: undefined
     };
 
     if (forbiddenCar.length) {
@@ -240,18 +261,25 @@ const EditZoneTable: FC<{
     editZoneForm.setFieldValue('speed_limit', oldData.tagSetting.speed_limit);
     editZoneForm.setFieldValue('limitNum', oldData.tagSetting.limitNum);
     editZoneForm.setFieldValue('color', oldData.backgroundColor);
+    editZoneForm.setFieldValue('view_available', oldData.tagSetting.view_available);
 
     tagSetting.limitNum = oldData.tagSetting.limitNum as number | undefined;
     tagSetting.hight_limit = oldData.tagSetting.hight_limit as number | undefined;
     tagSetting.speed_limit = oldData.tagSetting.speed_limit as number | undefined;
 
     setTagSetting(tagSetting);
-  }, []);
+  }, [oldData, editZoneForm]);
 
   useEffect(() => {
     if (!tagsSetting) return;
-    const { limitNum, hight_limit, speed_limit, allVehicleForbidden, notVehicleForbidden } =
-      tagsSetting;
+    const {
+      limitNum,
+      hight_limit,
+      speed_limit,
+      allVehicleForbidden,
+      notVehicleForbidden,
+      view_available
+    } = tagsSetting;
 
     if (zoneTags.length === 0) return setIsHint(false);
 
@@ -276,45 +304,51 @@ const EditZoneTable: FC<{
       setIsHint(true);
       return;
     }
+
     if (zoneTags.includes('限制區') && limitNum == null) {
       setIsHint(true);
       return;
     }
+
+    if (zoneTags.includes('查看區') && view_available == null) {
+      setIsHint(true);
+      return;
+    }
+
     setIsHint(false);
-  });
+  }, [tagsSetting, zoneTags, editZoneForm, t]);
 
   const tagChangeFn = useCallback(
     (tags) => {
       setZoneTags((pre) => {
-        console.log(pre);
         pre.forEach((tag) => {
           if (!tags.includes(tag)) {
             switch (tag) {
               case '減速區':
-                setTagSetting((pre) => {
-                  return { ...pre, speed_limit: undefined };
-                });
+                setTagSetting((pre) => ({ ...pre, speed_limit: undefined }));
                 editZoneForm.setFieldValue('speed_limit', undefined);
                 break;
               case '限高區':
-                setTagSetting((pre) => {
-                  return { ...pre, hight_limit: undefined };
-                });
+                setTagSetting((pre) => ({ ...pre, hight_limit: undefined }));
                 editZoneForm.setFieldValue('hight_limit', undefined);
                 break;
               case '禁止區':
-                setTagSetting((pre) => {
-                  return { ...pre, allVehicleForbidden: false, notVehicleForbidden: false };
-                });
+                setTagSetting((pre) => ({
+                  ...pre,
+                  allVehicleForbidden: false,
+                  notVehicleForbidden: false
+                }));
                 editZoneForm.setFieldValue('forbidden', []);
                 editZoneForm.setFieldValue('all_forbidden', false);
                 editZoneForm.setFieldValue('not_forbidden', false);
                 break;
               case '限制區':
-                setTagSetting((pre) => {
-                  return { ...pre, limitNum: undefined };
-                });
+                setTagSetting((pre) => ({ ...pre, limitNum: undefined }));
                 editZoneForm.setFieldValue('limitNum', undefined);
+                break;
+              case '查看區':
+                setTagSetting((pre) => ({ ...pre, view_available: undefined }));
+                editZoneForm.setFieldValue('view_available', undefined);
                 break;
             }
           }
@@ -322,7 +356,7 @@ const EditZoneTable: FC<{
         return tags;
       });
     },
-    [zoneTags]
+    [zoneTags, editZoneForm]
   );
 
   if (!oldData) return;
@@ -534,6 +568,35 @@ const EditZoneTable: FC<{
                 type="number"
                 placeholder={t('edit_zone_panel.placeholder.limit')}
                 style={{ width: '50%' }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="view_available"
+              label={`${t('edit_zone_panel.view_available')}: (${t('edit_zone_panel.necessary')})`}
+              style={{
+                display: `${zoneTags?.includes('查看區') ? '' : 'none'}`,
+                boxShadow: '3px 3px 15px rgba(0, 0, 0, 0.05)',
+                borderLeft: '4px solid #8491ea',
+                padding: '10px',
+                borderRadius: '5px',
+                marginBottom: '10px'
+              }}
+              rules={[
+                { required: zoneTags?.includes('查看區'), message: t('edit_zone_panel.necessary') }
+              ]}
+            >
+              <Select
+                placeholder={t('edit_zone_panel.placeholder.view_available')}
+                style={{ width: '50%' }}
+                options={viewAvailableOption}
+                onChange={(value) => {
+                  setTagSetting((pre) => ({
+                    ...pre,
+                    view_available: value || undefined
+                  }));
+                  editZoneForm.setFieldValue('view_available', value || undefined);
+                }}
               />
             </Form.Item>
 

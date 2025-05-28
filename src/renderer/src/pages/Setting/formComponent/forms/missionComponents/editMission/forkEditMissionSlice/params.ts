@@ -23,8 +23,8 @@ export const controlList = {
 } as const;
 
 export const selectLocationOption = [
-  'custom',
-  'select',
+  'custom', // 自訂位置
+  'select', // 快速任務 user直接指定或是在發任務時計算任務點
   'available_charge_station',
   'prepare_point',
   'back_to_load_place'
