@@ -47,7 +47,8 @@ const schema = object({
         speed_limit: number().required().nullable(),
         hight_limit: number().required().nullable(),
         forbidden_car: array(string()).required(),
-        limitNum: number().required().nullable()
+        limitNum: number().required().nullable(),
+        view_available: number().required().nullable()
       }).required(),
       startPoint: object({
         startX: number().required(),

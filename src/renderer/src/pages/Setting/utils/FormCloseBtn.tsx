@@ -26,7 +26,8 @@ import {
   isShowEditWarningId,
   isOpenUploadWarningIDModal,
   isShowEditBackup,
-  QuickEditRoadSwitch
+  QuickEditRoadSwitch,
+  isShowRegisterAMR
 } from '@renderer/utils/siderGloble';
 import { ToolBarItemType } from '../components/siderElement';
 
@@ -45,6 +46,8 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
   const setOpenEditShelf = useSetAtom(EditShelfPanelSwitch); //4-1
   const setOpenEditShelfCategory = useSetAtom(EditShelfCategoryPanelSwitch); //4-2
   const setOpenYawTable = useSetAtom(EditShelfYawPanelSwitch); //4-3
+
+  const setOpenRegisterAmr = useSetAtom(isShowRegisterAMR);
 
   const setOpenMissionPanel = useSetAtom(isShowEditMission); // 5-1
   const setOpenChargeMissionPanel = useSetAtom(isShowEditChargeMission); // 5-2
@@ -133,6 +136,9 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
         break;
       case 'backup_file':
         setOpenBackup(false);
+        break;
+      case 'edit_register_amr':
+        setOpenRegisterAmr(false);
         break;
       case 'edit_amr_config':
       case 'shelf_mission':

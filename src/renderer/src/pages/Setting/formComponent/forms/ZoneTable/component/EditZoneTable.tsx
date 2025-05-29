@@ -146,9 +146,6 @@ const EditZoneTable: FC<{
       return;
     }
     const data = editZoneForm.getFieldsValue() as FormType;
-
-    console.log(data);
-
     const { name, startX, startY, endX, endY, color } = data;
     if (!name || name.trim() === '') {
       messageApi.warning(t('edit_zone_panel.waring.name_empty_error'));
@@ -266,6 +263,7 @@ const EditZoneTable: FC<{
     tagSetting.limitNum = oldData.tagSetting.limitNum as number | undefined;
     tagSetting.hight_limit = oldData.tagSetting.hight_limit as number | undefined;
     tagSetting.speed_limit = oldData.tagSetting.speed_limit as number | undefined;
+    tagSetting.view_available = oldData.tagSetting.view_available as string | undefined;
 
     setTagSetting(tagSetting);
   }, [oldData, editZoneForm]);

@@ -203,6 +203,7 @@ const SortableWrap: FC<{
           case 'edit_register_amr':
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <FormCloseBtn sortableId={sortableId} panelName="edit_register_amr" />
                 <RegisterAmrPanel
                   sortableId={sortableId}
                   attributes={attributes}
@@ -215,6 +216,7 @@ const SortableWrap: FC<{
           case 'edit_amr_config':
             return (
               <Card style={styles} ref={setNodeRef} key={sortableId}>
+                <FormCloseBtn sortableId={sortableId} panelName="edit_amr_config" />
                 <AmrConfigPanel
                   sortableId={sortableId}
                   attributes={attributes}
