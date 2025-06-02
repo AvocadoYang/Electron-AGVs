@@ -41,15 +41,16 @@ const Wrapper = styled.div<{
 `;
 
 const Block = styled(Button)`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #ff0000;
   background-color: unset;
   border-radius: 3px;
-  width: 15px;
-  height: 15px;
-  padding: 0;
+  min-width: 15px;
+  max-height: 15px;
+  max-width: 100%;
+  padding: 0 2px;
   transition: all 0.2s ease;
   position: relative;
   flex-grow: 1;

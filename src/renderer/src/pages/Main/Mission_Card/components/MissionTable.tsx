@@ -1,5 +1,5 @@
 import { Additional_Mission_Info, MissionInfo, useMissions } from '../../../../sockets/useMissions';
-import { TableColumnsType, Table, Spin, ConfigProvider, Button } from 'antd';
+import { TableColumnsType, Table, Spin, ConfigProvider, Button, Flex } from 'antd';
 import { memo, useEffect, useState } from 'react';
 import '../mission_info.css';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { useAtomValue } from 'jotai';
 import client from '@renderer/api/axiosClient';
 import { useMutation } from '@tanstack/react-query';
 import useName from '@renderer/api/useAmrName';
+import MissionHistory from './MissionHistory';
 
 const MISSION_SORT = ['executing', 'assigned', 'pending', 'completed', 'aborting', 'canceled'];
 
@@ -43,6 +44,11 @@ const SubTitle = styled.div`
   }
 `;
 
+const BtnWrapper = styled.div`
+  width: 100%;
+  padding: 0 1em;
+`;
+
 type SelectMissionT = {
   amrId?: string; // 有些選到的任務也許還沒指派到amr
   taskId?: string;
@@ -60,6 +66,11 @@ const MissionTable = () => {
   const { missions } = useMissions();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 767);
   const [, setWindowHeight] = useState(window.innerHeight);
+  const [isOpenMissionHistory, setIsOpenMissionHistory] = useState(false);
+
+  const openHistory = () => {
+    setIsOpenMissionHistory(true);
+  };
 
   useEffect(() => {
     const updateHeight = () => setWindowHeight(window.innerHeight);
@@ -210,19 +221,35 @@ const MissionTable = () => {
         }
       }}
     >
-      <div style={{ width: '100%', padding: '0 0 0 10px' }}>
-        <Button
-          onClick={() => {
-            handleDeleteMission();
-          }}
-          disabled={!selectInfo.length}
-          loading={deleteMissionMutation.isLoading}
-          color="danger"
-          variant="filled"
-        >
-          {t('utils.delete')}
-        </Button>
-      </div>
+      <MissionHistory
+        isOpenMissionHistory={isOpenMissionHistory}
+        setIsOpenMissionHistory={setIsOpenMissionHistory}
+      />
+
+      <BtnWrapper>
+        <Flex gap="middle" align="flex-start">
+          <Button
+            onClick={() => {
+              handleDeleteMission();
+            }}
+            disabled={!selectInfo.length}
+            loading={deleteMissionMutation.isLoading}
+            color="danger"
+            variant="filled"
+          >
+            {t('utils.delete')}
+          </Button>
+          <Button
+            onClick={() => {
+              openHistory();
+            }}
+            variant="filled"
+          >
+            open history
+          </Button>
+        </Flex>
+      </BtnWrapper>
+
       <Table
         columns={columns}
         style={{ width: '100%' }}

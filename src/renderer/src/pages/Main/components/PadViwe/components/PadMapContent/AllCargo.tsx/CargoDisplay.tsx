@@ -17,16 +17,17 @@ const Block = styled(Button)<{
   $canBeClick: boolean;
   $isHaveAction: boolean;
 }>`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   background-color: ${({ $hasCargo }) => ($hasCargo ? '#ffe73c80' : '#f5f5f580')};
   border: ${({ $isSelecting, $canBeClick }) =>
     $isSelecting && $canBeClick ? '2px solid #1890ff' : '1px dashed #727272'};
   border-radius: 3px;
-  width: 15px;
-  height: 15px;
-  padding: 0;
+  min-width: 15px;
+  max-height: 15px;
+  max-width: 100%;
+  padding: 0 2px;
   transition: all 0.2s ease;
   position: relative;
   flex-grow: 1;
