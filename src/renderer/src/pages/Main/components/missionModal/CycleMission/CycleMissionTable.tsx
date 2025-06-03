@@ -1,19 +1,17 @@
-import { useCycleMission } from '@renderer/sockets/useCycleMission'
-import { Button, message, Popconfirm, Space, Table, TableProps, Tag } from 'antd'
-import { nanoid } from 'nanoid'
-import { CaretRightOutlined, PauseOutlined } from '@ant-design/icons'
+import { Button, message, Popconfirm, Space, Table, TableProps, Tag } from 'antd';
+import { CaretRightOutlined, PauseOutlined } from '@ant-design/icons';
 
-import { useMutation } from '@tanstack/react-query'
-import client from '@renderer/api/axiosClient'
-import { useTranslation } from 'react-i18next'
+import { useMutation } from '@tanstack/react-query';
+import client from '@renderer/api/axiosClient';
+import { useTranslation } from 'react-i18next';
 
 type CM = {
-  isActive: boolean
-  amrId?: string
-  missionName: string
-  cycle_relate_id: string
-  mission_id: string
-}
+  isActive: boolean;
+  amrId?: string;
+  missionName: string;
+  cycle_relate_id: string;
+  mission_id: string;
+};
 
 const test = [
   {
@@ -64,14 +62,13 @@ const test = [
     cycle_relate_id: 'qe11eqwofwe2weoifeiwojfoiwejf',
     mission_id: 'jkfoiwej3oijweof2jewoifjweoifjoiewjfoiwejfoiwejfoiewjf'
   }
-]
+];
 
 const CycleMissionTable: React.FC<{ setOpenCycleMissionList: React.Dispatch<boolean> }> = ({
   setOpenCycleMissionList
 }) => {
-  const data = useCycleMission()
-  const { t } = useTranslation()
-  const [messageApi, contextHolder] = message.useMessage()
+  const { t } = useTranslation();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const activeMutation = useMutation({
     mutationFn: (payload: { id: string; isActive: boolean }) => {
@@ -84,15 +81,15 @@ const CycleMissionTable: React.FC<{ setOpenCycleMissionList: React.Dispatch<bool
         {
           headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
         }
-      )
+      );
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
     },
     onError: () => {
-      void messageApi.error(t('utils.error'))
+      void messageApi.error(t('utils.error'));
     }
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (payload: { id: string }) => {
@@ -104,24 +101,24 @@ const CycleMissionTable: React.FC<{ setOpenCycleMissionList: React.Dispatch<bool
         {
           headers: { authorization: `Bearer ${localStorage.getItem('_KMT')}` }
         }
-      )
+      );
     },
     onSuccess: () => {
-      void messageApi.success(t('utils.success'))
+      void messageApi.success(t('utils.success'));
     },
     onError: () => {
-      void messageApi.error(t('utils.error'))
+      void messageApi.error(t('utils.error'));
     }
-  })
+  });
 
   const activeSwitch = (id: string, isActive: boolean) => {
-    activeMutation.mutate({ id, isActive })
-  }
+    activeMutation.mutate({ id, isActive });
+  };
 
   const deleteOne = (id: string) => {
-    console.log(id)
-    deleteMutation.mutate({ id })
-  }
+    console.log(id);
+    deleteMutation.mutate({ id });
+  };
 
   const columns: TableProps<CM>['columns'] = [
     {
@@ -136,7 +133,7 @@ const CycleMissionTable: React.FC<{ setOpenCycleMissionList: React.Dispatch<bool
       key: 'amrId',
       width: '5%',
       render(_, record) {
-        return record.amrId ? record.amrId : t('utils.random')
+        return record.amrId ? record.amrId : t('utils.random');
       }
     },
     Table.EXPAND_COLUMN,
@@ -150,11 +147,11 @@ const CycleMissionTable: React.FC<{ setOpenCycleMissionList: React.Dispatch<bool
           <Tag color="green">{t('utils.working')}</Tag>
         ) : (
           <Tag color="red">{t('utils.stopping')}</Tag>
-        )
+        );
       }
     },
     Table.SELECTION_COLUMN
-  ]
+  ];
   return (
     <>
       {contextHolder}
@@ -196,7 +193,7 @@ const CycleMissionTable: React.FC<{ setOpenCycleMissionList: React.Dispatch<bool
                   )}
                 </Space>
               </div>
-            )
+            );
           }
         }}
         style={{ width: '95%' }}
@@ -206,7 +203,7 @@ const CycleMissionTable: React.FC<{ setOpenCycleMissionList: React.Dispatch<bool
         pagination={{ pageSize: 5 }}
       ></Table>
     </>
-  )
-}
+  );
+};
 
-export default CycleMissionTable
+export default CycleMissionTable;

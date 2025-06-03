@@ -216,6 +216,7 @@ const CycleMissionPanel: FC<{
     }
   ];
 
+  if (!data) return [];
   return (
     <>
       {contextHolder}
@@ -227,7 +228,7 @@ const CycleMissionPanel: FC<{
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <CycleForm />
           <WideTable
-            rowKey={(record) => record?.cycle_relate_id as string}
+            rowKey={(record) => (record as { cycle_relate_id: string }).cycle_relate_id as string}
             columns={columns as []}
             dataSource={data}
             pagination={{ pageSize: 4 }}

@@ -9,6 +9,20 @@ import useLoc, { LocWithoutArr } from '@renderer/api/useLoc';
 import Station from './Station';
 import styled from 'styled-components';
 
+const WrapperForCargo = styled.div.attrs<{
+  left: number;
+  top: number;
+}>(({ left, top }) => ({
+  style: { left, top }
+}))<{
+  left: number;
+  top: number;
+}>`
+  position: absolute;
+  width: 5px;
+  height: 5px;
+`;
+
 const PointDiv = styled.div.attrs<{
   left: number;
   top: number;
@@ -96,7 +110,8 @@ const AllChargeStation: FC = () => {
                 key={nanoid()}
                 onMouseEnter={() => handleEnter(loc.locationId, loc.x, loc.y)}
                 onMouseLeave={() => handleLeave()}
-              >
+              ></Point>
+              <WrapperForCargo left={displayX} top={displayY}>
                 <Station
                   locationId={loc.locationId}
                   translateX={translateX}
@@ -104,7 +119,7 @@ const AllChargeStation: FC = () => {
                   rotate={rotate}
                   scale={LocScale}
                 />
-              </Point>
+              </WrapperForCargo>
             </div>
           );
         })}

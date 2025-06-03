@@ -258,37 +258,40 @@ const MissionTable = () => {
           type: selectionType,
           ...rowSelection
         }}
-        dataSource={missions
-          .sort((a, b) => {
-            const isCompleteA = a.missionStatus === 'completed';
-            const isCompleteB = b.missionStatus === 'completed';
-            const typeDiff =
-              MISSION_SORT.indexOf(a.missionStatus as string) -
-              MISSION_SORT.indexOf(b.missionStatus as string);
-            if (typeDiff !== 0) return typeDiff;
-            if (isCompleteA && isCompleteB) {
-              return b.createdAt.getTime() - a.createdAt.getTime();
-            }
+        dataSource={
+          missions
+            .sort((a, b) => {
+              const isCompleteA = a.missionStatus === 'completed';
+              const isCompleteB = b.missionStatus === 'completed';
+              const typeDiff =
+                MISSION_SORT.indexOf(a.missionStatus as string) -
+                MISSION_SORT.indexOf(b.missionStatus as string);
+              if (typeDiff !== 0) return typeDiff;
+              if (isCompleteA && isCompleteB) {
+                return b.createdAt.getTime() - a.createdAt.getTime();
+              }
 
-            if (!isCompleteA && !isCompleteB) {
-              return a.order - b.order;
-            }
+              if (!isCompleteA && !isCompleteB) {
+                return a.order - b.order;
+              }
 
-            return MISSION_SORT.indexOf(a.missionStatus) - MISSION_SORT.indexOf(b.missionStatus);
-          })
-          .map((m) => ({
-            ...m,
-            missionStatus: translate('normal', m.missionStatus) || '',
-            missionType: translate('normal', m.missionType) || '',
-            manualMode: m.manualMode ? t('utils.yes') : t('utils.no'),
-            emergencyBtn: m.emergencyBtn ? t('utils.yes') : t('utils.no'),
-            recoveryBtn: m.recoveryBtn ? t('utils.yes') : t('utils.no'),
+              return MISSION_SORT.indexOf(a.missionStatus) - MISSION_SORT.indexOf(b.missionStatus);
+            })
+            .map((m) => ({
+              ...m,
+              missionStatus: translate('normal', m.missionStatus) || '',
+              missionType: translate('normal', m.missionType) || '',
+              manualMode: m.manualMode ? t('utils.yes') : t('utils.no'),
+              emergencyBtn: m.emergencyBtn ? t('utils.yes') : t('utils.no'),
+              recoveryBtn: m.recoveryBtn ? t('utils.yes') : t('utils.no'),
 
-            totalTime:
-              m.completedAt && m.createdAt
-                ? Math.round((m.completedAt.getTime() - (m.startedAt?.getTime() || 0)) / 6000) / 10
-                : ''
-          }))}
+              totalTime:
+                m.completedAt && m.createdAt
+                  ? Math.round((m.completedAt.getTime() - (m.startedAt?.getTime() || 0)) / 6000) /
+                    10
+                  : ''
+            })) as []
+        }
       />
     </ConfigProvider>
   );

@@ -13,6 +13,7 @@ import ToolTip from '@renderer/pages/Setting/components/ToolTip';
 import { isShowLocation, isShowLocationTooltip, isShowRoad } from '@renderer/utils/siderGloble';
 import { AllChargeStation } from './AllChargeStation';
 import useMap from '@renderer/api/useMap';
+import ChargeStationModel from './AllChargeStation/ChargeStationModel';
 
 const WebMapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>;
@@ -59,6 +60,7 @@ const WebMapView: React.FC<{
           {showLocationToolTip ? <ToolTip /> : []}
           <AllZones scale={scale}></AllZones>
           <AllChargeStation />
+          <ChargeStationModel />
         </>
       )}
     </div>

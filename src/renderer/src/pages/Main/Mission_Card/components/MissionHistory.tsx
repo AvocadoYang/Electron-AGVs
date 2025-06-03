@@ -105,6 +105,14 @@ const MissionHistory: FC<{
       width: 120
     },
     {
+      title: t('mission_history.full_name'),
+      dataIndex: 'full_name',
+      key: 'full_name',
+      sorter: (a, b) => (a.sub_name || '').localeCompare(b.sub_name || ''),
+      render: (full_name: string[]) => full_name?.join(', ') || 'N/A',
+      width: 150
+    },
+    {
       title: t('mission_history.sub_name'),
       dataIndex: 'sub_name',
       key: 'sub_name',
@@ -112,6 +120,15 @@ const MissionHistory: FC<{
       render: (text) => text || 'N/A',
       width: 150
     },
+    {
+      title: t('mission_history.category'),
+      dataIndex: 'category',
+      key: 'category',
+      sorter: (a, b) => (a.sub_name || '').localeCompare(b.sub_name || ''),
+      render: (category: string[]) => category?.join(', ') || 'N/A',
+      width: 150
+    },
+
     {
       title: t('mission_history.priority'),
       dataIndex: 'priority',

@@ -4,48 +4,37 @@ import { FC } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 type ChargeStyle = {
-  $is_in_service: boolean
-  translate_x?: number
-  translate_y?: number
-  scale?: number
-  rotate?: number
-  left?: number
-  top?: number
-}
+  $is_in_service: boolean;
+  translate_x?: number;
+  translate_y?: number;
+  scale?: number;
+  rotate?: number;
+};
+
 const pulse = keyframes`
-  0% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.5;
-  }
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
 `;
 
 const CStation = styled.div<ChargeStyle>`
   width: 21px;
   height: 26px;
-  background-color: ${(prop) => (prop.$is_in_service ? '#2581ffc2' : '#3d3d3d')};
+  background-color: ${({ $is_in_service }) => ($is_in_service ? '#2581ffc2' : '#3d3d3d')};
   z-index: 20;
   text-align: center;
   position: absolute;
   display: flex;
   border-radius: 5px;
   font-weight: bolder;
-
   justify-content: center;
   align-content: center;
   align-items: center;
-  opacity: ${(props) => (props.$is_in_service ? 1 : 0.5)};
-
-  transform: ${(props) =>
-    `translate(${props.translate_x}em, ${props.translate_y}em) scale(${props.scale}) rotate(${props.rotate}deg)`};
-
-  animation-name: ${(props) => (props.$is_in_service ? 'none' : pulse)};
-  animation-duration: ${(props) => (props.$is_in_service ? '0s' : '1.5s')};
-  animation-iteration-count: ${(props) => (props.$is_in_service ? '0' : 'infinite')};
+  opacity: ${({ $is_in_service }) => ($is_in_service ? 1 : 0.5)};
+  transform: ${({ translate_x, translate_y, scale, rotate }) =>
+    `translate(${translate_x}em, ${translate_y}em) scale(${scale || 1}) rotate(${rotate || 0}deg)`};
+  animation: ${({ $is_in_service }) => ($is_in_service ? 'none' : `${pulse} 1.5s infinite`)};
+  cursor: pointer; /* Indicate clickability */
 `;
 
 const Svg = styled.svg`
@@ -54,14 +43,15 @@ const Svg = styled.svg`
 `;
 
 const PathStyle = styled.path<ChargeStyle>`
-  fill: ${(prop) => (prop.$is_in_service ? '#ffffff' : '#b30000')};
+  fill: ${({ $is_in_service }) => ($is_in_service ? '#ffffff' : '#b30000')};
 `;
+
 const Station: FC<{
-  locationId: string
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
+  locationId: string;
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
 }> = ({ locationId, translateX, translateY, rotate, scale }) => {
   const setOpen = useSetAtom(chargeStationModelProp);
 

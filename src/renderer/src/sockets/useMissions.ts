@@ -39,6 +39,8 @@ const schema = () =>
         amrId: string().optional().nullable(),
         missionId: string().required(),
         sub_name: string().required(),
+        full_name: array(string().optional()).required().nullable(),
+        category: array(string().optional()).required(),
         missionType: mixed<keyof typeof missionTypeMap>()
           .oneOf(objectKeys(missionTypeMap))
           .required(),
@@ -134,7 +136,9 @@ export const useMissionsOnce = () => {
 export type MissionInfo = {
   amrId?: string;
   missionId: string;
+  full_name: string[];
   sub_name: string;
+  category: string[];
   missionType: string;
   missionStatus: string;
   manualMode?: boolean | string;

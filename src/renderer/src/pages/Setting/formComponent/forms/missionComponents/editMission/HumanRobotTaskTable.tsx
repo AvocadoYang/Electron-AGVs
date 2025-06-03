@@ -201,6 +201,23 @@ const HumanRobotTaskTable: FC<{
     setImportConfig({ key: selectedMissionKey, order: order + 1 });
   };
 
+  const carTrans = (value: string) => {
+    switch (value) {
+      case 'F':
+        return t('car_control_translate.F');
+      case 'B':
+        return t('car_control_translate.B');
+      case 'S':
+        return t('car_control_translate.S');
+      case 'H':
+        return t('car_control_translate.H');
+      case 'W':
+        return t('car_control_translate.W');
+      default:
+        return value;
+    }
+  };
+
   const columns: ColumnsType<Robot_Mission_Slice_Table> = [
     {
       title: t('mission.task_table.sort'),
@@ -241,7 +258,7 @@ const HumanRobotTaskTable: FC<{
           width: 100,
           render: (_, record) => {
             return record.operation.type.map((v, i) => {
-              return <Typography key={`${v}-${i}`}>{t(`car_control_translate.${v}`)}</Typography>;
+              return <Typography key={`${v}-${i}`}>{carTrans(v)}</Typography>;
             });
           }
         },

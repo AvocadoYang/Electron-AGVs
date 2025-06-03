@@ -1,6 +1,3 @@
-import { IsEditingQuickRoads } from '@renderer/pages/Setting/utils/settingJotai';
-import { chargeStationModelProp } from '@renderer/utils/gloable';
-import { useAtomValue, useSetAtom } from 'jotai';
 import { FC } from 'react';
 import styled, { keyframes } from 'styled-components';
 
@@ -63,18 +60,9 @@ const Station: FC<{
   translateY: number;
   rotate: number;
   scale: number;
-}> = ({ locationId, translateX, translateY, rotate, scale }) => {
-  const setOpen = useSetAtom(chargeStationModelProp);
-  const quickRoad = useAtomValue(IsEditingQuickRoads);
-
-  const handleClick = () => {
-    if (quickRoad) return;
-    setOpen({ open: true, location: locationId });
-  };
-
+}> = ({ translateX, translateY, rotate, scale }) => {
   return (
     <CStation
-      onClick={() => handleClick()}
       $is_in_service={true}
       translate_x={translateX}
       translate_y={translateY}

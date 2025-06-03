@@ -46,8 +46,8 @@ export enum MaintenanceLevel {
 export type FleetInfo = {
   IO: {
     connect_status: boolean;
-    baffle_left: boolean;
-    baffle_right: boolean;
+    // baffle_left: boolean;
+    // baffle_right: boolean;
     manual_mode: boolean;
     enforce_charge: boolean;
     set_charge: boolean;
@@ -104,8 +104,8 @@ const schema = () =>
         ultrasound: string().optional(),
         enable_baffle: boolean().optional(),
 
-        baffle_left: boolean().optional(),
-        baffle_right: boolean().optional(),
+        // baffle_left: boolean().optional(),
+        // baffle_right: boolean().optional(),
         manual_mode: boolean().optional(),
         enforce_charge: boolean().optional(),
         set_charge: boolean().optional(),

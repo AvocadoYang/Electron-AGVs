@@ -52,7 +52,7 @@ const getLocations = async () => {
     object({
       chargingStations: array(
         object({
-          id: string().optional(),
+          locationId: string().optional(),
           isInService: boolean().optional(),
           booker: string().optional().nullable(),
           info: object({

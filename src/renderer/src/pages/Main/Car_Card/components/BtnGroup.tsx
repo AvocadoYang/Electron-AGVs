@@ -7,6 +7,8 @@ import client from '@renderer/api/axiosClient';
 import { useMutation } from '@tanstack/react-query';
 import { MaintenanceLevel } from '@renderer/sockets/useAMRInfo';
 import styled from 'styled-components';
+import { ErrorResponse } from '@renderer/utils/globalType';
+import { errorHandler } from '@renderer/utils/utils';
 
 const StyledFlex = styled(Flex)`
   width: 100%;
@@ -51,9 +53,7 @@ const BtnGroup: FC<{ amrId: string }> = ({ amrId }) => {
     onSuccess: () => {
       void messageApi.success(t('utils.success'));
     },
-    onError: () => {
-      void messageApi.error(t('mission.charge_mission.haventSetChargeMission'));
-    }
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
   return (

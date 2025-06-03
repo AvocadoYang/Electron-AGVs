@@ -17,6 +17,8 @@ const missionSchema = object({
       send_by: number().required(),
       amrId: string().required(),
       status: number().required(),
+      full_name: array(string().optional()).required().nullable(),
+      category: array(string().optional()).required().nullable(),
       sub_name: string().nullable(),
       manualMode: boolean().required(),
       emergencyBtn: boolean().required(),

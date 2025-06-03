@@ -247,11 +247,14 @@ const AllLocationTable: React.FC<{
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex]
+    onFilter: (value, record) => {
+      const fieldValue = record[dataIndex];
+      if (fieldValue === undefined || fieldValue === null) return false;
+      return fieldValue
         .toString()
         .toLowerCase()
-        .includes((value as string).toLowerCase()),
+        .includes((value as string).toLowerCase());
+    },
     filterDropdownProps: {
       onOpenChange: (visible) => {
         if (visible) {
@@ -293,7 +296,11 @@ const AllLocationTable: React.FC<{
     setEditingKey(null);
   };
 
-  const deleteLocationInList = (id: string, locationId: string) => {
+  const deleteLocationInList = (id: string | undefined, locationId: string) => {
+    if (!id) {
+      messageApi.error('id is missed');
+      return;
+    }
     deleteLocationMutation.mutate({ id, locationId });
   };
 
@@ -377,7 +384,11 @@ const AllLocationTable: React.FC<{
           <Flex gap="small">
             <Typography.Link
               onClick={() => {
-                save(record.id, record.locationId);
+                if (record.id && record.locationId) {
+                  save(record.id, record.locationId);
+                } else {
+                  messageApi.warning('id is missed');
+                }
               }}
               style={{ marginRight: 8 }}
             >

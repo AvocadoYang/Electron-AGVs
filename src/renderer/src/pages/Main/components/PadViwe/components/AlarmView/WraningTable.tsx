@@ -1,25 +1,16 @@
 /* eslint-disable no-restricted-syntax */
-import { FC, useMemo, memo } from 'react'
-import { Table } from 'antd'
-import type { TableProps } from 'antd'
-import { nanoid } from 'nanoid'
-import useWarningTable from '@renderer/api/useWarningTable'
-
-type WarningTableData = {
-  [key: string]: {
-    Alarm_music: boolean
-    level: number
-    info: string
-    debug: string
-  }
-}
+import { FC, memo } from 'react';
+import { Table } from 'antd';
+import type { TableProps } from 'antd';
+import { nanoid } from 'nanoid';
+import useWarningTable from '@renderer/api/useWarningTable';
 
 interface DataType {
-  key: string
-  level: number
-  Alarm_music: boolean
-  info: string
-  debug: string
+  key: string;
+  level: number;
+  Alarm_music: boolean;
+  info: string;
+  debug: string;
 }
 
 const columns: TableProps<DataType>['columns'] = [
@@ -55,12 +46,12 @@ const columns: TableProps<DataType>['columns'] = [
       </p>
     )
   }
-]
+];
 
 const WarningTable: FC = () => {
-  const { data } = useWarningTable()
+  const { data } = useWarningTable();
 
-  console.log(data)
+  console.log(data);
 
   // const warningArray: DataType[] = useMemo(() => {
   //   const rawData = { ...(data as WarningTableData) }
@@ -80,7 +71,7 @@ const WarningTable: FC = () => {
         pagination={{ pageSize: 8 }}
       />
     </>
-  )
-}
+  );
+};
 
-export default memo(WarningTable)
+export default memo(WarningTable);

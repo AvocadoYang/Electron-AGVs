@@ -1,17 +1,15 @@
-import { chargeStationModelProp } from '@renderer/utils/gloable';
-import { useSetAtom } from 'jotai';
 import { FC } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 type ChargeStyle = {
-  $is_in_service: boolean
-  translate_x?: number
-  translate_y?: number
-  scale?: number
-  rotate?: number
-  left?: number
-  top?: number
-}
+  $is_in_service: boolean;
+  translate_x?: number;
+  translate_y?: number;
+  scale?: number;
+  rotate?: number;
+  left?: number;
+  top?: number;
+};
 const pulse = keyframes`
   0% {
     opacity: 0.5;
@@ -57,17 +55,14 @@ const PathStyle = styled.path<ChargeStyle>`
   fill: ${(prop) => (prop.$is_in_service ? '#ffffff' : '#b30000')};
 `;
 const Station: FC<{
-  locationId: string
-  translateX: number
-  translateY: number
-  rotate: number
-  scale: number
-}> = ({ locationId, translateX, translateY, rotate, scale }) => {
-  const setOpen = useSetAtom(chargeStationModelProp);
-
+  locationId: string;
+  translateX: number;
+  translateY: number;
+  rotate: number;
+  scale: number;
+}> = ({ translateX, translateY, rotate, scale }) => {
   return (
     <CStation
-      onClick={() => setOpen({ open: true, location: locationId })}
       $is_in_service={true}
       translate_x={translateX}
       translate_y={translateY}

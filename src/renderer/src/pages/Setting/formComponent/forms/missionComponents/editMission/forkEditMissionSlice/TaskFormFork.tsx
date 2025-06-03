@@ -535,7 +535,7 @@ const TaskFormFork: FC<{
               name="camera_config"
               rules={[{ required: true, message: t('utils.required') }]}
             >
-              <InputNumber min={1} placeholder="1" addonAfter="mm" />
+              <InputNumber min={0} placeholder="1" addonAfter="mm" />
             </Form.Item>
 
             <Form.Item
@@ -550,7 +550,7 @@ const TaskFormFork: FC<{
               name="modify_dis"
               rules={[{ required: true, message: t('utils.required') }]}
             >
-              <InputNumber min={1} placeholder="1" addonAfter="meter" />
+              <InputNumber min={0} placeholder="1" addonAfter="meter" />
             </Form.Item>
           </>
         ) : (
