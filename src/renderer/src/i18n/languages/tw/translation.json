@@ -97,7 +97,11 @@
     "warning_id_list": "警告 ID 列表",
     "none": "無",
     "has_warnings": "有警告",
-    "no_warnings": "無警告"
+    "no_warnings": "無警告",
+    "unknown": "未知",
+    "rcs": "交管",
+    "user": "使用者",
+    "wcs": "第三方"
   },
 
   "maintenance": {
@@ -270,7 +274,7 @@
   "edit_location_panel": {
     "none": "路徑點",
     "charge_station": "充電站",
-    "prepare_spot": "預備點",
+    "prepare_spot": "預派點",
     "wait_side": "待命區",
     "shelve": "貨區",
     "save": "儲存",

@@ -37,7 +37,7 @@ const LayerForm: FC<{
         [`hasCargo${indexStr}`]: info.hasCargo,
         [`levelName${indexStr}`]: levelName,
         [`disable${indexStr}`]: info.disable || false,
-        [`cargo_limit${indexStr}`]: info.cargo_limit || 0
+        [`cargo_limit${indexStr}`]: info.cargo_limit || false
       });
     });
   }, [form, layer]);
@@ -103,7 +103,7 @@ const LayerForm: FC<{
                 />
               </Form.Item>
               <Form.Item label={t('edit_road_panel.limit')} name={`cargo_limit${index}`}>
-                <Input type="number" min={0} placeholder="0" />
+                <Switch />
               </Form.Item>
             </div>
           );

@@ -245,7 +245,7 @@ const MissionTable = () => {
             }}
             variant="filled"
           >
-            open history
+            {t('mission_history.open')}
           </Button>
         </Flex>
       </BtnWrapper>

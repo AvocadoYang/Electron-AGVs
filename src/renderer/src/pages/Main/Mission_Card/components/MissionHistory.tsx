@@ -36,6 +36,20 @@ interface Mission {
   message?: string;
 }
 
+enum Send_By {
+  /**未知 */
+  UNKNOWN,
+
+  /**交管 */
+  RCS,
+
+  /**第三方的API */
+  WCS,
+
+  //**使用者於界面上派發 */
+  USER
+}
+
 const MissionHistory: FC<{
   isOpenMissionHistory: boolean;
   setIsOpenMissionHistory: Dispatch<SetStateAction<boolean>>;
@@ -142,6 +156,20 @@ const MissionHistory: FC<{
       dataIndex: 'send_by',
       key: 'send_by',
       sorter: (a, b) => a.send_by - b.send_by,
+      render(value: Send_By) {
+        switch (value) {
+          case Send_By.UNKNOWN:
+            return t('mission_history.unknown');
+          case Send_By.RCS:
+            return t('mission_history.rcs');
+          case Send_By.WCS:
+            return t('mission_history.wcs');
+          case Send_By.USER:
+            return t('mission_history.user');
+          default:
+            return t('mission_history.unknown');
+        }
+      },
       width: 100
     },
     {

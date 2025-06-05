@@ -97,7 +97,11 @@
     "warning_id_list": "Warning ID List",
     "none": "None",
     "has_warnings": "Has Warnings",
-    "no_warnings": "No Warnings"
+    "no_warnings": "No Warnings",
+    "unknown": "unknown",
+    "rcs": "RCS",
+    "user": "USER",
+    "wcs": "WCS"
   },
 
   "maintenance": {
