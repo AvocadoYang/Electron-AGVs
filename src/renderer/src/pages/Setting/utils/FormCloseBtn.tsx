@@ -27,7 +27,8 @@ import {
   isOpenUploadWarningIDModal,
   isShowEditBackup,
   QuickEditRoadSwitch,
-  isShowRegisterAMR
+  isShowRegisterAMR,
+  isShowEditAbortMissionWhenHasCargoMission
 } from '@renderer/utils/siderGloble';
 import { ToolBarItemType } from '../components/siderElement';
 
@@ -56,6 +57,7 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
   const setOpenScheduleMissionPanel = useSetAtom(isShowEditScheduleMission); // 5-5
   const setOpenIdleMissionPanel = useSetAtom(isShowEditIdleMission); // 5-6
   const setOpenTopicMissionPanel = useSetAtom(isShowEditTopicMission); // 5-7
+  const setOpenAbortMissionPanel = useSetAtom(isShowEditAbortMissionWhenHasCargoMission);
   const setOpenTagMissionPanel = useSetAtom(isShowEditMissionTag); // 6-1
   const setOpenEditChargeStationIconPanel = useSetAtom(isShowEditChargeStationPosition); // 6-2
   const setOpenWarningId = useSetAtom(isShowEditWarningId); // 7-1
@@ -121,6 +123,9 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
         break;
       case 'topic_mission':
         setOpenTopicMissionPanel(false);
+        break;
+      case 'abort_cargo_mission':
+        setOpenAbortMissionPanel(false);
         break;
       case 'edit_tag':
         setOpenTagMissionPanel(false);

@@ -18,6 +18,7 @@ import {
   EditShelfYawPanelSwitch,
   EditZoneSwitch,
   isShowAMRConfig,
+  isShowEditAbortMissionWhenHasCargoMission,
   isShowEditBackup,
   isShowEditBeforeLeftChargeStationMission,
   isShowEditChargeMission,
@@ -57,6 +58,7 @@ import { BackupPanel } from '../formComponent/forms/file/backup';
 import { RegisterAmrPanel } from '../formComponent/forms/amrSetting/registerAmr';
 import AmrConfigPanel from '../formComponent/forms/amrSetting/amrConfig/AmrConfigPanel';
 import QuickEditRoadPanel from '../formComponent/QuickEditRoadPanel';
+import { AbortCargoMissionPanel } from '../formComponent/forms/missionComponents/abortCargoMission';
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType;
@@ -309,6 +311,19 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
+          //6-8 縣市刪除任務身上有貨處理機制
+          case 'abort_cargo_mission':
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="topic_mission" />
+                <AbortCargoMissionPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            );
+
           // 7-1 顯示編輯標籤
           case 'edit_tag':
             return (
@@ -394,6 +409,7 @@ const ToolComponents: FC<{
   const openSchedulePanel = useAtomValue(isShowEditScheduleMission);
   const openIdlePanel = useAtomValue(isShowEditIdleMission);
   const openTopicPanel = useAtomValue(isShowEditTopicMission);
+  const openAbortCargoMission = useAtomValue(isShowEditAbortMissionWhenHasCargoMission);
   const openTagPanel = useAtomValue(isShowEditMissionTag);
   const openChargeStylePanel = useAtomValue(isShowEditChargeStationPosition);
   const openWarningPanel = useAtomValue(isShowEditWarningId);
@@ -510,6 +526,9 @@ const ToolComponents: FC<{
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'topic_mission' && openTopicPanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
+    }
+    if (formKey === 'abort_cargo_mission' && openAbortCargoMission) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'edit_tag' && openTagPanel) {

@@ -93,6 +93,22 @@ export const CarRow1 = styled.div.attrs<{ is_dark: string }>((props) => {
   }};
   justify-content: space-around;
 `;
+
+const NetworkDelay = styled.p<{ delay: number | undefined }>`
+  font-weight: bold;
+  font-size: 0.8em;
+  color: ${({ delay }) => {
+    if (delay === undefined) return 'gray';
+    if (delay <= 100) return 'green';
+    if (delay <= 300) return 'orange';
+    return 'red';
+  }};
+`;
+
+const WramOverdue = styled.span`
+  color: red;
+`;
+
 export const AmrTitle = styled.h2`
   font-size: 90%;
   line-height: 100%;
@@ -102,8 +118,9 @@ export const AmrTitle = styled.h2`
 
   white-space: nowrap;
 `;
+
 export const RowOne: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDark, amrId }) => {
-  const { isOnline } = useIsLogIn(amrId);
+  const { isOnline, networkDelay, isOverdue } = useIsLogIn(amrId);
   const { t } = useTranslation();
 
   const AmrID = useMemo(() => {
@@ -116,10 +133,29 @@ export const RowOne: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDa
   return (
     <CarRow1 is_dark={isDark.toString()}>
       <div>
-        <LogInStatus login={`${isOnline ? 'true' : 'false'}`}></LogInStatus>
+        <LogInStatus login={isOnline ? 'true' : 'false'} />
+
         <span
-          className={`login-text ${isOnline ? '' : 'offline-text'}`}
-        >{`${isOnline ? t('utils.online') : t('utils.offline')}`}</span>
+          className={`login-text ${
+            isOnline ? (isOverdue ? 'overdue-text' : 'online-text') : 'offline-text'
+          }`}
+        >
+          {isOnline ? (
+            isOverdue ? (
+              <WramOverdue>{t('utils.overdue')}</WramOverdue>
+            ) : (
+              t('utils.online')
+            )
+          ) : (
+            t('utils.offline')
+          )}
+        </span>
+
+        {isOnline && !isOverdue && (
+          <NetworkDelay delay={networkDelay}>
+            {networkDelay !== undefined ? `${networkDelay} ms` : '--'}
+          </NetworkDelay>
+        )}
       </div>
 
       <AmrTitle>

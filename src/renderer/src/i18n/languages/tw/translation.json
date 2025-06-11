@@ -50,6 +50,7 @@
     "meters": "米",
     "none": "無",
     "floor": "層",
+    "overdue": "逾時",
     "location_property": {
       "none": "點位",
       "charge_station": "充電站",
@@ -65,9 +66,11 @@
     "amr_id": "AMR ID",
     "status": "狀態",
     "pending": "等待中",
-    "in_progress": "執行中",
+    "assigned": "已指派",
+    "executing": "執行中",
     "completed": "已完成",
-    "failed": "失敗",
+    "aborting": "取消中",
+    "canceled": "已取消",
     "total_time": "總耗時",
     "min": "分鐘",
     "sec": "秒",
@@ -113,6 +116,12 @@
     "forbidden_rcs_mission": "不可接交管任務",
     "forbidden_user_mission": "不可接使用者任務",
     "broken": "車輛毀損"
+  },
+
+  "amr_card": {
+    "delete_current_mission": "刪除任務",
+    "emergency_stop": "啟動急停",
+    "continue_move": "解除急停"
   },
 
   "scale_pad": {
@@ -213,7 +222,8 @@
       "before_left_charge_station_mission": "離開充電站強制任務",
       "schedule_mission": "定時任務",
       "idle_mission": "閒置任務",
-      "topic_mission": "Topic任務"
+      "topic_mission": "Topic任務",
+      "abort_mission_when_has_cargo_mission": "刪除任務有貨處理"
     },
     "others": {
       "others": "其它",
@@ -813,6 +823,16 @@
       "missed": "少填資料",
       "amr_warn": "少填資料",
       "topic_duplicate": "topic id 重複",
+      "status": "狀態",
+      "executing": "運行中",
+      "stale": "停止"
+    },
+    "abort_mission_when_has_cargo_mission": {
+      "title": "刪除任務有貨處理",
+      "car": "車輛",
+      "amr_warn": "少填資料",
+      "mission": "任務",
+      "missed": "少填資料",
       "status": "狀態",
       "executing": "運行中",
       "stale": "停止"

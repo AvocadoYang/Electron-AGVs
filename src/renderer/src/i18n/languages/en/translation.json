@@ -50,6 +50,7 @@
     "meters": "Meters",
     "none": "noneA",
     "floor": "floor",
+    "overdue": "overdue",
     "location_property": {
       "none": "Normal",
       "charge_station": "Charge Station",
@@ -64,9 +65,12 @@
     "mission_id": "Mission ID",
     "amr_id": "AMR ID",
     "status": "Status",
-    "pending": "Pending",
-    "in_progress": "In Progress",
-    "completed": "Completed",
+    "pending": "pending",
+    "assigned": "assigned",
+    "executing": "executing",
+    "completed": "completed",
+    "aborting": "canceled",
+    "canceled": "canceled",
     "failed": "Failed",
     "total_time": "Total Time",
     "min": "min",
@@ -113,6 +117,12 @@
     "forbidden_rcs_mission": "Cannot accept traffic control mission",
     "forbidden_user_mission": "Cannot accept user missions",
     "broken": "The vehicle is damaged"
+  },
+
+  "amr_card": {
+    "delete_current_mission": "Delete mission",
+    "emergency_stop": "Start emergency stop",
+    "continue_move": "Release emergency stop"
   },
 
   "scale_pad": {
@@ -216,7 +226,8 @@
       "before_left_charge_station_mission": "Before left charge station mission",
       "schedule_mission": "Schedule mission",
       "idle_mission": "Idle mission",
-      "topic_mission": "Topic mission"
+      "topic_mission": "Topic mission",
+      "abort_mission_when_has_cargo_mission": "Delete mission when there is cargo to process"
     },
     "others": {
       "others": "Others",
@@ -817,6 +828,16 @@
       "topic_duplicate": "topic id duplicate",
       "executing": "Execution",
       "stale": "Stale"
+    },
+    "abort_mission_when_has_cargo_mission": {
+      "title": "Delete mission when there is cargo to process",
+      "car": "Vehicle",
+      "amr_warn": "amr is required",
+      "mission": "Mission",
+      "missed": "Missing information",
+      "status": "Status",
+      "executing": "Running",
+      "stale": "Stopped"
     }
   },
 

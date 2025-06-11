@@ -56,6 +56,34 @@ const BtnGroup: FC<{ amrId: string }> = ({ amrId }) => {
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
+  const emergencyMutation = useMutation({
+    mutationFn: (isStop: boolean) => {
+      return client.post('/api/amr/emergency-stop', { amrId, isStop });
+    },
+    onSuccess: () => {
+      void messageApi.success(t('utils.success'));
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  });
+
+  const deleteMissionMutation = useMutation({
+    mutationFn: () => {
+      return client.post('/api/amr/delete-mission', { amrId });
+    },
+    onSuccess: () => {
+      void messageApi.success(t('utils.success'));
+    },
+    onError: (e: ErrorResponse) => errorHandler(e, messageApi)
+  });
+
+  const handleEmergencyStop = (isStop: boolean) => {
+    emergencyMutation.mutate(isStop);
+  };
+
+  const handleDelMis = () => {
+    deleteMissionMutation.mutate();
+  };
+
   return (
     <>
       {contextHolder}
@@ -63,7 +91,18 @@ const BtnGroup: FC<{ amrId: string }> = ({ amrId }) => {
         <StyledButton type="primary" onClick={() => manualChargeMutation.mutate()}>
           {t('charge.charge')}
         </StyledButton>
+        <StyledButton type="primary" danger onClick={() => handleDelMis()}>
+          {t('amr_card.delete_current_mission')}
+        </StyledButton>
         <MaintenancePanel amrId={amrId} />
+
+        <StyledButton type="primary" danger onClick={() => handleEmergencyStop(true)}>
+          {t('amr_card.emergency_stop')}
+        </StyledButton>
+
+        <StyledButton type="primary" onClick={() => handleEmergencyStop(false)}>
+          {t('amr_card.continue_move')}
+        </StyledButton>
       </StyledFlex>
     </>
   );

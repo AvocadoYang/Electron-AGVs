@@ -152,6 +152,8 @@ const schema = () =>
       arriveInit: boolean().optional().default(false),
       smStatus: string().optional(),
       hasCargo: boolean().optional(),
+      networkDelay: number().optional(),
+      isOverdue: boolean().optional(),
       maintenanceLevel: number().optional()
     }).required()
   ).required();
@@ -337,7 +339,12 @@ export const useAmrPose = (amrId: string) => {
 };
 
 export const useIsLogIn = (amrId: string) => {
-  const [isOnline, setIsOnline] = useState(false);
+  const [data, setData] = useState({
+    isOnline: false,
+    networkDelay: 0,
+    isOverdue: false
+  });
+
   useEffect(() => {
     const profile$ = profiles$.pipe(
       map((p) => p.find((x) => x.amrId === amrId)),
@@ -346,17 +353,27 @@ export const useIsLogIn = (amrId: string) => {
     );
     const logIn$ = profile$
       .pipe(
-        map((info) => info.arriveInit),
+        map((info) => ({
+          isOnline: info.arriveInit,
+          delay: info.networkDelay,
+          isOverdue: info.isOverdue
+        })),
         distinctUntilChanged()
       )
-      .subscribe((isOnline) => setIsOnline(isOnline));
+      .subscribe(({ isOnline, delay, isOverdue }) => {
+        setData({
+          isOnline,
+          isOverdue: isOverdue || false,
+          networkDelay: delay || 0
+        });
+      });
 
     return () => {
       logIn$.unsubscribe();
     };
   }, [amrId]);
 
-  return { isOnline };
+  return data;
 };
 
 export const useCloseLoc = (amrId: string) => {

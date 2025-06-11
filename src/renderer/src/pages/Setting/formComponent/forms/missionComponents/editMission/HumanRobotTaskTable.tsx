@@ -139,7 +139,7 @@ const HumanRobotTaskTable: FC<{
   });
 
   const disableMutation = useMutation({
-    mutationFn: (payload: { id: string; disable: boolean }) => {
+    mutationFn: (payload: { id: string; disable: boolean; missionTitleId: string }) => {
       return client.post('api/setting/disable-task', payload);
     },
     onSuccess: async () => {
@@ -193,7 +193,7 @@ const HumanRobotTaskTable: FC<{
   };
 
   const disableTask = (id: string, disable: boolean) => {
-    disableMutation.mutate({ id, disable });
+    disableMutation.mutate({ id, disable, missionTitleId: selectedMissionKey });
   };
 
   const showImportMissionModal = (order: number) => {

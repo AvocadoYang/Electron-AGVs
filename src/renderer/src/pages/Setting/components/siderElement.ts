@@ -35,6 +35,7 @@ export const formList = [
   { key: 'schedule_mission' },
   { key: 'idle_mission' },
   { key: 'topic_mission' },
+  { key: 'abort_cargo_mission' },
   // ===================
   // === other ===
   { key: 'edit_tag' },

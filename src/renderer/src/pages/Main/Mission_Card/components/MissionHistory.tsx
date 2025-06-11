@@ -6,7 +6,9 @@ import {
   SyncOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
-  ExclamationCircleOutlined
+  ExclamationCircleOutlined,
+  LoadingOutlined,
+  MinusCircleOutlined
 } from '@ant-design/icons';
 import useAllMissionHistory from '@renderer/api/useMissionHistory';
 import { useTranslation } from 'react-i18next';
@@ -88,36 +90,60 @@ const MissionHistory: FC<{
       key: 'status',
       filters: [
         { text: t('mission_history.pending'), value: 0 },
-        { text: t('mission_history.in_progress'), value: 1 },
-        { text: t('mission_history.completed'), value: 2 },
-        { text: t('mission_history.failed'), value: 3 }
+        { text: t('mission_history.assigned'), value: 1 },
+        { text: t('mission_history.executing'), value: 2 },
+        { text: t('mission_history.completed'), value: 3 },
+        { text: t('mission_history.aborting'), value: 4 },
+        { text: t('mission_history.canceled'), value: 5 }
       ],
       onFilter: (value, record) => record.status === value,
       render: (status: number) => {
         let color = 'blue';
         let text = t('mission_history.pending');
         let icon = <SyncOutlined spin />;
-        if (status === 1) {
-          color = 'orange';
-          text = t('mission_history.in_progress');
-          icon = <SyncOutlined />;
-        } else if (status === 2) {
-          color = 'green';
-          text = t('mission_history.completed');
-          icon = <CheckCircleOutlined />;
-        } else if (status === 3) {
-          color = 'red';
-          text = t('mission_history.failed');
-          icon = <CloseCircleOutlined />;
+
+        switch (status) {
+          case 0:
+            color = 'blue';
+            text = t('mission_history.pending');
+            icon = <SyncOutlined spin />;
+            break;
+          case 1:
+            color = 'orange';
+            text = t('mission_history.assigned');
+            icon = <SyncOutlined />;
+            break;
+          case 2:
+            color = 'gold';
+            text = t('mission_history.executing');
+            icon = <LoadingOutlined />;
+            break;
+          case 3:
+            color = 'green';
+            text = t('mission_history.completed');
+            icon = <CheckCircleOutlined />;
+            break;
+          case 4:
+            color = 'red';
+            text = t('mission_history.aborting');
+            icon = <CloseCircleOutlined />;
+            break;
+          case 5:
+            color = 'gray';
+            text = t('mission_history.canceled');
+            icon = <MinusCircleOutlined />;
+            break;
         }
+
         return (
           <Tag color={color} icon={icon}>
             {text}
           </Tag>
         );
       },
-      width: 120
+      width: 150
     },
+
     {
       title: t('mission_history.full_name'),
       dataIndex: 'full_name',

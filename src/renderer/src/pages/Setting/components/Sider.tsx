@@ -31,7 +31,8 @@ import {
   isOpenSwitchMap,
   isShowRegisterAMR,
   isShowAMRConfig,
-  QuickEditRoadSwitch
+  QuickEditRoadSwitch,
+  isShowEditAbortMissionWhenHasCargoMission
 } from '@renderer/utils/siderGloble';
 import {
   AimOutlined,
@@ -110,6 +111,9 @@ const Sider: React.FC<{
     useAtom(isShowEditScheduleMission);
   const [openIdleMissionPanel, setOpenIdleMissionPanel] = useAtom(isShowEditIdleMission);
   const [openTopicMissionPanel, setOpenTopicMissionPanel] = useAtom(isShowEditTopicMission);
+  const [openEditAbortCargoMissionPanel, setEditAbortCargoMissionPanel] = useAtom(
+    isShowEditAbortMissionWhenHasCargoMission
+  );
 
   const [openRegisterAMR, setOpenRegisterAMR] = useAtom(isShowRegisterAMR);
   const [openAMRConfig, setOpenAMRConfig] = useAtom(isShowAMRConfig);
@@ -150,6 +154,7 @@ const Sider: React.FC<{
       openScheduleMissionPanel,
       openIdleMissionPanel,
       openTopicMissionPanel,
+      openEditAbortCargoMissionPanel,
       openTagMissionPanel,
       openEditChargeStationIconPanel,
       openRegisterAMR,
@@ -178,6 +183,7 @@ const Sider: React.FC<{
     openScheduleMissionPanel,
     openIdleMissionPanel,
     openTopicMissionPanel,
+    openEditAbortCargoMissionPanel,
     openTagMissionPanel,
     openEditChargeStationIconPanel,
     openRegisterAMR,
@@ -274,6 +280,11 @@ const Sider: React.FC<{
       case 'topic_mission':
         setOpenTopicMissionPanel(check);
         break;
+
+      case 'abort_cargo_mission':
+        setEditAbortCargoMissionPanel(check);
+        break;
+
       // ===================
       // ===================
       // === amr robot ===
@@ -508,6 +519,14 @@ const Sider: React.FC<{
         <Switch
           checked={openTopicMissionPanel}
           onChange={(checked) => handleShowPanel(checked, 'topic_mission')}
+        />
+      ),
+      getItem(
+        t('toolbar.mission.abort_mission_when_has_cargo_mission'),
+        '6-8',
+        <Switch
+          checked={openEditAbortCargoMissionPanel}
+          onChange={(checked) => handleShowPanel(checked, 'abort_cargo_mission')}
         />
       )
     ]),
