@@ -150,6 +150,7 @@ const schema = () =>
       doingTask: boolean().optional(),
       rosStatus: string().optional(),
       arriveInit: boolean().optional().default(false),
+      isPosAccurate: boolean().optional(),
       smStatus: string().optional(),
       hasCargo: boolean().optional(),
       networkDelay: number().optional(),
@@ -342,7 +343,8 @@ export const useIsLogIn = (amrId: string) => {
   const [data, setData] = useState({
     isOnline: false,
     networkDelay: 0,
-    isOverdue: false
+    isOverdue: false,
+    isPosAccurate: false
   });
 
   useEffect(() => {
@@ -356,15 +358,16 @@ export const useIsLogIn = (amrId: string) => {
         map((info) => ({
           isOnline: info.arriveInit,
           delay: info.networkDelay,
-          isOverdue: info.isOverdue
-        })),
-        distinctUntilChanged()
+          isOverdue: info.isOverdue,
+          isPosAccurate: info.isPosAccurate
+        }))
       )
-      .subscribe(({ isOnline, delay, isOverdue }) => {
+      .subscribe(({ isOnline, delay, isOverdue, isPosAccurate }) => {
         setData({
           isOnline,
           isOverdue: isOverdue || false,
-          networkDelay: delay || 0
+          networkDelay: delay || 0,
+          isPosAccurate: isPosAccurate || false
         });
       });
 

@@ -2,13 +2,14 @@
 
 import { Flex, Button, message, MenuProps, Dropdown } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import client from '@renderer/api/axiosClient';
 import { useMutation } from '@tanstack/react-query';
 import { MaintenanceLevel } from '@renderer/sockets/useAMRInfo';
 import styled from 'styled-components';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
+import EditCargoCarrier from './EditCargoCarrier';
 
 const StyledFlex = styled(Flex)`
   width: 100%;
@@ -45,6 +46,7 @@ const StyledDropdownButton = styled.div`
 const BtnGroup: FC<{ amrId: string }> = ({ amrId }) => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
+  const [isCarrierModalOpen, setIsCarrierModalOpen] = useState(false);
 
   const manualChargeMutation = useMutation({
     mutationFn: () => {
@@ -88,22 +90,41 @@ const BtnGroup: FC<{ amrId: string }> = ({ amrId }) => {
     <>
       {contextHolder}
       <StyledFlex justify="center" align="center" vertical gap="middle">
-        <StyledButton type="primary" onClick={() => manualChargeMutation.mutate()}>
+        <StyledButton
+          type="default"
+          variant="outlined"
+          onClick={() => manualChargeMutation.mutate()}
+        >
           {t('charge.charge')}
         </StyledButton>
-        <StyledButton type="primary" danger onClick={() => handleDelMis()}>
+        <StyledButton type="default" variant="outlined" danger onClick={() => handleDelMis()}>
           {t('amr_card.delete_current_mission')}
         </StyledButton>
         <MaintenancePanel amrId={amrId} />
 
-        <StyledButton type="primary" danger onClick={() => handleEmergencyStop(true)}>
+        <StyledButton
+          type="default"
+          variant="outlined"
+          danger
+          onClick={() => handleEmergencyStop(true)}
+        >
           {t('amr_card.emergency_stop')}
         </StyledButton>
 
-        <StyledButton type="primary" onClick={() => handleEmergencyStop(false)}>
+        <StyledButton type="default" variant="outlined" onClick={() => handleEmergencyStop(false)}>
           {t('amr_card.continue_move')}
         </StyledButton>
+
+        <StyledButton type="default" variant="outlined" onClick={() => setIsCarrierModalOpen(true)}>
+          {t('amr_card.update_cargo')}
+        </StyledButton>
       </StyledFlex>
+
+      <EditCargoCarrier
+        amrId={amrId}
+        isModalOpen={isCarrierModalOpen}
+        setIsModalOpen={setIsCarrierModalOpen}
+      />
     </>
   );
 };

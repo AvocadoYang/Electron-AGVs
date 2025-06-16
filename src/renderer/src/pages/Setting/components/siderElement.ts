@@ -41,6 +41,7 @@ export const formList = [
   { key: 'edit_tag' },
   { key: 'edit_charge_station_icon_style' },
   { key: 'edit_region_name' },
+  { key: 'custom_cargo_info' },
   // ===================
   // === config ===
   { key: 'warning_id' },

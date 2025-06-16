@@ -86,7 +86,8 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
     `${t('page_view')}`,
     `${t('page_dashboard')}`,
     `${t('page_setting')}`,
-    `${t('page_simulate')}`
+    `${t('page_simulate')}`,
+    `${t('page_analysis')}`
   ].map((name, index) => ({
     key: index + 1,
     label: name
@@ -105,6 +106,9 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         break;
       case '4':
         navigate('/simulate');
+        break;
+      case '5':
+        navigate('/mission-analysis');
         break;
       default:
         break;

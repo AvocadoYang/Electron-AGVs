@@ -74,6 +74,9 @@ export const isShowEditMissionTag = atom<boolean>(false);
 /** 7-2 顯示編輯充電站icon位置 */
 export const isShowEditChargeStationPosition = atom<boolean>(false);
 
+/** 7-3 顯示自定義貨物格式 */
+export const isShowEditCustomCargoFormat = atom<boolean>(false);
+
 /** 9-1 顯示編輯warning id */
 export const isShowEditWarningId = atom<boolean>(false);
 

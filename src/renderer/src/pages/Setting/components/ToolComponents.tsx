@@ -23,6 +23,7 @@ import {
   isShowEditBeforeLeftChargeStationMission,
   isShowEditChargeMission,
   isShowEditChargeStationPosition,
+  isShowEditCustomCargoFormat,
   isShowEditCycleMission,
   isShowEditIdleMission,
   isShowEditMission,
@@ -59,6 +60,7 @@ import { RegisterAmrPanel } from '../formComponent/forms/amrSetting/registerAmr'
 import AmrConfigPanel from '../formComponent/forms/amrSetting/amrConfig/AmrConfigPanel';
 import QuickEditRoadPanel from '../formComponent/QuickEditRoadPanel';
 import { AbortCargoMissionPanel } from '../formComponent/forms/missionComponents/abortCargoMission';
+import CustomCargoInfoPanel from '../formComponent/forms/other/customCargoInfo/CustomCargoInfoPanel';
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType;
@@ -348,6 +350,18 @@ const SortableWrap: FC<{
                 />
               </Card>
             );
+          // 7-3 顯示自定義貨物格式
+          case 'custom_cargo_info':
+            return (
+              <Card style={styles} ref={setNodeRef}>
+                <FormCloseBtn sortableId={sortableId} panelName="custom_cargo_info" />
+                <CustomCargoInfoPanel
+                  sortableId={sortableId}
+                  attributes={attributes}
+                  listeners={listeners}
+                />
+              </Card>
+            );
           // 8-1 顯示編輯warning id
           case 'warning_id':
             return (
@@ -412,6 +426,7 @@ const ToolComponents: FC<{
   const openAbortCargoMission = useAtomValue(isShowEditAbortMissionWhenHasCargoMission);
   const openTagPanel = useAtomValue(isShowEditMissionTag);
   const openChargeStylePanel = useAtomValue(isShowEditChargeStationPosition);
+  const openCargoFormatPanel = useAtomValue(isShowEditCustomCargoFormat);
   const openWarningPanel = useAtomValue(isShowEditWarningId);
   const openBackupPanel = useAtomValue(isShowEditBackup);
 
@@ -535,6 +550,9 @@ const ToolComponents: FC<{
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'edit_charge_station_icon_style' && openChargeStylePanel) {
+      return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
+    }
+    if (formKey === 'custom_cargo_info' && openCargoFormatPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'warning_id' && openWarningPanel) {

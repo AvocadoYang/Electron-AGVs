@@ -32,7 +32,8 @@ import {
   isShowRegisterAMR,
   isShowAMRConfig,
   QuickEditRoadSwitch,
-  isShowEditAbortMissionWhenHasCargoMission
+  isShowEditAbortMissionWhenHasCargoMission,
+  isShowEditCustomCargoFormat
 } from '@renderer/utils/siderGloble';
 import {
   AimOutlined,
@@ -122,6 +123,7 @@ const Sider: React.FC<{
   const [openEditChargeStationIconPanel, setOpenEditChargeStationIconPanel] = useAtom(
     isShowEditChargeStationPosition
   );
+  const [openCustomCargoFormat, setOpenCustomCargoFormat] = useAtom(isShowEditCustomCargoFormat);
 
   const [openWarningId, setOpenWarningId] = useAtom(isShowEditWarningId);
   const [OpenUploadWarningIDModal, setOpenUploadWarningIDModal] = useAtom(
@@ -157,6 +159,7 @@ const Sider: React.FC<{
       openEditAbortCargoMissionPanel,
       openTagMissionPanel,
       openEditChargeStationIconPanel,
+      openCustomCargoFormat,
       openRegisterAMR,
       openAMRConfig,
       openWarningId,
@@ -186,6 +189,7 @@ const Sider: React.FC<{
     openEditAbortCargoMissionPanel,
     openTagMissionPanel,
     openEditChargeStationIconPanel,
+    openCustomCargoFormat,
     openRegisterAMR,
     openAMRConfig,
     openWarningId,
@@ -305,6 +309,10 @@ const Sider: React.FC<{
         break;
       case 'edit_charge_station_icon_style':
         setOpenEditChargeStationIconPanel(check);
+        break;
+
+      case 'custom_cargo_info':
+        setOpenCustomCargoFormat(check);
         break;
       // ===================
       // === file ===
@@ -545,6 +553,14 @@ const Sider: React.FC<{
         <Switch
           checked={openEditChargeStationIconPanel}
           onChange={(checked) => handleShowPanel(checked, 'edit_charge_station_icon_style')}
+        />
+      ),
+      getItem(
+        t('toolbar.others.custom_cargo_info'),
+        '7-3',
+        <Switch
+          checked={openCustomCargoFormat}
+          onChange={(checked) => handleShowPanel(checked, 'custom_cargo_info')}
         />
       )
     ]),

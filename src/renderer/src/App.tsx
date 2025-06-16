@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Routes, Route, HashRouter } from 'react-router-dom';
 import { Main, LogIn, Setting, Register, Simulate } from './pages';
+import MissionAnalysis from './pages/MissionAnalysis/MissionAnalysis';
 
 const client = new QueryClient({
   defaultOptions: {
@@ -21,6 +22,7 @@ function App(): JSX.Element {
           <Route path="/dashboard" element={<Register />}></Route>
           <Route path="/setting" element={<Setting></Setting>}></Route>
           <Route path="/simulate" element={<Simulate />}></Route>
+          <Route path="/mission-analysis" element={<MissionAnalysis />}></Route>
           <Route path="/view" element={<Main />}></Route>
         </Routes>
       </HashRouter>

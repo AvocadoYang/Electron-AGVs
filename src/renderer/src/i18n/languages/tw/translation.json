@@ -121,7 +121,8 @@
   "amr_card": {
     "delete_current_mission": "刪除任務",
     "emergency_stop": "啟動急停",
-    "continue_move": "解除急停"
+    "continue_move": "解除急停",
+    "update_cargo": "編輯攜帶貨物資訊"
   },
 
   "scale_pad": {
@@ -169,6 +170,8 @@
   "page_dashboard": "控制中心",
   "page_simulate": "模擬任務",
   "simulate": "模擬的",
+  "page_analysis": "任務統計",
+
   "main_task_list": {
     "wait_suitable": "等待適合"
   },
@@ -229,7 +232,8 @@
       "others": "其它",
       "edit_gauge": "編輯錶頭",
       "edit_tag": "標籤設定",
-      "edit_charge_station_icon_style": "充電站 Icon"
+      "edit_charge_station_icon_style": "充電站 Icon",
+      "custom_cargo_info": "自定義貨物資訊"
     },
     "file_setting": {
       "file_setting": "檔案設定",
@@ -899,6 +903,17 @@
     "S": "自轉",
     "H": "枒杈升降",
     "W": "等待"
+  },
+
+  "customCargo": {
+    "create": "新增格式",
+    "modalTitle": "建立自訂貨物格式",
+    "name": "格式名稱",
+    "namePlaceholder": "例如：我的貨物格式",
+    "addField": "新增欄位",
+    "keyRequired": "欄位名稱為必填",
+    "valueRequired": "類型為必填",
+    "isDefault": "預設"
   },
 
   "sim": {

@@ -122,7 +122,8 @@
   "amr_card": {
     "delete_current_mission": "Delete mission",
     "emergency_stop": "Start emergency stop",
-    "continue_move": "Release emergency stop"
+    "continue_move": "Release emergency stop",
+    "update_cargo": "update carrier info"
   },
 
   "scale_pad": {
@@ -171,6 +172,7 @@
   "page_dashboard": "Dashboard",
   "page_simulate": "Simulate",
   "simulate": "simulate",
+  "page_analysis": "Mission analysis",
 
   "main_task_list": {
     "wait_suitable": "wait suitable"
@@ -233,7 +235,8 @@
       "others": "Others",
       "edit_gauge": "Edit Gauge",
       "edit_tag": "Edit Tag",
-      "edit_charge_station_icon_style": "Edit charge station icon style"
+      "edit_charge_station_icon_style": "Edit charge station icon style",
+      "custom_cargo_info": "custom cargo info"
     },
     "file_setting": {
       "file_setting": "File Setting",
@@ -901,6 +904,17 @@
     "S": "spin",
     "H": "fork movement",
     "W": "wait"
+  },
+
+  "customCargo": {
+    "create": "Create Format",
+    "modalTitle": "Create Custom Cargo Format",
+    "name": "Custom Format Name",
+    "namePlaceholder": "e.g., My Cargo Format",
+    "addField": "Add Field",
+    "keyRequired": "Key is required",
+    "valueRequired": "Value type is required",
+    "isDefault": "is default"
   },
 
   "sim": {
