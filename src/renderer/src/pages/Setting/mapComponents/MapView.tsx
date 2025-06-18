@@ -30,6 +30,9 @@ import ToolTip from '../components/ToolTip';
 import SudoCargo from './components/AllCargo.tsx/SudoCargo';
 import { AllChargeStation } from './components/AllChargeStation';
 import SudoChargeStation from '../formComponent/forms/other/editChargeStationIcon/SudoChargeStation';
+import CargoDetail from './components/AllCargo.tsx/CargoDetail';
+import { GlobalCargoInfoModal } from './components/AllCargo.tsx/jotaiState';
+import CargoModal from './components/AllCargo.tsx/CargoModal';
 
 const MapView: React.FC<{
   scale: number;
@@ -76,6 +79,7 @@ const MapView: React.FC<{
   const shelfSelectedStyleId = useAtomValue(shelfSelectedStyleLocationId);
   const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   const showRoad = useAtomValue(isShowRoad);
+  const openCargoInfo = useAtomValue(GlobalCargoInfoModal);
 
   if (currentVersion) {
     const defaultCookie = Cookies.get('version');
@@ -182,6 +186,10 @@ const MapView: React.FC<{
       {shelfSelectedStyleId === '' ? [] : <SudoCargo />}
 
       <SudoChargeStation />
+
+      {openCargoInfo ? <CargoDetail /> : []}
+
+      <CargoModal />
     </div>
   );
 };

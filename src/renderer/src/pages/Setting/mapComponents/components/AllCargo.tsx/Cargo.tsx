@@ -1,17 +1,17 @@
-import { Form, message } from 'antd';
-import { FC, memo, useCallback, useState } from 'react';
+import { message } from 'antd';
+import { FC, memo, useCallback } from 'react';
 
 import { WrapperType } from './types';
 import styled from 'styled-components';
 import { useCargoMutations } from './hook/useCargoMutations';
 import CargoDisplay from './CargoDisplay';
-import CargoModal from './CargoModal';
 import { CargoInfo } from '@renderer/sockets/useCargoInfo';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { EditRoadPanelSwitch, EditZoneSwitch } from '@renderer/utils/siderGloble';
 import { LoadingStation } from './LoadingStation';
 import { IsEditingQuickRoads, QuickRoadsArray } from '@renderer/pages/Setting/utils/settingJotai';
 import { prefixLevelName } from '@renderer/utils/globalFunction';
+import { BaseGlobalCargoInfoModal, GlobalCargoData } from './jotaiState';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -47,18 +47,15 @@ const Cargo: FC<{
   flex_direction: string;
   shelfInfo: CargoInfo | undefined;
 }> = ({ id, locId, translateX, translateY, rotate, scale, shelfInfo, flex_direction }) => {
-  const [settingForm] = Form.useForm();
-  const [layerForm] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const openEditZone = useAtomValue(EditZoneSwitch);
   const openEditRoadPanel = useAtomValue(EditRoadPanelSwitch);
-  const [isEditLayer, setIsEditLayer] = useState(false);
   const { editColumnMutation } = useCargoMutations(messageApi);
-
   const quickRoad = useAtomValue(IsEditingQuickRoads);
   const setQuickRoadArr = useSetAtom(QuickRoadsArray);
+
+  const setBaseModal = useSetAtom(BaseGlobalCargoInfoModal);
+  const setGlobalData = useSetAtom(GlobalCargoData);
 
   const handleQuickRoad = (locationId: string) => {
     if (!quickRoad) return;
@@ -66,14 +63,15 @@ const Cargo: FC<{
     setQuickRoadArr((prev) => [...prev, locationId]);
   };
 
-  const handleCargo = () => {
+  const handleCargo = (data: { id: string; locationId: string; shelfInfo: CargoInfo }) => {
     if (quickRoad) {
       handleQuickRoad(locId);
       return;
     }
 
     if (openEditRoadPanel || openEditZone) return;
-    setIsEditModalOpen(true);
+    setBaseModal(true);
+    setGlobalData(data);
   };
 
   const handleMouseDown = useCallback(
@@ -95,7 +93,11 @@ const Cargo: FC<{
         scale={scale}
         rotate={rotate}
         onClick={() => {
-          handleCargo();
+          handleCargo({
+            id,
+            locationId: locId,
+            shelfInfo
+          });
         }}
       >
         {' '}
@@ -120,17 +122,6 @@ const Cargo: FC<{
           );
         })}
       </WrapperDiv>
-      <CargoModal
-        id={id}
-        locId={locId}
-        settingForm={settingForm}
-        layerForm={layerForm}
-        shelfInfo={shelfInfo}
-        isEditLayer={isEditLayer}
-        isEditModalOpen={isEditModalOpen}
-        setIsEditModalOpen={setIsEditModalOpen}
-        setIsEditLayer={setIsEditLayer}
-      />
     </>
   );
 };

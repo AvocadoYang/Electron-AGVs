@@ -57,11 +57,15 @@ const CargoFormatModal: FC<Props> = ({ open, onClose, onSubmit, initialValues, l
           <Input placeholder={t('customCargo.namePlaceholder')} />
         </Form.Item>
 
-        <Form.Item name="is_default" label={t('customCargo.name')} rules={[{ required: true }]}>
+        <Form.Item
+          name="is_default"
+          label={t('customCargo.isDefault')}
+          rules={[{ required: true }]}
+        >
           <Select
             options={[
-              { value: true, label: 'yes' },
-              { value: false, label: 'no' }
+              { value: true, label: t('utils.yes') },
+              { value: false, label: t('utils.no') }
             ]}
           />
         </Form.Item>

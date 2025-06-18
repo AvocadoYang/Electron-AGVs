@@ -120,11 +120,13 @@ const BtnGroup: FC<{ amrId: string }> = ({ amrId }) => {
         </StyledButton>
       </StyledFlex>
 
-      <EditCargoCarrier
-        amrId={amrId}
-        isModalOpen={isCarrierModalOpen}
-        setIsModalOpen={setIsCarrierModalOpen}
-      />
+      {isCarrierModalOpen && (
+        <EditCargoCarrier
+          amrId={amrId}
+          isModalOpen={isCarrierModalOpen}
+          setIsModalOpen={setIsCarrierModalOpen}
+        />
+      )}
     </>
   );
 };

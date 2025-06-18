@@ -1,11 +1,13 @@
 import client from '@renderer/api/axiosClient';
 import useCustomCargoFormat from '@renderer/api/useCustomCargoFormat';
+import { useIsCarry } from '@renderer/sockets/useAMRInfo';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation } from '@tanstack/react-query';
-import { Form, Modal, Select, Input, message } from 'antd';
+import { Form, Modal, Select, Input, message, Switch, Flex } from 'antd';
 import { FC, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import ReactJsonView from '@uiw/react-json-view';
 
 type DataType = {
   id: string;
@@ -25,6 +27,8 @@ const EditCargoCarrier: FC<{
   const [form] = Form.useForm();
   const [dynamicFields, setDynamicFields] = useState<{ name: string; type: string }[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const [hasCargo, setHasCargo] = useState(false);
+  const { isCarry, metadata, customCargoMetadataId } = useIsCarry(amrId);
 
   const options = data?.map((v) => ({
     label: v?.custom_name,
@@ -32,10 +36,15 @@ const EditCargoCarrier: FC<{
   }));
 
   const editMutation = useMutation({
-    mutationFn: (payload: { amrId: string; metadata: string; custom_cargo_metadata_id: string }) =>
-      client.post('/api/amr/update-cargo-info', payload),
+    mutationFn: (payload: {
+      amrId: string;
+      hasCargo: boolean;
+      metadata: string;
+      custom_cargo_metadata_id: string;
+    }) => client.post('/api/amr/update-cargo-info', payload),
     onSuccess: () => {
       messageApi.success(t('utils.success'));
+      setIsModalOpen(false);
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -57,12 +66,49 @@ const EditCargoCarrier: FC<{
   }, [format]);
 
   useEffect(() => {
+    if (!isModalOpen) return;
+
+    if (isCarry) {
+      setHasCargo(true);
+      try {
+        const parsed = metadata ? JSON.parse(metadata) : {};
+
+        form.setFieldsValue({
+          hasCargo: true,
+          ...parsed
+        });
+      } catch (err) {
+        console.error('Failed to parse metadata from socket:', err);
+      }
+    }
+  }, [isCarry, metadata, isModalOpen, form]);
+
+  useEffect(() => {
     if (!data || data.length === 0) return;
 
-    const defaultData = data.find((v) => v?.is_default) || data[0];
-    setFormat(defaultData as DataType);
-    form.setFieldsValue({ custom_cargo_metadata_id: defaultData?.id });
-  }, [data, form]);
+    // console.log('render');
+    // console.log(customCargoMetadataId, 'custom');
+
+    if (customCargoMetadataId) {
+      //   console.log('1');
+      const customData = data.find((v) => v?.id === customCargoMetadataId);
+      setFormat(customData as DataType);
+      form.setFieldsValue({ custom_cargo_metadata_id: customData?.id });
+    } else {
+      const defaultData = data.find((v) => v?.is_default);
+      //console.log('2');
+      //可能是取到的貨格式沒有在定義內
+      if (!defaultData || customCargoMetadataId === null) {
+        //console.log('3');
+        setFormat(null);
+        form.setFieldsValue({ custom_cargo_metadata_id: null });
+        return;
+      }
+      //  console.log('4');
+      setFormat(defaultData as DataType);
+      form.setFieldsValue({ custom_cargo_metadata_id: defaultData?.id });
+    }
+  }, [data, form, isCarry]);
 
   const handleSelectChange = (value: string) => {
     const selectedFormat = data?.find((v) => v?.id === value);
@@ -83,14 +129,13 @@ const EditCargoCarrier: FC<{
             {} as Record<string, any>
           )
         };
-        console.log('Form data:', formData);
 
         editMutation.mutate({
           amrId,
           metadata: JSON.stringify(formData.metadata),
+          hasCargo,
           custom_cargo_metadata_id: formData.custom_cargo_metadata_id
         });
-        setIsModalOpen(false);
       })
       .catch((error) => {
         console.error('Form validation failed:', error);
@@ -130,24 +175,47 @@ const EditCargoCarrier: FC<{
         onCancel={handleCancel}
       >
         <Form form={form} layout="vertical">
-          <Form.Item
-            label={t('customCargo.name')}
-            name="custom_cargo_metadata_id"
-            rules={[{ required: true, message: t('utils.required') }]}
-          >
+          <Form.Item label={t('customCargo.name')} name="custom_cargo_metadata_id">
             <Select options={options} onChange={handleSelectChange} />
           </Form.Item>
 
-          {dynamicFields.map((field) => (
-            <Form.Item
-              key={field.name}
-              label={field.name}
-              name={field.name}
-              rules={[{ required: true, message: `${field.name} is required` }]}
-            >
-              {renderInput(field.type, field.name)}
-            </Form.Item>
-          ))}
+          <Form.Item
+            label={t('shelf.layer_form.has_cargo')}
+            name={`hasCargo`}
+            valuePropName="checked"
+          >
+            <Switch
+              value={hasCargo}
+              onChange={() => setHasCargo(!hasCargo)}
+              checkedChildren={t('shelf.layer_form.has_cargo')}
+              unCheckedChildren={t('shelf.layer_form.no_cargo')}
+            />
+          </Form.Item>
+
+          {format ? (
+            dynamicFields.map((field) => (
+              <Form.Item key={field.name} label={field.name} name={field.name}>
+                {renderInput(field.type, field.name)}
+              </Form.Item>
+            ))
+          ) : (
+            <>
+              <Flex vertical gap="middle">
+                <p>{t('customCargo.not_defined_format')}</p>
+                {metadata ? (
+                  <ReactJsonView
+                    displayDataTypes={false}
+                    value={JSON.parse(metadata as string)}
+                    collapsed={false}
+                    enableClipboard={false}
+                    style={{ fontSize: 14 }}
+                  />
+                ) : (
+                  []
+                )}
+              </Flex>
+            </>
+          )}
         </Form>
       </Modal>
     </>

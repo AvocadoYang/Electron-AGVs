@@ -47,7 +47,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
       <ConfigProvider
         theme={{
           token: {
-            colorBgElevated: 'rgba(255, 254, 254, 0.65)'
+            colorBgElevated: 'rgb(255, 255, 255)'
           },
           components: {
             Popover: {

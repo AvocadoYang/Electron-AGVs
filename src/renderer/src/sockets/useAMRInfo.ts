@@ -153,6 +153,8 @@ const schema = () =>
       isPosAccurate: boolean().optional(),
       smStatus: string().optional(),
       hasCargo: boolean().optional(),
+      cargoMetadata: string().optional().nullable(),
+      customCargoMetadataId: string().optional().nullable(),
       networkDelay: number().optional(),
       isOverdue: boolean().optional(),
       maintenanceLevel: number().optional()
@@ -620,7 +622,15 @@ export const useIsManual = (amrId: string) => {
 };
 
 export const useIsCarry = (amrId: string) => {
-  const [isCarry, setIsCarry] = useState<boolean | undefined>(false);
+  const [isCarry, setIsCarry] = useState<{
+    isCarry: boolean;
+    metadata: string | null;
+    customCargoMetadataId: string | null;
+  }>({
+    isCarry: false,
+    metadata: null,
+    customCargoMetadataId: null
+  });
   useEffect(() => {
     const profile$ = profiles$.pipe(
       map((p) => p.find((x) => x.amrId === amrId)),
@@ -629,17 +639,23 @@ export const useIsCarry = (amrId: string) => {
     );
     const isCarry$ = profile$
       .pipe(
-        map((info) => info.hasCargo),
+        map((info) => ({
+          hasCargo: info.hasCargo || false,
+          metadata: info.cargoMetadata || null,
+          customCargoMetadataId: info.customCargoMetadataId || null
+        })),
         distinctUntilChanged()
       )
-      .subscribe((isWorking) => setIsCarry(isWorking));
+      .subscribe(({ hasCargo, metadata, customCargoMetadataId }) =>
+        setIsCarry({ isCarry: hasCargo, metadata: metadata, customCargoMetadataId })
+      );
 
     return () => {
       isCarry$.unsubscribe();
     };
   }, [amrId]);
 
-  return { isCarry };
+  return isCarry;
 };
 
 export const useIsCharging = (amrId: string) => {

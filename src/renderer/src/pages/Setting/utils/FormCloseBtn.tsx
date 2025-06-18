@@ -28,7 +28,8 @@ import {
   isShowEditBackup,
   QuickEditRoadSwitch,
   isShowRegisterAMR,
-  isShowEditAbortMissionWhenHasCargoMission
+  isShowEditAbortMissionWhenHasCargoMission,
+  isShowEditCustomCargoFormat
 } from '@renderer/utils/siderGloble';
 import { ToolBarItemType } from '../components/siderElement';
 
@@ -60,6 +61,7 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
   const setOpenAbortMissionPanel = useSetAtom(isShowEditAbortMissionWhenHasCargoMission);
   const setOpenTagMissionPanel = useSetAtom(isShowEditMissionTag); // 6-1
   const setOpenEditChargeStationIconPanel = useSetAtom(isShowEditChargeStationPosition); // 6-2
+  const setOpenCustomCargoInfoPanel = useSetAtom(isShowEditCustomCargoFormat); // 6-3
   const setOpenWarningId = useSetAtom(isShowEditWarningId); // 7-1
   const setOpenUploadWarningIDModal = useSetAtom(isOpenUploadWarningIDModal); //7-2
   const setOpenBackup = useSetAtom(isShowEditBackup); // 7-3
@@ -144,6 +146,9 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
         break;
       case 'edit_register_amr':
         setOpenRegisterAmr(false);
+        break;
+      case 'custom_cargo_info':
+        setOpenCustomCargoInfoPanel(false);
         break;
       case 'edit_amr_config':
       case 'shelf_mission':

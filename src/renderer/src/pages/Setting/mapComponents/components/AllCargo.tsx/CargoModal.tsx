@@ -1,35 +1,21 @@
-import { FC, SetStateAction } from 'react';
-import { FormInstance, message, Modal } from 'antd';
+import { FC, useState } from 'react';
+import { Form, message, Modal } from 'antd';
 import { useCargoMutations } from './hook/useCargoMutations';
 import { FormCargo, LayerType } from './types';
 import { useTranslation } from 'react-i18next';
 import CargoMissionForm from './CargoMissionForm';
 import LayerForm from './LayerForm';
-import { CargoInfo } from '@renderer/sockets/useCargoInfo';
+import { useAtom, useAtomValue } from 'jotai';
+import { BaseGlobalCargoInfoModal, GlobalCargoData } from './jotaiState';
 
-const CargoModal: FC<{
-  id: string;
-  locId: string;
-  settingForm: FormInstance<unknown>;
-  layerForm: FormInstance<unknown>;
-  shelfInfo: CargoInfo | undefined;
-  isEditLayer: boolean;
-  isEditModalOpen: boolean;
-  setIsEditLayer: (value: SetStateAction<boolean>) => void;
-  setIsEditModalOpen: (value: SetStateAction<boolean>) => void;
-}> = ({
-  id,
-  locId,
-  settingForm,
-  layerForm,
-  shelfInfo,
-  isEditLayer,
-  isEditModalOpen,
-  setIsEditModalOpen,
-  setIsEditLayer
-}) => {
+const CargoModal: FC = () => {
+  const [settingForm] = Form.useForm();
+  const [layerForm] = Form.useForm();
   const [messageApi, contextHolders] = message.useMessage();
   const { editMutation } = useCargoMutations(messageApi);
+  const { id, locationId: locId, shelfInfo } = useAtomValue(GlobalCargoData);
+  const [isEditModalOpen, setIsEditModalOpen] = useAtom(BaseGlobalCargoInfoModal);
+  const [isEditLayer, setIsEditLayer] = useState(false);
   const { t } = useTranslation();
 
   const handleEditOk = () => {
@@ -40,8 +26,8 @@ const CargoModal: FC<{
     setIsEditLayer(false);
 
     const mis = {
-      id,
-      loc: locId,
+      id: id as string,
+      loc: locId as string,
       name: payload.name || '',
       region: payload.region,
       directionId: payload.yaw,
@@ -61,6 +47,8 @@ const CargoModal: FC<{
   const handleEditCancel = () => {
     setIsEditModalOpen(false);
   };
+
+  if (!locId || !shelfInfo) return [];
 
   return (
     <>

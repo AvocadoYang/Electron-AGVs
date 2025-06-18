@@ -441,6 +441,7 @@
       "has_cargo": "有貨",
       "no_cargo": "無貨",
       "cargo_name": "貨名",
+      "edit_detail": "編輯貨物詳細資訊",
       "cargo_limit": "貨架高度鎖定",
       "pallet": "板"
     },
@@ -913,7 +914,8 @@
     "addField": "新增欄位",
     "keyRequired": "欄位名稱為必填",
     "valueRequired": "類型為必填",
-    "isDefault": "預設"
+    "isDefault": "預設",
+    "not_defined_format": "尚未定義或是此貨物的資料格式未定義"
   },
 
   "sim": {

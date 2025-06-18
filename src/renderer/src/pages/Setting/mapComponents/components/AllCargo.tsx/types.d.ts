@@ -20,11 +20,15 @@ export type FormCargo = {
 };
 export type LayerType = {
   [level: number]: {
+    dbId: string;
     levelName: string;
     booked: boolean;
     cargo_limit: number;
     disable: boolean;
     hasCargo: boolean;
+    cargoInfoId: string | null;
+    customCargoMetadataId: string | null;
+    metadata: string | null;
   };
 };
 

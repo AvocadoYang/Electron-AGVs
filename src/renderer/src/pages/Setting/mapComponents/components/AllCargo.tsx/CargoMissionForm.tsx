@@ -113,7 +113,9 @@ const CargoMissionForm: FC<{
         background: '#fff',
         padding: '24px',
         borderRadius: 8,
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        maxHeight: '70vh',
+        overflowY: 'auto'
       }}
     >
       <Form form={form} layout="vertical" size="large" initialValues={{ name: locName }}>

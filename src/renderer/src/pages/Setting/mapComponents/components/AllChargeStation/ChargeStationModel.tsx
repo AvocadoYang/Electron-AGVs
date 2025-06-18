@@ -12,8 +12,8 @@ import useLocation from '@renderer/api/useLocation';
 import Draggable from 'react-draggable';
 
 type Open = {
-  $is_open: boolean
-}
+  $is_open: boolean;
+};
 
 const Box = styled.div`
   display: flex;
@@ -51,8 +51,8 @@ const InfoWrapper = styled.div`
 `;
 
 type HasTrigger = {
-  b: boolean
-}
+  b: boolean;
+};
 
 const C = styled.div<HasTrigger>`
   width: 100%;
@@ -83,15 +83,15 @@ const NoConnectBlock = styled.div`
 `;
 
 const PointDiv = styled.div.attrs<{
-  left: number
-  top: number
-  canrotate: string
+  left: number;
+  top: number;
+  canrotate: string;
 }>(({ left, top, canrotate }) => ({
   style: { left, top, canrotate }
 }))<{
-  left: number
-  top: number
-  canrotate: string
+  left: number;
+  top: number;
+  canrotate: string;
 }>`
   position: absolute;
   width: ${(props) => (props.canrotate === 'true' ? '6.5px' : '5px')};
@@ -113,7 +113,7 @@ const ChargeStationModel: FC = () => {
   if (!open || !data) return [];
 
   const info =
-    (AllStation?.chargingStations.find((v) => v.id === open.location)
+    (AllStation?.chargingStations.find((v) => v.locationId === open.location)
       ?.info as ChargeStationResponseObj) || null;
 
   const [displayX, displayY] = rosCoord2DisplayCoord({

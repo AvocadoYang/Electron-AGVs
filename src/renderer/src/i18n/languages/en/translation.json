@@ -446,6 +446,7 @@
       "has_cargo": "Has Cargo",
       "no_cargo": "No Cargo",
       "cargo_name": "Cargo Name",
+      "edit_detail": "edit cargo detail info",
       "cargo_limit": "Cargo Limit",
       "pallet": "Pallet"
     },
@@ -914,7 +915,8 @@
     "addField": "Add Field",
     "keyRequired": "Key is required",
     "valueRequired": "Value type is required",
-    "isDefault": "is default"
+    "isDefault": "is default",
+    "not_defined_format": "Not yet defined or the data format for this cargo custom info is not defined"
   },
 
   "sim": {
