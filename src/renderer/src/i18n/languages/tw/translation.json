@@ -171,6 +171,7 @@
   "page_simulate": "模擬任務",
   "simulate": "模擬的",
   "page_analysis": "任務統計",
+  "page_cargo_history": "貨物紀錄",
 
   "main_task_list": {
     "wait_suitable": "等待適合"
@@ -1024,5 +1025,17 @@
         "carried": "搬運數"
       }
     }
+  },
+  "cargo_history": {
+    "cargoId": "貨物編號",
+    "status": "狀態",
+    "customFormat": "自定義格式",
+    "metadata": "中繼資料",
+    "createdAt": "建立時間",
+    "history": "歷史紀錄",
+    "search": "搜尋",
+    "reset": "重置",
+    "refetch": "重新載入",
+    "no_defined": "尚未定義資料格式"
   }
 }

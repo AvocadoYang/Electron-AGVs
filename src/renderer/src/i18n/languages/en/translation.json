@@ -173,6 +173,7 @@
   "page_simulate": "Simulate",
   "simulate": "simulate",
   "page_analysis": "Mission analysis",
+  "page_cargo_history": "Cargo History",
 
   "main_task_list": {
     "wait_suitable": "wait suitable"
@@ -1023,5 +1024,17 @@
         "carried": "carried"
       }
     }
+  },
+  "cargo_history": {
+    "cargoId": "Cargo ID",
+    "status": "Status",
+    "customFormat": "Custom Format",
+    "metadata": "Metadata",
+    "createdAt": "Created At",
+    "history": "History",
+    "search": "Search",
+    "reset": "Reset",
+    "refetch": "Refetch",
+    "no_defined": "Data format has not been defined yet"
   }
 }
