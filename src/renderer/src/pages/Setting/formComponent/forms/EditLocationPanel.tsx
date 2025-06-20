@@ -11,6 +11,8 @@ import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import FormHr from '../../utils/FormHr';
 import { SaveOutlined } from '@ant-design/icons';
+import useAllAreaTypes from '@renderer/api/useAllAreaTypes';
+import { locationOption } from '../../utils/func';
 
 const EditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>;
@@ -20,6 +22,7 @@ const EditLocationPanel: React.FC<{
 }> = ({ locationPanelForm, attributes, listeners }) => {
   const queryClient = useQueryClient();
   const [messageApi, contextHolders] = message.useMessage();
+  const { data: locGenre } = useAllAreaTypes();
   const { t } = useTranslation();
 
   const saveLocationMutation = useMutation({
@@ -35,7 +38,6 @@ const EditLocationPanel: React.FC<{
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
-
   const savePose = () => {
     const payload = locationPanelForm.getFieldsValue() as LocationType;
     const isNegative = Number(payload.locationId) <= 0;
@@ -115,15 +117,18 @@ const EditLocationPanel: React.FC<{
               name="rotation"
               style={{ marginBottom: 16 }}
               rules={[
-                { required: true, message: '必填' },
-                { max: 360, message: '不可超過360' },
-                { min: -360, message: '不可小於-360' }
+                { required: true, message: t('utils.required') },
+                { max: 360, message: t('edit_location_panel.save_pose_notify.no_more_than_360') },
+                {
+                  min: -360,
+                  message: t('edit_location_panel.save_pose_notify.cannot_be_less_than_-360')
+                }
               ]}
             >
               <Input type="number" />
             </Form.Item>
             <Form.Item
-              label="是否可旋轉"
+              label={t('edit_location_panel.can_rotate')}
               name="canRotate"
               valuePropName="checked"
               shouldUpdate
@@ -132,13 +137,13 @@ const EditLocationPanel: React.FC<{
               <Checkbox />
             </Form.Item>
           </Space>
-          <Form.Item label={'功能'} name="areaType" style={{ marginBottom: 16 }}>
+          <Form.Item
+            label={t('edit_location_panel.areaType')}
+            name="areaType"
+            style={{ marginBottom: 16 }}
+          >
             <Radio.Group>
-              <Radio value="Extra">{t('edit_location_panel.none')}</Radio>
-              <Radio value="充電區">{t('edit_location_panel.charge_station')}</Radio>
-              <Radio value="預派點">{t('edit_location_panel.prepare_spot')}</Radio>
-              <Radio value="待命區">{t('edit_location_panel.wait_side')}</Radio>
-              <Radio value="存貨區">{t('edit_location_panel.shelve')}</Radio>
+              {locGenre?.map(({ value }) => <Radio value={value}>{locationOption(value)}</Radio>)}
             </Radio.Group>
           </Form.Item>
           <Form.Item style={{ textAlign: 'center' }}>

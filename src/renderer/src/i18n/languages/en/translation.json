@@ -295,15 +295,23 @@
     "prepare_spot": "prepare location",
     "wait_side": "wait side",
     "shelve": "shelve",
+    "can_rotate": "Can Rotate",
     "save": "save",
-
+    "elevator": "Elevator",
+    "roboticArm": "Robotic Arm",
+    "conveyor": "Conveyor",
+    "liftGate": "Lifting Gate",
+    "palletizer": "Palletizer",
+    "areaType": "Area Type",
     "save_pose_notify": {
       "empty_value": "X/Y is required",
       "fill_in_value": "Please fill in the X/Y value",
       "format_warn": "formate error",
       "is_a_navigate": "Location ID can't be a negative number",
       "duplicate_id": "duplicate ID",
-      "change_duplicate_id": "please change ID, can not be same"
+      "change_duplicate_id": "please change ID, can not be same",
+      "no_more_than_360": "No more than 360",
+      "cannot_be_less_than_-360": "No less than -360"
     },
 
     "table_notify": {

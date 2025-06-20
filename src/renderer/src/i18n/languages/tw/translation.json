@@ -292,14 +292,23 @@
     "prepare_spot": "預派點",
     "wait_side": "待命區",
     "shelve": "貨區",
+    "can_rotate": "是否可旋轉",
     "save": "儲存",
+    "areaType": "地點功能",
+    "elevator": " 電梯",
+    "roboticArm": "機器手臂",
+    "conveyor": "傳送帶",
+    "liftGate": "升降門",
+    "palletizer": "棧板機",
     "save_pose_notify": {
       "empty_value": "X/Y 為必填值",
       "fill_in_value": "請填入 X/Y 值",
       "format_warn": "格式錯誤 (點位不可為負值)",
       "is_a_navigate": "點位 ID 不可為負值",
       "duplicate_id": "ID 重複",
-      "change_duplicate_id": "請檢查輸入 ID,不可重複！"
+      "change_duplicate_id": "請檢查輸入 ID,不可重複！",
+      "no_more_than_360": "不可超過360",
+      "cannot_be_less_than_-360": "不可小於-360"
     },
 
     "table_notify": {

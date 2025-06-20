@@ -25,6 +25,8 @@ import {
   TempStoredLocationsForQuickEditPanel
 } from '@renderer/utils/gloable';
 import FormHr from '../../utils/FormHr';
+import useAllAreaTypes from '@renderer/api/useAllAreaTypes';
+import { locationOption } from '../../utils/func';
 
 const initialFormDate = {
   genre: 'Extra',
@@ -56,10 +58,6 @@ type FormT = {
 const selectDirX = [{ value: 'left' }, { value: 'right' }];
 const selectDirY = [{ value: 'top' }, { value: 'down' }];
 
-const locGenre = ['Extra', '充電區', '預派點', '待命區', '存貨區'].map((v) => ({
-  value: v
-}));
-
 const QuickEditLocationPanel: React.FC<{
   locationPanelForm: FormInstance<unknown>;
   sortableId: string;
@@ -68,6 +66,7 @@ const QuickEditLocationPanel: React.FC<{
 }> = ({ attributes, listeners }) => {
   const [form] = Form.useForm();
   const { data } = useMap();
+  const { data: locGenre } = useAllAreaTypes();
   const [FL, setFL] = useState<LocationType[]>([]);
   const [, setFLR] = useState<RoadListType[]>([]);
   const mousePointX = useAtomValue(locationXForQuickEditLocationPanel);
@@ -250,7 +249,7 @@ const QuickEditLocationPanel: React.FC<{
   return (
     <>
       {contextHolder}
-      <div style={{ width: '23em' }}>
+      <div style={{ width: '29em' }}>
         <h3 className="drop_button_style" {...listeners} {...attributes}>
           {t('quick_edit_location_panel.quick_edit_location_panel')}
         </h3>
@@ -270,7 +269,13 @@ const QuickEditLocationPanel: React.FC<{
               style={{ borderBottom: '2px solid black', marginBottom: '15px', overflow: 'hidden' }}
             >
               <Form.Item label={t('quick_edit_location_panel.areaType')} name="genre">
-                <Select options={locGenre} style={{ overflow: 'hidden' }} />
+                <Select
+                  options={locGenre?.map((v) => ({
+                    label: locationOption(v.value),
+                    value: v.value
+                  }))}
+                  style={{ overflow: 'hidden', width: '8em' }}
+                />
               </Form.Item>
               <Form.Item label={t('quick_edit_location_panel.location')} name="originId">
                 <InputNumber min={1} />
