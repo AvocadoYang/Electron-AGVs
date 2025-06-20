@@ -1036,6 +1036,29 @@
     "search": "搜尋",
     "reset": "重置",
     "refetch": "重新載入",
-    "no_defined": "尚未定義資料格式"
+    "no_defined": "尚未定義資料格式",
+    "search_metadata": "查詢中繼資料"
+  },
+  "upload": {
+    "success": "地圖上傳成功！",
+    "no_file": "請上傳一個檔案。",
+    "validation_error": "請完成所有必填欄位。",
+    "invalid_filename": "檔名必須是英文，不能有空格，且以 .png 結尾",
+    "invalid_filename_when_edit": "檔名必須是英文，不能有空格.",
+    "invalid_file_type": "{{name}} 不是 PNG 檔案",
+    "only_one_file": "只能上傳一個檔案。",
+    "map_origin_x": "地圖原點 X",
+    "map_origin_y": "地圖原點 Y",
+    "filename": "檔案名稱",
+    "status": "狀態",
+    "using": "使用中",
+    "not_using": "未使用",
+    "is_using": "使用此地圖",
+    "enter_map_origin_x": "輸入地圖原點 X",
+    "enter_map_origin_y": "輸入地圖原點 Y",
+    "upload_label": "上傳地圖檔案",
+    "drag_text": "點擊或拖曳檔案到此區域以上傳",
+    "hint": "請上傳地圖圖片檔案。僅允許一個檔案。",
+    "button": "上傳地圖"
   }
 }

@@ -1035,6 +1035,29 @@
     "search": "Search",
     "reset": "Reset",
     "refetch": "Refetch",
-    "no_defined": "Data format has not been defined yet"
+    "no_defined": "Data format has not been defined yet",
+    "search_metadata": "Search metadata"
+  },
+  "upload": {
+    "success": "Map uploaded successfully!",
+    "no_file": "Please upload a file.",
+    "validation_error": "Please complete all required fields.",
+    "invalid_filename": "Filename must be in English, contain no spaces, and end with .png",
+    "invalid_filename_when_edit": "Filename must be in English, contain no spaces.",
+    "invalid_file_type": "{{name}} is not a PNG file",
+    "only_one_file": "Only one file can be uploaded at a time.",
+    "map_origin_x": "Map Origin X",
+    "map_origin_y": "Map Origin Y",
+    "filename": "file name",
+    "status": "Status",
+    "is_using": "Use the map",
+    "using": "using",
+    "not_using": "not using",
+    "enter_map_origin_x": "Enter map origin X",
+    "enter_map_origin_y": "Enter map origin Y",
+    "upload_label": "Upload Map File",
+    "drag_text": "Click or drag file to this area to upload",
+    "hint": "Please upload the map image file. Only one file is allowed.",
+    "button": "Upload Map"
   }
 }

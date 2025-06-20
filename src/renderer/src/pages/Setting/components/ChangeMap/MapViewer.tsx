@@ -7,7 +7,6 @@ import {
   Input,
   InputNumber,
   message,
-  Popconfirm,
   Radio
 } from 'antd';
 import { Dispatch, FC, memo, SetStateAction, useEffect, useState } from 'react';
@@ -72,6 +71,7 @@ const MapViewer: FC = () => {
   };
 
   const handleDelete = (id: string) => {
+    console.log('work', id);
     deleteMutation.mutate(id);
   };
 
@@ -91,7 +91,7 @@ const MapViewer: FC = () => {
   return (
     <>
       {contextHolders}
-      <Carousel arrows infinite={false} className="carousel">
+      <Carousel arrows draggable infinite={false} className="carousel">
         {data.map((v) => {
           return (
             <ShowImageContainer
@@ -154,19 +154,19 @@ const ShowInfo: FC<{
     >
       <Flex vertical align="flex-start" gap="12px" style={{ width: '100%', maxWidth: '400px' }}>
         <Flex gap="small" justify="space-between" style={{ width: '100%' }}>
-          <span>File Name:</span>
+          <span>{t('upload.filename')}:</span>
           <span>{info.fileName}</span>
         </Flex>
         <Flex gap="small" justify="space-between" style={{ width: '100%' }}>
-          <span>Status:</span>
-          <span>{info.isUsing ? 'Using' : 'Not in use'}</span>
+          <span>{t('upload.status')}:</span>
+          <span>{info.isUsing ? t('upload.using') : t('upload.not_using')}</span>
         </Flex>
         <Flex gap="small" justify="space-between" style={{ width: '100%' }}>
-          <span>Origin X:</span>
+          <span>{t('upload.map_origin_x')}:</span>
           <span>{info.mapOriginX}</span>
         </Flex>
         <Flex gap="small" justify="space-between" style={{ width: '100%' }}>
-          <span>Origin Y:</span>
+          <span>{t('upload.map_origin_y')}:</span>
           <span>{info.mapOriginY}</span>
         </Flex>
       </Flex>
@@ -183,25 +183,18 @@ const ShowInfo: FC<{
           {t('utils.edit')}
         </Button>
 
-        <Popconfirm
-          title="Delete the task"
-          description="Are you sure to delete this task?"
-          onConfirm={() => handleDelete(info.id)}
-          okText="Yes"
-          cancelText="No"
+        <Button
+          type="primary"
+          danger
+          onClick={() => handleDelete(info.id)}
+          style={{
+            backgroundColor: 'rgba(255, 0, 0, 0.8)',
+            border: 'none',
+            width: '100px'
+          }}
         >
-          <Button
-            type="primary"
-            danger
-            style={{
-              backgroundColor: 'rgba(255, 0, 0, 0.8)',
-              border: 'none',
-              width: '100px'
-            }}
-          >
-            {t('utils.delete')}
-          </Button>
-        </Popconfirm>
+          {t('utils.delete')}
+        </Button>
       </Flex>
     </Flex>
   );
@@ -222,7 +215,7 @@ const EditOrigin: FC<{
     <>
       <StyledForm form={form} layout="inline">
         <Form.Item
-          label="fileName"
+          label={t('upload.filename')}
           name="fileName"
           rules={[
             {
@@ -231,10 +224,10 @@ const EditOrigin: FC<{
             }
           ]}
         >
-          <Input style={{ width: '100px' }} />
+          <Input disabled style={{ width: '100px' }} />
         </Form.Item>
 
-        <Form.Item label="isUsing" name="isUsing">
+        <Form.Item label={t('upload.status')} name="isUsing">
           <Radio.Group>
             <Radio value={false}>{t('utils.no')}</Radio>
             <Radio value>{t('utils.yes')}</Radio>
@@ -242,7 +235,7 @@ const EditOrigin: FC<{
         </Form.Item>
 
         <Form.Item
-          label="Origin X"
+          label={t('upload.map_origin_x')}
           name="mapOriginX"
           rules={[
             {
@@ -254,7 +247,7 @@ const EditOrigin: FC<{
           <InputNumber style={{ width: '100px' }} />
         </Form.Item>
         <Form.Item
-          label="Origin Y"
+          label={t('upload.map_origin_y')}
           name="mapOriginY"
           rules={[
             {

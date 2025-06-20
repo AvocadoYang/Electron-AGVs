@@ -1,15 +1,12 @@
 import useCargoHistory from '@renderer/api/useCargoHistory';
-import { Typography, Table, Tag, Flex, Card, Space } from 'antd';
+import { Typography, Table, Tag, Flex, Card, Input } from 'antd';
 import moment from 'moment';
-import { FC, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import ReactJsonView from '@uiw/react-json-view';
-import { Input, Button } from 'antd';
-import type { InputRef, TableColumnType } from 'antd';
-import type { FilterDropdownProps } from 'antd/es/table/interface';
-import { SearchOutlined } from '@ant-design/icons';
-import Highlighter from 'react-highlight-words';
+import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
+import useSearchCargoMetadata from '@renderer/api/useSearchCargoMetadata';
 
 const { Text } = Typography;
 
@@ -85,120 +82,13 @@ export enum CargoAction {
 }
 
 const HistoryTable: FC = () => {
-  const { data, refetch, isFetching } = useCargoHistory();
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
-  const searchInput = useRef<InputRef>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 20;
+  const [metadataSearch, setMetadataSearch] = useState('');
+  const { data, refetch, isFetching } = useCargoHistory(currentPage, pageSize);
+  const { data: searchData } = useSearchCargoMetadata(metadataSearch);
+
   const { t } = useTranslation();
-
-  const getColumnSearchProps = (dataIndex: keyof CargoData): TableColumnType<CargoData> => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
-      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
-        <Input
-          ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-          style={{ marginBottom: 8, display: 'block' }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              setSearchText((selectedKeys as string[])[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            close
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered: boolean) => (
-      <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      (record[dataIndex] ?? '')
-        .toString()
-        .toLowerCase()
-        .includes((value as string).toLowerCase()),
-    filterDropdownProps: {
-      onOpenChange(open) {
-        if (open) {
-          setTimeout(() => searchInput.current?.select(), 100);
-        }
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
-      ) : (
-        text
-      )
-  });
-
-  const handleSearch = (
-    selectedKeys: React.Key[],
-    confirm: FilterDropdownProps['confirm'],
-    dataIndex: keyof CargoData
-  ) => {
-    confirm();
-    setSearchText(String(selectedKeys[0] || ''));
-    setSearchedColumn(dataIndex as string);
-  };
-
-  const handleReset = (clearFilters?: FilterDropdownProps['clearFilters']) => {
-    clearFilters?.();
-    setSearchText('');
-    setSearchedColumn('');
-  };
-
-  const searchNestedObject = (obj: any, search: string): boolean => {
-    const lowerSearch = search.toLowerCase();
-    if (typeof obj === 'string') {
-      return obj.toLowerCase().includes(lowerSearch);
-    }
-    if (Array.isArray(obj)) {
-      return obj.some((item) => searchNestedObject(item, search));
-    }
-    if (typeof obj === 'object' && obj !== null) {
-      return Object.values(obj).some((value) => searchNestedObject(value, search));
-    }
-    return String(obj).toLowerCase().includes(lowerSearch);
-  };
 
   const getActionColor = (action: CargoAction): string => {
     switch (action) {
@@ -251,7 +141,6 @@ const HistoryTable: FC = () => {
       title: t('cargo_history.metadata'),
       dataIndex: 'metadata',
       key: 'metadata',
-      ...getColumnSearchProps('metadata'),
       render: (meta: string | null) => {
         try {
           const parsed = meta ? JSON.parse(meta) : {};
@@ -275,14 +164,32 @@ const HistoryTable: FC = () => {
   return (
     <PageContainer>
       <HeaderContainer>
+        <Flex gap="small">
+          <Input
+            placeholder={t('cargo_history.search_metadata')}
+            value={metadataSearch}
+            onChange={(e) => setMetadataSearch(e.target.value)}
+            style={{ width: 300 }}
+            allowClear
+          />
+        </Flex>
+
         <Button onClick={() => refetch()} loading={isFetching}>
           {t('cargo_history.refetch')}
         </Button>
       </HeaderContainer>
       <StyledTable<any>
-        dataSource={data}
+        dataSource={metadataSearch ? searchData?.data || [] : data?.data || []}
         columns={columns}
-        pagination={{ pageSize: 20 }}
+        pagination={
+          metadataSearch
+            ? false
+            : {
+                pageSize,
+                total: data?.total,
+                onChange: (page) => setCurrentPage(page)
+              }
+        }
         rowKey="id"
         expandable={{
           expandedRowRender: (record: CargoData) => (

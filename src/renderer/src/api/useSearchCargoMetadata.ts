@@ -42,9 +42,11 @@ const schema = array(
 
 export type CargoListData = InferType<typeof schema>;
 
-const getCargoHistory = async (page = 1, pageSize = 20) => {
-  const { data } = await client.get('api/cargo-history/history', {
-    params: { page, pageSize }
+const getCargoHistory = async (metadata: string) => {
+  if (metadata.trim() === '') return { data: [], total: 0 };
+
+  const { data } = await client.get('api/cargo-history/search-metadata-history', {
+    params: { metadata }
   });
 
   return schema.validate(data.data, { stripUnknown: true }).then((validated) => ({
@@ -53,8 +55,8 @@ const getCargoHistory = async (page = 1, pageSize = 20) => {
   }));
 };
 
-const useCargoHistory = (page: number, pageSize: number) => {
-  return useQuery(['cargo-history', page, pageSize], () => getCargoHistory(page, pageSize));
+const useSearchCargoMetadata = (metadata: string) => {
+  return useQuery(['cargo-history-metadata', metadata], () => getCargoHistory(metadata));
 };
 
-export default useCargoHistory;
+export default useSearchCargoMetadata;
