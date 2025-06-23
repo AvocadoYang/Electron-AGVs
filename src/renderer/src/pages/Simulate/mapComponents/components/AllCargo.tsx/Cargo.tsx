@@ -6,16 +6,8 @@ import styled from 'styled-components';
 import { useCargoMutations } from '../../../../../api/useCargoMutations';
 import CargoDisplay from './CargoDisplay';
 import { CargoInfo } from '@renderer/sockets/useCargoInfo';
-import { LoadingStation } from './LoadingStation';
-import {
-  isOpenCargoModal,
-  isSelectCargo,
-  selectedLocation,
-  targetKeyJotai
-} from '@renderer/pages/Simulate/utils/status';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { useTranslation } from 'react-i18next';
 import { prefixLevelName } from '@renderer/utils/globalFunction';
+import { LoadingStation } from './LoadingStation';
 
 const Wrapper = styled.div<WrapperType>`
   position: relative;
@@ -53,11 +45,6 @@ const Cargo: FC<{
   shelfInfo: CargoInfo | undefined;
 }> = ({ id, locId, translateX, translateY, rotate, scale, flex_direction, shelfInfo }) => {
   const [messageApi, contextHolder] = message.useMessage();
-  const setTargetKey = useSetAtom(targetKeyJotai);
-  const setIsOpening = useSetAtom(isOpenCargoModal);
-  const isSelecting = useAtomValue(isSelectCargo);
-  const setSelectLoc = useSetAtom(selectedLocation);
-  const { t } = useTranslation();
   const { editColumnMutation } = useCargoMutations(messageApi);
   const handleMouseDown = useCallback(
     (event: React.MouseEvent<HTMLElement>, targetId: string, targetLevel: number) => {
@@ -67,30 +54,12 @@ const Cargo: FC<{
     [editColumnMutation]
   );
 
-  const handleClick = (locationId: string) => {
-    if (!isSelecting) {
-      setSelectLoc(locationId);
-      setIsOpening(true);
-      return;
-    }
-    // 這個是在要在哪些地點拉區域時在地圖上按 會觸發
-    setTargetKey((prev) => {
-      if (!prev) return [locationId];
-      if (prev.includes(locationId)) {
-        messageApi.warning(t('sim.cargo.already_exist'));
-        return prev;
-      }
-      return [...prev, locationId];
-    });
-  };
-
   if (!shelfInfo || !shelfInfo.layer) return <LoadingStation />;
   return (
     <>
       {contextHolder}
       <WrapperDiv
         flex_direction={flex_direction}
-        onClick={() => handleClick(locId)}
         translatex={translateX}
         translatey={translateY}
         scale={scale}

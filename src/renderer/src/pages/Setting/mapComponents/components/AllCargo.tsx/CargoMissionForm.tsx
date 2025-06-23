@@ -8,10 +8,9 @@ import {
   InputNumber,
   Button,
   Flex,
-  Tooltip,
-  Switch
+  Tooltip
 } from 'antd';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import useAllMissionTitles from '@renderer/api/useMissionTitle';
 import useYaw from '@renderer/api/useYaw';
@@ -30,7 +29,6 @@ const CargoMissionForm: FC<{
   const { data: yaw } = useYaw();
   const { data: loc } = useLoc(undefined);
   const { data: shelf } = useSpecificShelf(locId);
-  const [useScriptPlacement, setUseScriptPlacement] = useState(false);
   const { t } = useTranslation();
 
   const locationOption = useMemo(() => {
@@ -90,17 +88,13 @@ const CargoMissionForm: FC<{
         }))
       : [];
 
-    if (currentLoc && currentLoc.use_script_placement)
-      setUseScriptPlacement(currentLoc.use_script_placement);
-
     form.setFieldsValue({
       load: loadTask,
       offload: offloadTask,
       yaw: shelf.Dir?.id,
       prepare_point_id: defaultPreparedPoint,
       placement_priority,
-      relationships,
-      use_script_placement: currentLoc?.use_script_placement || false
+      relationships
     });
   }, [form, shelf, loc, locId]);
 
@@ -213,22 +207,6 @@ const CargoMissionForm: FC<{
           ]}
         >
           <InputNumber min={0} max={100} style={{ width: '100%' }} placeholder={'10'} />
-        </Form.Item>
-
-        <Form.Item
-          label={
-            <>
-              <Flex align="center" justify="center">
-                <Typography.Text>{t('shelf.cargo_mission.use_script_placement')}</Typography.Text>
-                <Tooltip title={t('shelf.cargo_mission.use_script_placement_desc')}>
-                  <QuestionCircleOutlined style={{ marginLeft: 8 }} />
-                </Tooltip>
-              </Flex>
-            </>
-          }
-          name="use_script_placement"
-        >
-          <Switch value={useScriptPlacement} onChange={(v) => setUseScriptPlacement(v)} />
         </Form.Item>
 
         <Form.Item

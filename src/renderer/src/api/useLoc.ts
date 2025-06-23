@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { array, boolean, number, object, string } from 'yup';
+import { array, number, object, string } from 'yup';
 import client from './axiosClient';
 
 const getLoc = async () => {
@@ -37,7 +37,6 @@ const getLoc = async () => {
         scale: number().required(),
         flex_direction: string().required('all loc only req'),
         placement_priority: number().required(),
-        use_script_placement: boolean().required(),
         relationships: relationshipSchema.optional().nullable(),
         prepare_point: object({
           id: string().required(),
@@ -76,7 +75,6 @@ export type LocWithoutArr = {
   rotate: number;
   scale: number;
   placement_priority: number;
-  use_script_placement: boolean;
   relationships: Relation;
   flex_direction: string;
   prepare_point: {
