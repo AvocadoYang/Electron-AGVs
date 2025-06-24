@@ -1,18 +1,14 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Flex, Modal } from 'antd';
-import styled from 'styled-components';
+import { Flex } from 'antd';
+
 import WarningIdForm from './WarningIdForm';
-import WarningIdGenreTable from './WarningIdGenreTable';
+
 import FormHr from '@renderer/pages/Setting/utils/FormHr';
-import WarningIdGenreForm from './WarningIdGenreForm';
+
 import WarningListTable from './WarningListTable';
-import { DiffOutlined } from '@ant-design/icons';
-const AlignBtn = styled.div`
-  position: relative;
-  bottom: 130px;
-  right: -340px;
-`;
+
+
 
 const EditWarningListPanel: FC<{
   sortableId: string;
@@ -20,19 +16,6 @@ const EditWarningListPanel: FC<{
   listeners: import('@dnd-kit/core/dist/hooks/utilities').SyntheticListenerMap | undefined;
 }> = ({ attributes, listeners }) => {
   const { t } = useTranslation();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <>
@@ -44,24 +27,9 @@ const EditWarningListPanel: FC<{
 
         <Flex gap="middle" justify="flex-start" align="start" vertical>
           <WarningIdForm />
-          <AlignBtn>
-            <Button icon={<DiffOutlined />} color="primary" variant="filled" onClick={showModal}>
-              {t('file.warning_list.add_new_genre')}
-            </Button>
-          </AlignBtn>
-
           <WarningListTable />
         </Flex>
       </div>
-      <Modal
-        title={t('file.warning_list.add_new_genre')}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <WarningIdGenreForm />
-        <WarningIdGenreTable />
-      </Modal>
     </>
   );
 };
