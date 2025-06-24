@@ -1,11 +1,28 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
+
+const redGlow = keyframes`
+  0% {
+    box-shadow: 0 0 4px rgba(255, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 4px rgba(255, 0, 0, 0.2);
+  }
+`;
 
 export const InfoWrap = styled.div.attrs<{
   randomcolor: string;
   is_dark: string;
+  is_warn: string
 }>((props) => {
-  return { randomcolor: props.randomcolor, is_dark: props.is_dark };
-})<{ randomcolor: string }>`
+  return {
+    randomcolor: props.randomcolor,
+    is_dark: props.is_dark,
+    is_warn: props.is_warn
+  };
+}) <{ randomcolor: string, is_warn: string }>`
   margin-top: 1%;
   z-index: 2;
   border-radius: 5px;
@@ -16,5 +33,9 @@ export const InfoWrap = styled.div.attrs<{
   max-width: 220px;
   border-top: ${(props) => `0.4em solid ${props.randomcolor}`};
   background-color: ${(props) => `${props.is_dark === 'true' ? '#3a3939' : '#ffffff'}`};
-  // #262626
+ ${(props) =>
+    props.is_warn === 'true' &&
+    css`
+      animation: ${redGlow} 1s infinite ease-in-out;
+    `}
 `;

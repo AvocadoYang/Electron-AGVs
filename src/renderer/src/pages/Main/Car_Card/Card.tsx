@@ -16,11 +16,15 @@ import BtnGroup from './components/BtnGroup';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { AmrCarSelectFilter, AmrFilterCarCard, darkMode, hintAmr } from '@renderer/utils/gloable';
 import { amrId2ColorRainbow } from '@renderer/utils/utils';
+import { useWarningId } from '@renderer/sockets/useWarning';
 
 const Card: React.FC<{ id: string }> = ({ id }) => {
   const [openHiddenRow, setOpenHiddenRow] = useState(false);
   const [isPopoverOpen, setPopoverOpen] = useState(false);
   const [openFullInfo, setOpenFullInfo] = useState(true);
+  const errorMessage = useWarningId()?.get(id);
+
+  // console.log(errorMessage);
   // hover 卡片時地圖AMR的提示
   const setHintAmr = useSetAtom(hintAmr);
   // select選單篩選顯示的 AMR 系列
@@ -69,6 +73,7 @@ const Card: React.FC<{ id: string }> = ({ id }) => {
             className={`${hide ? 'hide-car-info-wrap' : ''}`}
             randomcolor={amrId2ColorRainbow(id)}
             is_dark={isDark.toString()}
+            is_warn={(errorMessage?.length) ? "true" : "false"}
             onMouseEnter={() => {
               setHintAmr(id);
             }}
