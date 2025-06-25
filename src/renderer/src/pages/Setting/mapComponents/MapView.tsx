@@ -33,6 +33,9 @@ import SudoChargeStation from '../formComponent/forms/other/editChargeStationIco
 import CargoDetail from './components/AllCargo.tsx/CargoDetail';
 import { GlobalCargoInfoModal } from './components/AllCargo.tsx/jotaiState';
 import CargoModal from './components/AllCargo.tsx/CargoModal';
+import AllConveyor from './components/AllConveyor/AllConveyor';
+import { IsEditConveyor } from './components/AllConveyor/jotai';
+import EditConveyorModal from './components/AllConveyor/EditConveyorModal';
 
 const MapView: React.FC<{
   scale: number;
@@ -80,6 +83,7 @@ const MapView: React.FC<{
   const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   const showRoad = useAtomValue(isShowRoad);
   const openCargoInfo = useAtomValue(GlobalCargoInfoModal);
+  const openConveyorModal = useAtomValue(IsEditConveyor);
 
   if (currentVersion) {
     const defaultCookie = Cookies.get('version');
@@ -154,6 +158,9 @@ const MapView: React.FC<{
       <AllZones scale={scale}></AllZones>
 
       <AllChargeStation setInitPoint={setInitPoint} handleMouseDown={handleMouseDown} />
+
+      {openConveyorModal ? <EditConveyorModal /> : []}
+      <AllConveyor />
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
 

@@ -1067,5 +1067,13 @@
     "drag_text": "點擊或拖曳檔案到此區域以上傳",
     "hint": "請上傳地圖圖片檔案。僅允許一個檔案。",
     "button": "上傳地圖"
+  },
+
+  "conveyor": {
+    "title": "編輯輸送帶參數",
+    "edit_fork_height": "編輯取放貨時枒杈高度",
+    "enable_loading": "可以取貨",
+    "enable_offloading": "可以放貨",
+    "error_fork_height": "枒杈高度危必填"
   }
 }

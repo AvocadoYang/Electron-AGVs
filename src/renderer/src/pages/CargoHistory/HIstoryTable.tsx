@@ -143,7 +143,7 @@ const HistoryTable: FC = () => {
       key: 'metadata',
       render: (meta: string | null) => {
         try {
-          const parsed = meta ? JSON.parse(meta) : {};
+          const parsed = meta ? meta : {};
           return (
             <pre style={{ fontSize: 12 }}>{JSON.stringify(parsed, null, 0).slice(0, 8)}...</pre>
           );
@@ -199,7 +199,7 @@ const HistoryTable: FC = () => {
                   {record.metadata ? (
                     <ReactJsonView
                       displayDataTypes={false}
-                      value={JSON.parse(record.metadata as string)}
+                      value={record.metadata as {}}
                       collapsed={false}
                       enableClipboard={false}
                       style={{ fontSize: 14 }}

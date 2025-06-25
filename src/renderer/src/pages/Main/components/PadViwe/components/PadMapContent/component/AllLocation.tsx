@@ -27,7 +27,7 @@ const AllLocation = () => {
   return (
     <>
       {data.locations
-        .filter(({ areaType }) => areaType === 'Extra' || '預派點')
+        .filter(({ areaType }) => areaType === 'Extra' || areaType === '預派點')
         .map((loc) => {
           const [displayX, displayY] = rosCoord2DisplayCoord({
             x: loc.x,

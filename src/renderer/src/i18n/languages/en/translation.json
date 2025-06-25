@@ -1065,5 +1065,12 @@
     "drag_text": "Click or drag file to this area to upload",
     "hint": "Please upload the map image file. Only one file is allowed.",
     "button": "Upload Map"
+  },
+  "conveyor": {
+    "title": "Edit conveyor belt parameters",
+    "edit_fork_height": "Edit fork height when picking up and releasing goods",
+    "enable_loading": "Enable Loading",
+    "enable_offloading": "Enable Offloading",
+    "error_fork_height": "Fork height is required"
   }
 }

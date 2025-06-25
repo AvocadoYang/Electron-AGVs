@@ -8,12 +8,13 @@ import { AmrFilterCarCard, Scale, showZoneForbidden } from '@renderer/utils/gloa
 
 import AllRoads from '@renderer/pages/Setting/mapComponents/components/AllRoads/AllRoads';
 import AllAMRs from '../../PadViwe/components/PadMapContent/component/AllAMRs/AllAMRs';
-import AllCargo from '../../PadViwe/components/PadMapContent/AllCargo.tsx/AllCargo';
+import AllCargo from '../../PadViwe/components/PadMapContent/AllCargo/AllCargo';
 import ToolTip from '@renderer/pages/Setting/components/ToolTip';
 import { isShowLocation, isShowLocationTooltip, isShowRoad } from '@renderer/utils/siderGloble';
 import { AllChargeStation } from './AllChargeStation';
 import useMap from '@renderer/api/useMap';
 import ChargeStationModel from './AllChargeStation/ChargeStationModel';
+import AllConveyor from '../../PadViwe/components/PadMapContent/AllConveyor/AllConveyor';
 
 const WebMapView: React.FC<{
   mapRef: RefObject<HTMLDivElement>;
@@ -55,6 +56,7 @@ const WebMapView: React.FC<{
         <>
           <AllAMRs></AllAMRs>
           <AllCargo></AllCargo>
+          <AllConveyor></AllConveyor>
           {showLocation ? <AllLocation></AllLocation> : null}
           {showRoad ? <AllRoads></AllRoads> : null}
           {showLocationToolTip ? <ToolTip /> : []}
