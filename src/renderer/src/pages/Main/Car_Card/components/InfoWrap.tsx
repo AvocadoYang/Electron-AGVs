@@ -33,9 +33,5 @@ export const InfoWrap = styled.div.attrs<{
   max-width: 220px;
   border-top: ${(props) => `0.4em solid ${props.randomcolor}`};
   background-color: ${(props) => `${props.is_dark === 'true' ? '#3a3939' : '#ffffff'}`};
- ${(props) =>
-    props.is_warn === 'true' &&
-    css`
-      animation: ${redGlow} 1s infinite ease-in-out;
-    `}
+  box-shadow: ${(props) => `${props.is_warn == "true" ? "0 0 7px rgba(255, 0, 0, 0.8)" : ""}`};
 `;
