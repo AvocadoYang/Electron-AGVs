@@ -2,6 +2,7 @@ import { array, string, object, ValidationError, number, boolean } from 'yup';
 import { from, fromEventPattern, share, switchMap, distinctUntilChanged } from 'rxjs';
 import { useEffect, useState } from 'react';
 import { io } from './socketConnect';
+import { Conveyor_Info } from '@renderer/types/peripheral';
 
 const schema = () =>
   array(
@@ -11,6 +12,8 @@ const schema = () =>
       forkHeight: number().required(),
       activeLoad: boolean().required(),
       activeOffload: boolean().required(),
+      loadMissionId: string().nullable(),
+      offloadMissionId: string().nullable(),
       cargo: array(
         object({
           cargoInfoId: string().optional().nullable(),
@@ -49,22 +52,6 @@ const profiles$ = fromEventPattern(
   distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
   share()
 );
-
-export type Cargo = {
-  cargoInfoId: string | null;
-  customCargoMetadataId: string | null;
-  metadata: string | null;
-};
-
-export type Conveyor_Info = {
-  locationId: string;
-  conveyorDBId: string;
-  cargo: Cargo[];
-  status: string;
-  forkHeight: number;
-  activeLoad: boolean;
-  activeOffload: boolean;
-};
 
 const useConveyorSocket = () => {
   const [cargoInfo, setCargoInfo] = useState<Conveyor_Info[]>();

@@ -1,7 +1,7 @@
-import { Conveyor_Info } from '@renderer/sockets/useConveyorSocket';
 import React from 'react';
 import styled from 'styled-components';
 import { LoadingStation } from '../AllCargo/LoadingStation';
+import { Conveyor_Info } from '@renderer/types/peripheral';
 
 type ConveyorStyle = {
   translate_x?: number;
@@ -38,14 +38,28 @@ const Box = styled.div`
   position: absolute;
   top: -20px;
 `;
-
+const ConveyorContainer = styled.div`
+  position: relative;
+  display: inline-block;
+`;
 const Arrow = styled.div<{ direction: 'load' | 'offload' }>`
+  position: absolute;
+  top: 50%;
+  ${({ direction }) =>
+    direction === 'load'
+      ? `
+        left: -16px;
+        transform: translate(-100%, -50%);
+      `
+      : `
+        right: -16px;
+        transform: translate(100%, -50%) rotate(180deg);
+      `}
   width: 0;
   height: 0;
   border-left: 8px solid ${({ direction }) => (direction === 'load' ? '#10b981' : '#ef4444')};
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
-  transform: ${({ direction }) => (direction === 'load' ? 'rotate(0deg)' : 'rotate(180deg)')};
 `;
 
 const ConveyorIcon: React.FC<{
@@ -54,21 +68,21 @@ const ConveyorIcon: React.FC<{
   rotate: number;
   scale: number;
   info: Conveyor_Info | null;
-  withLoad?: boolean;
-  withOffload?: boolean;
-}> = ({ translateX, translateY, rotate, scale, info, withLoad = true, withOffload = true }) => {
+}> = ({ translateX, translateY, rotate, scale, info }) => {
   if (!info) return <LoadingStation />;
   return (
-    <ConveyorWrapper
-      translate_x={translateX}
-      translate_y={translateY}
-      scale={scale}
-      rotate={rotate}
+    <ConveyorContainer
+      style={{
+        transform: `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotate}deg)`
+      }}
     >
-      {withLoad && <Arrow direction="load" />}
-      <Belt>{info.cargo.length > 0 ? <Box style={{ left: '25%' }} /> : []}</Belt>
-      {withOffload && <Arrow direction="offload" />}
-    </ConveyorWrapper>
+      {info.activeLoad && <Arrow direction="load" />}
+      {info.activeOffload && <Arrow direction="offload" />}
+
+      <ConveyorWrapper>
+        <Belt>{info.cargo.length > 0 ? <Box style={{ left: '25%' }} /> : []}</Belt>
+      </ConveyorWrapper>
+    </ConveyorContainer>
   );
 };
 

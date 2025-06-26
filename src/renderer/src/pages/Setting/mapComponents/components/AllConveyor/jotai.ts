@@ -5,4 +5,6 @@ export const IsEditConveyor = atom<{
   forkHeight: number;
   activeLoad: boolean;
   activeOffload: boolean;
+  loadMissionId: string;
+  offloadMissionId: string;
 } | null>(null);

@@ -8,6 +8,7 @@ import MapTitle from './mapComponents/components/MapTitle';
 import { useIsMobile } from '@renderer/hooks/useIsMoblie';
 import IdleRobotPanel from './components/AMR/IdleRobotPanel';
 import SelectScript from './components/SelectScript';
+import WcsPad from './components/WCS/WcsPad';
 
 const Simulate: FC = () => {
   const { isMobile } = useIsMobile();
@@ -36,6 +37,7 @@ const Simulate: FC = () => {
 
           {/* 左上圓形 切換腳本  */}
           <SelectScript />
+          <WcsPad />
 
           {/* 左側未放置到地圖的車輛表 */}
           <IdleRobotPanel mapRef={mapRef} mapWrapRef={mapWrapRef} />

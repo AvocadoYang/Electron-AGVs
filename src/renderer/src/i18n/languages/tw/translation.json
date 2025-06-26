@@ -1031,6 +1031,20 @@
         "idle_time": "空閒時間",
         "carried": "搬運數"
       }
+    },
+    "conveyor": {
+      "title": "倉儲控制系統設定",
+      "card_title": "輸送帶站點啟用設定",
+      "station": "站點：{{id}}",
+      "active": "啟用",
+      "spawn_cargo": "產生貨物",
+      "spawn_time": "產生時間",
+      "active_shift": "啟用搬移",
+      "shift_time": "搬移時間",
+      "shift_target": "搬移目標",
+      "none": "無",
+      "save": "儲存設定",
+      "cancel": "取消"
     }
   },
   "cargo_history": {
@@ -1074,6 +1088,17 @@
     "edit_fork_height": "編輯取放貨時枒杈高度",
     "enable_loading": "可以取貨",
     "enable_offloading": "可以放貨",
-    "error_fork_height": "枒杈高度危必填"
+    "error_fork_height": "枒杈高度危必填",
+    "mock_config": "編輯輸送帶模擬參數",
+    "mock_enable": "啟用模擬傳送帶",
+    "mock_spawn_cargo": "啟用生成貨物",
+    "mock_spawn_time": "生成間隔 (毫秒)",
+    "mock_active_shift": "啟用貨物轉移",
+    "mock_shift_time": "貨物轉移間隔 (毫秒)",
+    "mock_shift_target": "換班目標位置 ID",
+    "error_spawn_time": "請輸入生成間隔",
+    "error_shift_time": "請輸入貨物轉移間隔",
+    "error_shift_location": "請輸入貨物轉移位置 ID",
+    "none": "不指定"
   }
 }

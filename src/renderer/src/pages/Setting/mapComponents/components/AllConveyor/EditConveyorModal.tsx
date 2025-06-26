@@ -2,12 +2,25 @@ import { FC, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
-import { Button, Form, InputNumber, message, Modal, Switch, Typography } from 'antd';
+import {
+  Button,
+  Flex,
+  Form,
+  InputNumber,
+  message,
+  Modal,
+  Select,
+  Switch,
+  Tooltip,
+  Typography
+} from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { IsEditConveyor } from './jotai';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import client from '@renderer/api/axiosClient';
 import { useMutation } from '@tanstack/react-query';
+import useAllMissionTitles from '@renderer/api/useMissionTitle';
 
 const { Title } = Typography;
 
@@ -35,18 +48,25 @@ const StyledTitle = styled(Title)`
 `;
 
 const EditConveyorModal: FC = () => {
-  const [openModal, setOpenModal] = useAtom(IsEditConveyor); // openModal contains the current conveyor's config
+  const [openModal, setOpenModal] = useAtom(IsEditConveyor);
   const [form] = Form.useForm();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
+  const { data: misTitle } = useAllMissionTitles();
+  const taskOption = misTitle
+    ?.filter((g) =>
+      g.MissionTitleBridgeCategory.some((s) => s.Category?.tagName === 'dynamic-mission')
+    )
+    .map((v) => ({ value: v.id, label: v.name ?? `Mission ${v.id}` }));
 
-  // ✨ React Query mutation
   const updateMutation = useMutation({
     mutationFn: (data: {
       stationId: string;
       forkHeight: number;
       activeLoad: boolean;
       activeOffload: boolean;
+      loadMissionId: string;
+      offloadMissionId: string;
     }) => {
       return client.post('/api/peripherals/update-conveyor-config', data);
     },
@@ -57,13 +77,14 @@ const EditConveyorModal: FC = () => {
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
 
-  // ⏮ Sync form values when modal opens
   useEffect(() => {
     if (openModal) {
       form.setFieldsValue({
         forkHeight: openModal.forkHeight,
         activeLoad: openModal.activeLoad,
-        activeOffload: openModal.activeOffload
+        activeOffload: openModal.activeOffload,
+        loadMissionId: openModal.loadMissionId,
+        offloadMissionId: openModal.offloadMissionId
       });
     }
   }, [openModal, form]);
@@ -77,15 +98,12 @@ const EditConveyorModal: FC = () => {
       messageApi.warning('the station not found');
       return;
     }
-    try {
-      const values = await form.validateFields();
-      updateMutation.mutate({
-        stationId: openModal.stationId,
-        ...values
-      });
-    } catch (e) {
-      // Form validation errors, don't need to do anything here
-    }
+
+    const values = await form.validateFields();
+    updateMutation.mutate({
+      stationId: openModal.stationId,
+      ...values
+    });
   };
 
   return (
@@ -112,6 +130,40 @@ const EditConveyorModal: FC = () => {
             rules={[{ required: true, message: t('conveyor.error_fork_height') }]}
           >
             <InputNumber min={0} />
+          </Form.Item>
+
+          <Form.Item
+            label={
+              <>
+                <Flex align="center" justify="center">
+                  <Typography.Text>{t('shelf.cargo_mission.load_mission')}</Typography.Text>
+                  <Tooltip>
+                    <QuestionCircleOutlined style={{ marginLeft: 8 }} />
+                  </Tooltip>
+                </Flex>
+              </>
+            }
+            name="loadMissionId"
+            rules={[{ required: true, message: t('shelf.cargo_mission.load_mission_required') }]}
+          >
+            <Select options={taskOption} placeholder={t('utils.select')} showSearch />
+          </Form.Item>
+
+          <Form.Item
+            label={
+              <>
+                <Flex align="center" justify="center">
+                  <Typography.Text>{t('shelf.cargo_mission.offload_mission')}</Typography.Text>
+                  <Tooltip title={t('shelf.cargo_mission.offload_desc')}>
+                    <QuestionCircleOutlined style={{ marginLeft: 8 }} />
+                  </Tooltip>
+                </Flex>
+              </>
+            }
+            name="offloadMissionId"
+            rules={[{ required: true, message: t('shelf.cargo_mission.offload_mission_required') }]}
+          >
+            <Select options={taskOption} placeholder={t('utils.select')} showSearch />
           </Form.Item>
 
           <Form.Item label={t('conveyor.enable_loading')} name="activeLoad" valuePropName="checked">

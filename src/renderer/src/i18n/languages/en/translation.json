@@ -1029,6 +1029,21 @@
         "idle_time": "Idle time",
         "carried": "carried"
       }
+    },
+
+    "conveyor": {
+      "title": "Warehouse Control System Settings",
+      "card_title": "Conveyor Station Activation",
+      "station": "Station: {{id}}",
+      "active": "Active",
+      "spawn_cargo": "Spawn Cargo",
+      "spawn_time": "Spawn Time",
+      "active_shift": "Active Shift",
+      "shift_time": "Shift Time",
+      "shift_target": "Shift Target",
+      "none": "None",
+      "save": "Save Settings",
+      "cancel": "Cancel"
     }
   },
   "cargo_history": {
@@ -1071,6 +1086,17 @@
     "edit_fork_height": "Edit fork height when picking up and releasing goods",
     "enable_loading": "Enable Loading",
     "enable_offloading": "Enable Offloading",
-    "error_fork_height": "Fork height is required"
+    "error_fork_height": "Fork height is required",
+    "mock_config": "Edit conveyor belt mock parameters",
+    "mock_enable": "Enable Mock Conveyor",
+    "mock_spawn_cargo": "Enable Spawn Cargo",
+    "mock_spawn_time": "Spawn Interval (ms)",
+    "mock_active_shift": "Enable Shift",
+    "mock_shift_time": "Shift Interval (ms)",
+    "mock_shift_target": "Shift Target Location ID",
+    "error_spawn_time": "Please input spawn interval",
+    "error_shift_time": "Please input shift interval",
+    "error_shift_location": "Please input shift location ID",
+    "none": "none"
   }
 }

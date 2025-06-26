@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { LoadingStation } from '../AllCargo.tsx/LoadingStation';
-import { useSetAtom } from 'jotai';
-import { IsEditConveyor } from './jotai';
 import { Conveyor_Info } from '@renderer/types/peripheral';
+import { useSetAtom } from 'jotai';
+import { EditConveyorConfig } from '@renderer/pages/Simulate/utils/mapStatus';
 
 type ConveyorStyle = {
   translate_x?: number;
@@ -71,8 +71,7 @@ const ConveyorIcon: React.FC<{
   scale: number;
   info: Conveyor_Info | null;
 }> = ({ translateX, translateY, rotate, scale, info }) => {
-  const setIsEdit = useSetAtom(IsEditConveyor);
-
+  const setMockConfig = useSetAtom(EditConveyorConfig);
   if (!info) return <LoadingStation />;
   return (
     <ConveyorContainer
@@ -85,13 +84,8 @@ const ConveyorIcon: React.FC<{
 
       <ConveyorWrapper
         onClick={() =>
-          setIsEdit({
-            stationId: info.locationId,
-            forkHeight: info.forkHeight,
-            activeLoad: info.activeLoad,
-            activeOffload: info.activeOffload,
-            loadMissionId: info.loadMissionId,
-            offloadMissionId: info.offloadMissionId
+          setMockConfig({
+            stationId: info.locationId
           })
         }
       >
