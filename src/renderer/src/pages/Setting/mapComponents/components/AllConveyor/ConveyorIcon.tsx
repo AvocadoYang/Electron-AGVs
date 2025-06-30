@@ -72,6 +72,8 @@ const ConveyorIcon: React.FC<{
   info: Conveyor_Info | null;
 }> = ({ translateX, translateY, rotate, scale, info }) => {
   const setIsEdit = useSetAtom(IsEditConveyor);
+  // console.log('!!!!!!!!!!!!');
+  // console.log(info);
 
   if (!info) return <LoadingStation />;
   return (
@@ -91,7 +93,9 @@ const ConveyorIcon: React.FC<{
             activeLoad: info.activeLoad,
             activeOffload: info.activeOffload,
             loadMissionId: info.loadMissionId,
-            offloadMissionId: info.offloadMissionId
+            offloadMissionId: info.offloadMissionId,
+            placement_priority: info.placement_priority,
+            relationships: info.relationships
           })
         }
       >

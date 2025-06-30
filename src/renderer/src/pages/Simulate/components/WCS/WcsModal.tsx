@@ -1,10 +1,21 @@
 import { useAllConveyorMockConfig } from '@renderer/api/useAllConveyorMockConfig';
-import { Modal, Form, Switch, Card, Space, Button, Descriptions } from 'antd';
+import {
+  Modal,
+  Form,
+  Switch,
+  Card,
+  Space,
+  Button,
+  Descriptions,
+  Flex,
+  Tooltip,
+  Divider
+} from 'antd';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
-// Styled Components for styling the modal
 const StyledModal = styled(Modal)`
   .ant-modal-content {
     border-radius: 12px;
@@ -22,10 +33,6 @@ const StyledModal = styled(Modal)`
   }
   .ant-modal-body {
     padding: 24px;
-  }
-  .ant-modal-footer {
-    border-top: none;
-    padding: 0 24px 24px;
   }
 `;
 
@@ -78,7 +85,9 @@ const WcsModal: FC<{
     const updates =
       allConveyor?.map((station, _index) => ({
         locationId: station!.locationId,
-        isEnable: values[`enable_${station!.locationId}`] ?? station!.isEnable
+        isEnable: values[`enable_${station!.locationId}`] ?? station!.isEnable,
+        isEnableNotifyMission:
+          values[`enable_notify_mission_${station!.locationId}`] ?? station!.isEnabledNotifyMission
       })) ?? [];
 
     handleOk(updates);
@@ -105,14 +114,41 @@ const WcsModal: FC<{
                     title={t('sim.conveyor.station', { id: station.locationId })}
                     size="small"
                   >
-                    <Form.Item
-                      label={t('sim.conveyor.active')}
-                      name={`enable_${station.locationId}`}
-                      valuePropName="checked"
-                      initialValue={station.isEnable}
-                    >
-                      <Switch />
-                    </Form.Item>
+                    <Flex>
+                      <Form.Item
+                        label={
+                          <span>
+                            {t('sim.conveyor.active_config')}{' '}
+                            <Tooltip title={t('sim.conveyor.active_config_desc')}>
+                              <QuestionCircleOutlined style={{ color: '#999' }} />
+                            </Tooltip>
+                          </span>
+                        }
+                        name={`enable_${station.locationId}`}
+                        valuePropName="checked"
+                        initialValue={station.isEnable}
+                      >
+                        <Switch />
+                      </Form.Item>
+
+                      <Divider type="vertical" />
+
+                      <Form.Item
+                        label={
+                          <span>
+                            {t('sim.conveyor.active_notify_mission')}{' '}
+                            <Tooltip title={t('sim.conveyor.active_notify_mission_desc')}>
+                              <QuestionCircleOutlined style={{ color: '#999' }} />
+                            </Tooltip>
+                          </span>
+                        }
+                        name={`enable_notify_mission_${station.locationId}`}
+                        valuePropName="checked"
+                        initialValue={station.isEnabledNotifyMission}
+                      >
+                        <Switch />
+                      </Form.Item>
+                    </Flex>
 
                     <Descriptions column={2} size="small" bordered>
                       <Descriptions.Item label={t('sim.conveyor.spawn_cargo')}>

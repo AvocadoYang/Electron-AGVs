@@ -1035,7 +1035,8 @@
       "title": "Warehouse Control System Settings",
       "card_title": "Conveyor Station Activation",
       "station": "Station: {{id}}",
-      "active": "Active",
+      "active_config": "Active",
+      "active_notify_mission": "Active notify mission",
       "spawn_cargo": "Spawn Cargo",
       "spawn_time": "Spawn Time",
       "active_shift": "Active Shift",
@@ -1043,7 +1044,9 @@
       "shift_target": "Shift Target",
       "none": "None",
       "save": "Save Settings",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "active_config_desc": "Start the parameter settings in the table below",
+      "active_notify_mission_desc": "When there is stock, a notify task will be automatically generated"
     }
   },
   "cargo_history": {
@@ -1083,6 +1086,7 @@
   },
   "conveyor": {
     "title": "Edit conveyor belt parameters",
+    "active_notify_mission": "Active notify mission",
     "edit_fork_height": "Edit fork height when picking up and releasing goods",
     "enable_loading": "Enable Loading",
     "enable_offloading": "Enable Offloading",

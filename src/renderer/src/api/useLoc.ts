@@ -62,7 +62,7 @@ const useLoc = (locId: string | undefined) => {
   });
 };
 
-type Relation = {
+export type Relation = {
   [locationId: string]: string;
 };
 

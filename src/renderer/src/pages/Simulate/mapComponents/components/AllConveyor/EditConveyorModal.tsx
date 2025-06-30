@@ -134,6 +134,14 @@ const EditConveyorModal: FC = () => {
             </Form.Item>
 
             <Form.Item
+              label={t('conveyor.active_notify_mission')}
+              name={'isEnabledNotifyMission'}
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+
+            <Form.Item
               label={t('conveyor.mock_spawn_cargo')}
               name="isSpawnCargo"
               valuePropName="checked"

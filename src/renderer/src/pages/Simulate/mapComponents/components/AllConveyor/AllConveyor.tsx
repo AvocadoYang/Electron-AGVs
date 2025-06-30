@@ -61,7 +61,7 @@ const AllConveyor: FC = () => {
       locationId
     });
   };
-
+  // console.log(conveyorData);
   const handleLeave = () => {
     setTooltip(null);
   };

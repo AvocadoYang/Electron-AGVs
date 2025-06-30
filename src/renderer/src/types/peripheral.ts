@@ -1,3 +1,5 @@
+import { Relation } from '@renderer/api/useLoc';
+
 export enum PeripheralMachineStatus {
   INIT = 'INIT',
   IDLE = 'IDLE',
@@ -36,6 +38,7 @@ export type Cargo = {
 
 export type Mock_Conveyor_Config = {
   isEnable: boolean;
+  isEnabledNotifyMission: boolean;
   isSpawnCargo: boolean;
   spawnTimeMs: number;
   activeShift: boolean;
@@ -53,7 +56,8 @@ export type Conveyor_Info = {
   activeOffload: boolean;
   loadMissionId: string;
   offloadMissionId: string;
-  mockConfig: Mock_Conveyor_Config;
+  placement_priority: number;
+  relationships: Relation;
 };
 
 export enum Peripheral_Error {

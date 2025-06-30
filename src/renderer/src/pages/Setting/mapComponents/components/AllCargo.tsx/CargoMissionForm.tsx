@@ -122,7 +122,7 @@ const CargoMissionForm: FC<{
             <>
               <Flex align="center" justify="center">
                 <Typography.Text>{t('shelf.cargo_mission.load_mission')}</Typography.Text>
-                <Tooltip>
+                <Tooltip title={t('shelf.cargo_mission.load_desc')}>
                   <QuestionCircleOutlined style={{ marginLeft: 8 }} />
                 </Tooltip>
               </Flex>

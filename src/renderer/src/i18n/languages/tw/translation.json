@@ -1036,15 +1036,18 @@
       "title": "倉儲控制系統設定",
       "card_title": "輸送帶站點啟用設定",
       "station": "站點：{{id}}",
-      "active": "啟用",
+      "active_config": "啟用模擬參數設定",
+      "active_notify_mission": "啟動關係級別任務",
       "spawn_cargo": "產生貨物",
       "spawn_time": "產生時間",
-      "active_shift": "啟用搬移",
-      "shift_time": "搬移時間",
-      "shift_target": "搬移目標",
+      "active_shift": "啟用貨物轉移",
+      "shift_time": "貨物轉移時間",
+      "shift_target": "貨物轉移目標",
       "none": "無",
       "save": "儲存設定",
-      "cancel": "取消"
+      "cancel": "取消",
+      "active_config_desc": "啟動下方表格參數設定",
+      "active_notify_mission_desc": "當有貨時會自動生成一個關係級別任務"
     }
   },
   "cargo_history": {
@@ -1085,6 +1088,7 @@
 
   "conveyor": {
     "title": "編輯輸送帶參數",
+    "active_notify_mission": "啟動關係級別任務",
     "edit_fork_height": "編輯取放貨時枒杈高度",
     "enable_loading": "可以取貨",
     "enable_offloading": "可以放貨",
@@ -1095,7 +1099,7 @@
     "mock_spawn_time": "生成間隔 (毫秒)",
     "mock_active_shift": "啟用貨物轉移",
     "mock_shift_time": "貨物轉移間隔 (毫秒)",
-    "mock_shift_target": "換班目標位置 ID",
+    "mock_shift_target": "貨物轉移目標位置 ID",
     "error_spawn_time": "請輸入生成間隔",
     "error_shift_time": "請輸入貨物轉移間隔",
     "error_shift_location": "請輸入貨物轉移位置 ID",

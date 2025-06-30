@@ -4,6 +4,26 @@ import { useEffect, useState } from 'react';
 import { io } from './socketConnect';
 import { Conveyor_Info } from '@renderer/types/peripheral';
 
+const strSchema = string().optional().nullable();
+
+const relationshipSchema = object().test(
+  'relation-type',
+  'relationship has format error',
+  (value) => {
+    if (!value || Object.keys(value).length === 0) return true;
+
+    if (typeof value !== 'object' || Array.isArray(value)) return false;
+
+    for (const key in value) {
+      const levelValue = value[key];
+      const valid = strSchema.isValidSync(levelValue);
+      if (!valid) return false;
+    }
+
+    return true;
+  }
+);
+
 const schema = () =>
   array(
     object({
@@ -14,6 +34,8 @@ const schema = () =>
       activeOffload: boolean().required(),
       loadMissionId: string().nullable(),
       offloadMissionId: string().nullable(),
+      placement_priority: number().required(),
+      relationships: relationshipSchema.optional().nullable(),
       cargo: array(
         object({
           cargoInfoId: string().optional().nullable(),
