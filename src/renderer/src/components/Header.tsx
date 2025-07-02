@@ -84,11 +84,11 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
 
   const items = [
     `${t('page_view')}`,
-    `${t('page_dashboard')}`,
-    `${t('page_setting')}`,
-    `${t('page_simulate')}`,
+    `${t('page_amr')}`,
     `${t('page_analysis')}`,
-    `${t('page_cargo_history')}`
+    `${t('page_cargo_history')}`,
+    `${t('page_setting')}`,
+    `${t('page_simulate')}`
   ].map((name, index) => ({
     key: index + 1,
     label: name
@@ -100,19 +100,19 @@ const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
         navigate('/view');
         break;
       case '2':
-        navigate('/dashboard');
+        navigate('/amr');
         break;
       case '3':
-        navigate('/setting');
-        break;
-      case '4':
-        navigate('/simulate');
-        break;
-      case '5':
         navigate('/mission-analysis');
         break;
-      case '6':
+      case '4':
         navigate('/cargo-history');
+        break;
+      case '5':
+        navigate('/setting');
+        break;
+      case '6':
+        navigate('/simulate');
         break;
       default:
         break;

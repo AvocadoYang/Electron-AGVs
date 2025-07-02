@@ -174,7 +174,7 @@
   "simulate": "simulate",
   "page_analysis": "Mission analysis",
   "page_cargo_history": "Cargo History",
-
+  "page_amr": "Amf info",
   "main_task_list": {
     "wait_suitable": "wait suitable"
   },
@@ -1106,5 +1106,38 @@
     "error_shift_time": "Please input shift interval",
     "error_shift_location": "Please input shift location ID",
     "none": "none"
+  },
+  "amr_detail": {
+    "back": "Back to AMR List",
+    "online": "Online",
+    "offline": "Offline",
+    "overdue": "Overdue",
+    "normal": "Normal",
+    "accurate": "Position Accurate",
+    "inaccurate": "Position Inaccurate",
+    "delay": "Delay: {{ms}} ms",
+    "battery": "Battery",
+    "location": "Location",
+    "current_position": "Current Position",
+    "carrying_cargo": "Carrying Cargo",
+    "show_cargo_metadata": "Show Cargo Metadata",
+    "maintenance": "Maintenance",
+    "manual_operation": "Manual Operation",
+    "show_manual": "Show Manual Operation",
+    "hide_manual": "Hide Manual Operation",
+    "reset": "Reset",
+    "force_to_standby": "force machine to standby",
+    "stop": "Stop",
+    "continue": "Continue",
+    "recent_tasks": "Recent Tasks",
+    "task_id": "Task ID",
+    "desc": "Description",
+    "status": "Status",
+    "time": "Time",
+    "no_mission": "No recent mission",
+    "amr_not_found": "AMR Not Found",
+    "no_data": "No data available for this AMR.",
+    "cargo_metadata": "Cargo Metadata",
+    "no_metadata": "No metadata available"
   }
 }

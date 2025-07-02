@@ -172,6 +172,7 @@
   "simulate": "模擬的",
   "page_analysis": "任務統計",
   "page_cargo_history": "貨物紀錄",
+  "page_amr": "車輛資訊",
 
   "main_task_list": {
     "wait_suitable": "等待適合"
@@ -1108,5 +1109,38 @@
     "error_shift_time": "請輸入貨物轉移間隔",
     "error_shift_location": "請輸入貨物轉移位置 ID",
     "none": "不指定"
+  },
+  "amr_detail": {
+    "back": "返回 AMR 列表",
+    "online": "在線",
+    "offline": "離線",
+    "overdue": "逾時",
+    "normal": "正常",
+    "accurate": "定位準確",
+    "inaccurate": "定位不準",
+    "delay": "延遲：{{ms}} 毫秒",
+    "battery": "電量",
+    "location": "位置",
+    "current_position": "目前位置",
+    "carrying_cargo": "是否載貨",
+    "show_cargo_metadata": "顯示貨物資料",
+    "maintenance": "維護狀態",
+    "manual_operation": "手動操作",
+    "show_manual": "顯示手動操作",
+    "hide_manual": "隱藏手動操作",
+    "reset": "復歸",
+    "force_to_standby": "強制狀態回待命",
+    "stop": "停止",
+    "continue": "解除停止",
+    "recent_tasks": "最近任務",
+    "task_id": "任務 ID",
+    "desc": "描述",
+    "status": "狀態",
+    "time": "時間",
+    "no_mission": "沒有最近任務",
+    "amr_not_found": "找不到 AMR",
+    "no_data": "無 AMR 資料",
+    "cargo_metadata": "貨物資料",
+    "no_metadata": "無資料"
   }
 }

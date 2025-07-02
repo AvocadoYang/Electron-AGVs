@@ -381,6 +381,47 @@ export const useIsLogIn = (amrId: string) => {
   return data;
 };
 
+export const useAllAmrStatus = () => {
+  const [data, setData] = useState<
+    {
+      amrId: string;
+      isOnline: boolean;
+      networkDelay: number;
+      isOverdue: boolean;
+      isPosAccurate: boolean;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const profile$ = profiles$.pipe(filter(isDefined), share());
+    const logIn$ = profile$
+      .pipe(
+        map(
+          (infos) =>
+            infos
+              .map((info) => ({
+                amrId: info.amrId,
+                isOnline: info.arriveInit,
+                networkDelay: info.networkDelay || 0,
+                isOverdue: info.isOverdue || false,
+                isPosAccurate: info.isPosAccurate || false
+              }))
+              .sort((a, b) => a.amrId.localeCompare(b.amrId)) // <-- sort by amrId
+        ),
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
+      )
+      .subscribe((amrStatusArr) => {
+        setData(amrStatusArr);
+      });
+
+    return () => {
+      logIn$.unsubscribe();
+    };
+  }, []);
+
+  return data;
+};
+
 export const useCloseLoc = (amrId: string) => {
   const [closeLoc, setCloseLoc] = useState<string | undefined>('-');
   useEffect(() => {
@@ -407,6 +448,41 @@ export const useCloseLoc = (amrId: string) => {
   }, [amrId]);
 
   return { closeLoc };
+};
+
+export const useAmrDetail = (amrId: string) => {
+  const [data, setData] = useState<{
+    locationId: string;
+    battery: number;
+    status: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const profile$ = profiles$.pipe(
+      map((p) => p.find((x) => x.amrId === amrId)),
+      filter(isDefined),
+      share()
+    );
+    const sub = profile$
+      .pipe(
+        map((info) => ({
+          locationId: info.pose?.closeLoc ?? '',
+          battery: info.IO?.battery ?? 0,
+          status: info.rosStatus ?? ''
+        })),
+        distinctUntilChanged(
+          (a, b) =>
+            a.locationId === b.locationId && a.battery === b.battery && a.status === b.status
+        )
+      )
+      .subscribe(setData);
+
+    return () => {
+      sub.unsubscribe();
+    };
+  }, [amrId]);
+
+  return data;
 };
 
 export const useBattery = (amrId: string) => {
@@ -443,10 +519,7 @@ export const useYaw = (amrId: string) => {
     const yaw$ = profile$
       .pipe(
         map((info) => info.pose?.yaw),
-        distinctUntilChanged((pre, cur) => {
-          if (pre == undefined || cur == undefined) return true;
-          return cur - pre < 0.03;
-        })
+        distinctUntilChanged()
       )
       .subscribe((yaw) => {
         setYaw(yaw);

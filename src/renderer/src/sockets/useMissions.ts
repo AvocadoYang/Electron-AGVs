@@ -133,6 +133,30 @@ export const useMissionsOnce = () => {
   return { missions };
 };
 
+export const useRecentMission = (amrId: string) => {
+  const [recentMission, setRecentMission] = useState<MissionInfo | undefined>(undefined);
+
+  useEffect(() => {
+    const sub = missionReports$
+      .pipe(
+        pluck('missions'),
+        filter(Array.isArray),
+        map(
+          (missions: MissionInfo[]) =>
+            missions
+              .filter((m) => m.amrId === amrId)
+              .sort((a, b) => (b.startedAt?.getTime?.() || 0) - (a.startedAt?.getTime?.() || 0))[0]
+        ),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      )
+      .subscribe(setRecentMission);
+
+    return () => sub.unsubscribe();
+  }, [amrId]);
+
+  return { recentMission };
+};
+
 export type MissionInfo = {
   amrId?: string;
   missionId: string;
