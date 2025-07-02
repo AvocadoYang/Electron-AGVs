@@ -51,7 +51,7 @@ const EditConveyorModal: FC = () => {
     const options = info
       .filter(
         (v) =>
-          (v.areaType === '存貨區' || v.areaType === 'Conveyor') &&
+          (v.areaType === 'Storage' || v.areaType === 'Conveyor') &&
           v.locationId !== openModal?.stationId
       )
       .sort((a, b) => Number(a.locationId) - Number(b.locationId))

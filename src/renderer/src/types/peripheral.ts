@@ -48,6 +48,8 @@ export type Mock_Conveyor_Config = {
 
 export type Conveyor_Info = {
   locationId: string;
+  booker?: string;
+  occupier?: string;
   forkHeight: number;
   conveyorDBId: string;
   cargo: Cargo[];

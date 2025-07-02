@@ -303,6 +303,10 @@
     "liftGate": "Lifting Gate",
     "palletizer": "Palletizer",
     "areaType": "Area Type",
+    "Charging": "Charging point",
+    "Dispatch": "Pre-dispatch point",
+    "Standby": "Standby point",
+    "Storage": "Storage point",
     "save_pose_notify": {
       "empty_value": "X/Y is required",
       "fill_in_value": "Please fill in the X/Y value",

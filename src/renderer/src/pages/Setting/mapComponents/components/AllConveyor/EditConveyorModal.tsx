@@ -92,7 +92,7 @@ const EditConveyorModal: FC = () => {
   const relationOption = useMemo(() => {
     const info = loc as LocWithoutArr[];
     const mixData = info
-      .filter((v) => v.areaType === '存貨區' && v.id !== openModal?.stationId)
+      .filter((v) => v.areaType === 'Storage' && v.id !== openModal?.stationId)
       .sort((a, b) => Number(a.locationId) - Number(b.locationId))
       .map((v) => ({
         label: v.locationId,

@@ -12,6 +12,14 @@ export const locationOption = (value) => {
       return t('edit_location_panel.liftGate');
     case 'Palletizer':
       return t('edit_location_panel.palletizer');
+    case 'Charging':
+      return t('edit_location_panel.Charging');
+    case 'Dispatch':
+      return t('edit_location_panel.Dispatch');
+    case 'Standby':
+      return t('edit_location_panel.Standby');
+    case 'Storage':
+      return t('edit_location_panel.Storage');
     default:
       return value;
   }

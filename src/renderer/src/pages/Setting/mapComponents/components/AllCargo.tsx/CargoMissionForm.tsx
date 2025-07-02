@@ -34,7 +34,7 @@ const CargoMissionForm: FC<{
   const locationOption = useMemo(() => {
     const info = loc as LocWithoutArr[];
     const mixData = info
-      .filter((v) => v.areaType === '預派點' && v.id !== locId)
+      .filter((v) => v.areaType === 'Dispatch' && v.id !== locId)
       .sort((a, b) => Number(a.locationId) - Number(b.locationId))
       .map((v) => ({
         label: v.locationId,
@@ -47,7 +47,7 @@ const CargoMissionForm: FC<{
   const relationOption = useMemo(() => {
     const info = loc as LocWithoutArr[];
     const mixData = info
-      .filter((v) => v.areaType === '存貨區' && v.id !== locId)
+      .filter((v) => (v.areaType === 'Storage' || v.areaType === 'Conveyor') && v.id !== locId)
       .sort((a, b) => Number(a.locationId) - Number(b.locationId))
       .map((v) => ({
         label: v.locationId,

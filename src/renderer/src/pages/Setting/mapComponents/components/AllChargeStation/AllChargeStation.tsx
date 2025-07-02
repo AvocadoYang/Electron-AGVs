@@ -46,7 +46,7 @@ const AllChargeStation: FC<{
   return (
     <>
       {data.locations
-        .filter(({ areaType }) => areaType === '充電區')
+        .filter(({ areaType }) => areaType === 'Charging')
         .map((loc) => {
           const [displayX, displayY] = rosCoord2DisplayCoord({
             x: loc.x,

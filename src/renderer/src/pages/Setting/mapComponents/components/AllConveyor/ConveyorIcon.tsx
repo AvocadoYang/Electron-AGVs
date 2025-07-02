@@ -32,36 +32,40 @@ const Belt = styled.div`
 `;
 
 const Box = styled.div`
-  width: 24px;
-  height: 24px;
-  background-color: #d97706;
+  width: 20px; /* Reduced size for better proportion */
+  height: 20px;
+  background-color: #ffd9ad;
   border: 2px solid #92400e;
   border-radius: 4px;
   position: absolute;
-  top: -20px;
+  top: -18px; /* Slightly closer to the belt */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for true centering */
 `;
+
 const ConveyorContainer = styled.div`
   position: relative;
   display: inline-block;
 `;
+
 const Arrow = styled.div<{ direction: 'load' | 'offload' }>`
   position: absolute;
-  top: 50%;
+  top: -6px; /* Position above the conveyor */
   ${({ direction }) =>
     direction === 'load'
       ? `
-        left: -16px;
-        transform: translate(-100%, -50%);
+        left: 18%; /* Offset to the left of center */
+        transform: translate(-50%, -100%) rotate(0deg);
       `
       : `
-        right: -16px;
-        transform: translate(100%, -50%) rotate(180deg);
+        left: 82%; /* Offset to the right of center */
+        transform: translate(-50%, -100%) rotate(180deg);
       `}
   width: 0;
   height: 0;
-  border-left: 8px solid ${({ direction }) => (direction === 'load' ? '#10b981' : '#ef4444')};
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid ${({ direction }) => (direction === 'load' ? '#10b981' : '#ef4444')};
 `;
 
 const ConveyorIcon: React.FC<{
@@ -72,8 +76,6 @@ const ConveyorIcon: React.FC<{
   info: Conveyor_Info | null;
 }> = ({ translateX, translateY, rotate, scale, info }) => {
   const setIsEdit = useSetAtom(IsEditConveyor);
-  // console.log('!!!!!!!!!!!!');
-  // console.log(info);
 
   if (!info) return <LoadingStation />;
   return (
@@ -99,7 +101,7 @@ const ConveyorIcon: React.FC<{
           })
         }
       >
-        <Belt>{info.cargo.length > 0 ? <Box style={{ left: '25%' }} /> : []}</Belt>
+        <Belt>{info.cargo.length > 0 ? <Box /> : []}</Belt>
       </ConveyorWrapper>
     </ConveyorContainer>
   );

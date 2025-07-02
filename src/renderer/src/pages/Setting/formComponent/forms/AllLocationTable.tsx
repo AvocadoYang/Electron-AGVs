@@ -33,10 +33,10 @@ import SubmitButton from '@renderer/utils/SubmitButton';
 
 const pointTypeWithColor = {
   Extra: '#2d7df6',
-  充電區: '#e7ab29',
-  預派點: '#7fc035',
-  存貨區: '#e06a0a',
-  待命區: '#e0dcd8'
+  Charging: '#e7ab29',
+  Dispatch: '#7fc035',
+  Storage: '#e06a0a',
+  Standby: '#e0dcd8'
 };
 
 const EditableCell: React.FC<EditableCellProps> = ({
@@ -48,10 +48,10 @@ const EditableCell: React.FC<EditableCellProps> = ({
   const { t } = useTranslation();
   const pointTypeOption = [
     { value: 'Extra', label: t('utils.location_property.none') },
-    { value: '充電區', label: t('utils.location_property.charge_station') },
-    { value: '預派點', label: t('utils.location_property.prepare_side') },
-    { value: '存貨區', label: t('utils.location_property.shelve') },
-    { value: '待命區', label: t('utils.location_property.wait_side') }
+    { value: 'Charging', label: t('utils.location_property.charge_station') },
+    { value: 'Dispatch', label: t('utils.location_property.prepare_side') },
+    { value: 'Storage', label: t('utils.location_property.shelve') },
+    { value: 'Standby', label: t('utils.location_property.wait_side') }
   ];
 
   const canRotateOption = [

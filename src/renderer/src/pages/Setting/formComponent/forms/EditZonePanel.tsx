@@ -99,7 +99,7 @@ const EditZonePanel: React.FC<{
   const viewAvailableOption = useMemo(() => {
     const info = loc as LocWithoutArr[];
     const mixData = info
-      .filter((v) => v.areaType !== '存貨區')
+      .filter((v) => v.areaType !== 'Storage')
       .sort((a, b) => Number(a.locationId) - Number(b.locationId))
       .map((v) => ({
         label: v.locationId,

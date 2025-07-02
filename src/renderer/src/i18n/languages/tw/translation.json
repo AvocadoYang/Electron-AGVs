@@ -300,6 +300,10 @@
     "conveyor": "傳送帶",
     "liftGate": "升降門",
     "palletizer": "棧板機",
+    "Charging": "充電區",
+    "Dispatch": "預派點",
+    "Standby": "待命區",
+    "Storage": "存貨區",
     "save_pose_notify": {
       "empty_value": "X/Y 為必填值",
       "fill_in_value": "請填入 X/Y 值",

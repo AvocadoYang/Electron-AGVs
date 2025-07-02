@@ -38,7 +38,7 @@ const AllCargo: React.FC<{
   return (
     <>
       {data.locations
-        .filter(({ areaType }) => areaType === '存貨區')
+        .filter(({ areaType }) => areaType === 'Storage')
         .map((loc) => {
           const [displayX, displayY] = rosCoord2DisplayCoord({
             x: loc.x,
