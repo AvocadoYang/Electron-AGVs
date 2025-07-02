@@ -1,9 +1,8 @@
 import client from '@renderer/api/axiosClient';
-import useWarningGenre from '@renderer/api/useWarningGenre';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Form, FormProps, Input, InputNumber, message, Radio, Select } from 'antd';
+import { Form, FormProps, Input, InputNumber, message, Radio } from 'antd';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import SubmitButton from '@renderer/utils/SubmitButton';
@@ -15,15 +14,11 @@ interface FieldType {
   info_en: string;
   solution_ch: string;
   solution_en: string;
-  sensor_location_en: string;
-  sensor_location_ch: string;
-  genre_id: string;
 }
 
 const WarningIdForm: FC = () => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
-  const { data: warningGenreData } = useWarningGenre();
   const { data: warningData } = useWarningTable();
   const queryClient = useQueryClient();
   const [messageApi, contextHolder] = message.useMessage();
@@ -45,11 +40,11 @@ const WarningIdForm: FC = () => {
   });
 
   const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+
     if (warningData?.findIndex((v) => v?.id === values.id) !== -1) {
       messageApi.warning(t('file.warning_list.id_duplicate_warn'));
       return;
     }
-
     addMutation.mutate(values);
   };
 
@@ -142,53 +137,6 @@ const WarningIdForm: FC = () => {
           ]}
         >
           <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={t('file.warning_list.sensor_location_en')}
-          name="sensor_location_en"
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: t('utils.required')
-            }
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={t('file.warning_list.sensor_location_ch')}
-          name="sensor_location_ch"
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: t('utils.required')
-            }
-          ]}
-        >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          label={t('file.warning_list.genre')}
-          name="warning_genre_id"
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: t('utils.required')
-            }
-          ]}
-        >
-          <Select
-            options={warningGenreData?.map((v) => ({
-              label: `${v?.name_ch} | ${v?.name_en}`,
-              value: v?.id
-            }))}
-          />
         </Form.Item>
 
         <Form.Item>

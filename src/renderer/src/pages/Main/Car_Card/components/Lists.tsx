@@ -1,5 +1,5 @@
 import { memo, useMemo } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import '../car_info.css';
 
 import {
@@ -24,6 +24,73 @@ import { useTranslation } from 'react-i18next';
 import { CarryTag, ChargingTag, ManualTag, MissionTag, PowerTag } from './Tags';
 import useRoadConditions from '@renderer/sockets/useAmrRoadConditions';
 
+const shak = keyframes`
+  0%,
+  65% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  70% {
+    -webkit-transform: rotate(6deg);
+    transform: rotate(6deg);
+  }
+
+  75% {
+    -webkit-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+  }
+
+  80% {
+    -webkit-transform: rotate(6deg);
+    transform: rotate(6deg);
+  }
+
+  85% {
+    -webkit-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+  }
+
+  90% {
+    -webkit-transform: rotate(6deg);
+    transform: rotate(6deg);
+  }
+
+  95% {
+    -webkit-transform: rotate(-6deg);
+    transform: rotate(-6deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+`
+
+export const EmergencyIcon =
+  styled.div`
+  width: 1rem;
+  height: 1rem;
+
+  
+
+  position: absolute;
+ 
+  font-size: 1.5em;
+  /* top: 7%;
+  right: 50%; */
+  top: -0.9rem;
+  left: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+   ${() =>
+      css`
+        animation: ${shak} 1s infinite ease-in-out;
+      `}
+`;
+
 // ======= DropArrow =================
 const Arrow = styled.div<{ random_color: string }>`
   width: 1rem;
@@ -44,6 +111,8 @@ const Arrow = styled.div<{ random_color: string }>`
   justify-content: center;
   cursor: pointer;
 `;
+
+
 export const DropDown: React.FC<{
   color: string;
   openFullInfo: boolean;
@@ -68,7 +137,7 @@ export const DropDown: React.FC<{
 // ======= Login status icon ==========
 export const LogInStatus = styled.p.attrs<{ login: string }>((props) => {
   return { login: props.login };
-})<{ login: string }>`
+}) <{ login: string }>`
   background-color: ${(props) => (props.login === 'true' ? '	#2eb800' : 'red')};
   width: 0.6em;
   height: 0.6em;
@@ -79,7 +148,7 @@ export const LogInStatus = styled.p.attrs<{ login: string }>((props) => {
 // ======= First row in info card =======
 export const CarRow1 = styled.div.attrs<{ is_dark: string }>((props) => {
   return { is_dark: props.is_dark };
-})<{ is_dark: string }>`
+}) <{ is_dark: string }>`
   width: 100%;
   display: flex;
   overflow: hidden;
@@ -136,9 +205,8 @@ export const RowOne: React.FC<{ isDark: boolean; amrId: string }> = memo(({ isDa
         <LogInStatus login={isOnline ? 'true' : 'false'} />
 
         <span
-          className={`login-text ${
-            isOnline ? (isOverdue ? 'overdue-text' : 'online-text') : 'offline-text'
-          }`}
+          className={`login-text ${isOnline ? (isOverdue ? 'overdue-text' : 'online-text') : 'offline-text'
+            }`}
         >
           {isOnline ? (
             isOverdue ? (
@@ -277,7 +345,7 @@ const LocXY: React.FC<{ amrId: string }> = memo(({ amrId }) => {
 });
 const HiddenInfo = styled.div.attrs<{ open_hidden_row: string; is_dark: string }>((props) => {
   return { open_hidden_row: props.open_hidden_row, is_dark: props.is_dark };
-})<{ open_hidden_row: string; is_dark: string }>`
+}) <{ open_hidden_row: string; is_dark: string }>`
   height: ${(props) => (props.open_hidden_row === 'true' ? '25px' : '0px')};
   color: ${(props) => (props.is_dark === 'true' ? 'white' : 'black')};
   overflow: hidden;
@@ -299,7 +367,7 @@ export const HiddenRow: React.FC<{ openHiddenRow: boolean; isDark: boolean; amrI
 
 const CarRow3 = styled.div.attrs<{ is_dark: string }>((props) => {
   return { is_dark: props.is_dark };
-})<{ is_dark: string }>`
+}) <{ is_dark: string }>`
   width: 100%;
   display: flex;
   color: ${(props) => (props.is_dark === 'true' ? 'white' : 'black')};

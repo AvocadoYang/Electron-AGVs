@@ -9,6 +9,8 @@ import styled from 'styled-components';
 import { useAtomValue } from 'jotai';
 import { amrId2ColorRainbow } from '@renderer/utils/utils';
 import { AmrFilterCarCard, hintAmr, showZoneForbidden } from '@renderer/utils/gloable';
+import { useWarningId } from '@renderer/sockets/useWarning';
+
 
 const Tip = styled.div.attrs<{
   left: number;
@@ -20,7 +22,7 @@ const Tip = styled.div.attrs<{
     top,
     transition: 'x 1s, y 1s'
   }
-}))<{
+})) <{
   left: number;
   top: number;
 }>`
@@ -51,6 +53,31 @@ const Tip = styled.div.attrs<{
   }
 `;
 
+const ErrorTip = styled.div.attrs<{
+  left: number;
+  top: number;
+}>(({ left, top }) => ({
+  style: {
+    transform: `translate(-42%, -160%) `,
+    left,
+    top,
+    transition: 'x 1s, y 1s'
+  }
+})) <{
+  left: number;
+  top: number;
+}>`
+ position: absolute;
+  display: flex;
+  padding: 2px;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  background-color: rgba(252, 252, 252, 0.75);
+  z-index: 50;
+  color: #fafafa;
+  font-weight: bold;`
+
 const agvFormate = (x1: number, y1: number) => {
   const theta = (3 * Math.PI) / 2;
   const x = x1 * Math.cos(theta) - y1 * Math.sin(theta);
@@ -67,6 +94,7 @@ const AMR: FC<{
   const hintAmrId = useAtomValue(hintAmr);
   const hintAmrId2 = useAtomValue(AmrFilterCarCard);
   const zoneForbidden = useAtomValue(showZoneForbidden);
+  const errorMessage = useWarningId()?.get(amrId);
 
   const isForbidden = useMemo(() => {
     return zoneForbidden.has(amrId);
@@ -102,6 +130,11 @@ const AMR: FC<{
       )}
 
       <Icon amrId={amrId} color={color} left={left} top={top}></Icon>
+      {
+        errorMessage?.length
+          ? <ErrorTip left={left} top={top + Math.sqrt(top) - 5}>❗</ErrorTip>
+          : null
+      }
     </>
   );
 };

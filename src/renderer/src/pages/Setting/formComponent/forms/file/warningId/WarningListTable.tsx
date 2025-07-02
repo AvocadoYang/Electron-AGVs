@@ -9,14 +9,12 @@ import {
   InputNumber,
   Popconfirm,
   Radio,
-  Select,
   Table,
   Typography,
   message
 } from 'antd';
 import { CloseOutlined, DeleteTwoTone, EditOutlined, SaveOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
-import useWarningGenre from '@renderer/api/useWarningGenre';
 import TextArea from 'antd/es/input/TextArea';
 import useWarningTable from '@renderer/api/useWarningTable';
 import client from '@renderer/api/axiosClient';
@@ -54,7 +52,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   const { t } = useTranslation();
-  const { data: warningGenreData } = useWarningGenre();
   let inputNode;
   switch (dataIndex) {
     case 'id':
@@ -79,22 +76,6 @@ const EditableCell: React.FC<EditableCellProps> = ({
       break;
     case 'solution_en':
       inputNode = <TextArea />;
-      break;
-    case 'sensor_location_en':
-      inputNode = <TextArea />;
-      break;
-    case 'sensor_location_ch':
-      inputNode = <TextArea />;
-      break;
-    case 'genre_id':
-      inputNode = (
-        <Select
-          options={warningGenreData?.map((v) => ({
-            label: `${v?.name_ch} | ${v?.name_en}`,
-            value: v?.id
-          }))}
-        />
-      );
       break;
 
     default:
@@ -160,9 +141,6 @@ const WarningListTable: FC = () => {
     form.setFieldValue('info_en', record.info_en);
     form.setFieldValue('solution_ch', record.solution_ch);
     form.setFieldValue('solution_en', record.solution_en);
-    form.setFieldValue('sensor_location_en', record.sensor_location_en);
-    form.setFieldValue('sensor_location_ch', record.sensor_location_ch);
-    form.setFieldValue('genre_id', record.genre_id);
 
     setEditingKey(record.id);
   };
@@ -196,16 +174,7 @@ const WarningListTable: FC = () => {
       sorter: (a: WarningRecord, b: WarningRecord) => a.id - b.id
     },
     {
-      title: t('file.warning_list.genre'),
-      dataIndex: 'genre_id',
-      key: 'genre_id',
-      editable: true,
-      render(_: unknown, record: WarningRecord) {
-        return `${record.genre_name_ch}  ${record.genre_name_en}`;
-      }
-    },
-    {
-      title: t('file.warning_list.add_new_genre'),
+      title: t('file.warning_list.buzzer'),
       dataIndex: 'is_open_buzzer',
       key: 'is_open_buzzer',
       editable: true,
@@ -237,20 +206,6 @@ const WarningListTable: FC = () => {
       title: t('file.warning_list.solution_en'),
       dataIndex: 'solution_en',
       key: 'solution_en',
-      editable: true
-    },
-
-    {
-      title: t('file.warning_list.sensor_location_ch'),
-      dataIndex: 'sensor_location_ch',
-      key: 'sensor_location_ch',
-      editable: true
-    },
-
-    {
-      title: t('file.warning_list.sensor_location_en'),
-      dataIndex: 'sensor_location_en',
-      key: 'sensor_location_en',
       editable: true
     },
     {
@@ -340,6 +295,7 @@ const WarningListTable: FC = () => {
 
       <Form form={form} component={false}>
         <Table
+
           rowKey={(record) => record.id}
           components={{
             body: {
