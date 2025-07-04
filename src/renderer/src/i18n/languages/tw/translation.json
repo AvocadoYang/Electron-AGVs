@@ -1141,6 +1141,10 @@
     "amr_not_found": "找不到 AMR",
     "no_data": "無 AMR 資料",
     "cargo_metadata": "貨物資料",
-    "no_metadata": "無資料"
+    "no_metadata": "無資料",
+    "show_io": "顯示 IO",
+    "hide_io": "隱藏 IO",
+    "io": "IO 資訊",
+    "no_io": "無 IO 資訊"
   }
 }

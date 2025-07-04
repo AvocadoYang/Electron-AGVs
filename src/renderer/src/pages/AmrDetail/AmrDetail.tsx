@@ -4,15 +4,14 @@ import { Card, Typography, Tag, Progress, Descriptions, Table, Button, Modal, Fl
 import styled from 'styled-components';
 import ReactJsonView from '@uiw/react-json-view';
 import {
-  ArrowLeftOutlined,
-  UpOutlined,
-  DownOutlined,
-  LeftOutlined,
-  RightOutlined,
-  RedoOutlined,
-  StopOutlined
+  ArrowLeftOutlined
+  // UpOutlined,
+  // DownOutlined,
+  // LeftOutlined,
+  // RightOutlined,
 } from '@ant-design/icons';
 import {
+  useAMRAllIO,
   useAmrDetail,
   useAmrPose,
   useIsCarry,
@@ -21,6 +20,7 @@ import {
 } from '@renderer/sockets/useAMRInfo';
 import { useRecentMission } from '@renderer/sockets/useMissions';
 import { useTranslation } from 'react-i18next';
+import DPad from './DPad';
 
 const { Title, Text } = Typography;
 
@@ -44,65 +44,6 @@ const Container = styled.div`
     border-radius: 8px;
     margin: 8px auto;
   }
-`;
-
-const ControlPanel = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 24px 0;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  width: 100%;
-`;
-
-const DPad = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 8px;
-  justify-items: center;
-  align-items: center;
-  width: 180px;
-  background: #f9f9f9;
-  padding: 8px;
-
-  @media (max-width: 600px) {
-    width: 120px;
-    gap: 4px;
-  }
-`;
-
-const DPadRow = styled.div`
-  display: flex;
-  width: 100%;
-  gap: 16px;
-  justify-content: center;
-  align-items: flex-start;
-  margin-bottom: 8px;
-
-  @media (max-width: 600px) {
-    gap: 8px;
-  }
-`;
-
-const DPadMain = styled(DPad)`
-  flex: 0 1 70%;
-  max-width: 70%;
-  height: 14em;
-`;
-
-const DPadSide = styled.div`
-  flex: 0 1 40%;
-  max-width: 380px;
-  height: 14em; // increased from 10em
-  padding: 0.8em;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: stretch;
-  background: #f9f9f9;
 `;
 
 const PoseWrapper = styled.div`
@@ -161,8 +102,10 @@ const AmrDetail = () => {
   const { pose } = useAmrPose(prefixAmrId || '');
   const { recentMission } = useRecentMission(prefixAmrId || '');
   const connectionStatus = useIsLogIn(prefixAmrId || '');
+  const io = useAMRAllIO(prefixAmrId || '');
   const [showControlPanel, setShowControlPanel] = useState(false);
   const [showCargoMetadata, setShowCargoMetadata] = useState(false);
+  const [showIO, setShowIO] = useState(false);
   const { t } = useTranslation();
 
   // Prepare table data from recentMission
@@ -217,7 +160,6 @@ const AmrDetail = () => {
                 </Tag>
               </div>
             </Flex>
-
             <FixedDescWrapper>
               <Descriptions bordered column={1} size="middle" style={{ marginBottom: 24 }}>
                 <Descriptions.Item label={t('amr_detail.battery')}>
@@ -280,47 +222,34 @@ const AmrDetail = () => {
             >
               {showControlPanel ? t('amr_detail.hide_manual') : t('amr_detail.show_manual')}
             </Button>
-            {showControlPanel && (
-              <ControlPanel>
-                <Title level={4} style={{ marginBottom: 12, fontSize: '1.2em' }}>
-                  {t('amr_detail.manual_operation')}
+            {showControlPanel && <DPad amrId={prefixAmrId} />}
+
+            <Button
+              type="primary"
+              onClick={() => setShowIO((v) => !v)}
+              style={{ marginBottom: 12, width: '100%', maxWidth: 300, marginLeft: 8 }}
+            >
+              {showIO ? t('amr_detail.hide_io', '隱藏 IO') : t('amr_detail.show_io', '顯示 IO')}
+            </Button>
+            {showIO && (
+              <Card style={{ marginTop: 16, padding: 16 }}>
+                <Title level={4} style={{ fontSize: '1.1em' }}>
+                  {t('amr_detail.io')}
                 </Title>
-                <DPadRow>
-                  <DPadMain>
-                    <div /> {/* Spacer */}
-                    <Button icon={<UpOutlined />} />
-                    <div /> {/* Spacer */}
-                    <Button icon={<LeftOutlined />} />
-                    <Button icon={<DownOutlined />} />
-                    <Button icon={<RightOutlined />} />
-                  </DPadMain>
-                  <DPadSide>
-                    <Flex vertical gap="middle">
-                      <Button icon={<RedoOutlined />} type="default" aria-label="force_to_standby">
-                        {t('amr_detail.force_to_standby')}
-                      </Button>
-                      <Button
-                        icon={<RedoOutlined />}
-                        type="primary"
-                        style={{ background: '#faad14', borderColor: '#faad14', color: '#fff' }}
-                        aria-label="Reset AMR position"
-                      >
-                        {t('amr_detail.reset')}
-                      </Button>
-                      <Button
-                        style={{ background: '#92fa14', borderColor: '#92fa14', color: '#fff' }}
-                        icon={<StopOutlined />}
-                        aria-label="continue AMR"
-                      >
-                        {t('amr_detail.continue')}
-                      </Button>
-                      <Button icon={<StopOutlined />} danger aria-label="Emergency stop AMR">
-                        {t('amr_detail.stop')}
-                      </Button>
-                    </Flex>
-                  </DPadSide>
-                </DPadRow>
-              </ControlPanel>
+                <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                  {io && Object.keys(io).length > 0 ? (
+                    <ReactJsonView
+                      displayDataTypes={false}
+                      value={io}
+                      collapsed={false}
+                      enableClipboard={false}
+                      style={{ fontSize: 14 }}
+                    />
+                  ) : (
+                    t('amr_detail.no_io')
+                  )}
+                </pre>
+              </Card>
             )}
             <Title level={4} style={{ fontSize: '1.1em' }}>
               {t('amr_detail.recent_tasks')}
@@ -379,7 +308,7 @@ const AmrDetail = () => {
         title={t('amr_detail.cargo_metadata')}
       >
         <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-          {currier.metadata ? (
+          {currier.metadata && currier.metadata !== 'null' ? (
             <ReactJsonView
               displayDataTypes={false}
               value={JSON.parse(currier.metadata)}

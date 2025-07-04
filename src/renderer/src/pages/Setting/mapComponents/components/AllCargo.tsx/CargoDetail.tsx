@@ -202,7 +202,7 @@ const CargoDetail: FC = () => {
             <>
               <Flex vertical gap="middle">
                 <p>{t('customCargo.not_defined_format')}</p>
-                {metadata ? (
+                {metadata && metadata !== 'null' ? (
                   <StyledJsonPreview>
                     <ReactJsonView
                       displayDataTypes={false}

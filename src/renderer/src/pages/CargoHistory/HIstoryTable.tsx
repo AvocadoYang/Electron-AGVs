@@ -196,7 +196,7 @@ const HistoryTable: FC = () => {
             <div style={{ width: '100%' }}>
               <Flex gap="small" style={{ width: '100%' }}>
                 <MetaCard title={t('cargo_history.metadata')}>
-                  {record.metadata ? (
+                  {record.metadata && record.metadata !== 'null' ? (
                     <ReactJsonView
                       displayDataTypes={false}
                       value={record.metadata as {}}

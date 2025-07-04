@@ -1138,6 +1138,10 @@
     "amr_not_found": "AMR Not Found",
     "no_data": "No data available for this AMR.",
     "cargo_metadata": "Cargo Metadata",
-    "no_metadata": "No metadata available"
+    "no_metadata": "No metadata available",
+    "show_io": "Show IO",
+    "hide_io": "Hide IO",
+    "io": "IO information",
+    "no_io": "No IO information"
   }
 }

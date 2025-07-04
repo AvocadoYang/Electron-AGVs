@@ -165,6 +165,8 @@ const EditCargoCarrier: FC<{
     }
   };
 
+  console.log(metadata, 'metadata');
+
   return (
     <>
       {contextHolder}
@@ -202,7 +204,7 @@ const EditCargoCarrier: FC<{
             <>
               <Flex vertical gap="middle">
                 <p>{t('customCargo.not_defined_format')}</p>
-                {metadata ? (
+                {metadata && metadata !== 'null' ? (
                   <ReactJsonView
                     displayDataTypes={false}
                     value={JSON.parse(metadata as string)}

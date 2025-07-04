@@ -533,6 +533,32 @@ export const useYaw = (amrId: string) => {
   return { yaw };
 };
 
+export const useAMRAllIO = (amrId: string) => {
+  const [io, setIO] = useState<FleetInfo['IO'] | null>(null);
+
+  useEffect(() => {
+    const profile$ = profiles$.pipe(
+      map((p) => p.find((x) => x.amrId === amrId)),
+      filter(isDefined),
+      share()
+    );
+    const io$ = profile$
+      .pipe(
+        map((info) => info.IO),
+        distinctUntilChanged()
+      )
+      .subscribe((io) => {
+        setIO((io as FleetInfo['IO']) ?? null);
+      });
+
+    return () => {
+      io$.unsubscribe();
+    };
+  }, [amrId]);
+
+  return { io };
+};
+
 export const useXY = (amrId: string) => {
   const [loc, setLoc] = useState<{ x: number; y: number } | undefined>();
   useEffect(() => {
