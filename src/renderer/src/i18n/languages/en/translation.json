@@ -123,7 +123,11 @@
     "delete_current_mission": "Delete mission",
     "emergency_stop": "Start emergency stop",
     "continue_move": "Release emergency stop",
-    "update_cargo": "update carrier info"
+    "update_cargo": "update carrier info",
+    "metadata": "Metadata (can only read)",
+    "metadata_desc": "This data has not been defined and cannot be edited in the traffic control system",
+    "add_cargo": "Add cargo information",
+    "add_desc": "Added means this vehicle carries more than one cargo at the same time. After releasing the cargo, all cargo information will be transferred to the release point."
   },
 
   "scale_pad": {

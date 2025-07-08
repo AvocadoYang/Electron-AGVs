@@ -19,6 +19,7 @@ import { isDefined } from 'ts-extras';
 import { array, boolean, number, object, string, ValidationError } from 'yup';
 import { translate } from '@renderer/i18n';
 import { useTranslation } from 'react-i18next';
+import { Cargo } from '@renderer/types/peripheral';
 
 export enum MaintenanceLevel {
   /**初始值 */
@@ -153,8 +154,13 @@ const schema = () =>
       isPosAccurate: boolean().optional(),
       smStatus: string().optional(),
       hasCargo: boolean().optional(),
-      cargoMetadata: string().optional().nullable(),
-      customCargoMetadataId: string().optional().nullable(),
+      cargo: array(
+        object({
+          cargoInfoId: string().nullable(),
+          customCargoMetadataId: string().nullable(),
+          metadata: string().nullable()
+        }).optional()
+      ).required(),
       networkDelay: number().optional(),
       isOverdue: boolean().optional(),
       maintenanceLevel: number().optional()
@@ -519,7 +525,7 @@ export const useYaw = (amrId: string) => {
     const yaw$ = profile$
       .pipe(
         map((info) => info.pose?.yaw),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
       .subscribe((yaw) => {
         setYaw(yaw);
@@ -545,7 +551,7 @@ export const useAMRAllIO = (amrId: string) => {
     const io$ = profile$
       .pipe(
         map((info) => info.IO),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
       .subscribe((io) => {
         setIO((io as FleetInfo['IO']) ?? null);
@@ -609,7 +615,7 @@ export const useAmrStatus = (amrId: string) => {
           const tipText = statusText;
           return tipText;
         }),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
       .subscribe((info) => {
         setStatus(info);
@@ -660,7 +666,7 @@ export const useMaintenanceStatus = (amrId: string) => {
           const { maintenanceLevel } = info;
           return translateMaintenance(maintenanceLevel);
         }),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
       .subscribe((info) => {
         setStatus(info);
@@ -685,7 +691,7 @@ export const useIsWorking = (amrId: string) => {
     const isWorking$ = profile$
       .pipe(
         map((info) => info.doingTask),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
       .subscribe((isWorking) => setIsWorking(isWorking));
 
@@ -708,7 +714,7 @@ export const useIsManual = (amrId: string) => {
     const manual$ = profile$
       .pipe(
         map((info) => info.IO?.manual_mode),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
       .subscribe((isWorking) => setIsManual(isWorking));
 
@@ -723,12 +729,10 @@ export const useIsManual = (amrId: string) => {
 export const useIsCarry = (amrId: string) => {
   const [isCarry, setIsCarry] = useState<{
     isCarry: boolean;
-    metadata: string | null;
-    customCargoMetadataId: string | null;
+    cargo: Cargo[];
   }>({
     isCarry: false,
-    metadata: null,
-    customCargoMetadataId: null
+    cargo: []
   });
   useEffect(() => {
     const profile$ = profiles$.pipe(
@@ -740,14 +744,11 @@ export const useIsCarry = (amrId: string) => {
       .pipe(
         map((info) => ({
           hasCargo: info.hasCargo || false,
-          metadata: info.cargoMetadata || null,
-          customCargoMetadataId: info.customCargoMetadataId || null
+          cargo: info.cargo as Cargo[]
         })),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
-      .subscribe(({ hasCargo, metadata, customCargoMetadataId }) =>
-        setIsCarry({ isCarry: hasCargo, metadata: metadata, customCargoMetadataId })
-      );
+      .subscribe(({ hasCargo, cargo }) => setIsCarry({ isCarry: hasCargo, cargo }));
 
     return () => {
       isCarry$.unsubscribe();
@@ -768,7 +769,7 @@ export const useIsCharging = (amrId: string) => {
     const isCarry$ = profile$
       .pipe(
         map((info) => info.IO?.charging),
-        distinctUntilChanged()
+        distinctUntilChanged((pre, current) => JSON.stringify(pre) === JSON.stringify(current))
       )
       .subscribe((isWorking) => setIsCharge(isWorking));
 

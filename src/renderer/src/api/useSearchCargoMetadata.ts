@@ -1,4 +1,4 @@
-import { array, object, string, date, boolean } from 'yup';
+import { array, object, string, date, boolean, mixed } from 'yup';
 import { InferType } from 'yup';
 import { useQuery } from '@tanstack/react-query';
 import client from './axiosClient';
@@ -18,7 +18,7 @@ const customCargoMetadataSchema = object({
   id: string().required(),
   is_default: boolean().required(),
   custom_name: string().required(),
-  format: string().required()
+  format: mixed().optional().nullable()
 })
   .optional()
   .nullable();
@@ -27,7 +27,7 @@ const schema = array(
   object({
     id: string().required(),
     status: string().oneOf(['ON_AMR', 'AT_LOCATION', 'SHIFT']).required(),
-    metadata: string().optional().nullable(),
+    metadata: mixed().optional().nullable(),
     createdAt: date().required(),
     updatedAt: date().required(),
     register_robot_id: string().nullable(),

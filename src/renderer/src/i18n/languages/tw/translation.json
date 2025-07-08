@@ -122,7 +122,11 @@
     "delete_current_mission": "刪除任務",
     "emergency_stop": "啟動急停",
     "continue_move": "解除急停",
-    "update_cargo": "編輯攜帶貨物資訊"
+    "update_cargo": "編輯攜帶貨物資訊",
+    "metadata": "中繼資料 (只能讀取)",
+    "metadata_desc": "此資料尚未定義型態於交管系統不可編輯",
+    "add_cargo": "新增貨物資訊",
+    "add_desc": "新增代表此車輛同時攜帶1個以上的貨物, 放貨後會將所有貨物資訊轉移到放貨點"
   },
 
   "scale_pad": {

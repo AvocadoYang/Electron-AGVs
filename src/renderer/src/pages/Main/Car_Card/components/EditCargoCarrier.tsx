@@ -4,17 +4,18 @@ import { useIsCarry } from '@renderer/sockets/useAMRInfo';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation } from '@tanstack/react-query';
-import { Form, Modal, Select, Input, message, Switch, Flex } from 'antd';
+import { Form, Modal, Select, Input, message, Switch, Button, Tooltip } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { FC, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactJsonView from '@uiw/react-json-view';
+import styled from 'styled-components';
 
-type DataType = {
-  id: string;
-  custom_name: string;
-  is_default: boolean;
-  format: string;
-};
+const Wrapper = styled.div`
+  max-height: 72vh;
+  overflow-y: auto;
+  padding-right: 8px;
+`;
 
 const EditCargoCarrier: FC<{
   amrId: string;
@@ -23,25 +24,22 @@ const EditCargoCarrier: FC<{
 }> = ({ amrId, isModalOpen, setIsModalOpen }) => {
   const { t } = useTranslation();
   const { data } = useCustomCargoFormat();
-  const [format, setFormat] = useState<DataType | null>(null);
+  const [formatFieldMap, setFormatFieldMap] = useState<
+    Record<number, { name: string; type: string }[]>
+  >({});
   const [form] = Form.useForm();
-  const [dynamicFields, setDynamicFields] = useState<{ name: string; type: string }[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
   const [hasCargo, setHasCargo] = useState(false);
-  const { isCarry, metadata, customCargoMetadataId } = useIsCarry(amrId);
-
+  const { isCarry, cargo } = useIsCarry(amrId);
+  // console.log(cargo, 'current carry');
   const options = data?.map((v) => ({
     label: v?.custom_name,
     value: v?.id
   }));
 
   const editMutation = useMutation({
-    mutationFn: (payload: {
-      amrId: string;
-      hasCargo: boolean;
-      metadata: string;
-      custom_cargo_metadata_id: string;
-    }) => client.post('/api/amr/update-cargo-info', payload),
+    mutationFn: (payload: { amrId: string; hasCargo: boolean; cargo: any }) =>
+      client.post('/api/amr/update-cargo-info', payload),
     onSuccess: () => {
       messageApi.success(t('utils.success'));
       setIsModalOpen(false);
@@ -50,92 +48,91 @@ const EditCargoCarrier: FC<{
   });
 
   useEffect(() => {
-    if (!format || !format.format) return;
-
-    try {
-      const parsedFormat = JSON.parse(format.format);
-      const fields = Object.entries(parsedFormat).map(([name, type]) => ({
-        name,
-        type: typeof type === 'string' ? type : 'string'
-      }));
-      setDynamicFields(fields);
-    } catch (error) {
-      console.error('Invalid JSON format:', error);
-      setDynamicFields([]);
-    }
-  }, [format]);
-
-  useEffect(() => {
     if (!isModalOpen) return;
 
     if (isCarry) {
       setHasCargo(true);
       try {
-        const parsed = metadata ? JSON.parse(metadata) : {};
+        const parsedCargo = Array.isArray(cargo)
+          ? cargo.map((c) => ({
+              cargoInfoId: c.cargoInfoId,
+              metadata: c.metadata ? JSON.parse(c.metadata) : {},
+              custom_cargo_metadata_id: c.customCargoMetadataId ?? c.customCargoMetadataId
+            }))
+          : [];
 
-        form.setFieldsValue({
-          hasCargo: true,
-          ...parsed
+        // console.log(parsedCargo, 'oolm');
+
+        // Precompute formatFieldMap
+        const newMap: Record<number, { name: string; type: string }[]> = {};
+        parsedCargo.forEach((c, index) => {
+          const matched = data?.find((v) => v?.id === c.custom_cargo_metadata_id);
+          if (matched?.format) {
+            try {
+              const fields = Object.entries(JSON.parse(matched.format)).map(([name, type]) => ({
+                name,
+                type: typeof type === 'string' ? type : 'string'
+              }));
+              newMap[index] = fields;
+            } catch (err) {
+              newMap[index] = [];
+            }
+          }
         });
+
+        setFormatFieldMap(newMap);
+        form.setFieldsValue({ hasCargo: true, cargo: parsedCargo });
       } catch (err) {
-        console.error('Failed to parse metadata from socket:', err);
+        console.error('Failed to parse cargo from socket:', err);
       }
-    }
-  }, [isCarry, metadata, isModalOpen, form]);
-
-  useEffect(() => {
-    if (!data || data.length === 0) return;
-
-    // console.log('render');
-    // console.log(customCargoMetadataId, 'custom');
-
-    if (customCargoMetadataId) {
-      //   console.log('1');
-      const customData = data.find((v) => v?.id === customCargoMetadataId);
-      setFormat(customData as DataType);
-      form.setFieldsValue({ custom_cargo_metadata_id: customData?.id });
     } else {
-      const defaultData = data.find((v) => v?.is_default);
-      //console.log('2');
-      //可能是取到的貨格式沒有在定義內
-      if (!defaultData || customCargoMetadataId === null) {
-        //console.log('3');
-        setFormat(null);
-        form.setFieldsValue({ custom_cargo_metadata_id: null });
-        return;
-      }
-      //  console.log('4');
-      setFormat(defaultData as DataType);
-      form.setFieldsValue({ custom_cargo_metadata_id: defaultData?.id });
+      form.setFieldsValue({
+        hasCargo: false,
+        cargo: []
+      });
+      setFormatFieldMap({});
     }
-  }, [data, form, isCarry]);
+  }, [isCarry, cargo, isModalOpen, form, data]);
 
-  const handleSelectChange = (value: string) => {
+  const handleSelectChange = (value: string, index: number) => {
     const selectedFormat = data?.find((v) => v?.id === value);
-    setFormat(selectedFormat as DataType);
+    const formatFields = selectedFormat?.format
+      ? Object.entries(JSON.parse(selectedFormat.format)).map(([name, type]) => ({
+          name,
+          type: typeof type === 'string' ? type : 'string'
+        }))
+      : [];
+
+    const existingCargo = form.getFieldValue('cargo') || [];
+    existingCargo[index] = {
+      ...(existingCargo[index] || {}),
+      custom_cargo_metadata_id: value
+    };
+
+    setFormatFieldMap((prev) => ({
+      ...prev,
+      [index]: formatFields
+    }));
+
+    form.setFieldsValue({ cargo: existingCargo });
   };
 
   const handleOk = () => {
     form
       .validateFields()
       .then((values) => {
-        const formData = {
-          custom_cargo_metadata_id: values.custom_cargo_metadata_id,
-          metadata: dynamicFields.reduce(
-            (acc, field) => {
-              acc[field.name] = values[field.name];
-              return acc;
-            },
-            {} as Record<string, any>
-          )
+        const payload = {
+          amrId,
+          hasCargo,
+          cargo: (values.cargo || []).map((entry: any) => ({
+            cargoInfoId: entry.cargoInfoId,
+            metadata: JSON.stringify(entry.metadata),
+            customCargoMetadataId: entry.custom_cargo_metadata_id
+          }))
         };
 
-        editMutation.mutate({
-          amrId,
-          metadata: JSON.stringify(formData.metadata),
-          hasCargo,
-          custom_cargo_metadata_id: formData.custom_cargo_metadata_id
-        });
+        // console.log('Sending payload:', JSON.stringify(payload, null, 2));
+        editMutation.mutate(payload);
       })
       .catch((error) => {
         console.error('Form validation failed:', error);
@@ -165,7 +162,7 @@ const EditCargoCarrier: FC<{
     }
   };
 
-  console.log(metadata, 'metadata');
+  // console.log(metadata, 'metadata');
 
   return (
     <>
@@ -176,49 +173,108 @@ const EditCargoCarrier: FC<{
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        <Form form={form} layout="vertical">
-          <Form.Item label={t('customCargo.name')} name="custom_cargo_metadata_id">
-            <Select options={options} onChange={handleSelectChange} />
-          </Form.Item>
+        <Wrapper>
+          <Form form={form} layout="vertical">
+            <Form.Item
+              label={t('shelf.layer_form.has_cargo')}
+              name={`hasCargo`}
+              valuePropName="checked"
+            >
+              <Switch
+                value={hasCargo}
+                onChange={() => setHasCargo(!hasCargo)}
+                checkedChildren={t('shelf.layer_form.has_cargo')}
+                unCheckedChildren={t('shelf.layer_form.no_cargo')}
+              />
+            </Form.Item>
 
-          <Form.Item
-            label={t('shelf.layer_form.has_cargo')}
-            name={`hasCargo`}
-            valuePropName="checked"
-          >
-            <Switch
-              value={hasCargo}
-              onChange={() => setHasCargo(!hasCargo)}
-              checkedChildren={t('shelf.layer_form.has_cargo')}
-              unCheckedChildren={t('shelf.layer_form.no_cargo')}
-            />
-          </Form.Item>
+            <Form.List name="cargo">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => {
+                    const currentCargo = form.getFieldValue('cargo')?.[name] || {};
+                    const hasMetadataSchema = !!currentCargo.custom_cargo_metadata_id;
+                    const metadata = currentCargo.metadata || {};
 
-          {format ? (
-            dynamicFields.map((field) => (
-              <Form.Item key={field.name} label={field.name} name={field.name}>
-                {renderInput(field.type, field.name)}
-              </Form.Item>
-            ))
-          ) : (
-            <>
-              <Flex vertical gap="middle">
-                <p>{t('customCargo.not_defined_format')}</p>
-                {metadata && metadata !== 'null' ? (
-                  <ReactJsonView
-                    displayDataTypes={false}
-                    value={JSON.parse(metadata as string)}
-                    collapsed={false}
-                    enableClipboard={false}
-                    style={{ fontSize: 14 }}
-                  />
-                ) : (
-                  []
-                )}
-              </Flex>
-            </>
-          )}
-        </Form>
+                    return (
+                      <div
+                        key={key}
+                        style={{
+                          marginBottom: 24,
+                          padding: 12,
+                          border: '1px dashed #ccc',
+                          borderRadius: 4
+                        }}
+                      >
+                        {/* 為了cargo id不可填寫 */}
+                        <Form.Item name={[name, 'cargoInfoId']} hidden>
+                          <Input />
+                        </Form.Item>
+
+                        {/* 當格式不是定義在交管 就不可編輯只能觀看 */}
+                        <Form.Item
+                          {...restField}
+                          label={t('customCargo.name')}
+                          name={[name, 'custom_cargo_metadata_id']}
+                        >
+                          <Select
+                            disabled={!hasMetadataSchema && Object.keys(metadata).length !== 0}
+                            options={options}
+                            onChange={(val) => handleSelectChange(val, name)}
+                          />
+                        </Form.Item>
+
+                        {hasMetadataSchema ? (
+                          (formatFieldMap[name] || []).map((field) => (
+                            <Form.Item
+                              key={`${name}-${field.name}`}
+                              label={field.name}
+                              name={[name, 'metadata', field.name]}
+                            >
+                              {renderInput(field.type, field.name)}
+                            </Form.Item>
+                          ))
+                        ) : (
+                          <Form.Item
+                            label={
+                              <>
+                                {t('amr_card.metadata')}
+                                <Tooltip placement="right" title={t('amr_card.metadata_desc')}>
+                                  <QuestionCircleOutlined />
+                                </Tooltip>
+                              </>
+                            }
+                          >
+                            <ReactJsonView
+                              displayDataTypes={false}
+                              enableClipboard={false}
+                              collapsed={false}
+                              value={metadata}
+                            />
+                          </Form.Item>
+                        )}
+
+                        <Form.Item>
+                          <Button danger onClick={() => remove(name)}>
+                            {t('utils.delete')}
+                          </Button>
+                        </Form.Item>
+                      </div>
+                    );
+                  })}
+
+                  <Form.Item>
+                    <Tooltip placement="bottom" title={t('amr_card.add_desc')}>
+                      <Button type="dashed" onClick={() => add()} block>
+                        + {t('amr_card.add_cargo')}
+                      </Button>
+                    </Tooltip>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </Form>
+        </Wrapper>
       </Modal>
     </>
   );
