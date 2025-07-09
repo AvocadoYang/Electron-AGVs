@@ -68,7 +68,7 @@ const Cargo: FC<{
       handleQuickRoad(locId);
       return;
     }
-
+    //console.log(data.shelfInfo.layer, ' cargo gloabl');
     if (openEditRoadPanel || openEditZone) return;
     setBaseModal(true);
     setGlobalData(data);

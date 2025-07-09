@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid';
 import { LayerType } from '@renderer/sockets/useCargoInfo';
 import { useSetAtom } from 'jotai';
 import { GlobalCargoInfo, GlobalCargoInfoModal } from './jotaiState';
+import { Cargo } from '@renderer/types/peripheral';
 
 const prefixLevelName = (word: string | null | undefined) => {
   if (!word) return null;
@@ -37,17 +38,14 @@ const LayerForm: FC<{
   const setOpenEditCargoDetailModal = (data: {
     dbId: string | null;
     level: number;
-    cargoInfoId: string | null;
-    customCargoMetadataId: string | null;
-    metadata: string | null;
+    cargo: Cargo[];
   }) => {
+    // console.log(data.cargo, 'setting');
     setCargoInfo({
       locationId: locId,
       dbId: data.dbId,
       level: data.level,
-      cargoInfoId: data.cargoInfoId,
-      customCargoMetadataId: data.customCargoMetadataId,
-      metadata: data.metadata
+      cargo: data.cargo
     });
     setOpenCargoInfo(true);
   };
@@ -90,7 +88,7 @@ const LayerForm: FC<{
           </Title>
           {Object.entries(layer).map(([levelStr, levelValue]) => {
             const index = Number(levelStr);
-
+            //  console.log(levelValue.cargo, 'level value');
             return (
               <div
                 key={nanoid()}
@@ -140,9 +138,7 @@ const LayerForm: FC<{
                             setOpenEditCargoDetailModal({
                               dbId: levelValue.dbId,
                               level: Number(levelStr),
-                              cargoInfoId: levelValue.cargoInfoId,
-                              customCargoMetadataId: levelValue.customCargoMetadataId,
-                              metadata: levelValue.metadata
+                              cargo: levelValue.cargo
                             })
                           }
                         >

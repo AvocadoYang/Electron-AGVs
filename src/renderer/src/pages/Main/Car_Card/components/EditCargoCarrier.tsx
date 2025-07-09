@@ -4,12 +4,13 @@ import { useIsCarry } from '@renderer/sockets/useAMRInfo';
 import { ErrorResponse } from '@renderer/utils/globalType';
 import { errorHandler } from '@renderer/utils/utils';
 import { useMutation } from '@tanstack/react-query';
-import { Form, Modal, Select, Input, message, Switch, Button, Tooltip } from 'antd';
+import { Form, Modal, Select, Input, message, Switch, Button, Tooltip, Flex } from 'antd';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { FC, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactJsonView from '@uiw/react-json-view';
 import styled from 'styled-components';
+import { useReverifyCargoFormat } from '@renderer/hooks/useReverifyCargoFormat';
 
 const Wrapper = styled.div`
   max-height: 72vh;
@@ -31,6 +32,12 @@ const EditCargoCarrier: FC<{
   const [messageApi, contextHolder] = message.useMessage();
   const [hasCargo, setHasCargo] = useState(false);
   const { isCarry, cargo } = useIsCarry(amrId);
+  const { mutate, isLoading, contextHolder: reContextHolder } = useReverifyCargoFormat();
+
+  const reVerityCargoFormat = (cargoInfoId: string) => {
+    mutate(cargoInfoId);
+  };
+
   // console.log(cargo, 'current carry');
   const options = data?.map((v) => ({
     label: v?.custom_name,
@@ -106,7 +113,8 @@ const EditCargoCarrier: FC<{
     const existingCargo = form.getFieldValue('cargo') || [];
     existingCargo[index] = {
       ...(existingCargo[index] || {}),
-      custom_cargo_metadata_id: value
+      custom_cargo_metadata_id: value,
+      metadata: {}
     };
 
     setFormatFieldMap((prev) => ({
@@ -166,6 +174,7 @@ const EditCargoCarrier: FC<{
 
   return (
     <>
+      {reContextHolder}
       {contextHolder}
       <Modal
         title={t('amr_card.update_cargo')}
@@ -237,12 +246,21 @@ const EditCargoCarrier: FC<{
                         ) : (
                           <Form.Item
                             label={
-                              <>
-                                {t('amr_card.metadata')}
-                                <Tooltip placement="right" title={t('amr_card.metadata_desc')}>
-                                  <QuestionCircleOutlined />
-                                </Tooltip>
-                              </>
+                              <Flex align="center" gap="large">
+                                <Flex gap="small">
+                                  {t('amr_card.metadata')}
+                                  <Tooltip placement="right" title={t('amr_card.metadata_desc')}>
+                                    <QuestionCircleOutlined />
+                                  </Tooltip>
+                                </Flex>
+
+                                <Button
+                                  loading={isLoading}
+                                  onClick={() => reVerityCargoFormat(currentCargo.cargoInfoId)}
+                                >
+                                  {t('cargo_history.re_verity_format')}
+                                </Button>
+                              </Flex>
                             }
                           >
                             <ReactJsonView

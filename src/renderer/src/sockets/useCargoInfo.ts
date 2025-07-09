@@ -2,6 +2,7 @@ import { array, string, object, ValidationError, boolean, number } from 'yup';
 import { from, fromEventPattern, share, switchMap, distinctUntilChanged } from 'rxjs';
 import { useEffect, useState } from 'react';
 import { io } from './socketConnect';
+import { Cargo } from '@renderer/types/peripheral';
 
 export const levelSchema = object({
   levelName: string().optional().nullable(),
@@ -33,14 +34,14 @@ export const layerSchema = object().test(
 export type LayerType = {
   [level: number]: {
     dbId: string;
+    height: number;
     levelName: string;
     booked: boolean;
     cargo_limit: number;
     disable: boolean;
     hasCargo: boolean;
-    cargoInfoId: string | null;
-    customCargoMetadataId: string | null;
-    metadata: string | null;
+
+    cargo: Cargo[];
   };
 };
 

@@ -923,6 +923,7 @@
   },
 
   "customCargo": {
+    "warn": "WARN !!",
     "create": "Create Format",
     "modalTitle": "Create Custom Cargo Format",
     "name": "Custom Format Name",
@@ -931,7 +932,8 @@
     "keyRequired": "Key is required",
     "valueRequired": "Value type is required",
     "isDefault": "is default",
-    "not_defined_format": "Not yet defined or the data format for this cargo custom info is not defined"
+    "not_defined_format": "Not yet defined or the data format for this cargo custom info is not defined",
+    "delete_desc": "And confirm that the entire site is not in a mission state, deletion will reload all cargo-related equipment records. "
   },
 
   "sim": {
@@ -1061,6 +1063,9 @@
     "cargoId": "Cargo ID",
     "status": "Status",
     "customFormat": "Custom Format",
+    "undefined_format": "Undefined Format",
+    "undefined_format_desc": "This data format is judged as undefined. It may be that when the third party specifies the storage location or place that can contain goods, the format is wrong or the data format has not been defined in the QAMS. You can add a new format in the settings page -> Shelves & Pallets -> Customized Goods Information",
+    "re_verity_format": "Recheck format",
     "metadata": "Metadata",
     "createdAt": "Created At",
     "history": "History",

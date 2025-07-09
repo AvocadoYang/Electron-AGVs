@@ -1,5 +1,5 @@
 import useCargoHistory from '@renderer/api/useCargoHistory';
-import { Typography, Table, Tag, Flex, Card, Input } from 'antd';
+import { Typography, Table, Tag, Flex, Card, Input, Alert, Tooltip } from 'antd';
 import moment from 'moment';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import ReactJsonView from '@uiw/react-json-view';
 import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import useSearchCargoMetadata from '@renderer/api/useSearchCargoMetadata';
+import { useReverifyCargoFormat } from '@renderer/hooks/useReverifyCargoFormat';
 
 const { Text } = Typography;
 
@@ -90,6 +91,12 @@ const HistoryTable: FC = () => {
 
   const { t } = useTranslation();
 
+  const { mutate, isLoading, contextHolder } = useReverifyCargoFormat(refetch);
+
+  const reVerityCargoFormat = (cargoInfoId: string) => {
+    mutate(cargoInfoId);
+  };
+
   const getActionColor = (action: CargoAction): string => {
     switch (action) {
       case CargoAction.CREATED:
@@ -162,77 +169,112 @@ const HistoryTable: FC = () => {
   ];
 
   return (
-    <PageContainer>
-      <HeaderContainer>
-        <Flex gap="small">
-          <Input
-            placeholder={t('cargo_history.search_metadata')}
-            value={metadataSearch}
-            onChange={(e) => setMetadataSearch(e.target.value)}
-            style={{ width: 300 }}
-            allowClear
-          />
-        </Flex>
+    <>
+      {contextHolder}
+      <PageContainer>
+        <HeaderContainer>
+          <Flex gap="small">
+            <Input
+              placeholder={t('cargo_history.search_metadata')}
+              value={metadataSearch}
+              onChange={(e) => setMetadataSearch(e.target.value)}
+              style={{ width: 300 }}
+              allowClear
+            />
+          </Flex>
 
-        <Button onClick={() => refetch()} loading={isFetching}>
-          {t('cargo_history.refetch')}
-        </Button>
-      </HeaderContainer>
-      <StyledTable<any>
-        dataSource={metadataSearch ? searchData?.data || [] : data?.data || []}
-        columns={columns}
-        pagination={
-          metadataSearch
-            ? false
-            : {
-                pageSize,
-                total: data?.total,
-                onChange: (page) => setCurrentPage(page)
-              }
-        }
-        rowKey="id"
-        expandable={{
-          expandedRowRender: (record: CargoData) => (
-            <div style={{ width: '100%' }}>
-              <Flex gap="small" style={{ width: '100%' }}>
-                <MetaCard title={t('cargo_history.metadata')}>
-                  {record.metadata && record.metadata !== 'null' ? (
-                    <ReactJsonView
-                      displayDataTypes={false}
-                      value={record.metadata as {}}
-                      collapsed={false}
-                      enableClipboard={false}
-                      style={{ fontSize: 14 }}
-                    />
-                  ) : (
-                    <NoDefine>{t('cargo_history.no_defined')}</NoDefine>
-                  )}
-                </MetaCard>
-                <HisCard title={t('cargo_history.history')}>
-                  <div style={{ marginTop: 8 }}>
-                    {[...record.history]
-                      .sort(
-                        (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
-                      )
-                      .map((h) => (
-                        <Flex key={h.id} gap="small" style={{ marginBottom: 4 }}>
-                          <Text type="secondary" style={{ minWidth: 160 }}>
-                            {moment(h.timestamp).format('YYYY-MM-DD HH:mm:ss')}
-                          </Text>
-                          <ActionWrapper>
-                            <Tag color={getActionColor(h.action as CargoAction)}>{h.action}</Tag>
-                          </ActionWrapper>
-                          <span>{h.description}</span>
+          <Button onClick={() => refetch()} loading={isFetching}>
+            {t('cargo_history.refetch')}
+          </Button>
+        </HeaderContainer>
+        <StyledTable<any>
+          dataSource={metadataSearch ? searchData?.data || [] : data?.data || []}
+          columns={columns}
+          pagination={
+            metadataSearch
+              ? false
+              : {
+                  pageSize,
+                  total: data?.total,
+                  onChange: (page) => setCurrentPage(page)
+                }
+          }
+          rowKey="id"
+          expandable={{
+            expandedRowRender: (record: CargoData) => (
+              <div style={{ width: '100%' }}>
+                <Flex gap="small" style={{ width: '100%' }}>
+                  <MetaCard
+                    title={
+                      <>
+                        <Flex align="center" gap="large">
+                          {t('cargo_history.metadata')}
+
+                          {record.custom_cargo_metadata ? (
+                            []
+                          ) : (
+                            <Tooltip title={t('cargo_history.undefined_format_desc')}>
+                              <Alert
+                                message={t('cargo_history.undefined_format')}
+                                type="warning"
+                                showIcon
+                              />
+                            </Tooltip>
+                          )}
+
+                          {record.custom_cargo_metadata ? (
+                            []
+                          ) : (
+                            <Button
+                              loading={isLoading}
+                              onClick={() => reVerityCargoFormat(record.id)}
+                            >
+                              {t('cargo_history.re_verity_format')}
+                            </Button>
+                          )}
                         </Flex>
-                      ))}
-                  </div>
-                </HisCard>
-              </Flex>
-            </div>
-          )
-        }}
-      />
-    </PageContainer>
+                      </>
+                    }
+                  >
+                    {record.metadata && record.metadata !== 'null' ? (
+                      <ReactJsonView
+                        displayDataTypes={false}
+                        value={record.metadata as {}}
+                        collapsed={false}
+                        enableClipboard={false}
+                        style={{ fontSize: 14 }}
+                      />
+                    ) : (
+                      <NoDefine>{t('cargo_history.no_defined')}</NoDefine>
+                    )}
+                  </MetaCard>
+                  <HisCard title={t('cargo_history.history')}>
+                    <div style={{ marginTop: 8 }}>
+                      {[...record.history]
+                        .sort(
+                          (a, b) =>
+                            new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+                        )
+                        .map((h) => (
+                          <Flex key={h.id} gap="small" style={{ marginBottom: 4 }}>
+                            <Text type="secondary" style={{ minWidth: 160 }}>
+                              {moment(h.timestamp).format('YYYY-MM-DD HH:mm:ss')}
+                            </Text>
+                            <ActionWrapper>
+                              <Tag color={getActionColor(h.action as CargoAction)}>{h.action}</Tag>
+                            </ActionWrapper>
+                            <span>{h.description}</span>
+                          </Flex>
+                        ))}
+                    </div>
+                  </HisCard>
+                </Flex>
+              </div>
+            )
+          }}
+        />
+      </PageContainer>
+    </>
   );
 };
 

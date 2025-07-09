@@ -1,4 +1,5 @@
 import { CargoInfo } from '@renderer/sockets/useCargoInfo';
+import { Cargo } from '@renderer/types/peripheral';
 import { atom } from 'jotai';
 
 export const GlobalCargoInfoModal = atom<boolean>(false);
@@ -8,16 +9,12 @@ export const GlobalCargoInfo = atom<{
   dbId: string | null;
   locationId: string | null;
   level: number;
-  cargoInfoId: string | null;
-  customCargoMetadataId: string | null;
-  metadata: string | null;
+  cargo: Cargo[];
 }>({
   dbId: null,
   locationId: null,
   level: -1,
-  cargoInfoId: null,
-  customCargoMetadataId: null,
-  metadata: null
+  cargo: []
 });
 
 export const GlobalCargoData = atom<{

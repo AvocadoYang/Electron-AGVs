@@ -1,12 +1,13 @@
 import { FC, useState } from 'react';
 import { Form, message, Modal } from 'antd';
 import { useCargoMutations } from './hook/useCargoMutations';
-import { FormCargo, LayerType } from './types';
+import { FormCargo } from './types';
 import { useTranslation } from 'react-i18next';
 import CargoMissionForm from './CargoMissionForm';
 import LayerForm from './LayerForm';
 import { useAtom, useAtomValue } from 'jotai';
 import { BaseGlobalCargoInfoModal, GlobalCargoData } from './jotaiState';
+import { LayerType } from '@renderer/sockets/useCargoInfo';
 
 const CargoModal: FC = () => {
   const [settingForm] = Form.useForm();

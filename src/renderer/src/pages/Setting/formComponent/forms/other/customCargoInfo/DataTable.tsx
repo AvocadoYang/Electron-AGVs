@@ -44,7 +44,7 @@ const DataTable: FC = () => {
       client.post('/api/setting/delete-custom-cargo-format', payload),
     onSuccess: () => {
       messageApi.success(t('utils.success'));
-      refetch;
+      refetch();
     },
     onError: (e: ErrorResponse) => errorHandler(e, messageApi)
   });
@@ -85,7 +85,13 @@ const DataTable: FC = () => {
             >
               {t('utils.edit')}
             </Button>
-            <Popconfirm title={'are you sure'} onConfirm={() => handleDelete(record.id)}>
+            <Popconfirm
+              title={t('customCargo.warn')}
+              description={t('customCargo.delete_desc')}
+              onConfirm={() => handleDelete(record.id)}
+              okText={t('utils.yes')}
+              cancelText={t('utils.no')}
+            >
               <Button
                 icon={<DeleteTwoTone twoToneColor="#f30303" />}
                 color="danger"

@@ -21,6 +21,7 @@ import {
 import { useRecentMission } from '@renderer/sockets/useMissions';
 import { useTranslation } from 'react-i18next';
 import DPad from './DPad';
+import EditCargoCarrier from '../Main/Car_Card/components/EditCargoCarrier';
 
 const { Title, Text } = Typography;
 
@@ -106,6 +107,7 @@ const AmrDetail = () => {
   const [showControlPanel, setShowControlPanel] = useState(false);
   const [showCargoMetadata, setShowCargoMetadata] = useState(false);
   const [showIO, setShowIO] = useState(false);
+  const [editCargoModalOpen, setEditCargoModalOpen] = useState(false);
   const { t } = useTranslation();
 
   // Prepare table data from recentMission
@@ -198,6 +200,14 @@ const AmrDetail = () => {
                         onClick={() => setShowCargoMetadata(true)}
                       >
                         {t('amr_detail.show_cargo_metadata')}
+                      </Button>
+                      <Button
+                        size="small"
+                        type="primary"
+                        style={{ marginLeft: 8 }}
+                        onClick={() => setEditCargoModalOpen(true)}
+                      >
+                        {t('amr_card.update_cargo')}
                       </Button>
                     </>
                   ) : (
@@ -308,19 +318,42 @@ const AmrDetail = () => {
         title={t('amr_detail.cargo_metadata')}
       >
         <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-          {currier.metadata && currier.metadata !== 'null' ? (
-            <ReactJsonView
-              displayDataTypes={false}
-              value={JSON.parse(currier.metadata)}
-              collapsed={false}
-              enableClipboard={false}
-              style={{ fontSize: 14 }}
-            />
-          ) : (
-            t('amr_detail.no_metadata')
-          )}
+          {Array.isArray(currier.cargo) && currier.cargo.length > 0
+            ? currier.cargo.map((cargo, idx) =>
+                cargo.metadata && cargo.metadata !== 'null' ? (
+                  <div key={idx} style={{ marginBottom: 16 }}>
+                    <b>
+                      {t('amr_detail.carrying_cargo')} #{idx + 1}
+                    </b>
+                    <ReactJsonView
+                      displayDataTypes={false}
+                      value={
+                        typeof cargo.metadata === 'string'
+                          ? JSON.parse(cargo.metadata)
+                          : cargo.metadata
+                      }
+                      collapsed={false}
+                      enableClipboard={false}
+                      style={{ fontSize: 14 }}
+                    />
+                  </div>
+                ) : (
+                  <div key={idx}>
+                    <b>
+                      {t('amr_detail.carrying_cargo')} #{idx + 1}
+                    </b>
+                    <div>{t('amr_detail.no_metadata')}</div>
+                  </div>
+                )
+              )
+            : t('amr_detail.no_metadata')}
         </pre>
       </Modal>
+      <EditCargoCarrier
+        amrId={prefixAmrId}
+        isModalOpen={editCargoModalOpen}
+        setIsModalOpen={setEditCargoModalOpen}
+      />
     </>
   );
 };

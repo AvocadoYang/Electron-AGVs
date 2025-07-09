@@ -924,6 +924,7 @@
   },
 
   "customCargo": {
+    "warn": "警告 !!",
     "create": "新增格式",
     "modalTitle": "建立自訂貨物格式",
     "name": "格式名稱",
@@ -932,7 +933,8 @@
     "keyRequired": "欄位名稱為必填",
     "valueRequired": "類型為必填",
     "isDefault": "預設",
-    "not_defined_format": "尚未定義或是此貨物的資料格式未定義"
+    "not_defined_format": "尚未定義或是此貨物的資料格式未定義",
+    "delete_desc": "且確認全場不是在任務狀態, 刪除會重新載入所有貨物相關設備紀錄. "
   },
 
   "sim": {
@@ -1063,6 +1065,9 @@
     "cargoId": "貨物編號",
     "status": "狀態",
     "customFormat": "自定義格式",
+    "undefined_format": "未定義格式",
+    "undefined_format_desc": "此資料格式被判定為未定義, 可能是在第三方指定儲位或是地點可包含貨物時, 格式錯誤或是還沒在交管定義資料格式, 可於設定頁面->貨架&&棧板-> 自定義貨物資訊 新增格式",
+    "re_verity_format": "重新檢查格式",
     "metadata": "中繼資料",
     "createdAt": "建立時間",
     "history": "歷史紀錄",
