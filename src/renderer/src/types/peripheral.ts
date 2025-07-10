@@ -17,7 +17,8 @@ export type PeripheralTypes =
   | 'STANDBY_LOCATION'
   | 'OUTPUT_STATION'
   | 'CARGO_AREA'
-  | 'FORKLIFT_LOAD_STATION';
+  | 'FORKLIFT_LOAD_STATION'
+  | 'CONVEYOR';
 
 export type PeripheralInfo = {
   id: string;
@@ -47,6 +48,8 @@ export type Mock_Conveyor_Config = {
 };
 
 export type Conveyor_Info = {
+  name: string;
+  disable: boolean;
   locationId: string;
   booker?: string;
   occupier?: string;

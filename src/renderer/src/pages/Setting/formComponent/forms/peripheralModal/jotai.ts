@@ -1,8 +1,12 @@
 import { Relation } from '@renderer/api/useLoc';
+import { Cargo, PeripheralTypes } from '@renderer/types/peripheral';
 import { atom } from 'jotai';
 
-export const IsEditConveyor = atom<{
+export const IsEditPeripheralModal = atom<{
+  stationType: PeripheralTypes;
   stationId: string;
+  name: string;
+  disable: boolean;
   forkHeight: number;
   activeLoad: boolean;
   activeOffload: boolean;
@@ -10,4 +14,7 @@ export const IsEditConveyor = atom<{
   offloadMissionId: string;
   placement_priority: number;
   relationships: Relation;
+  cargo: Cargo[];
 } | null>(null);
+
+export const IsOpenCargoEditorModal = atom(false);

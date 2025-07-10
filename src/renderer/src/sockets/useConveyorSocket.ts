@@ -28,6 +28,8 @@ const schema = () =>
   array(
     object({
       locationId: string().optional().nullable(),
+      name: string().required().nullable(),
+      disable: boolean().required(),
       conveyorDBId: string().optional(),
       forkHeight: number().required(),
       activeLoad: boolean().required(),

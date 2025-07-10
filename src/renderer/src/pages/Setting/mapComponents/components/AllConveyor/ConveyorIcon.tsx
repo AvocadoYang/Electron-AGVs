@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { LoadingStation } from '../AllCargo.tsx/LoadingStation';
 import { useSetAtom } from 'jotai';
-import { IsEditConveyor } from './jotai';
+import { IsEditPeripheralModal } from '../../../formComponent/forms/peripheralModal/jotai';
 import { Conveyor_Info } from '@renderer/types/peripheral';
 
 type ConveyorStyle = {
@@ -75,7 +75,7 @@ const ConveyorIcon: React.FC<{
   scale: number;
   info: Conveyor_Info | null;
 }> = ({ translateX, translateY, rotate, scale, info }) => {
-  const setIsEdit = useSetAtom(IsEditConveyor);
+  const setIsEdit = useSetAtom(IsEditPeripheralModal);
 
   if (!info) return <LoadingStation />;
   return (
@@ -90,6 +90,9 @@ const ConveyorIcon: React.FC<{
       <ConveyorWrapper
         onClick={() =>
           setIsEdit({
+            stationType: 'CONVEYOR',
+            name: info.name,
+            disable: info.disable,
             stationId: info.locationId,
             forkHeight: info.forkHeight,
             activeLoad: info.activeLoad,
@@ -97,7 +100,8 @@ const ConveyorIcon: React.FC<{
             loadMissionId: info.loadMissionId,
             offloadMissionId: info.offloadMissionId,
             placement_priority: info.placement_priority,
-            relationships: info.relationships
+            relationships: info.relationships,
+            cargo: info.cargo
           })
         }
       >

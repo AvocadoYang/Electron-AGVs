@@ -34,8 +34,12 @@ import CargoDetail from './components/AllCargo.tsx/CargoDetail';
 import { GlobalCargoInfoModal } from './components/AllCargo.tsx/jotaiState';
 import CargoModal from './components/AllCargo.tsx/CargoModal';
 import AllConveyor from './components/AllConveyor/AllConveyor';
-import { IsEditConveyor } from './components/AllConveyor/jotai';
-import EditConveyorModal from './components/AllConveyor/EditConveyorModal';
+import {
+  IsEditPeripheralModal,
+  IsOpenCargoEditorModal
+} from '../formComponent/forms/peripheralModal/jotai';
+import EditPeripheralModal from '../formComponent/forms/peripheralModal/EditPeripheralModal';
+import CargoEditor from '../formComponent/forms/peripheralModal/CargoEditor';
 
 const MapView: React.FC<{
   scale: number;
@@ -83,7 +87,8 @@ const MapView: React.FC<{
   const showLocationToolTip = useAtomValue(isShowLocationTooltip);
   const showRoad = useAtomValue(isShowRoad);
   const openCargoInfo = useAtomValue(GlobalCargoInfoModal);
-  const openConveyorModal = useAtomValue(IsEditConveyor);
+  const openPeripheralModal = useAtomValue(IsEditPeripheralModal);
+  const openPeripheralCargoEditorModal = useAtomValue(IsOpenCargoEditorModal);
 
   if (currentVersion) {
     const defaultCookie = Cookies.get('version');
@@ -159,7 +164,10 @@ const MapView: React.FC<{
 
       <AllChargeStation setInitPoint={setInitPoint} handleMouseDown={handleMouseDown} />
 
-      {openConveyorModal ? <EditConveyorModal /> : []}
+      {openPeripheralModal ? <EditPeripheralModal /> : []}
+
+      {openPeripheralCargoEditorModal ? <CargoEditor /> : []}
+
       <AllConveyor />
 
       {openQuickEditLocationPanelSwitch ? <TempLocations></TempLocations> : []}
@@ -194,6 +202,7 @@ const MapView: React.FC<{
 
       <SudoChargeStation />
 
+      {/* 只有for  儲位專用修改貨物資料的 modal */}
       {openCargoInfo ? <CargoDetail /> : []}
 
       <CargoModal />
