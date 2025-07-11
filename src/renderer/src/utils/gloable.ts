@@ -49,8 +49,12 @@ export const chargeStationModelProp = atom<{
   location: string;
 } | null>(null);
 
+//to delete
 export const isEditChargeStation = atom(false);
 export const chargeStationEditData = atom<null | SelectStation>(null);
+
+export const IsEditPeripheralStyle = atom(false);
+export const PeripheralEditData = atom<null | SelectStation>(null);
 
 export const hintAmr = atom('');
 export const AmrFilterCarCard = atom<Set<string>>(new Set([]));

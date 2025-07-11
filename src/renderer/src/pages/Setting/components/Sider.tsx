@@ -307,7 +307,7 @@ const Sider: React.FC<{
       case 'edit_tag':
         setOpenTagMissionPanel(check);
         break;
-      case 'edit_charge_station_icon_style':
+      case 'edit_icon_style':
         setOpenEditChargeStationIconPanel(check);
         break;
 
@@ -548,11 +548,11 @@ const Sider: React.FC<{
         />
       ),
       getItem(
-        t('toolbar.others.edit_charge_station_icon_style'),
+        t('toolbar.others.edit_peripheral_style'),
         '7-2',
         <Switch
           checked={openEditChargeStationIconPanel}
-          onChange={(checked) => handleShowPanel(checked, 'edit_charge_station_icon_style')}
+          onChange={(checked) => handleShowPanel(checked, 'edit_icon_style')}
         />
       ),
       getItem(

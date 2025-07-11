@@ -53,7 +53,6 @@ import { SchedulePanel } from '../formComponent/forms/missionComponents/schedule
 import { IdleMissionPanel } from '../formComponent/forms/missionComponents/idleMission';
 import { TopicMissionPanel } from '../formComponent/forms/missionComponents/topicMission';
 import { EditTagPanel } from '../formComponent/forms/other/editTag';
-import { ChargeStationStylePanel } from '../formComponent/forms/other/editChargeStationIcon';
 import { EditWarningListPanel } from '../formComponent/forms/file/warningId';
 import { BackupPanel } from '../formComponent/forms/file/backup';
 import { RegisterAmrPanel } from '../formComponent/forms/amrSetting/registerAmr';
@@ -61,6 +60,7 @@ import AmrConfigPanel from '../formComponent/forms/amrSetting/amrConfig/AmrConfi
 import QuickEditRoadPanel from '../formComponent/QuickEditRoadPanel';
 import { AbortCargoMissionPanel } from '../formComponent/forms/missionComponents/abortCargoMission';
 import CustomCargoInfoPanel from '../formComponent/forms/other/customCargoInfo/CustomCargoInfoPanel';
+import EditPeripheralIcon from '../formComponent/forms/other/editPeripheralIcon/EditPeripheralIcon';
 
 const SortableWrap: FC<{
   sortableId: ToolBarItemType;
@@ -339,11 +339,11 @@ const SortableWrap: FC<{
               </Card>
             );
           // 7-2 顯示編輯充電站圖標樣式
-          case 'edit_charge_station_icon_style':
+          case 'edit_icon_style':
             return (
               <Card style={styles} ref={setNodeRef}>
-                <FormCloseBtn sortableId={sortableId} panelName="edit_charge_station_icon_style" />
-                <ChargeStationStylePanel
+                <FormCloseBtn sortableId={sortableId} panelName="edit_icon_style" />
+                <EditPeripheralIcon
                   sortableId={sortableId}
                   attributes={attributes}
                   listeners={listeners}
@@ -549,7 +549,7 @@ const ToolComponents: FC<{
     if (formKey === 'edit_tag' && openTagPanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
-    if (formKey === 'edit_charge_station_icon_style' && openChargeStylePanel) {
+    if (formKey === 'edit_icon_style' && openChargeStylePanel) {
       return <SortableWrap sortableId={formKey} key={formKey}></SortableWrap>;
     }
     if (formKey === 'custom_cargo_info' && openCargoFormatPanel) {

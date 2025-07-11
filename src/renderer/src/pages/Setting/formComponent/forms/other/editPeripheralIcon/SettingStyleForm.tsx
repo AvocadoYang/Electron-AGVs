@@ -15,7 +15,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useAtom, useSetAtom } from 'jotai';
 import client from '@renderer/api/axiosClient';
-import { chargeStationEditData, isEditChargeStation } from '@renderer/utils/gloable';
+import { IsEditPeripheralStyle, PeripheralEditData } from '@renderer/utils/gloable';
 
 type Options = 'areaType' | 'translateX' | 'translateY' | 'rotate' | 'scale' | 'flex_direction';
 
@@ -62,23 +62,23 @@ const BtnWrapper = styled.div`
   gap: 1em;
 `;
 
-const SettingChargeStationStyleForm: FC = () => {
+const SettingStyleForm: FC = () => {
   const [form] = Form.useForm();
   const intervalId = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [selectStation, setSelectStation] = useAtom(chargeStationEditData);
-  const setIsEditStation = useSetAtom(isEditChargeStation);
+  const [selectStation, setSelectStation] = useAtom(PeripheralEditData);
+  const setIsEditStation = useSetAtom(IsEditPeripheralStyle);
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
 
   const submitMutation = useMutation({
     mutationFn: (payload: SubmitValue) => {
-      return client.post('api/setting/edit-charge-station-style', payload);
+      return client.post('api/peripherals/edit-peripheral-station-style', payload);
     },
     onSuccess: async () => {
-      await queryClient.refetchQueries({
-        queryKey: ['all-charge-station']
-      });
+      // await queryClient.refetchQueries({
+      //   queryKey: ['all-charge-station']
+      // });
       await queryClient.refetchQueries({
         queryKey: ['loc-only']
       });
@@ -101,6 +101,7 @@ const SettingChargeStationStyleForm: FC = () => {
       if (!prev) return null;
       return {
         loc: prev.loc,
+        peripheralType: prev.peripheralType,
         translateX: val.input === 'translateX' ? val.value : prev.translateX,
         translateY: val.input === 'translateY' ? val.value : prev.translateY,
         rotate: val.input === 'rotate' ? val.value : prev.rotate,
@@ -125,6 +126,7 @@ const SettingChargeStationStyleForm: FC = () => {
       if (!prev) return null;
       return {
         loc: prev.loc,
+        peripheralType: prev.peripheralType,
         flex_direction: prev.flex_direction,
         translateX:
           val.input === 'translateX'
@@ -334,4 +336,4 @@ const SettingChargeStationStyleForm: FC = () => {
   );
 };
 
-export default SettingChargeStationStyleForm;
+export default SettingStyleForm;

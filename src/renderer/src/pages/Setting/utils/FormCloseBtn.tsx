@@ -132,7 +132,7 @@ const FormCloseBtn: FC<{ sortableId: string; panelName: ToolBarItemType }> = ({ 
       case 'edit_tag':
         setOpenTagMissionPanel(false);
         break;
-      case 'edit_charge_station_icon_style':
+      case 'edit_icon_style':
         setOpenEditChargeStationIconPanel(false);
         break;
       case 'warning_id':

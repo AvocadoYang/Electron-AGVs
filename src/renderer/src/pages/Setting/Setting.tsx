@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Layout, Form, Splitter, Flex } from 'antd';
 import Header from '../../components/Header';
 import { ZoomPad, Sider, FormDrawerBtn, ToolComponents } from './components';
-import MapView from './mapComponents/MapView';
 import { useResetSiderSwitch } from './hooks';
 import './setting.css';
 import { DndContext } from '@dnd-kit/core';
@@ -11,6 +10,7 @@ import { restrictToParentElement } from '@dnd-kit/modifiers';
 import { getMoveIndex } from './utils/utils';
 import { toolbarState } from './components/siderElement';
 import { useIsMobile } from '@renderer/hooks/useIsMoblie';
+import MapView from './mapComponents/MapView';
 const { Content } = Layout;
 
 const Setting: React.FC = () => {

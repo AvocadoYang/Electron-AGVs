@@ -29,6 +29,7 @@ export type ChargeStationResponseObj = {
 
 export type SelectStation = {
   loc: number;
+  peripheralType: string;
   translateX: number;
   translateY: number;
   rotate: number;

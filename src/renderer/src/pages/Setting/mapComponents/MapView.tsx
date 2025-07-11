@@ -29,7 +29,6 @@ import AllCargo from './components/AllCargo.tsx/AllCargo';
 import ToolTip from '../components/ToolTip';
 import SudoCargo from './components/AllCargo.tsx/SudoCargo';
 import { AllChargeStation } from './components/AllChargeStation';
-import SudoChargeStation from '../formComponent/forms/other/editChargeStationIcon/SudoChargeStation';
 import CargoDetail from './components/AllCargo.tsx/CargoDetail';
 import { GlobalCargoInfoModal } from './components/AllCargo.tsx/jotaiState';
 import CargoModal from './components/AllCargo.tsx/CargoModal';
@@ -40,6 +39,7 @@ import {
 } from '../formComponent/forms/peripheralModal/jotai';
 import EditPeripheralModal from '../formComponent/forms/peripheralModal/EditPeripheralModal';
 import CargoEditor from '../formComponent/forms/peripheralModal/CargoEditor';
+import { SudoPeripheral } from '../formComponent/forms/other/editPeripheralIcon';
 
 const MapView: React.FC<{
   scale: number;
@@ -200,7 +200,7 @@ const MapView: React.FC<{
 
       {shelfSelectedStyleId === '' ? [] : <SudoCargo />}
 
-      <SudoChargeStation />
+      <SudoPeripheral />
 
       {/* 只有for  儲位專用修改貨物資料的 modal */}
       {openCargoInfo ? <CargoDetail /> : []}

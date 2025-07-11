@@ -60,6 +60,19 @@
     }
   },
 
+  "peripheral": {
+    "Charging": "Charging",
+    "Dispatch": "Dispatch",
+    "Standby": "Standby",
+    "Storage": "Storage",
+    "Extra": "Extra",
+    "Elevator": "Elevator",
+    "RoboticArm": "Robotic Arm",
+    "Conveyor": "Conveyor",
+    "LiftGate": "Lift Gate",
+    "Palletizer": "Palletizer"
+  },
+
   "mission_history": {
     "open": "Open History",
     "mission_id": "Mission ID",
@@ -240,7 +253,7 @@
       "others": "Others",
       "edit_gauge": "Edit Gauge",
       "edit_tag": "Edit Tag",
-      "edit_charge_station_icon_style": "Edit charge station icon style",
+      "edit_peripheral_style": "Edit peripheral style",
       "custom_cargo_info": "custom cargo info"
     },
     "file_setting": {
@@ -1152,5 +1165,9 @@
     "hide_io": "Hide IO",
     "io": "IO information",
     "no_io": "No IO information"
+  },
+
+  "peripheral_style": {
+    "areaType": "地點功能"
   }
 }
