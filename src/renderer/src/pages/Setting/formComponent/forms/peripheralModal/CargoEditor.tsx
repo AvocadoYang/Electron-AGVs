@@ -48,7 +48,7 @@ const CargoEditor: FC = () => {
       locationId: string;
       cargo: Cargo[];
       peripheralType: PeripheralTypes;
-    }) => client.post('/api/setting/update-cargo-info-peripheral', payload),
+    }) => client.post('/api/peripherals/update-cargo-info-peripheral', payload),
     onSuccess: () => {
       messageApi.success(t('utils.success'));
       form.resetFields();
