@@ -5,6 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { IsEditPeripheralModal, IsOpenCargoEditorModal } from './jotai';
 
+const prefixLevelName = (word: string | null | undefined) => {
+  if (!word) return null;
+  const parts = word.split('-');
+  parts.pop();
+  return parts.join('-');
+};
+
 const { Title } = Typography;
 
 const CargoInfoAtPeripheral: FC<{ form: FormInstance<unknown> }> = ({ form }) => {
@@ -20,7 +27,7 @@ const CargoInfoAtPeripheral: FC<{ form: FormInstance<unknown> }> = ({ form }) =>
     if (!openModal || !openModal.cargo) return;
 
     form.setFieldValue('hasCargo', openModal.cargo.length > 0);
-    form.setFieldValue('name', openModal.name);
+    form.setFieldValue('name', prefixLevelName(openModal.name));
     form.setFieldValue('disable', openModal.disable);
   }, []);
 

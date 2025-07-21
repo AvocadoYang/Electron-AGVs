@@ -353,7 +353,7 @@ const AllLocationTable: React.FC<{
     {
       title: t('utils.point_type'),
       dataIndex: 'areaType',
-      editable: true,
+      editable: false,
       key: 'areaType',
       width: '20%',
       sorter: (a: LocationType, b: LocationType) => a.areaType.localeCompare(b.areaType),
